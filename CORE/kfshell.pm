@@ -2,6 +2,7 @@ package kfshell;
 use Crypt::RSA;
 use MIME::Base64;
 use Crypt::Blowfish;
+use Itami::ConvData;
 use strict;
 my $uptime=time();
 my $sender;
@@ -21,9 +22,18 @@ sub RecData {
 	$this->act_RSA($data->{RSA}) if exists $data->{RSA};
 	$this->act_INFO($data->{INFO}) if exists $data->{INFO};
 	$this->act_HASHREQ($data->{HASHREQ}) if exists $data->{HASHREQ};
+	$this->act_FUNC($data->{FUNC}) if exists $data->{FUNC};
 	die("\n\nKeyForum chiuso per una richiesta dalla Shell.\n\n") if exists($data->{CHIUDI}) && $data->{CHIUDI};
 	$sender->($this->{num},$this->{tosend});
 	$this->ResetSendVar();
+}
+sub act_FUNC {
+	my ($this,$data)=@_;
+	$this->{tosend}->{'FUNC'}={} unless exists $this->{tosend}->{'FUNC'};
+	$this->{tosend}->{'FUNC'}->{Dec2Bin}=ConvData::Dec2Bin($data->{Dec2Bin}) if exists $data->{Dec2Bin};
+	$this->{tosend}->{'FUNC'}->{Bin2Dec}=ConvData::Bin2Dec($data->{Bin2Dec}) if exists $data->{Bin2Dec};
+	$this->{tosend}->{'FUNC'}->{Dec2Base64}=ConvData::Dec2Base64($data->{Dec2Base64}) if exists $data->{Dec2Base64};
+	$this->{tosend}->{'FUNC'}->{Base642Dec}=ConvData::Base642Dec($data->{Base642Dec}) if exists $data->{Base642Dec};
 }
 sub ResetSendVar {
 	my $this=shift;
