@@ -1,0 +1,3 @@
+Licenses are in COMMON\licenses folder
+
+Le licenze si trovano nella cartella COMMON\licenses

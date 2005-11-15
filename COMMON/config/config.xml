@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <conf>
+    <DB>
+      <type>mysql</type>
+      <host>localhost</host>
+      <dbuser>root</dbuser>
+      <dbpassword></dbpassword>
+      <dbname>keyforum</dbname>
+    </DB>
+  </conf>
