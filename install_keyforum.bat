@@ -19,7 +19,7 @@ GOTO END
 :Normal
 
 echo AVVIO DI MYSQL
-start COMMON\mysql\bin\mysqld --defaults-file=COMMON\mysql\bin\my.ini --standalone
+start COMMON\mysql\bin\mysqld --defaults-file=COMMON\mysql\bin\my.cnf --standalone
 
 set PHP_BIN=WEBSERVER\apache\bin\php-cgi.exe
 
