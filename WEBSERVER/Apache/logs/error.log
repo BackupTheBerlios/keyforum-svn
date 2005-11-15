@@ -1,0 +1,13 @@
+[Mon Nov 14 13:49:27 2005] [notice] Apache/2.0.55 (Win32) PHP/5.0.5 mod_autoindex_color configured -- resuming normal operations
+[Mon Nov 14 13:49:27 2005] [notice] Server built: Oct 15 2005 10:41:53
+[Mon Nov 14 13:49:27 2005] [notice] Parent: Created child process 2232
+[Mon Nov 14 13:49:27 2005] [notice] Child 2232: Child process is running
+[Mon Nov 14 13:49:27 2005] [notice] Child 2232: Acquired the start mutex.
+[Mon Nov 14 13:49:27 2005] [notice] Child 2232: Starting 10 worker threads.
+[Mon Nov 14 13:50:26 2005] [error] [client 127.0.0.1] script 'G:/keyforum/keyforum42/WEBSERVER/HTTPD/anime/nulla.php' not found or unable to stat
+[Mon Nov 14 15:16:03 2005] [notice] Apache/2.0.55 (Win32) PHP/5.0.5 mod_autoindex_color configured -- resuming normal operations
+[Mon Nov 14 15:16:03 2005] [notice] Server built: Oct 15 2005 10:41:53
+[Mon Nov 14 15:16:03 2005] [notice] Parent: Created child process 6252
+[Mon Nov 14 15:16:03 2005] [notice] Child 6252: Child process is running
+[Mon Nov 14 15:16:03 2005] [notice] Child 6252: Acquired the start mutex.
+[Mon Nov 14 15:16:03 2005] [notice] Child 6252: Starting 10 worker threads.
