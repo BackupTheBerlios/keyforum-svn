@@ -2,17 +2,20 @@
 2005-11-14
 DanieleG	[MOD] Viene salvata una copia della chiave pubblica dell'utente nel DB per aumentare le prestazioni
 		      di keyforum quando vengono aggiunte risposte o nuovi thread.
+mmorselli	[MOD] Inportazione utente via XML
+mmorselli	[MOD] conversione configurazione in XML
 
 2005-11-11
 Hierro:         [FIX] Nella modifica di un post d'inizio thread ora viene ricaricata anche la descrizione
 DanieleG	[MOD] Modificato il codice iniziale (tolto il webserver incluso in keyforum)
 DanieleG	[ADD] Aggiunta una shell che permette alle pagine PHP di comunicare con il core
+mmorselli	[MOD] configurazione automatica di php.ini e keyforum.conf
 
 2005-11-10
 DanieleG:	[ADD] Aggiunto un nuovo protocollo di comunicazione per PERL
 DanieleG:	[ADD] Convertito il codice per il protocollo nuovo anche per PHP
-Gulp:			[MOD] Aggiornate le pagine del forum per il multilanguage
-Gulp:			[ADD] Aggiunti i files delle traduzioni
+Gulp:		[MOD] Aggiornate le pagine del forum per il multilanguage
+Gulp:		[ADD] Aggiunti i files delle traduzioni
 
 2005-11-09
 Luftw@ffer:	[FIX] Corretto un bug nell'identificazione dell'autore della modifica (aggiunto un escape)
