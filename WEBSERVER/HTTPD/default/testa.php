@@ -6,6 +6,7 @@ CheckSession();
 <!-- v.0.22 -->
 <html>
 <head>
+<link rel="shortcut icon" href="favicon.ico">
 <title><?php
 $blanguage='eng'; // Lingua di visualizzazione
 // carico la lingua per la testa
