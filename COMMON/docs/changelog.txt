@@ -1,4 +1,7 @@
 ================ KeyForum 0.42 Beta 2 ===========================
+2005-11-14
+DanieleG	[MOD] Viene salvata una copia della chiave pubblica dell'utente nel DB per aumentare le prestazioni
+		      di keyforum quando vengono aggiunte risposte o nuovi thread.
 
 2005-11-11
 Hierro:         [FIX] Nella modifica di un post d'inizio thread ora viene ricaricata anche la descrizione
