@@ -165,7 +165,6 @@ sub ArrayDump {
 		$KeyValue=PackValue($buf,$onlyregister,$subref) if $buf;
 		if ($KeyValue) {
 			$struttura.=pack("S",$index).$KeyValue;
-			#print $struttura." la struttura\n";
 			$totind++;
 		}
 		$index++;

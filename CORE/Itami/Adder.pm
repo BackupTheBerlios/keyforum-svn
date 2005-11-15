@@ -10,9 +10,9 @@ sub new {
 		."(`HASH`,`SEZ`,`AUTORE`,`EDIT_OF`,`DATE`,`TITLE`,`SUBTITLE`,`BODY`,`FIRMA`,`AVATAR`,`SIGN`,`FOR_SIGN`,`visibile`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	$this->{UpDateAvatar}=$db->prepare("UPDATE ".$fname."_membri SET firma=?, avatar=?,edit_firma=? WHERE HASH=? AND ?>edit_firma");
 	
-	$this->{UpdateMember}=$db->prepare("UPDATE ".$fname."_membri SET `AUTORE`=?, `DATE`=?, `PKEY`=?, `SIGN`=?, `present`='1' WHERE `HASH`=?");
+	$this->{UpdateMember}=$db->prepare("UPDATE ".$fname."_membri SET `AUTORE`=?, `DATE`=?, `PKEY`=?,`PKEYDEC`=?, `SIGN`=?, `present`='1' WHERE `HASH`=?");
 	$this->{UpAuthMember}=$db->prepare("UPDATE ".$fname."_membri SET `AUTH`=?,`is_auth`='1' WHERE `HASH`=?;");
-	$this->{InsertMember}=$db->prepare("INSERT INTO ".$fname."_membri (`HASH`,`AUTORE`,`DATE`,`PKEY`,`SIGN`) VALUES(?,?,?,?,?)");
+	$this->{InsertMember}=$db->prepare("INSERT INTO ".$fname."_membri (`HASH`,`AUTORE`,`DATE`,`PKEY`,`PKEYDEC`,`SIGN`) VALUES(?,?,?,?,?,?)");
 	$this->{UpDateCongi}=$db->prepare("UPDATE ".$fname."_congi SET CAN_SEND='1' WHERE HASH=?");
 	$this->{InsertMsghe}=$db->prepare("INSERT INTO ".$fname."_msghe (`HASH`,`last_reply_time`,`last_reply_author`,`DATE`,`AUTORE`) VALUES(?,?,?,?,?)");
 	
@@ -95,20 +95,20 @@ sub _AddType4 {
 	my ($this, $md5, $msg)=@_;
 	$this->{UpDateCongi}->execute($md5);
 	$this->{Congi}->execute($md5,"4",$msg->{DATE},time(),$md5) unless $this->{UpDateCongi}->rows;
-	$msg->{PKEY}=ConvData::Dec2Bin($msg->{PKEY});
+	$msg->{PKEYBIN}=ConvData::Dec2Bin($msg->{PKEY});
 	if ($this->ExistsMember($md5)) {#$msg->{AUTORE}
-		$this->{UpdateMember}->execute($msg->{AUTORE},$msg->{DATE},$msg->{PKEY},$msg->{SIGN} || '',$md5);
+		$this->{UpdateMember}->execute($msg->{AUTORE},$msg->{DATE},$msg->{PKEYBIN},$msg->{PKEY},$msg->{SIGN} || '',$md5);
 	} else {
-		$this->{InsertMember}->execute($md5,$msg->{AUTORE},$msg->{DATE},$msg->{PKEY},$msg->{SIGN} || '');
+		$this->{InsertMember}->execute($md5,$msg->{AUTORE},$msg->{DATE},$msg->{PKEYBIN},$msg->{PKEY},$msg->{SIGN} || '');
 	}
 	return 1;
 }
 sub _UpDateType4 {
 	my ($this, $md5, $msg)=@_;
 	return undef unless $this->ExistsMember($msg->{AUTORE});
-	$msg->{PKEY}=ConvData::Dec2Bin($msg->{PKEY});
+	$msg->{PKEYBIN}=ConvData::Dec2Bin($msg->{PKEY});
 	$this->{Congi}->execute($md5,"4",$msg->{DATE},time(),$md5);
-	$this->{UpdateMember}->execute($msg->{AUTORE},$msg->{DATE},$msg->{PKEY},$msg->{SIGN},$md5);
+	$this->{UpdateMember}->execute($msg->{AUTORE},$msg->{DATE},$msg->{PKEYBIN},$msg->{PKEY},$msg->{SIGN},$md5);
 	return 1;
 }
 sub _UpDateType4Auth {

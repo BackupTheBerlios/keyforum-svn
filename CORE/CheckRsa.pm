@@ -20,7 +20,7 @@ sub new {
 	$this->{AdminPublic}->{e}=PARI("65537");
 	$this->{AdminPublic}->{Version} = "1.91";
 	$this->{AdminPublic}->{Identity} = "i";
-	$this->{"GetPkeyAutore"}=$db->prepare("SELECT PKEY FROM ".$fname."_membri WHERE HASH=? AND present='1';");
+	$this->{"GetPkeyAutore"}=$db->prepare("SELECT PKEYDEC FROM ".$fname."_membri WHERE HASH=? AND present='1';");
 	$this->{RSA} = new Crypt::RSA;
 	return $this;
 }
@@ -29,8 +29,8 @@ sub GetPkey {
 	my $this=shift;
 	$this->{"GetPkeyAutore"}->execute(shift);
 	if (my $ref=$this->{"GetPkeyAutore"}->fetchrow_arrayref) {
-		return undef if length($ref->[0])>130;
-		return ConvData::Bin2Dec($ref->[0]);
+		return undef if length($ref->[0])<125;
+		return $ref->[0];
 	}
 	return undef;
 }

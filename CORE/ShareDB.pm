@@ -5,6 +5,7 @@ use strict;
 use Fcntl; # For O_RDWR, O_CREAT, etc. all'inizio
 use Itami::stati;
 use Itami::Cycle;
+use Itami::ConvData;
 require "flusher.pm";
 # $this contenuto:
 # DataBase	=> Oggetto per accedere al database.
@@ -68,8 +69,15 @@ sub tab_conf {
 	$this->{Query}->{GetType}=$this->{DataBase}->prepare("SELECT TYPE FROM ".$this->{TabConf}->{Table}." WHERE HASH=?");
 	$this->{Query}->{Contali}=$this->{DataBase}->prepare("SELECT ID FROM ".$this->{TabConf}->{Table}." ORDER BY ID DESC LIMIT 1");
 	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' ORDER BY WRITE_DATE DESC LIMIT 100");
-	$this->{Query}->{SelPrio}=$this->{DataBase}->prepare("SELECT HASH FROM ".$this->{fname}."_priority ORDER BY `PRIOR` LIMIT 50");
+	#$this->{Query}->{SelPrio}=$this->{DataBase}->prepare("SELECT HASH FROM ".$this->{fname}."_priority ORDER BY `PRIOR` LIMIT 50");
 	$this->{Query}->{DelePrio}=$this->{DataBase}->prepare("DELETE FROM ".$this->{fname}."_priority WHERE HASH=?");
+	
+	# Converto le PKEY binarie in decimale dove non è stato fatto
+	my $temp=$this->{DataBase}->prepare("SELECT HASH, PKEY FROM ".$this->{fname}."_membri WHERE PKEYDEC=''");
+	my $update=$this->{DataBase}->prepare("UPDATE ".$this->{fname}."_membri SET PKEYDEC=? WHERE HASH=?");
+	$temp->execute();
+	$update->execute(ConvData::Bin2Dec($_->[1]), $_->[0]) while $_=$temp->fetchrow_arrayref;
+	$temp->finish();
 	
 	$this->contali();
 	$this->{Index}=int(rand()*$this->{NumRows});
@@ -207,21 +215,21 @@ sub SendRandomHash {  # Invia hash random periodicamente.
 	return undef if $this->{NumeroOggetti}<1;
 	$this->{flusher}->check;
 	my ($tmp,@hash,$type);
-	$this->{Query}->{SelPrio}->execute();
-	while($tmp=$this->{Query}->{SelPrio}->fetchrow_arrayref) {
-		unless (exists $this->{DBM}->{$tmp->[0]}) { # Se non è prensente nel file DBM eseguo il blocco
-			$this->{Query}->{GetType}->execute($tmp->[0]); #Eseguo la query per prendere il tipo dell'hash
-			unless($type=$this->{Query}->{GetType}->fetchrow_arrayref) { # Gestisco l'eccezione dell'hash che non è in congi
-				$this->{Query}->{DelePrio}->execute($tmp->[0]); # Cancello l'hash se c'è l'errore
-				next;
-			}
-			$this->{Query}->{GetType}->finish;
-			$this->{DBM}->{$tmp->[0]}=$type->[0]; #Inserisco il nuovo hash nel file DBM
-		}
-		push(@hash, $tmp->[0]); # Inserisco l'hash nel vettore da offrire
-		$this->{Query}->{DelePrio}->execute($tmp->[0]);
-	}
-	$this->{Query}->{SelPrio}->finish();
+	#$this->{Query}->{SelPrio}->execute();
+	#while($tmp=$this->{Query}->{SelPrio}->fetchrow_arrayref) {
+		#unless (exists $this->{DBM}->{$tmp->[0]}) { # Se non è prensente nel file DBM eseguo il blocco
+			#$this->{Query}->{GetType}->execute($tmp->[0]); #Eseguo la query per prendere il tipo dell'hash
+			#unless($type=$this->{Query}->{GetType}->fetchrow_arrayref) { # Gestisco l'eccezione dell'hash che non è in congi
+			#	$this->{Query}->{DelePrio}->execute($tmp->[0]); # Cancello l'hash se c'è l'errore
+			#	next;
+			#}
+			#$this->{Query}->{GetType}->finish;
+			#$this->{DBM}->{$tmp->[0]}=$type->[0]; #Inserisco il nuovo hash nel file DBM
+		#}
+		#push(@hash, $tmp->[0]); # Inserisco l'hash nel vettore da offrire
+		#$this->{Query}->{DelePrio}->execute($tmp->[0]);
+	#}
+	#$this->{Query}->{SelPrio}->finish();
 	#if ($this->{Index}>$this->{NumRows}) {
 	#	$this->contali;
 	#	if($this->{Index}>$this->{NumRows}) {
