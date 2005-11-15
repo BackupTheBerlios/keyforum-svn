@@ -89,7 +89,7 @@ PageSelect();
 # 1 passivo
 # 3 manuale
 $i=$CurrPag*$BoardXPage;
-$querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
+$querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
 $responsewse=mysql_query($querywse) or Muori ($lang['inv_query'] . mysql_error());
 while($valuewse=mysql_fetch_assoc($responsewse)){
 

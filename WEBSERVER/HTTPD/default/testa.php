@@ -95,7 +95,7 @@ function togglevis(id) {
         <select class="content" name="boardlink" size="1" onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option selected value=''><? echo $lang['sel_otherbrd']; ?></option>
    <?php
-      $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE';";
+      $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
       $responsewse=mysql_query($querywse) or Muori ("Query non valida: " . mysql_error());
       while($valuewse=mysql_fetch_assoc($responsewse)){
        if($valuewse['SUBKEY']!=$SNAME){
@@ -129,8 +129,8 @@ function togglevis(id) {
   </div>
 </div>
 <div id="userlinks">
-  <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><? echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><? echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><? echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><? echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><? echo $lang['userlink_brdlst']; ?></a> | <? echo $lang['userlink_wlcm']; ?>
+  <p class="home"><b><a href="javascript:confirmThis('chiudi.pm')"><? echo $lang['userlink_close']; ?></a></b></p>
+  <p><b><a href="index.php"><? echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><? echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><? echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.pl"><? echo $lang['userlink_brdlst']; ?></a> | <? echo $lang['userlink_wlcm']; ?>
    <?php
       if ($sess_auth)
         echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
