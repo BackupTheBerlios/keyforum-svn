@@ -1,4 +1,5 @@
 <?PHP
+require "functions.php";
 class CoreSock {
 	var $connesso;
 	var $coresock;
@@ -53,7 +54,12 @@ class CoreSock {
 		if (!$this->connesso) return false;
 		if (!socket_select($read=array($this->coresock), $write = NULL, $except = NULL, 1)) 
 			return false;
-		$this->buf.=socket_read ($this->coresock, 200000);
+		$buf=socket_read ($this->coresock, 200000);
+		if(!strlen($buf)) {
+			$this->save_error('Il core ha chiuso la connessione in modo inaspettato.',3);
+			return($this->chiudi());
+		}
+		$this->buf.=$buf;
 		return true;
 	}
 	function _bufferizza(&$var) {
