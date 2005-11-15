@@ -50,7 +50,7 @@ sub AddSock($$%) {
 		($conf{'force_group'}) ? (delete $conf{'group'}) : (return undef);
 	}
 	$conf{'type'} ||= 'data';
-	$conf{'bandlimit'}=0 unless defined $conf{'$bandlimit'};
+	$conf{'bandlimit'}=0 unless defined $conf{'bandlimit'};
 	#return undef if $conf{'type'} !~ /^server$|^compdata$|^data$|^compbase$/;
 	$this->{IOS}->{'read'}->add($sock);
 	my $socknum=fileno $sock;
