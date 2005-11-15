@@ -48,25 +48,19 @@ define ("GMT_TIME", 3600*1);
 
 if($apache){
 
-$porta=$_SERVER['SERVER_PORT'] -100;
-$query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
-$risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
-$riga2 = mysql_fetch_assoc($risultato2);
-$query="SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='".$riga2['subkey']."'";
-$risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
-$riga = mysql_fetch_assoc($risultato);
-if($riga['value']){
- $_ENV['sesname']=$riga['value'];
-}else{
- $_ENV['sesname']=$riga2['subkey'];
+    $porta=$_SERVER['SERVER_PORT'] -100;
+    $query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
+    $risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
+    $riga2 = mysql_fetch_assoc($risultato2);
+    $query="SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='".$riga2['subkey']."'";
+    $risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
+    $riga = mysql_fetch_assoc($risultato);
+    if($riga['value']){
+         $_ENV['sesname']=$riga['value'];
+    } else {
+          $_ENV['sesname']=$riga2['subkey'];
+      }
 }
-$query3 = "SELECT value FROM config WHERE subkey='" . $_ENV['sesname'] . "' AND fkey='PKEY'";
-$risultato3 = mysql_query($query3) or Muori ("Query3 non valida: " . mysql_error());
-$riga3 = mysql_fetch_assoc($risultato3);
-if ( !$riga3['value'] ) Muori ("pkey vuota!\n");
-else $_ENV['pkey']=$riga3['value'];
-}
-
 
 if (!$_ENV['sesname']) {
 	print "Nessuna board assegnata a questo webserver.\n";

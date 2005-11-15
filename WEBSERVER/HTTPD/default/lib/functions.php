@@ -117,6 +117,18 @@ class FUNC {
 		return $ritorno;
 	}
 
+    /*-------------------------------------------------------------------------*/
+    // PKEY della sessione, in Base64
+    /*-------------------------------------------------------------------------*/
+
+        function getpkey($sesname) {
+                $query = "SELECT value FROM config WHERE subkey='" . $sesname . "' AND fkey='PKEY'";
+                $risultato = mysql_query($query) or die("Query non valida: " . mysql_error());
+                $riga = mysql_fetch_assoc($risultato);
+                if ( !$riga['value'] ) die("pkey vuota!\n");
+                return($riga['value']);
+        }
+        
  // ********************************************************************* 
   
   

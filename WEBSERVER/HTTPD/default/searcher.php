@@ -5,7 +5,8 @@ include("testa.php");
 $MODO=$_REQUEST['MODO'];
 $SEZ=$_REQUEST['SEZ'];
 $ORDER=$_REQUEST['ORDER'];
-$PKEY=$_ENV['pkey'];
+
+$PKEY=$std->getpkey($_ENV['sesname']);
 
 if ( !$MODO || !$SEZ || !$ORDER || !$PKEY )
     die("Errore nella richiesta!\n");
