@@ -60,7 +60,11 @@ if($riga['value']){
 }else{
  $_ENV['sesname']=$riga2['subkey'];
 }
-
+$query3 = "SELECT value FROM config WHERE subkey='" . $_ENV['sesname'] . "' AND fkey='PKEY'";
+$risultato3 = mysql_query($query3) or Muori ("Query3 non valida: " . mysql_error());
+$riga3 = mysql_fetch_assoc($risultato3);
+if ( !$riga3['value'] ) Muori ("pkey vuota!\n");
+else $_ENV['pkey']=$riga3['value'];
 }
 
 

@@ -61,7 +61,7 @@ function PageSelect() {
 $SEZID=$_REQUEST['SEZID'];
 $SNAME=$_ENV['sesname'];
 
-echo "<a href=\"searcher.pm?MODO=1&SEZ=".$SEZID."&ORDER=DESC\">".$lang['req_last']."</a><br><br>";
+echo "<a href=\"searcher.php?MODO=1&SEZ=".$SEZID."&ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
 $query="SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;";
 $risultato=mysql_query($query);
