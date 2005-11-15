@@ -1,5 +1,5 @@
 <?PHP
-require "functions.php";
+
 class CoreSock {
 	var $connesso;
 	var $coresock;
