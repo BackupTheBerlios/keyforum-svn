@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="IO-String" VERSION="1,06,0,0">
+<TITLE>IO-String</TITLE>
+<ABSTRACT>Is an IO::File compatible class that read or write data from in-core strings.</ABSTRACT>
+<AUTHOR>Gisle Aas &lt;gisle@ActiveState.com&gt;</AUTHOR>
+<IMPLEMENTATION>
+<DEPENDENCY NAME="IO-String" VERSION="1.06" />
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/IO-String.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>
