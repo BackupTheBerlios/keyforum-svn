@@ -5,7 +5,7 @@ include ("testa.php");
 ?>
 <tr><td valign=top>
 <h1><center>Aggiungi forum</center></h1>
-<form method=post action=group.pl>
+<form method=post action=addgroup.php>
 <table border=1 cellspacing=1 cellpadding=1 bordercolor=black>
 <tr><td>Chiave pubblica:</td><td><input type=text name=pkey size=60></td></tr>
 <tr><td>Nome (*Identificatore):</td><td><input type=text name=name></td></tr>

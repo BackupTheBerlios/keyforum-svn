@@ -79,6 +79,7 @@ sub DropTable {
 	"DROP TABLE IF EXISTS `".$BoardName."_congi`;",
 	"DROP TABLE IF EXISTS `".$BoardName."_sez`;",
 	"DROP TABLE IF EXISTS `".$BoardName."_conf`;",
+	"DROP TABLE IF EXISTS `".$BoardName."_purgatorio`;",
 	"DROP TABLE IF EXISTS `".$BoardName."_localmember`;";
 }
 sub MakeQuery {
@@ -86,8 +87,8 @@ sub MakeQuery {
 	
 return "CREATE TABLE `".$BoardName."_sez` (
   `ID` int(8) unsigned NOT NULL,
-  `SEZ_NAME` varchar(250) NOT NULL default '',
-  `SEZ_DESC` text NOT NULL,
+  `SEZ_NAME` varchar(250) default '',
+  `SEZ_DESC` text,
   `MOD` varchar(250) NOT NULL default '',
   `PKEY` tinyblob NOT NULL default '',
   `PRKEY` tinyblob NOT NULL default '',
@@ -111,24 +112,22 @@ CREATE TABLE  `".$BoardName."_conf` (
 
 
 CREATE TABLE  `".$BoardName."_purgatorio` (
-  `HASH` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
   `TYPE` enum('1','2','3','4') NOT NULL,
   `DELETE_DATE` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (HASH(16)),
   KEY (`DELETE_DATE`)
 ) TYPE=MyISAM;",
 "
 CREATE TABLE  `".$BoardName."_congi` (
   `ID` INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
-  `HASH` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL UNIQUE KEY,
   `TYPE` enum('1','2','3','4') NOT NULL,
   `WRITE_DATE` int(10) unsigned NOT NULL,
   `CAN_SEND` enum('0','1') NOT NULL default '1',
   `SNDTIME` INT UNSIGNED default '0' NOT NULL,
   `INSTIME` INT UNSIGNED default '0' NOT NULL,
-  `AUTORE` TINYBLOB NOT NULL,
+  `AUTORE` BINARY(16) NOT NULL,
   PRIMARY KEY(`ID`),
-  UNIQUE KEY (HASH(16)),
   KEY (AUTORE(16)),
   KEY (`WRITE_DATE`),
   KEY (`INSTIME`)
@@ -139,10 +138,11 @@ CREATE TABLE  `".$BoardName."_congi` (
 
 
 CREATE TABLE  `".$BoardName."_membri` (
-  `HASH` TINYBLOB NOT NULL,
-  `AUTORE` tinytext NOT NULL default '',
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
+  `AUTORE` varchar(30) default '',
   `DATE` int(10) unsigned NOT NULL default '0',
   `PKEY` tinyblob NOT NULL default '',
+  `PKEYDEC` text NOT NULL default '',
   `AUTH` tinyblob NOT NULL default '',
   `TYPE` enum('4') NOT NULL default '4',
   `SIGN` tinyblob NOT NULL default '',
@@ -155,7 +155,6 @@ CREATE TABLE  `".$BoardName."_membri` (
   `msg_num` int(10) unsigned NOT NULL default '0',
   `edit_firma` int(10) unsigned NOT NULL default '0',
   `edit_adminset` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (HASH(16)),
   KEY `is_auth` (`is_auth`),
   KEY (PKEY(20))
 ) TYPE=MyISAM;",
@@ -164,11 +163,11 @@ CREATE TABLE  `".$BoardName."_membri` (
 
 
 CREATE TABLE  `".$BoardName."_newmsg` (
-  `HASH` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
   `SEZ` int(8) unsigned NOT NULL default '0',
   `visibile` enum('0','1') NOT NULL default '1',
-  `AUTORE` TINYBLOB NOT NULL default '',
-  `EDIT_OF` TINYBLOB NOT NULL default '',
+  `AUTORE` BINARY(16) NOT NULL default '',
+  `EDIT_OF` BINARY(16) NOT NULL default '',
   `TYPE` enum('1') NOT NULL default '1',
   `DATE` int(10) unsigned NOT NULL default '0',
   `TITLE` tinytext NOT NULL default '',
@@ -178,11 +177,10 @@ CREATE TABLE  `".$BoardName."_newmsg` (
   `AVATAR` tinytext NOT NULL default '',
   `SIGN` tinyblob NOT NULL default '',
   `FOR_SIGN` tinyblob NOT NULL default '',
-  PRIMARY KEY  (HASH(16)),
-  KEY `EDIT_OF` (EDIT_OF(16)),
-  KEY `DATE` (`DATE`),
-  KEY `AUTORE` (AUTORE(16)),
-  KEY `SEZ` (`SEZ`)
+  KEY (`EDIT_OF`),
+  KEY (`DATE`),
+  KEY (`AUTORE`),
+  KEY (`SEZ`)
 ) TYPE=MyISAM;",
 #  FOREIGN KEY (`AUTORE`) REFERENCES `".$BoardName."_membri` (`HASH`) ON DELETE CASCADE,
 #  FOREIGN KEY (`HASH`) REFERENCES `".$BoardName."_congi` (`HASH`) ON DELETE CASCADE,
@@ -191,20 +189,19 @@ CREATE TABLE  `".$BoardName."_newmsg` (
 " 
 
 CREATE TABLE  `".$BoardName."_msghe` (
-  `HASH` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
   `last_reply_time` int(10) unsigned NOT NULL default '0',
-  `last_reply_author` TINYBLOB NOT NULL default '',
+  `last_reply_author` BINARY(16) NOT NULL default '',
   `reply_num` int(10) unsigned NOT NULL default '0',
   `DATE` int(10) unsigned NOT NULL default '0',
-  `AUTORE` TINYBLOB NOT NULL default '',
+  `AUTORE` BINARY(16) NOT NULL default '',
   `read_num` int(10) unsigned NOT NULL default '0',
   `block_date` int(10) unsigned NOT NULL default '0',
   `pinned` enum('0','1') NOT NULL default '0',
   `last_admin_update` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (HASH(16)),
-  KEY `last_reply_time` (`last_reply_time`),
-  KEY `AUTORE` (AUTORE(16)),
-  KEY `last_reply_author` (last_reply_author(16))
+  KEY (`last_reply_time`),
+  KEY (`AUTORE`),
+  KEY (`last_reply_author`)
 ) TYPE=MyISAM ROW_FORMAT=FIXED;",
 #  FOREIGN KEY (`AUTORE`) REFERENCES `".$BoardName."_membri` (`HASH`),
 #  FOREIGN KEY (`last_reply_author`) REFERENCES `".$BoardName."_membri` (`HASH`),
@@ -212,10 +209,10 @@ CREATE TABLE  `".$BoardName."_msghe` (
 "
 
 CREATE TABLE  `".$BoardName."_reply` (
-  `HASH` TINYBLOB NOT NULL,
-  `REP_OF` TINYBLOB NOT NULL,
-  `AUTORE` TINYBLOB NOT NULL,
-  `EDIT_OF` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
+  `REP_OF` BINARY(16) NOT NULL,
+  `AUTORE` BINARY(16) NOT NULL,
+  `EDIT_OF` BINARY(16) NOT NULL,
   `DATE` int(10) unsigned NOT NULL default '0',
   `FIRMA` tinytext NOT NULL default '',
   `TYPE` enum('2') NOT NULL default '2',
@@ -224,11 +221,10 @@ CREATE TABLE  `".$BoardName."_reply` (
   `BODY` mediumtext NOT NULL,
   `visibile` enum('0','1') NOT NULL default '1',
   `SIGN` tinyblob NOT NULL default '',
-  PRIMARY KEY  (HASH(16)),
-  KEY `REP_OF` (REP_OF(16)),
-  KEY `EDIT_OF` (EDIT_OF(16)),
-  KEY `DATE` (`DATE`),
-  KEY `AUTORE` (AUTORE(16))
+  KEY (`REP_OF`),
+  KEY (`EDIT_OF`),
+  KEY (`DATE`),
+  KEY (`AUTORE`)
 ) TYPE=MyISAM;
 ",
 #  FOREIGN KEY (`HASH`) REFERENCES `".$BoardName."_congi` (`HASH`) ON DELETE CASCADE,
@@ -239,31 +235,20 @@ CREATE TABLE  `".$BoardName."_reply` (
 " 
 
 CREATE TABLE  `".$BoardName."_admin` (
-  `HASH` TINYBLOB NOT NULL,
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
   `TITLE` tinytext NOT NULL default '',
   `COMMAND` mediumtext NOT NULL,
   `TYPE` enum('3') NOT NULL default '3',
   `DATE` int(10) unsigned NOT NULL default '0',
-  `SIGN` tinyblob NOT NULL default '',
-  PRIMARY KEY (HASH(16))
+  `SIGN` tinyblob NOT NULL default ''
 ) TYPE=MyISAM;
 ",
 #  FOREIGN KEY (`HASH`) REFERENCES `".$BoardName."_congi` (`HASH`) ON DELETE CASCADE
 "
 CREATE TABLE  `".$BoardName."_localmember` (
-  `HASH` char(32) NOT NULL,
-  `PASSWORD` mediumtext NOT NULL,
-  PRIMARY KEY (`HASH`)
-) TYPE=InnoDB;","
-CREATE TABLE `".$BoardName."_priority` (
-  `HASH` tinyblob NOT NULL,
-  `PRIOR` int(10) NOT NULL default '0',
-  PRIMARY KEY  (`HASH`(16))
-) TYPE=MyISAM; 
-
-
-
-";	
+  `HASH` char(32) NOT NULL PRIMARY KEY,
+  `PASSWORD` mediumtext NOT NULL
+) TYPE=MyISAM;";	
 }
 
 sub Warning {
