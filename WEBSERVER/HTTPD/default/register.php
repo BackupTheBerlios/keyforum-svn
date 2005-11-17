@@ -55,7 +55,9 @@ if (PEAR::isError($root)) {
 
 $userdata = $root->toArray();
 
-$userkey=$userdata['root']['userdata']['KEY'];
+$userkey=$userdata['root']['USERDATA']['KEY'];
+$usernick=$userdata['root']['USERDATA']['NICK'];
+
 
 }
 
@@ -67,7 +69,7 @@ $userkey=$userdata['root']['userdata']['KEY'];
 <table align=center width=350>
 <tr>
 	<?php echo "<td class=row1>".$lang['reg_nick']."</td>";?>
-	<td class=row2><input type=text name=nick></td>
+	<td class=row2><input type=text value="<? echo $usernick; ?>" name=nick></td>
 </tr>
 <tr>
 	<?php echo "<td class=row1>".$lang['reg_password']."</td>";?>
