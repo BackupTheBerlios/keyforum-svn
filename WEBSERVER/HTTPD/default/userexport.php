@@ -61,9 +61,9 @@ fwrite($handle, $xmlcont);
 fclose($handle);
 
 echo "<SCRIPT language=JScript src=\"/scripts.js\"></SCRIPT>
-<META HTTP-EQUIV=\"Refresh\" CONTENT=\"1;URL=http://127.0.0.1:20585/forcedownload.php?file=userdata.xml\">";
+<META HTTP-EQUIV=\"Refresh\" CONTENT=\"1;URL=http://".$_SERVER['HTTP_HOST']."/forcedownload.php?file=userdata.xml\">";
 
-echo "<center><a href=\"http://127.0.0.1:20585/userdata.xml\">If download doesn't start in 5 seconds you might try right-clicking here and selecting \"Save As\"</a></center>";
+echo "<center><a href=\"http://".$_SERVER['HTTP_HOST']."/userdata.xml\">If download doesn't start in 5 seconds you might try right-clicking here and selecting \"Save As\"</a></center>";
 
 }
 
