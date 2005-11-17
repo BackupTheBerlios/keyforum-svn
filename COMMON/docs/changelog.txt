@@ -1,5 +1,6 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-17
+mmorselli:	[ADD] Modulo esportazione utente a video o su file XML
 Luftw@ffer:	[FIX] Corretto bug di visualizzazione (con IE) del fieldset nella userlist
 Luftw@ffer:	[FIX] Corretto bug di visualizzazione (con IE) delle celle con i numeri di pagina dei thread,
 		      nella pagina sezioni
