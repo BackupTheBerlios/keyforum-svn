@@ -1,7 +1,8 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-17
-Luftw@ffer:	[FIX] Corretto bug di visualizzazione delle celle con i numeri di pagina dei thread,
-		      nella pagina sezioni, nel caso si utilizzi IE
+Luftw@ffer:	[FIX] Corretto bug di visualizzazione (con IE) del fieldset nella userlist
+Luftw@ffer:	[FIX] Corretto bug di visualizzazione (con IE) delle celle con i numeri di pagina dei thread,
+		      nella pagina sezioni
 
 2005-11-14
 DanieleG	[MOD] Viene salvata una copia della chiave pubblica dell'utente nel DB per aumentare le prestazioni

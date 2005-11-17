@@ -1,5 +1,5 @@
 <?PHP
-// v. 0.12
+// v. 0.13
 include ("testa.php");
 // carico la lingua per le sezioni
 $lang = $std->load_lang('lang_userlist', $blanguage );
@@ -70,11 +70,17 @@ function PageSelect() {
  <td>
   <form method='get' action='userlist.php'>
     <fieldset class='row3'>
-     <? echo "<legend>".$lang['usrlist_show']."</legend>";?>
-     <input type='checkbox' name='validati' value='1'<? if($_REQUEST['validati']) echo ' checked'; echo ">".$lang['usrlist_valid']."";?>
-     <input type='checkbox' name='nonvalidati' value='1'<? if($_REQUEST['nonvalidati']) echo ' checked'; echo ">".$lang['usrlist_notvalid']."&nbsp;";?>
-     <input type='hidden' name='pag' value='0'>
-     <? echo"<input type='submit' value='".$lang['usrlist_apply']."' class='button'>";?>
+     <? echo "<legend>".$lang['usrlist_show']."</legend>"; ?>
+     <table border="0" cellpadding="2px" cellspacing="0" width="100%">
+      <tr>
+       <td>
+        <input type='checkbox' name='validati' value='1'<? if($_REQUEST['validati']) echo ' checked'; echo ">".$lang['usrlist_valid']; ?>
+        <input type='checkbox' name='nonvalidati' value='1'<? if($_REQUEST['nonvalidati']) echo ' checked'; echo ">".$lang['usrlist_notvalid']."&nbsp;"; ?>
+        <input type='hidden' name='pag' value='0'>
+        <? echo"<input type='submit' value='".$lang['usrlist_apply']."' class='button'>"; ?>
+       </td>
+      </tr>
+     </table>
     </fieldset>
   </form>
 <?
