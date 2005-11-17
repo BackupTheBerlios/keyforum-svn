@@ -1,5 +1,5 @@
 <?PHP
-// v. 0.8
+// v. 0.9
 include ("testa.php");
 $lang = $std->load_lang('lang_sezioni', $blanguage );
 
@@ -134,10 +134,10 @@ while ($riga = mysql_fetch_assoc($risultato)) {
   if($rep>$PostXPage){
      while($rep>0){
         if($i<=$Section){
-           $Pages=$Pages."&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag={$i}'>".++$i."</a></span>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag={$i}'>".++$i."</a></span></td>";
            $rep=$rep-$PostXPage;
         }else{
-           $Pages=$Pages."&nbsp;<span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag=last#end_page'>&raquo;</a></span>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag=last#end_page'>&raquo;</a></span></td>";
            $rep=0;
         }
      }
@@ -146,7 +146,7 @@ while ($riga = mysql_fetch_assoc($risultato)) {
 <tr height='35'>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif'></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($riga["title"])."</a>".$Pages."<br>".secure_v($riga["subtitle"])."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($riga["title"])."</a></td>".$Pages."<br>".secure_v($riga["subtitle"])."</tr></tbody></table></td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
   <td align=center class='row4'><u><small><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></small></u></td>
   <td align=center class='row4'>".$riga['read_num']."</td>
