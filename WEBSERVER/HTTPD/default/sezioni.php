@@ -146,7 +146,7 @@ while ($riga = mysql_fetch_assoc($risultato)) {
 <tr height='35'>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif'></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($riga["title"])."</a></td>".$Pages."</tr></tbody></table>".secure_v($riga["subtitle"])."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($riga["title"])."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
   <td align=center class='row4'><u><small><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></small></u></td>
   <td align=center class='row4'>".$riga['read_num']."</td>
