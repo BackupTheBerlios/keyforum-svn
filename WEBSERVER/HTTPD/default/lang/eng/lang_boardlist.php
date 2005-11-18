@@ -7,5 +7,6 @@ $lang['board_name']  = "Name";
 $lang['board_bind']  = "Bind";
 $lang['board_port']  = "Port n°";
 $lang['board_pkey']  = "Public Key";
+$lang['timeout']  = "Timeout";
 
 ?>

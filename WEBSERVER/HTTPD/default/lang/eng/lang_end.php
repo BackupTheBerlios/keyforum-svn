@@ -14,7 +14,7 @@ $lang['perl_noderror2'] = "Board not found from registered";
 $lang['perl_noderror3'] = "Nobody connected at board!";
 $lang['perl_node1'] = "There are ";
 $lang['perl_node2'] = " connected nodes";
-$lang['query'] = " executed queries";
+$lang['timeout'] = "Timeout";
 
 
 ?>

@@ -85,11 +85,8 @@ PageSelect();
     </tr>";
 ?>
 <?PHP
-# 2 Scambio nodi
-# 1 passivo
-# 3 manuale
 $i=$CurrPag*$BoardXPage;
-$querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
+$querywse="SELECT DISTINCT SUBKEY, VALUE FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
 $responsewse=mysql_query($querywse) or Muori ($lang['inv_query'] . mysql_error());
 while($valuewse=mysql_fetch_assoc($responsewse)){
 
@@ -109,15 +106,16 @@ while($valuews=mysql_fetch_assoc($responsews)){
    }
    if($portwsl){
       if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
-         $querytemp="SELECT VALORE FROM temp WHERE CHIAVE='".$valuewse['SUBKEY']."_PKEY_DEC';";
-         $responsetemp=mysql_query($querytemp) or Muori ($lang['inv_query'] . mysql_error());
-         $valuetemp=mysql_fetch_assoc($responsetemp);
+         $req_dec[FUNC][Base642Dec]=$valuewse['VALUE'];
+         $core   = new CoreSock;
+         $core->Send($req_dec);
+         if (!($rep_dec=$core->Read())) die ($lang['timeout']);
          echo "<tr>
 	    <td class='row1' align='right'>".++$i."</td>
 	    <td class='row2' align='left'>&nbsp;<a href=\"http://$bindwsl:$portwsl\">".$valuews['SUBKEY']."</a></td>
             <td class='row2' align='center'>".$bindwsl."</td>
             <td class='row2' align='center'>".$portwsl."</td>
-	    <td class='row2' align='center'><textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$valuetemp['VALORE']."</textarea></td>\n</tr>";
+	    <td class='row2' align='center'><textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
       }
    }
 }

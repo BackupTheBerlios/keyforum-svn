@@ -27,7 +27,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
            $req_nod[INFO][FORUM][0]=pack("H*", $idriga['value']);
            $core   = new CoreSock;
            $core->Send($req_nod);
-           if (!($risposta=$core->Read())) die ("Non ha risposto entro il timeout");
+           if (!($risposta=$core->Read())) die ($lang['timeout']);
            if(!$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI]){
               echo $lang['perl_noderror3'];
            }else{

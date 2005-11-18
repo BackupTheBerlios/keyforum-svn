@@ -131,7 +131,7 @@ function togglevis(id) {
 </div>
 <div id="userlinks">
   <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><? echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><? echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><? echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><? echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.pl"><? echo $lang['userlink_brdlst']; ?></a> | <? echo $lang['userlink_wlcm']; ?>
+  <p><b><a href="index.php"><? echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><? echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><? echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><? echo $lang['userlink_brdlst']; ?></a> | <? echo $lang['userlink_wlcm']; ?>
    <?php
       if ($sess_auth)
         echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';

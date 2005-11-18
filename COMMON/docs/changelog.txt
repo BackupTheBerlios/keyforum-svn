@@ -1,5 +1,6 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-18
+Luftw@ffer:	[MOD] boardlist.php utilizza i socket
 Luftw@ffer:	[MOD] end.php utilizza i socket
 
 2005-11-17

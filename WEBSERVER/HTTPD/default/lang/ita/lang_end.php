@@ -14,7 +14,7 @@ $lang['perl_noderror2'] = "Board Non trovata tra quelle iscritte";
 $lang['perl_noderror3'] = "Nessun utente è connesso alla board!";
 $lang['perl_node1'] = "Ci sono ";
 $lang['perl_node2'] = " nodi connessi";
-$lang['query'] = " query eseguite";
+$lang['timeout'] = "Il core non ha risposto entro il timeout";
 
 
 ?>
