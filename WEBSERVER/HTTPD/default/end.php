@@ -19,7 +19,22 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	</th>
        </tr>
        <tr>
-	<td class="formsubtitle" colspan="2"><img src='img/connect.gif'>&nbsp;<SCRIPT Language=Javascript SRC='number.pm<? echo "?err1=".$lang['perl_noderror1']."&err2=".$lang['perl_noderror2']."&err3=".$lang['perl_noderror3']."&node1=".$lang['perl_node1']."&node2=".$lang['perl_node2']; ?>'></SCRIPT></td>
+	<td class="formsubtitle" colspan="2"><img src='img/connect.gif'>&nbsp;
+        <?PHP
+           $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
+           $idrisultato = mysql_query($idquery) or Muori ($lang['inv_query'] . mysql_error());
+           $idriga = mysql_fetch_assoc($idrisultato);
+           $req_nod[INFO][FORUM][0]=pack("H*", $idriga['value']);
+           $core   = new CoreSock;
+           $core->Send($req_nod);
+           if (!($risposta=$core->Read())) die ("Non ha risposto entro il timeout");
+           if(!$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI]){
+              echo $lang['perl_noderror3'];
+           }else{
+              echo $lang['perl_node1'].$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI].$lang['perl_node2'];
+           }
+        ?>
+        </td>
        </tr>
        <tr>
 	<td class="row1" width="1%"><img src='img/stats.gif' border='0' alt='Stats'></td>
