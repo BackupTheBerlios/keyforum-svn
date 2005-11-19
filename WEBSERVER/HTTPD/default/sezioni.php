@@ -1,5 +1,5 @@
 <?PHP
-// v. 0.9
+// v. 0.10
 include ("testa.php");
 $lang = $std->load_lang('lang_sezioni', $blanguage );
 
@@ -87,11 +87,11 @@ PageSelect();
    <tr>
     <th align="center" width="1%">&nbsp;</th>
     <th align="center" width="1%">&nbsp;</th>
-    <th align="left" width="50%" class='titlemedium'><?PHP echo $lang['topic_title'] ?></th>
+    <th align="left" width="57%" class='titlemedium'><?PHP echo $lang['topic_title'] ?></th>
     <th align="center" width="6%" class='titlemedium'><?PHP echo $lang['topic_replies'] ?></th>
-    <th align="center" width="14%" class='titlemedium'><?PHP echo $lang['topic_starter'] ?></th>
+    <th align="center" width="10%" class='titlemedium'><?PHP echo $lang['topic_starter'] ?></th>
     <th align="center" width="7%" class='titlemedium'><?PHP echo $lang['toppic_views'] ?></th>
-    <th align="center" width="21%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
+    <th align="center" width="18%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
    </tr>
 <?PHP
 $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
@@ -142,11 +142,16 @@ while ($riga = mysql_fetch_assoc($risultato)) {
         }
      }
   }
+  if(strlen($riga["title"])>100){
+     $title=substr($riga["title"], 0, 100)."...";
+  }else{
+     $title=$riga["title"];
+  }
   echo "
 <tr height='35'>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif'></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($riga["title"])."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
   <td align=center class='row4'><u><small><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></small></u></td>
   <td align=center class='row4'>".$riga['read_num']."</td>
