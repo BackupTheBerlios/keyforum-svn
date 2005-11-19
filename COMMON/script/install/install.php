@@ -61,6 +61,13 @@ if ($cnt==3){
 
 }
 
+// startup page
+$apacheconf .= "# startup page\n";
+$apacheconf .= "Listen 80\n";
+$apacheconf .= "<VirtualHost 127.0.0.1:80>\n";
+$apacheconf .= "DocumentRoot $apachedir/WEBSERVER/HTTPD/startup\n";
+$apacheconf .= "</VirtualHost>\n";
+
 // sovrascrivo keyforum.conf
 $filename = "$apachedir/WEBSERVER/apache/conf/keyforum.conf";
 echo "-> $filename\n";
