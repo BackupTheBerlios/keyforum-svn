@@ -38,7 +38,7 @@ del WEBSERVER\Apache\logs\httpd.pid
 
 rem STOP MYSQL
 echo STOPPING MYSQL...
-COMMON\mysql\bin\mysqladmin shutdown --user=root --password=
+COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf  shutdown --user=root --password= 
 echo KEYFORUM STOPPED !
 echo;
 pause

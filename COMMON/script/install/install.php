@@ -24,7 +24,7 @@ $settings = $root->toArray();
 
 // *********
 // connessione al db
- $connection = @mysql_connect($settings['root']['conf']['DB']['host'], $settings['root']['conf']['DB']['dbuser'], $settings['root']['conf']['DB']['dbpassword'])
+ $connection = @mysql_connect($settings['root']['conf']['DB']['host'].":".$settings['root']['conf']['DB']['dbport'], $settings['root']['conf']['DB']['dbuser'], $settings['root']['conf']['DB']['dbpassword'])
   	or die("Non riesco a connettermi al database");
 
 

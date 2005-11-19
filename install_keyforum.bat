@@ -30,7 +30,7 @@ rem poi tutto il resto
 %PHP_BIN%  -q COMMON\script\install\install.php
 
 echo ARRESTO DI MYSQL
-COMMON\mysql\bin\mysqladmin shutdown --user=root --password=
+COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf shutdown --user=root --password=
 
 echo;
 echo TERMINATO...
