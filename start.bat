@@ -1,5 +1,8 @@
 @echo off
 
+rem controllo la directory
+CALL COMMON\script\chkdir.bat
+
 rem controllo le porte
 ECHO PORTS CHECK
 IF EXIST kstop.txt DEL kstop.txt

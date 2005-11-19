@@ -73,6 +73,25 @@ $filename = "$apachedir/WEBSERVER/apache/conf/keyforum.conf";
 echo "-> $filename\n";
 $handle = fopen($filename, 'w');
 fwrite($handle, $apacheconf);
+fclose($handle);
+
+// sovrascrivo chkdir.bat
+$filename = "$apachedir/COMMON/script/chkdir.bat";
+echo "-> $filename\n";
+$chkdir= "@echo off
+ECHO DIRECTORY CHECK
+IF EXIST \"$phpdir\WEBSERVER\Apache\conf\keyforum.conf\" GOTO fine
+ECHO KEYFORUM NEEDS CONFIGURATION
+ECHO;
+pause
+install_keyforum.bat
+:fine
+ECHO OK
+ECHO;
+";
+$handle = fopen($filename, 'w');
+fwrite($handle, $chkdir);
+fclose($handle);
 
 exit();
 ?>
