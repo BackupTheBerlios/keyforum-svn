@@ -99,7 +99,7 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 <center>
 <br>
 <form action="<?php echo $_SERVER['PHP_SELF'];?>?submit=1" method="post" enctype="multipart/form-data">
-   Importa utente: <input type="hidden" name="MAX_FILE_SIZE" value="100000">
+<?php echo "   ".$lang['reg_import']." <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"100000\"> "; ?>
    
    <input name="userfile" type="file"><br>
    <input type="submit" value="Invia">
