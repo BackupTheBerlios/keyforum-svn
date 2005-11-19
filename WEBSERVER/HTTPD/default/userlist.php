@@ -1,5 +1,5 @@
 <?PHP
-// v. 0.13
+// v. 0.14
 include ("testa.php");
 // carico la lingua per le sezioni
 $lang = $std->load_lang('lang_userlist', $blanguage );
@@ -78,6 +78,13 @@ function PageSelect() {
         <input type='checkbox' name='validati' value='1'<? if($_REQUEST['validati']) echo ' checked'; echo ">".$lang['usrlist_valid']; ?>
         <input type='checkbox' name='nonvalidati' value='1'<? if($_REQUEST['nonvalidati']) echo ' checked'; echo ">".$lang['usrlist_notvalid']."&nbsp;"; ?>
         <input type='hidden' name='pag' value='0'>
+        &nbsp;
+        <? echo $lang['usrlist_orderby']; ?>
+        <select name="order_by" size="1">
+          <option <? if(!$_REQUEST['order_by']) echo "selected"; ?><? if($_REQUEST['order_by']=="DATE") echo "selected"; ?> value='DATE'><? echo $lang['usrlist_orderby_date']; ?></option>
+          <option <? if($_REQUEST['order_by']=="AUTORE") echo "selected"; ?> value='AUTORE'><? echo $lang['usrlist_orderby_nick']; ?></option>
+          <option <? if($_REQUEST['order_by']=="msg_num") echo "selected"; ?> value='msg_num'><? echo $lang['usrlist_orderby_msg']; ?></option>
+        </select>
         <? echo"<input type='submit' value='".$lang['usrlist_apply']."' class='button'>"; ?>
        </td>
       </tr>
@@ -108,6 +115,12 @@ if (! is_numeric($CurrPag))
 if ($CurrPag < 0) $CurrPag = 0;
 
 PageSelect();
+
+if(!$_REQUEST['order_by']){
+   $order="DATE";
+}else{
+   $order=$_REQUEST['order_by'];
+}
 ?>
 <div class="borderwrap">
   <div class="maintitle">
@@ -127,15 +140,15 @@ PageSelect();
 <?PHP
 if($_REQUEST['validati']){
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY DATE LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY DATE LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }else{
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY DATE LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY DATE LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }
 # 2 Scambio nodi

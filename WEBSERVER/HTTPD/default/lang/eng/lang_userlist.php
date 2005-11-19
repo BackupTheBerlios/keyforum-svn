@@ -14,5 +14,9 @@ $lang['usrlist_messages']  = "Messages";
 $lang['usrlist_gruop']  = "Group";
 $lang['usrlist_member']  = "Member";
 $lang['usrlist_validated']  = "To validate";
+$lang['usrlist_orderby_date'] = "Date";
+$lang['usrlist_orderby_nick'] = "Nick";
+$lang['usrlist_orderby_msg'] = "Messages";
+$lang['usrlist_orderby'] = "Order by";
 
 ?>
