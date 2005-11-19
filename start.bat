@@ -7,7 +7,8 @@ set PHP_BIN=WEBSERVER\apache\bin\php-cgi.exe
 %PHP_BIN%  -q COMMON\script\kport.php
 
 IF EXIST kstop.txt GOTO exitall
-ECHO ALL PORTS ARE FREE :-)
+ECHO OK: ALL NEEDED PORTS ARE FREE :-)
+ECHO;
 
 rem MYSQL
 echo STARTING MySQL
@@ -18,6 +19,7 @@ echo STARTING Apache
 cd WEBSERVER\Apache\bin
 StartApache.exe
 
+echo STARTING KeyForum
 rem CORE
 cd ..\..\..\CORE
 perl\bin\perl prog.pl

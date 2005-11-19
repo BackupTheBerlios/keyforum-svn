@@ -55,7 +55,7 @@ if ($cnt==3){
  $apacheconf .= "# {$row['subkey']}\n";
  $apacheconf .= "Listen $port\n";
  $apacheconf .= "<VirtualHost $bind:$port>\n";
- $apacheconf .= "DocumentRoot $apachedir/WEBSERVER/HTTPD/$dir\n";
+ $apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/$dir\"\n";
  $apacheconf .= "</VirtualHost>\n\n";
             }
 
@@ -65,7 +65,7 @@ if ($cnt==3){
 $apacheconf .= "# startup page\n";
 $apacheconf .= "Listen 81\n";
 $apacheconf .= "<VirtualHost 127.0.0.1:81>\n";
-$apacheconf .= "DocumentRoot $apachedir/WEBSERVER/HTTPD/startup\n";
+$apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/startup\"\n";
 $apacheconf .= "</VirtualHost>\n";
 
 // sovrascrivo keyforum.conf

@@ -30,8 +30,12 @@ if (preg_match("/\blisten\b/i", $buffer)) {
 
 }
 
-$portlist = $portlist.$mysqlport;
 fclose($handle);
+
+// altre porte (keyforum com = 40569 , keyforum shell = 40565")
+$otherport=",40569,40565";
+
+$portlist = $portlist.$mysqlport.$otherport;
 
 $ports= explode(',', $portlist);
 
