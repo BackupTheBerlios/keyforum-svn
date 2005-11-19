@@ -18,7 +18,7 @@ if ($sess_auth==1) {
     $query="SELECT count(*) as 'num' FROM `".mysql_real_escape_string($_ENV[sesname])."_localmember` WHERE `HASH`='".mysql_escape_string($identificatore)."';";
     $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
     if ($riga = mysql_fetch_assoc($risultato)) {
-      if ($riga[num] == 0) Muori("Utente o password errata\n<br>");
+      if ($riga[num] == 0) Muori("".$lang['login_err']."\n<br>");
       $query="INSERT INTO `session` (`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) ".
               "VALUES('".session_id()."',md5('".$_ENV['REMOTE_ADDR']."'),'".mysql_real_escape_string($_ENV[sesname])."','".mysql_real_escape_string($_POST["nick"])."','".time()."','".mysql_real_escape_string($rawpasswd)."');";
       echo $lang['login_succ'];
