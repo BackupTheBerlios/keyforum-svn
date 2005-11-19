@@ -31,6 +31,12 @@ function PageSelect() {
         $link="userlist.php?";
      }
   }
+  if($_REQUEST['order_by']){
+     $link=$link."order_by=".$_REQUEST['order_by']."&";
+  }
+  if($_REQUEST['order']){
+     $link=$link."order=".$_REQUEST['order']."&";
+  }
   $link = $link."pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['usrlist_pages']."</span>&nbsp;";
@@ -85,6 +91,10 @@ function PageSelect() {
           <option <? if($_REQUEST['order_by']=="AUTORE") echo "selected"; ?> value='AUTORE'><? echo $lang['usrlist_orderby_nick']; ?></option>
           <option <? if($_REQUEST['order_by']=="msg_num") echo "selected"; ?> value='msg_num'><? echo $lang['usrlist_orderby_msg']; ?></option>
         </select>
+        <select name="order" size="1">
+          <option <? if(!$_REQUEST['order']) echo "selected"; ?><? if($_REQUEST['order']=="ASC") echo "selected"; ?> value='ASC'><? echo $lang['usrlist_order_asc']; ?></option>
+          <option <? if($_REQUEST['order']=="DESC") echo "selected"; ?> value='DESC'><? echo $lang['usrlist_order_des']; ?></option>
+        </select>
         <? echo"<input type='submit' value='".$lang['usrlist_apply']."' class='button'>"; ?>
        </td>
       </tr>
@@ -117,9 +127,14 @@ if ($CurrPag < 0) $CurrPag = 0;
 PageSelect();
 
 if(!$_REQUEST['order_by']){
-   $order="DATE";
+   $order_by="DATE";
 }else{
-   $order=$_REQUEST['order_by'];
+   $order_by=$_REQUEST['order_by'];
+}
+if(!$_REQUEST['order']){
+   $order="";
+}else{
+   $order=" ".$_REQUEST['order'];
 }
 ?>
 <div class="borderwrap">
@@ -140,15 +155,15 @@ if(!$_REQUEST['order_by']){
 <?PHP
 if($_REQUEST['validati']){
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }else{
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }
 # 2 Scambio nodi

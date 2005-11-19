@@ -18,5 +18,7 @@ $lang['usrlist_orderby_date'] = "Data";
 $lang['usrlist_orderby_nick'] = "Nick";
 $lang['usrlist_orderby_msg'] = "Messaggi";
 $lang['usrlist_orderby'] = "Ordina per";
+$lang['usrlist_order_des'] = "Decrescente";
+$lang['usrlist_order_asc'] = "Crescente";
 
 ?>
