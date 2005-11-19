@@ -1,6 +1,7 @@
 <?PHP
 
 include ("testa.php");
+$lang = $std->load_lang('lang_userexport', $blanguage );
 $SNAME=$_ENV['sesname'];
 $whereiam="userexport";
 
@@ -17,20 +18,20 @@ $whereiam="userexport";
 <table cellSpacing="0" cellPadding="0" border="0" id="table3">
   <tr>
     <td align="right">
-    <p >Nick:&nbsp;</td>
+    <? echo" <p >".$lang['usrexp_usrname']."&nbsp;</td>";?>
     <td>
     <p ><input value="<? echo $_REQUEST['nick']; ?>" name="nick"></td>
   </tr>
   <tr>
 
     <td align="right">
-    <p >Password:&nbsp;</td>
+    <? echo" <p >".$lang['usrexp_password']."&nbsp;</td>";?>
     <td>
     <p ><input type="password" value="<? echo $_REQUEST['passwd']; ?>" name="passwd"></td>
   </tr>
 </table>
 
-        <p><input type="submit" value="Export" name="B_Export"><input type="submit" value="Show" name="B_Show"></p>
+      <? echo"   <p><input type=\"submit\" value=\"".$lang['usrexp_export']."\" name=\"B_Export\"><input type=\"submit\" value=\"".$lang['usrexp_show']."\" name=\"B_Show\"></p>";?>
       </form>
       <p>&nbsp;</td>
     </tr>
