@@ -1,5 +1,6 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-19
+Luftw@ffer:	[MOD] gestip.php non utilizza più le $_ENV
 Luftw@ffer:	[MOD] Taglia il titolo se > 100 in sezioni.php
 
 2005-11-18

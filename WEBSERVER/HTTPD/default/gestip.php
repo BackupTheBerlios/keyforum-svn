@@ -6,27 +6,30 @@ include ("testa.php");
 $lang = $std->load_lang('lang_gestip', $blanguage );
 
 $whereiam="gestip";
+$idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
+$idrisultato = mysql_query($idquery) or Muori ($lang['inv_query'] . mysql_error());
+$idriga = mysql_fetch_assoc($idrisultato);
 ?>
 <tr>
 	<td>
 <?PHP
 if ($_POST[action]=="update") {
     if($_POST[delete]) {
-		mysql_query("DELETE FROM iplist WHERE BOARD='".$_ENV[idboard]."' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
+		mysql_query("DELETE FROM iplist WHERE BOARD='".$idriga['value']."' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
 	} else {
 		if ($_POST['STATIC']) $stat=1; else $stat=0; 
-		mysql_query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='".$_ENV[idboard]."';") or print ($lang['inv_query'] . mysql_error());
+		mysql_query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='".$idriga['value']."';") or print ($lang['inv_query'] . mysql_error());
 	}
 	
 } elseif ($_POST[action]=="nuovo") {
 	if ($_POST['STATIC']) $stat=1; else $stat=0; 
 	mysql_query("INSERT INTO iplist (BOARD,IP,TCP_PORT,TROVATO,STATIC) VALUES "
-	."('".$_ENV[idboard]."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');") or print ($lang['inv_query'] . mysql_error());
+	."('".$idriga['value']."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');") or print ($lang['inv_query'] . mysql_error());
 }
 ?>
 <?PHP
 	echo $lang['gestip_nodelist'];
-	print $_ENV[idboard];?>.<bR>
+	print $idriga['value'];?>.<bR>
 	<?PHP echo $lang['gestip_info'];?>.<br><br>
 	<?PHP echo "<a href=\"gestip.php\">".$lang['gestip_refresh']."</a><br>";?>
 	<br><br>
@@ -52,7 +55,7 @@ if ($_POST[action]=="update") {
 		</tR>";
 		  ?>
 <?PHP
-$risultato=mysql_query("SELECT * FROM iplist WHERE BOARD='".$_ENV[idboard]."';");
+$risultato=mysql_query("SELECT * FROM iplist WHERE BOARD='".$idriga['value']."';");
 # 2 Scambio nodi
 # 1 passivo
 # 3 manuale
