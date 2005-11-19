@@ -45,8 +45,8 @@ pause
 GOTO end
 
 :exitall
-echo SI E' VERIFICATO UN PROBLEMA
-echo IMPOSSIBILE AVVIARE KEYFORUM
+echo SOME PROBLEMS OCCURS
+echo IMPOSSIBLE TO START KEYFORUM
 type kstop.txt
 echo;
 pause
