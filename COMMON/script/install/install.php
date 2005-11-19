@@ -63,8 +63,8 @@ if ($cnt==3){
 
 // startup page
 $apacheconf .= "# startup page\n";
-$apacheconf .= "Listen 80\n";
-$apacheconf .= "<VirtualHost 127.0.0.1:80>\n";
+$apacheconf .= "Listen 81\n";
+$apacheconf .= "<VirtualHost 127.0.0.1:81>\n";
 $apacheconf .= "DocumentRoot $apachedir/WEBSERVER/HTTPD/startup\n";
 $apacheconf .= "</VirtualHost>\n";
 

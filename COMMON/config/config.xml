@@ -3,6 +3,7 @@
     <DB>
       <type>mysql</type>
       <host>localhost</host>
+      <dbport>3306</dbport>
       <dbuser>root</dbuser>
       <dbpassword></dbpassword>
       <dbname>keyforum</dbname>

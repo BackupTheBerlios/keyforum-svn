@@ -1,5 +1,14 @@
 @echo off
 
+rem controllo le porte
+ECHO PORTS CHECK
+IF EXIST kstop.txt DEL kstop.txt
+set PHP_BIN=WEBSERVER\apache\bin\php-cgi.exe
+%PHP_BIN%  -q COMMON\script\kport.php
+
+IF EXIST kstop.txt GOTO exitall
+ECHO ALL PORTS ARE FREE :-)
+
 rem MYSQL
 echo STARTING MySQL
 start COMMON\mysql\bin\mysqld --defaults-file=COMMON\mysql\bin\my.cnf --standalone
@@ -28,3 +37,13 @@ COMMON\mysql\bin\mysqladmin shutdown --user=root --password=
 echo KEYFORUM STOPPED !
 echo;
 pause
+GOTO end
+
+:exitall
+echo SI E' VERIFICATO UN PROBLEMA
+echo IMPOSSIBILE AVVIARE KEYFORUM
+type kstop.txt
+echo;
+pause
+
+:end
