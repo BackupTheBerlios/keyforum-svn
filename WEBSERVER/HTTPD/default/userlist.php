@@ -14,6 +14,7 @@ function PageSelect() {
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
 <?
+	global $lang;
   global $NumPag;
   global $CurrPag;
   global $Section;
@@ -32,7 +33,7 @@ function PageSelect() {
   }
   $link = $link."pag=";
   if ($NumPag > 0) {
-    echo "<span class='pagelink'>".($NumPag+1)."&nbsp;Pagine</span>&nbsp;";
+    echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['usrlist_pages']."</span>&nbsp;";
     if ($CurrPag>0) { # Pagina precedente
       echo "<span class='pagelinklast'><a href=\"{$link}0\">&laquo;</a></span>&nbsp;";
       echo "<span class='pagelink'><a href=\"{$link}".($CurrPag-1)."\">&lt;</a></span>&nbsp;";
