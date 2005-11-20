@@ -112,7 +112,13 @@ function printmsg ($MSG,$usercolor) {
    <tr>
     <td bordercolor='#F0F0FF' class='postdetails'><b>".$lang['shmsg_title']."
 
-</b>".secure_v($MSG['title'])."</td>
+</b>";
+ $title=$MSG['title'];
+ if($MSG['subtitle']){
+    $title=$title.", ".$MSG['subtitle'];
+ }
+
+ echo secure_v($title)."</td>
    </tr>
   </table><br>
   <div class='postcolor'> ".convert($MSG['body'])."</div>

@@ -3,7 +3,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 CheckSession();
 ?>
-<!-- v.0.22 -->
+<!-- v.0.23 -->
 <html>
 <head>
 <link rel="shortcut icon" href="favicon.ico">
@@ -25,10 +25,14 @@ $BNAME=$valueacbd['SUBKEY'];
 
   if (pack("H*",$_REQUEST[THR_ID])){
     $MSGID=mysql_escape_string(pack("H*",$_REQUEST[THR_ID]));
-    $query="SELECT title FROM {$SNAME}_newmsg WHERE EDIT_OF='$MSGID' ORDER BY DATE DESC LIMIT 1;";
+    $query="SELECT title, subtitle FROM {$SNAME}_newmsg WHERE EDIT_OF='$MSGID' ORDER BY DATE DESC LIMIT 1;";
     $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-    $title=mysql_fetch_assoc($risultato);
-    $title=secure_v($title["title"]);
+    $title1=mysql_fetch_assoc($risultato);
+    $title=$title1["title"];
+    if($title1["subtitle"]){
+       $title=$title.", ".$title1["subtitle"];
+    }
+    $title=secure_v($title);
     echo $title." - ";
   }else{
     if ($SEZ_DATA['ID'])
