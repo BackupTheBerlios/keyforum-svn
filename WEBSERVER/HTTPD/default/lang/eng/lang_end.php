@@ -3,9 +3,9 @@
 $lang['inv_query']  = "Invalid query: ";
 $lang['mtitle_stat']  = "Statistics";
 $lang['stat_dbmess1']  = "There are ";
-$lang['stat_dbmess2']  = " message in the database";
+$lang['stat_dbmess2']  = " messages in the database";
 $lang['stat_dbmesslh1']  = "Inserted ";
-$lang['stat_dbmesslh2']  = " msg in the database in the last hour";
+$lang['stat_dbmesslh2']  = " messages in database in the last hour";
 $lang['stat_reguser1']  = "We have ";
 $lang['stat_reguser2']  = " registered users";
 $lang['stat_extime']  = "Execution time: ";
