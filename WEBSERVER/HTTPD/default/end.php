@@ -26,12 +26,13 @@ $lang = $std->load_lang('lang_end', $blanguage );
            $idriga = mysql_fetch_assoc($idrisultato);
            $req_nod[INFO][FORUM][0]=pack("H*", $idriga['value']);
            $core   = new CoreSock;
-           $core->Send($req_nod);
-           if (!($risposta=$core->Read())) die ($lang['timeout']);
-           if(!$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI]){
-              echo $lang['perl_noderror3'];
-           }else{
-              echo $lang['perl_node1'].$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI].$lang['perl_node2'];
+           if ( !(@$core->Connect()) ) echo "Core offline!";
+           else {
+                 $core->Send($req_nod);
+                 if (!($risposta=$core->Read())) die ($lang['timeout']);
+                 if (!$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI])
+                     echo $lang['perl_noderror3'];
+                 else echo $lang['perl_node1'].$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI].$lang['perl_node2'];
            }
         ?>
         </td>
