@@ -50,8 +50,6 @@ $querysql="SELECT ". $SNAME . "_newmsg.title as title, " . $SNAME . "_membri.AUT
           . " AND " . $SNAME . "_membri.HASH=" . $SNAME . "_msghe.AUTORE";
 $sqlresult=mysql_query($querysql);
 if (mysql_num_rows($sqlresult) == 0) die("<br>Errore: Messaggio Non trovato!\n");
-else $MSG_DATA=
-
 
 $REP_DATA['REP_OF']=$MSG_HASH;
 $REP_DATA['AUTORE']=ForumLib::GetAuthorHash();
