@@ -5,6 +5,8 @@ use MIME::Base64;
 use Crypt::Blowfish;
 use Itami::ConvData;
 use Itami::BinDump;
+use Time::Local;
+
 my $uptime=time();
 
 
@@ -44,6 +46,8 @@ sub ResetSendVar {
 	my $this=shift;
 	$this->{tosend}={};
 	$this->{tosend}->{'CORE'}->{'INFO'}->{'UPTIME'}=time()-$uptime;
+	$this->{tosend}->{'CORE'}->{'INFO'}->{'GMT_TIME'}=Time::Local::timelocal(gmtime(time()+$GLOBAL::ntpoffset));
+	$this->{tosend}->{'CORE'}->{'INFO'}->{'NTP_SEC'}=$GLOBAL::ntpoffset;
 }
 sub act_HASHREQ {
 	my ($this,$data)=@_;
