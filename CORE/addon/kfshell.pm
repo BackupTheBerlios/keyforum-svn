@@ -8,8 +8,8 @@ use Itami::BinDump;
 use Time::Local;
 
 my $uptime=time();
-
-
+my $win32api=0;
+my $hWnd;
 sub new {
 	my ($ogg,$sock,$server)=@_;
 	return undef unless $GLOBAL::ctcp->AddSock($sock,(MaxSleep=>120,type=>'compbase'));
@@ -27,12 +27,39 @@ sub RecData {
 	$this->act_INFO($data->{INFO}) if exists $data->{INFO};
 	$this->act_HASHREQ($data->{HASHREQ}) if exists $data->{HASHREQ};
 	$this->act_FUNC($data->{FUNC}) if exists $data->{FUNC};
+	$this->act_CORE($data->{'CORE'}) if exists $data->{'CORE'};
 	die("\n\nKeyForum chiuso per una richiesta dalla Shell.\n\n") if exists($data->{CHIUDI}) && $data->{CHIUDI};
 	$GLOBAL::ctcp->send($this->{num},$this->{tosend});
 	$this->ResetSendVar();
 }
+sub act_CORE {
+	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
+	$this->{tosend}->{'CORE'}={} unless exists $this->{tosend}->{'CORE'};
+	$this->{tosend}->{'CORE'}->{'Win32HideWin'}=$this->act_CORE_HideWin($data->{'Win32HideWin'}) if exists $data->{'Win32HideWin'};
+}
+sub act_CORE_HideWin {
+	my ($this,$data)=@_;
+	return "Errore: Avevo tentato questa azione prima ma ho avuto dei problemi :(" if $win32api<0;
+	if ($win32api==0) {
+		eval "use Win32::API;";
+		if ($@) {$win32api=-1;my $errore="$@";$@='';return "Errore: ".$errore;}
+		eval {
+			Win32::API->Import("kernel32.dll", 'HWND GetConsoleWindow()' ) || die("Errore nel caricamento di kernel32.dll");
+			Win32::API->Import("user32.dll", 'BOOL ShowWindow( HWND hWnd, int iCommand )' ) || die("Errore nel caricamento di user32.dll");
+			$hWnd = GetConsoleWindow();
+		};
+		if ($@) {$win32api=-1;my $errore="$@";$@='';return "Errore: ".$errore;}
+		$win32api=1;
+	}
+	eval "ShowWindow(\$hWnd,0x00);" if $data eq 'hide';#Nasconde la finestra
+	eval "ShowWindow(\$hWnd,0x04 );" if $data eq 'show';#Mostra la finestra
+	if ($@) {my $errore="$@";$@='';return "Errore: ".$errore;}
+	return "ok";
+}
 sub act_FUNC {
 	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
 	$this->{tosend}->{'FUNC'}={} unless exists $this->{tosend}->{'FUNC'};
 	$this->{tosend}->{'FUNC'}->{Dec2Bin}=ConvData::Dec2Bin($data->{Dec2Bin}) if exists $data->{Dec2Bin};
 	$this->{tosend}->{'FUNC'}->{Bin2Dec}=ConvData::Bin2Dec($data->{Bin2Dec}) if exists $data->{Bin2Dec};
