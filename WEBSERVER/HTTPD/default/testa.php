@@ -8,7 +8,7 @@ CheckSession();
 <head>
 <link rel="shortcut icon" href="favicon.ico">
 <title><?php
-$blanguage='eng'; // Lingua di visualizzazione
+$blanguage='ita'; // Lingua di visualizzazione
 // carico la lingua per la testa
 $lang = $std->load_lang('lang_testa', $blanguage );
 $ThreadXPage = 20;
