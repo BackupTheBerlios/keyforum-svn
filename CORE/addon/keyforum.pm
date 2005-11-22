@@ -345,6 +345,10 @@ sub StartUp {
 	ForumVer::SetVar("TCP_PORT",$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA});
 	ForumVer::SetVar("UDP_PORT",$GLOBAL::CONFIG->{SHARESERVER}->{UDP}->{PORTA});
 	ForumVer::SetVar("DESC", $GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{NICK});
+	$GLOBAL::CONFIG->{TEMP_DIRECTORY}="temp_bf" if length($GLOBAL::CONFIG->{TEMP_DIRECTORY})==0;
+	mkdir $GLOBAL::CONFIG->{TEMP_DIRECTORY} unless -d $GLOBAL::CONFIG->{TEMP_DIRECTORY};
+	unlink glob($GLOBAL::CONFIG->{TEMP_DIRECTORY}."/*.dbm.dir");
+	unlink glob($GLOBAL::CONFIG->{TEMP_DIRECTORY}."/*.dbm.pag");
 	my ($key,$value);
 	MakeShareSession($key, $value) while ($key, $value)=each %{$GLOBAL::CONFIG->{SHARE}};
 }
