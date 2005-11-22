@@ -6,7 +6,7 @@ use Math::Pari;
 require "CheckFormat.pm";
 require "CheckRsa.pm";
 use Itami::Adder;
-require "SignTime.pm";
+#require "SignTime.pm";
 require "admin.pm";
 sub new {
 	my ($packname, $DB, $fname, $Identificatore, $public_key, $buffer_rule)=@_;
@@ -90,7 +90,7 @@ sub AntiFlood {
 }
 sub RULE {
 	my($this, $md5, $msg)=@_;
-	return undef if $msg->{DATE}>SignTime::TimeStampGM()+3700;
+	return undef if $msg->{DATE}>Time::Local::timelocal(gmtime(time()+$GLOBAL::ntpoffset))+3700;
 	return $this->RULE_TYPE3($md5, $msg) if $msg->{TYPE}==3;
 	return undef if $msg->{DATE}<$this->{Config}->{'CORE'}->{'MSG'}->{'MAX_OLD'};
 	return $this->RULE_TYPE4($md5, $msg) if $msg->{TYPE}==4;

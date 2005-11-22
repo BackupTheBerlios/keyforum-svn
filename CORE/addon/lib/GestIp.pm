@@ -72,6 +72,7 @@ sub Connect {
 	my ($ref,$ipformat);
 	my $sth=$this->{SQL}->prepare("SELECT IP, TCP_PORT FROM iplist WHERE `BOARD`=? LIMIT $num,2");
 	$sth->execute($this->{Board});
+	my $socket;
 	while ($ref=$sth->fetchrow_hashref) {
 		$ipformat=Num2ip($ref->{IP});
 		next if exists $ip_connessi{$ipformat};
@@ -79,7 +80,8 @@ sub Connect {
 		next if exists $tring{$ipformat};
 		kfdebug::scrivi(13,2,5,undef,$ipformat); #Provo a connettermi con 
 		add2try($ipformat);
-		$ctcp->TryConnect($ipformat, $ref->{TCP_PORT}, 6);
+		$socket=$ctcp->TryConnect($ipformat, $ref->{TCP_PORT}, 6);
+		$GLOBAL::tryconn{fileno $socket}=\&keyforum::tryconn;
 		$this->{FallimentoGen}->execute($ref->{IP}) if $num_connessi>0;
 	}
 	$sth->finish;

@@ -1,30 +1,32 @@
 package kfshell;
+use strict;
 use Crypt::RSA;
 use MIME::Base64;
 use Crypt::Blowfish;
 use Itami::ConvData;
-use strict;
+use Itami::BinDump;
 my $uptime=time();
-my $sender;
-sub sender {$sender=shift;}
+
 
 sub new {
-	my $ogg=shift;
+	my ($ogg,$sock,$server)=@_;
+	return undef unless $GLOBAL::ctcp->AddSock($sock,(MaxSleep=>120,type=>'compbase'));
 	my $this=bless({},'kfshell');
 	$this->{num}=$ogg;
+	$GLOBAL::CLIENT{$ogg}=$this;
 	$this->ResetSendVar;
 	return $this;
 }
 
 sub RecData {
-	my ($this,$data)=@_;
+	my ($this,$ogg,$data,$sock)=@_;
 	return undef if ref($data) ne "HASH";
 	$this->act_RSA($data->{RSA}) if exists $data->{RSA};
 	$this->act_INFO($data->{INFO}) if exists $data->{INFO};
 	$this->act_HASHREQ($data->{HASHREQ}) if exists $data->{HASHREQ};
 	$this->act_FUNC($data->{FUNC}) if exists $data->{FUNC};
 	die("\n\nKeyForum chiuso per una richiesta dalla Shell.\n\n") if exists($data->{CHIUDI}) && $data->{CHIUDI};
-	$sender->($this->{num},$this->{tosend});
+	$GLOBAL::ctcp->send($this->{num},$this->{tosend});
 	$this->ResetSendVar();
 }
 sub act_FUNC {
@@ -34,6 +36,9 @@ sub act_FUNC {
 	$this->{tosend}->{'FUNC'}->{Bin2Dec}=ConvData::Bin2Dec($data->{Bin2Dec}) if exists $data->{Bin2Dec};
 	$this->{tosend}->{'FUNC'}->{Dec2Base64}=ConvData::Dec2Base64($data->{Dec2Base64}) if exists $data->{Dec2Base64};
 	$this->{tosend}->{'FUNC'}->{Base642Dec}=ConvData::Base642Dec($data->{Base642Dec}) if exists $data->{Base642Dec};
+	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},$data->{BlowDump2var}->{Data}))
+		if exists $data->{BlowDump2var};
+	$this->{tosend}->{'FUNC'}->{BinDump2var}=BinDump::MainDeDump($data->{BinDump2var}) if exists $data->{BinDump2var};
 }
 sub ResetSendVar {
 	my $this=shift;
@@ -45,7 +50,7 @@ sub act_HASHREQ {
 	return undef if ref($data) ne "HASH";
 	my $tmp;
 	while (my($key,$value)=each(%$data)) {
-		next unless $tmp= ShSession::CheckGate($key);
+		next unless $tmp= keyforum::CheckGate($key);
 		$this->{tosend}->{HASHREQ}->{$key}=$tmp->GenericRequest('HASH_REQ',$value);
 	}
 }
@@ -58,7 +63,10 @@ sub act_INFO {
 }
 sub act_INFO_CONN {
 	my $this=shift;
-	$this->{tosend}->{INFO}->{CONN}=ShSession::retItemSubscribe();
+	$this->{tosend}->{INFO}->{CONN}=\%GLOBAL::ItemSubscribe;
+}
+sub FreeBuff {
+
 }
 sub act_RSA {
 	my ($this,$data)=@_;
@@ -74,7 +82,10 @@ sub act_INFO_FORUM {
 	my $tmp;
 	foreach my $buf (values(%$data)) {
 		$tosend->{$buf}={} unless exists $tosend->{$buf};
-		next unless $tmp= ShSession::CheckGate($buf);
+		unless($tmp= keyforum::CheckGate($buf)) {
+			
+			next;	
+		}
 		$tosend->{$buf}->{NUM_NODI}=$tmp->Iscritti;
 	}
 }
@@ -132,4 +143,23 @@ sub DeCryptBlowFish {
 	}
 	return unpack("I/a",$testo_normale);	
 }
+
+
+# Creazione del server per di keyforum shell
+{
+	return 1 unless $GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA};
+	my $kfshell = IO::Socket::INET->new(Listen => 5,
+			LocalPort => $GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA},
+			LocalAddr => $GLOBAL::CONFIG->{SHELL}->{TCP}->{BIND},
+			Proto => 'tcp'
+		) or errore("Impossibile creare il server SHELL sulla porta ".$GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA}."\nErrore:$!\n");
+	$GLOBAL::SERVER{fileno($kfshell)}=\&kfshell::new;
+	$GLOBAL::ctcp->AddSock($kfshell,(type=>'server')) or errore("Errore non previsto nell'aggiunta del'oggetto server SHELL\n");
+}
+sub errore {
+	my $errore=shift;
+	die("Errore nel modulo kfshell.pm : $errore\n");
+}
+
 1;
+

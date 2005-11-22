@@ -215,28 +215,6 @@ sub SendRandomHash {  # Invia hash random periodicamente.
 	return undef if $this->{NumeroOggetti}<1;
 	$this->{flusher}->check;
 	my ($tmp,@hash,$type);
-	#$this->{Query}->{SelPrio}->execute();
-	#while($tmp=$this->{Query}->{SelPrio}->fetchrow_arrayref) {
-		#unless (exists $this->{DBM}->{$tmp->[0]}) { # Se non è prensente nel file DBM eseguo il blocco
-			#$this->{Query}->{GetType}->execute($tmp->[0]); #Eseguo la query per prendere il tipo dell'hash
-			#unless($type=$this->{Query}->{GetType}->fetchrow_arrayref) { # Gestisco l'eccezione dell'hash che non è in congi
-			#	$this->{Query}->{DelePrio}->execute($tmp->[0]); # Cancello l'hash se c'è l'errore
-			#	next;
-			#}
-			#$this->{Query}->{GetType}->finish;
-			#$this->{DBM}->{$tmp->[0]}=$type->[0]; #Inserisco il nuovo hash nel file DBM
-		#}
-		#push(@hash, $tmp->[0]); # Inserisco l'hash nel vettore da offrire
-		#$this->{Query}->{DelePrio}->execute($tmp->[0]);
-	#}
-	#$this->{Query}->{SelPrio}->finish();
-	#if ($this->{Index}>$this->{NumRows}) {
-	#	$this->contali;
-	#	if($this->{Index}>$this->{NumRows}) {
-	#		$this->{Index}=0;
-	#	kfdebug::scrivi(20,1,18,$this->{NumRows});
-	#	}
-	#}
 	$this->{Query}->{RandomSelect}->execute($this->{Index}) or return Error("DB ERROR:".$this->{DataBase}->errstr."\n");
 	my $numero=0;
 	my $start_index=$this->{Index};
