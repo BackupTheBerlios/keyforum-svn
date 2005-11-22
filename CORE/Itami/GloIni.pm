@@ -10,7 +10,6 @@ sub load {
 	while (<INI>) {
 		$line=$_;
 		next if $line=~ m/^#/;
-		$line =~ s/\015?\012/\n/g;
 		eval {$ini->{$1}=$2} if $line =~ /(.+?)=(.+?)\n/;
 	}
 	close INI;

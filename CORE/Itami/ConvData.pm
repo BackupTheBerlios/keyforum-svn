@@ -1,25 +1,21 @@
 package ConvData;
 use strict;
-use Math::BigInt;
+#use Math::BigInt;
 use MIME::Base64;
+use Math::BigIntFast;
 # Pacchetto di utilità per convertire i vari tipi di dati.
 
 
 
 # Converte un numero decimale in una stringa binaria
 sub Dec2Bin {
-	my $stringa=Math::BigInt->new(shift)->as_hex();
-	substr($stringa,0,2,"");
-	my $bin='';
-	$bin=(chr hex $_).$bin while $_=substr($stringa,-2,2,"");
-	return $bin;
+	return pack("H*",Bit::Vector->new_Dec(1024,shift)->to_Hex);
 }
 
 
 # Converte da Binario a cifra decimale (in stringa)
 sub Bin2Dec {
-	return undef if length($_[0])==0;
-	return Math::BigInt->new("0x".unpack("H*",$_[0]))->bstr();
+	return Bit::Vector->new_Hex(1032,unpack("H*",$_[0]))->to_Dec;
 }
 
 # Converte da Base64 a decimale

@@ -121,7 +121,7 @@ sub CheckLastSend {
 	foreach my $buf (values(%{$this->{Socket}})) {
 		next unless exists $buf->{MaxSleep};
 		next if $now-$buf->{LastRecv}<$buf->{MaxSleep};
-		print "CTCP: ".$buf->{Sock}->peerhost." TIMEOUT. ".($now-$buf->{LastRecv})." secondi.\n";
+		#print "CTCP: ".$buf->{Sock}->peerhost." TIMEOUT. ".($now-$buf->{LastRecv})." secondi.\n";
 		$this->Remove($buf->{Sock});
 		_addItem($this->{Return}, 'Disconnessi', $buf->{Sock});
 	}
