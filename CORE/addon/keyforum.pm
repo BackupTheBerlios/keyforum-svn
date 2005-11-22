@@ -275,7 +275,7 @@ sub JoinInto {
 
 sub MakeShareSession {
 	my ($ForumName, $value)=@_;
-	my $public_key=$value->{PKEY} || return Error("Chiave pubblca del forum $ForumName non valida\n");
+	my $public_key=$value->{PKEY} || return errore("Chiave pubblca del forum $ForumName non valida\n");
 	# Carico la chiave pubblica del forum che carico.
 	# La chiave pubblica è di vitale importanza e serve non solo per identificare un forum
 	# ma anche per autentificare le operazioni dell'admin.
@@ -288,13 +288,13 @@ sub MakeShareSession {
 	# La classe FRule è l'abbreviazione di ForumRule, regole del forum.
 	# I metodi dell'oggetto mi dicono se certe azioni da parte di certi utenti sono permesse
 	# in base anche alla configurazione caricata da $ForumName."_conf" .
-	my $rule=FRule->new($GLOBAL::SQL, $ForumName, $Identificatore,$public_key,$GLOBAL::CONFIG->{BUFFER}) || return Error("Errore nel caricamento della configurazione di $ForumName\n");
+	my $rule=FRule->new($GLOBAL::SQL, $ForumName, $Identificatore,$public_key,$GLOBAL::CONFIG->{BUFFER}) || return errore("Errore nel caricamento della configurazione di $ForumName\n");
 	
 	# Creo l'oggetto che mi permetterà di scambiare le righe delle varie tabelle.
 	# Questo oggetto particolare si chiama Gate (non lavora con socket).
 	# Il compito dell'iterazione tra gli socket è di una classe a livello superiore.
 	my $dbmpath=$GLOBAL::CONFIG->{TEMP_DIRECTORY}."/".unpack("H*",$Identificatore)."_hash.dbm";
-	my $Gate=ShareDB->new($GLOBAL::SQL, $dbmpath,$ForumName) or return Error("Impossibile creare l'oggetto di condivisione database\n");
+	my $Gate=ShareDB->new($GLOBAL::SQL, $dbmpath,$ForumName) or return errore("Impossibile creare l'oggetto di condivisione database\n");
 
 	my %ftable = (newmsg => $ForumName."_newmsg",
 				  membri=> $ForumName."_membri",
@@ -325,7 +325,7 @@ sub MakeShareSession {
 		"3"=> ["SELECT `HASH`, `DATE`, '3' AS `TYPE`,`SIGN`, `TITLE`, `COMMAND` FROM ".$ftable{admin}." WHERE `HASH`=? LIMIT 120;"],
 		"4"=>["SELECT `HASH`, `AUTORE`, '4' AS `TYPE`, `DATE`, `PKEY`, `SIGN`, `AUTH` FROM ".$ftable{membri}." WHERE `HASH`=? LIMIT 120;"]
 		}
-	) or return Error("Impossibile completare alcune operazione per il forum $ForumName\n");
+	) or return errore("Impossibile completare alcune operazione per il forum $ForumName\n");
 	AddGate($Identificatore,$Gate,$rule,$GLOBAL::CONFIG->{SHARESERVER});
 	print "INDEX: Aggiunta board con PKEY:$public_key\n";
 }
