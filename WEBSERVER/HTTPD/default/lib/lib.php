@@ -84,7 +84,7 @@ $GLOBALS['sess_password'] = &$sess_password;
 $GLOBALS['sess_auth'] = &$sess_auth;
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 function CheckSession() {
-  $query="SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_ENV['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
+  $query="SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
   $risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
   if ($riga = mysql_fetch_assoc($risultato)) {
       $GLOBALS['sess_nick'] = $riga["NICK"];
@@ -101,7 +101,7 @@ function CheckSession() {
 
 function DestroySession() {
 
-$query="DELETE FROM `session` WHERE `SESSID`='".session_id()."' AND IP=md5('".$_ENV['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
+$query="DELETE FROM `session` WHERE `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
 mysql_query($query) or Muori ("Query non valida: " . mysql_error());
 }
 
@@ -132,7 +132,7 @@ function Num2Ip ($ip) {
 	return implode('.', unpack("C4",pack("I",$ip+0)));
 }
 
-mysql_query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_ENV['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+mysql_query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
 if (rand(0,10)<1) mysql_query("DELETE FROM `session` WHERE `DATE`<'".(time()-3600)."';");
 if ($_REQUEST['SEZID']) {
   $risultato=mysql_query("SELECT * FROM ".$_ENV['sesname']."_sez WHERE ID='".mysql_escape_string($_GET['SEZID'])."';");

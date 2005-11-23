@@ -20,7 +20,7 @@ if ($sess_auth==1) {
     if ($riga = mysql_fetch_assoc($risultato)) {
       if ($riga[num] == 0) Muori("".$lang['login_err']."\n<br>");
       $query="INSERT INTO `session` (`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) ".
-              "VALUES('".session_id()."',md5('".$_ENV['REMOTE_ADDR']."'),'".mysql_real_escape_string($_ENV[sesname])."','".mysql_real_escape_string($_POST["nick"])."','".time()."','".mysql_real_escape_string($rawpasswd)."');";
+              "VALUES('".session_id()."',md5('".$_SERVER['REMOTE_ADDR']."'),'".mysql_real_escape_string($_ENV[sesname])."','".mysql_real_escape_string($_POST["nick"])."','".time()."','".mysql_real_escape_string($rawpasswd)."');";
       echo $lang['login_succ'];
       $SEZ_ID=$_REQUEST["SEZID"];
       if ($SEZ_ID) {
