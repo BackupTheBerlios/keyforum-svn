@@ -3,7 +3,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 CheckSession();
 ?>
-<!-- v.0.23 -->
+<!-- v.0.24 -->
 <html>
 <head>
 <link rel="shortcut icon" href="favicon.ico">
@@ -29,9 +29,6 @@ $BNAME=$valueacbd['SUBKEY'];
     $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
     $title1=mysql_fetch_assoc($risultato);
     $title=$title1["title"];
-    if($title1["subtitle"]){
-       $title=$title.", ".$title1["subtitle"];
-    }
     $title=secure_v($title);
     echo $title." - ";
   }else{
@@ -150,8 +147,11 @@ function togglevis(id) {
  <?php
     if ($SEZ_DATA['ID'])
       echo "\t<img src=\"img/3.gif\"></td>\n\t<td><a href=\"sezioni.php?SEZID=".$SEZ_DATA['ID']."\">".$SEZ_DATA['SEZ_NAME']."</a>\n";
-    if ($title)
-      echo "\t<img src=\"img/3.gif\"></td>\n\t<td>".$title."\n";
+    if ($title){
+          if($title1["subtitle"])
+            $title=$title.", ".$title1["subtitle"];
+      echo "\t<img src=\"img/3.gif\"></td>\n\t<td>".secure_v($title)."\n";
+    }
   ?>
 </div>
 <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
