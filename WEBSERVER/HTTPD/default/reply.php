@@ -69,7 +69,7 @@ $lang = $std->load_lang('lang_reply', $blanguage );
 </script>
   
 <div id="FastReply" class='post2'>
-<form action="reply_dest.pl" method="post">
+<form action="reply_dest.php" method="post">
   <input type="hidden" name="sezid" value='<?php echo $_REQUEST["SEZID"];?>'>
   <input type="hidden" name="repof" value='<?php print $_REQUEST["THR_ID"];?>'>
 
