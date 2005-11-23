@@ -15,7 +15,7 @@ class ADDER {
       }
       
       // fa l'escape dell'array dato come input
-      private function escape($input)
+      public function escape($input)
       {
           foreach ($input as $var) {
               if ($magic_q) $var = stripslashes($var);
@@ -23,7 +23,7 @@ class ADDER {
          }
       }
       
-      private function Congi($msg_hash,$msg_type,$write_date,$instime,$autore)
+      public function Congi($msg_hash,$msg_type,$write_date,$instime,$autore)
       {
           escape(array(&$msg_hash,&$msg_type,&$write_date,&$instime,&$autore));
           $query = "INSERT INTO " . $fname . "_congi (HASH,TYPE,WRITE_DATE,INSTIME,AUTORE) "
@@ -32,7 +32,7 @@ class ADDER {
           return true;
       }
       
-      private function InsertReply($msg_hash,$rep_of,$autore,$edit_of,$date,$firma,$avatar,$title,$body,$sign,$visible)
+      public function InsertReply($msg_hash,$rep_of,$autore,$edit_of,$date,$firma,$avatar,$title,$body,$sign,$visible)
       {
           escape(array(&$msg_hash,&$rep_of,&$autore,&$edit_of,&$date,&$firma,&$avatar,&$title,&$body,&$sign,&$visible));
           $query = "INSERT INTO $fname" . "_reply (HASH,REP_OF,AUTORE,EDIT_OF,DATE,FIRMA,AVATAR,TITLE,BODY,SIGN,Visibile) "
@@ -41,7 +41,7 @@ class ADDER {
           return true;
       }
       
-      private function IncrementMsgNum($autore)
+      public function IncrementMsgNum($autore)
       {
           escape(array(&$autore));
           $query = "UPDATE $fname" . "_membri SET msg_num=msg_num+1 WHERE HASH='$autore';";
@@ -49,7 +49,7 @@ class ADDER {
           return true;
       }
       
-      private function UpDateAvatar($firma,$avatar,$date,$msg_hash)
+      public function UpDateAvatar($firma,$avatar,$date,$msg_hash)
       {
           escape(array(&$firma,&$avatar,&$edit_firma,&$msg_hash));
           $sql = "UPDATE $fname" . "_membri SET firma='$firma',avatar='$avatar',edit_firma='$date' WHERE HASH='$msg_hash' AND $date>edit_firma;";
@@ -57,7 +57,7 @@ class ADDER {
           return true;
       }
       
-      private function IncMsghe($rep_of)
+      public function IncMsghe($rep_of)
       {
           escape(array(&$rep_of));
           $sql = "UPDATE $fname" . "_msghe SET reply_num=reply_num+1 WHERE HASH='$rep_of';";
@@ -65,7 +65,7 @@ class ADDER {
           return true;
       }
       
-      private function IncRepSez($rep_of)
+      public function IncRepSez($rep_of)
       {
           escape(array(&$rep_of));
           $sql = "UPDATE $fname" . "_sez,$fname" . "_newmsg SET REPLY_NUM=REPLY_NUM+1 WHERE $fname" . "_sez.ID=$fname" . "_newmsg.SEZ "
@@ -74,7 +74,7 @@ class ADDER {
           return true;
       }
       
-      private function UpDateLastTime($date,$autore,$rep_of,$date)
+      public function UpDateLastTime($date,$autore,$rep_of,$date)
       {
           escape(array(&$date,&$autore,&$rep_of,&$date));
           $sql = "UPDATE $fname" . "_msghe SET last_reply_time='$date',last_reply_author='$autore' WHERE HASH='$rep_of' AND last_reply_time<$date;";
