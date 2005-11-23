@@ -65,7 +65,7 @@ sub act_FUNC {
 	$this->{tosend}->{'FUNC'}->{Bin2Dec}=ConvData::Bin2Dec($data->{Bin2Dec}) if exists $data->{Bin2Dec};
 	$this->{tosend}->{'FUNC'}->{Dec2Base64}=ConvData::Dec2Base64($data->{Dec2Base64}) if exists $data->{Dec2Base64};
 	$this->{tosend}->{'FUNC'}->{Base642Dec}=ConvData::Base642Dec($data->{Base642Dec}) if exists $data->{Base642Dec};
-	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},$data->{BlowDump2var}->{Data}))
+	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},MIME::Base64::decode_base64($data->{BlowDump2var}->{Data})))
 		if exists $data->{BlowDump2var};
 	$this->{tosend}->{'FUNC'}->{BinDump2var}=BinDump::MainDeDump($data->{BinDump2var}) if exists $data->{BinDump2var};
 }
