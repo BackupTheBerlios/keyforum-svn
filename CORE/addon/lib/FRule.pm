@@ -51,10 +51,10 @@ sub AntiFloodFormat {
 }
 sub AddRows {
 	my ($this, $hashref)=@_;
+	#print "Controllo la formattazione\n";
 	return undef unless $hashref=CheckFormat::MsgList($hashref); # Vengono cancellati i messaggi mal formattati
 	#print "ci sono messaggi validi, ordino la lista\n";
 	$hashref=CheckFormat::Sorter($hashref);  # Inserisco i msg in un vettore secondo un ordine di importanza.
-	#print "controllo la firma digitale\n";
 	my (%richiesti, %aggiunti);
 	my ($md5, $msg, $odref,$truemd5,$dipen);
 	my @risultato;
@@ -80,8 +80,8 @@ sub AntiFlood {
 	my $hashref=$this->{Config}->{ANTIFLOOD_AUTH};my $num;
 	foreach my $buf (sort(keys(%$hashref))) {
 		$this->{AntiFloodCheck}->execute($autore,
-										 $data-$hashref->{$buf}->{RANGE_TIME},
-										 $data+$hashref->{$buf}->{RANGE_TIME});
+						$data-$hashref->{$buf}->{RANGE_TIME},
+						$data+$hashref->{$buf}->{RANGE_TIME});
 		$num=$this->{AntiFloodCheck}->fetchrow_arrayref->[0];
 		$this->{AntiFloodCheck}->finish();
 		return 1 if $num > $hashref->{$buf}->{MAX_MSG};
