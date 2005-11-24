@@ -84,8 +84,8 @@ $risp=$core->Read();
    <h4><? echo $lang['reply_thanks']; ?></h4>
    <p>
 <?
-echo $risp['FORUM']['ADDMSG']."<br>";
-echo "alfa<br>";
+// echo $risp['FORUM']['ADDMSG']."<br>";
+// echo "alfa<br>";
 ?>
          <? echo $lang['reply_wait2']; ?><br><br>
    </p>
