@@ -48,7 +48,7 @@ while ($row=mysql_fetch_array($result)) {
 $cnt++;
 if($row['fkey']=="BIND"){$bind=$row['value'];}
 if($row['fkey']=="DIRECTORY") {$dir=$row['value'];}
-if($row['fkey']=="PORTA") {$port=$row['value']+100;}
+if($row['fkey']=="PORTA") {$port=$row['value'];}
  
 if ($cnt==3){
  $cnt=0;

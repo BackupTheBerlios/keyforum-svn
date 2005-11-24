@@ -17,18 +17,6 @@ if (PEAR::isError($root)) {
 
 $settings = $root->toArray();
 
-// mod per uso con Apache
-
-// ******************************************************************************
-// RIMUOVERE QUESTO WORKAROUND PRIMA DEL RILASCIO
-// DELLA 0.42
-//
-// ( ... ma sono troppo sicuro che ce lo dimentichiamo :-) 
-// *****************************************************************************
-
-if (!$_ENV['sql_host']) {
-$apache=1;
-
 // dati del db
 $_ENV['sql_host']=$settings['root']['conf']['DB']['host'];
 $_ENV['sql_user']=$settings['root']['conf']['DB']['dbuser'];
@@ -37,9 +25,6 @@ $_ENV['sql_dbname']=$settings['root']['conf']['DB']['dbname'];
 $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
 
 
-// board = porta in uso - 100
-
-}
 
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
 
@@ -50,9 +35,7 @@ define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
 define ("GMT_TIME", 3600*1);
 
-if($apache){
-
-    $porta=$_SERVER['SERVER_PORT'] -100;
+    $porta=$_SERVER['SERVER_PORT'] ;
     $query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
     $risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
     $riga2 = mysql_fetch_assoc($risultato2);
@@ -64,7 +47,6 @@ if($apache){
     } else {
           $_ENV['sesname']=$riga2['subkey'];
       }
-}
 
 if (!$_ENV['sesname']) {
 	print "Nessuna board assegnata a questo webserver.\n";
