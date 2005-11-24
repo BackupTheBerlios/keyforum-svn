@@ -258,7 +258,7 @@ function FastReply() {
 		</script>
 
 		<div id=\"FastReply\" style=\"visibility:hidden;display:none;\" class='post2'>
-		<form method=post action='reply_dest.pl'>
+		<form method=post action='reply_dest.php'>
 			<input type=hidden name=\"sezid\" value='{$_REQUEST[SEZID]}'>
 			<input type=hidden name=\"repof\" value='{$_REQUEST[THR_ID]}'>
 		<div id=\"head01\" align=left class='maintitle'>
