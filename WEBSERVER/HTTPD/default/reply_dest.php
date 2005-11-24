@@ -33,7 +33,7 @@ $PKEY=$risp[FUNC][Base642Dec];
 if ( strlen($PKEY) < 120 ) die("La chiave pubblica dell'admin non è valida, non posso validare il messaggio\n");
 if (strlen($risp[FUNC][BlowDump2var][hash])!=16) die ("Errore nel trattamento dei tuoi dati privati\n");
 
-$querysql="SELECT count(*) FROM " . $SNAME . "_newmsg WHERE HASH='".$MSG_HASH."'";
+$querysql="SELECT count(*) FROM " . $SNAME . "_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
 $sqlresult=mysql_query($querysql);
 if (!mysql_num_rows($sqlresult)) die("<br>Errore: Messaggio Non trovato!\n");
 $mreq['FORUM']['ADDMSG'];
