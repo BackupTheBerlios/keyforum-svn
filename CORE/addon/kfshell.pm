@@ -6,7 +6,7 @@ use Crypt::Blowfish;
 use Itami::ConvData;
 use Itami::BinDump;
 use Time::Local;
-
+use Math::Pari;
 my $uptime=time();
 my $win32api=0;
 my $hWnd;
@@ -27,10 +27,31 @@ sub RecData {
 	$this->act_INFO($data->{INFO}) if exists $data->{INFO};
 	$this->act_HASHREQ($data->{HASHREQ}) if exists $data->{HASHREQ};
 	$this->act_FUNC($data->{FUNC}) if exists $data->{FUNC};
+	$this->act_FORUM($data->{FORUM}) if exists $data->{FORUM};
 	$this->act_CORE($data->{'CORE'}) if exists $data->{'CORE'};
 	die("\n\nKeyForum chiuso per una richiesta dalla Shell.\n\n") if exists($data->{CHIUDI}) && $data->{CHIUDI};
 	$GLOBAL::ctcp->send($this->{num},$this->{tosend});
 	$this->ResetSendVar();
+}
+sub act_FORUM {
+	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
+	$this->{tosend}->{'FORUM'}={} unless exists $this->{tosend}->{'FORUM'};
+	$this->act_FORUM_ADDMSG($data->{ADDMSG}) if exists $data->{ADDMSG};
+}
+sub act_FORUM_ADDMSG {
+	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
+	my ($md5,$fdest)=($data->{'MD5'},$data->{'FDEST'});
+	unless (exists $GLOBAL::Rule{$fdest}) {
+		$this->{tosend}->{'FORUM'}->{'ADDMSG'}='Il forum dove vuoi postare non è presente nel core.';
+		return undef;
+	}
+	my $msg={};
+	$msg->{$md5}=$data;
+	$GLOBAL::Rule{$fdest}->AddRows($msg);
+	$GLOBAL::Gate{$fdest}->OffertHashBrCa(["$md5"]);
+	$this->{tosend}->{'FORUM'}->{'ADDMSG'}='MSG innoltrato al core\n';
 }
 sub act_CORE {
 	my ($this,$data)=@_;
@@ -65,7 +86,7 @@ sub act_FUNC {
 	$this->{tosend}->{'FUNC'}->{Bin2Dec}=ConvData::Bin2Dec($data->{Bin2Dec}) if exists $data->{Bin2Dec};
 	$this->{tosend}->{'FUNC'}->{Dec2Base64}=ConvData::Dec2Base64($data->{Dec2Base64}) if exists $data->{Dec2Base64};
 	$this->{tosend}->{'FUNC'}->{Base642Dec}=ConvData::Base642Dec($data->{Base642Dec}) if exists $data->{Base642Dec};
-	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},MIME::Base64::decode_base64($data->{BlowDump2var}->{Data})))
+	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},$data->{BlowDump2var}->{Data}))
 		if exists $data->{BlowDump2var};
 	$this->{tosend}->{'FUNC'}->{BinDump2var}=BinDump::MainDeDump($data->{BinDump2var}) if exists $data->{BinDump2var};
 }
@@ -127,7 +148,7 @@ sub act_RSA_FIRMA {
 	my $priv_key;
 	my $rsa=new Crypt::RSA;
 	foreach my $buf (values(%$data)) {
-		next unless $priv_key=GetPrivateKey($buf->{priv_key},$buf->{priv_pwd});
+		next unless $priv_key=GetPrivateKey($buf->{priv_pwd},$buf->{priv_key});
 		$this->{tosend}->{RSA}->{FIRMA}->{$buf->{md5}}= $rsa->sign ( 
 								Message    => $buf->{md5}, 
 								Key        => $priv_key
@@ -144,7 +165,7 @@ sub GetPrivateKey {
 	my ($codice,$pwd)=@_;
 	my ($PRIVATE_DATA,$RSA_PRIVATE);
 	return undef unless $codice;
-	return undef unless $codice=MIME::Base64::decode_base64($codice);
+	#return undef unless $codice=MIME::Base64::decode_base64($codice);
 	$codice=DeCryptBlowFish($pwd,$codice) if $pwd;
 	return undef unless $PRIVATE_DATA=BinDump::MainDeDump($codice);
 	return undef unless ref($PRIVATE_DATA->{private}) eq "HASH";
