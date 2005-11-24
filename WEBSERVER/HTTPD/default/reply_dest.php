@@ -63,6 +63,36 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
 $core->Send($mreq);
 $risp=$core->Read();
-print $risp['FORUM']['ADDMSG'];
-print "alfa\n";
 ?>
+
+<html>
+ <head>
+  <title>Attendi...</title>
+  <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page'>
+  <script type="text/javascript"> </script>
+  <style type='text/css'>
+   html { overflow-x: auto; }
+   BODY { font-family: Verdana, Tahoma, Arial, sans-serif;font-size: 11px;margin: 0px;padding: 0px;text-align: center;color: #000;background-color: #FFFFFF; }
+   .tablefill { padding: 6px;background-color: #F5F9FD;border: 1px solid #345487; }
+  </style>
+ </head>
+ <body>
+  <table width='100%' height='85%' align='center'>
+   <tr>
+    <td valign='middle'>
+     <table align='center' cellpadding="4" class="tablefill">
+      <tr>
+       <td width="100%" align="center">
+<?
+echo $risp['FORUM']['ADDMSG']."<br>";
+echo "alfa<br>";
+?>
+         Attendi mentre viene caricata la pagina...<br><br>
+       </td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+  </table>
+ </body>
+</html>
