@@ -90,7 +90,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
   </td>
 </tr>
 <tr>
-  <td align=center><br>KeyForum 0.42 <b>Beta 2</b></td>
+  <td align=center><br>KeyForum 0.43 <b>Alfa</b></td>
 </tr>
 </table>
 <a name="end_page"></a>
