@@ -1,13 +1,12 @@
 <?php
-include ("lib/lib.php"); # Librerie per creare la connessione MySQL
+include "lib/lib.php"; # Librerie per creare la connessione MySQL
 
 CheckSession();
 ?>
-<!-- v.0.24 -->
 <html>
 <head>
-<link rel="shortcut icon" href="favicon.ico">
 <title><?php
+
 $blanguage='ita'; // Lingua di visualizzazione
 // carico la lingua per la testa
 $lang = $std->load_lang('lang_testa', $blanguage );
@@ -38,6 +37,7 @@ $BNAME=$valueacbd['SUBKEY'];
   echo $BNAME;
 ?> Forum</title>
 <link type="text/css" rel="stylesheet" href="style_page.css" />
+<link rel="shortcut icon" href="favicon.ico" />
 </head>
 <body>
 
@@ -97,12 +97,13 @@ function mklastselected() {
 </script>
 
 <div class="borderwrap">
-  <div id='logostrip'>
-    <a href=index.php><div id='logographic'></div></a>
+  <div id="logostrip">
+    <a href="index.php"><div id="logographic"></div></a>
   </div>
   <div id="submenu">
     <p class="home">
 <?php
+
    $querysetup="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='SETUP' OR SUBKEY='".$BNAME."';";
    $responsetup=mysql_query($querysetup) or Muori ($lang['inv_query'] . mysql_error());
    while($valuesetup=mysql_fetch_assoc($responsetup)){
@@ -117,17 +118,16 @@ function mklastselected() {
    if($portsetup){
       if((!$bindsetup)OR($bindsetup==$_SERVER['REMOTE_ADDR'])OR($bindsetup==$bindboard)){
          $addrsetup=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
-         print '<a href="http://'.$addrsetup.':'.$portsetup.'/">Setup</a>';
+         print '<a href="http://'.$addrsetup.':'.$portsetup.'/" target="_blank">Setup</a>';
       }
    }
 ?>
     </p>
       <form method="POST" name="boardlinkform">
        <p>
-        <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>
-        |
-        <select class="content" name="boardlink" size="1" onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
-          <option selected value=''><?php echo $lang['sel_otherbrd']; ?></option>
+        <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>|
+        <select class="forminput" name="boardlink" size="1" onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
+          <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
    <?php
       $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
       $responsewse=mysql_query($querywse) or Muori ("Query non valida: " . mysql_error());
@@ -174,7 +174,7 @@ function mklastselected() {
    </p>
 </div>
 <form name="reloader" style="display:inline;float:right;">
-<select name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
+<select class="forminput" name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
   <option value="null" selected="selected"><?php echo $lang['reload_no']; ?></option>
   <option value="60"><?php echo $lang['reload_60s']; ?></option>
   <option value="120"><?php echo $lang['reload_120s']; ?></option>
@@ -184,16 +184,16 @@ function mklastselected() {
 </select>
 </form>
 <div id="navstrip">
- <img src='img/3.gif'>
- <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
- <?php
-    if ($SEZ_DATA['ID'])
-      echo "\t<img src=\"img/3.gif\"></td>\n\t<td><a href=\"sezioni.php?SEZID=".$SEZ_DATA['ID']."\">".$SEZ_DATA['SEZ_NAME']."</a>\n";
-    if ($title){
-          if($title1["subtitle"])
-            $title=$title.", ".$title1["subtitle"];
-      echo "\t<img src=\"img/3.gif\"></td>\n\t<td>".secure_v($title)."\n";
-    }
-  ?>
+  <img src="img/3.gif" alt="" /> <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
+<?php
+
+if ($SEZ_DATA['ID']) {
+  echo "  <img src=\"img/3.gif\" alt=\"\" /> <a href=\"sezioni.php?SEZID=".$SEZ_DATA['ID']."\">".$SEZ_DATA['SEZ_NAME']."</a>\n";
+}
+if ($title) {
+  if($title1["subtitle"]) $title=$title.", ".$title1["subtitle"];
+  echo "  <img src=\"img/3.gif\" alt=\"\" /> ".secure_v($title)."\n";
+}
+?>
 </div>
-<table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
+<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%">
