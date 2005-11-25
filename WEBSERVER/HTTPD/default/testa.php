@@ -43,12 +43,15 @@ $BNAME=$valueacbd['SUBKEY'];
 
 <script type="text/javascript" language="JavaScript">
 <!--
+var pname = "<?php echo md5($BNAME.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]); ?>";
+
+// Exit confirm
 function confirmThis(url) {
-  if (confirm("<?php echo $lang['j_close_pup']; ?>")) {
+  if (confirm("<?php echo $lang["j_close_pup"]; ?>")) {
     window.location = url;
   }
 }
-
+// Spoiler
 function togglevis(id) {
   var obj = "";
 
@@ -60,6 +63,35 @@ function togglevis(id) {
   if(obj.visibility == "visible") obj.visibility = "hidden";
   else if(obj.visibility != "hidden") obj.visibility = "hidden";
   else obj.visibility = "visible";
+}
+// Reload
+var reload_cname = "kf_" + pname + "reload";
+function runit(reload_cname) {
+  if(getc(reload_cname)) {
+    if(getc(reload_cname)*1>0) setTimeout("document.location=document.location;",getc(reload_cname)*1000);
+  }
+}
+function getc(name) {
+  var rs = null;
+  var mc = " " + document.cookie + ";";
+  var sn = " " + name + "=";
+  var sc = mc.indexOf(sn);
+  var ec;
+  if (sc != -1) {
+    sc += sn.length;ec=mc.indexOf(";",sc);
+    rs = unescape(mc.substring(sc,ec));
+  }
+  return rs;
+}
+function setc(name,value) {
+  document.cookie=name+"="+escape(value);
+}
+window.onload=mklastselected;
+function mklastselected() {
+  if(getc(reload_cname)) {
+    document.reloader.reload_value.value=getc(reload_cname);
+  }
+  runit(reload_cname);
 }
 // -->
 </script>
@@ -141,6 +173,16 @@ function togglevis(id) {
     ?>
    </p>
 </div>
+<form name="reloader" style="display:inline;float:right;">
+<select name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
+  <option value="null" selected="selected">Non aggiornare</option>
+  <option value="60">Aggiorna ogni minuto</option>
+  <option value="120">Aggiorna ogni 2 minuti</option>
+  <option value="180">Aggiorna ogni 3 minuti</option>
+  <option value="300">Aggiorna ogni 5 minuti</option>
+  <option value="600">Aggiorna ogni 10 minuti</option>
+</select>
+</form>
 <div id="navstrip">
  <img src='img/3.gif'>
  <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
