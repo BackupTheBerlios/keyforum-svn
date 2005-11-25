@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 include ("testa.php");
 $lang = $std->load_lang('lang_showmsg', $blanguage );
 
@@ -17,7 +16,7 @@ function GetUserColor($MSG) {
   return $usercolor;
 }
 
-function printmsg ($MSG,$usercolor) {
+function printmsg($MSG,$usercolor) {
   global $GLOBALS;
   global $blanguage;
   global $lang;
@@ -26,7 +25,7 @@ function printmsg ($MSG,$usercolor) {
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['date']);
   $hash=unpack("H32hex",$MSG['hash']);
   if (eregi("http:\/\/", secure_v($MSG['avatar'])))
-    $avatar="<img src='".$MSG['avatar']."'><br>";
+    $avatar="<img src='".$MSG['avatar']."'><br />";
   if ($MSG['regdate'])
     $register_date=strftime("%d/%m/%y",$MSG['regdate']);
   if ($MSG['gruppo'])
@@ -71,16 +70,19 @@ function printmsg ($MSG,$usercolor) {
      while ($rigaaut = mysql_fetch_assoc($risultatoaut)) $realautore=$rigaaut['AUTORE'];
      $MSG['body'] = $MSG['body']."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG['real_date'])."[/COLOR][/SIZE]";
   }
-//  $MSG['body'] = preg_replace( "/\n/" , "<br>" , htmlspecialchars($MSG['body'] ));
+  
   $MSG['body'] = secure_v($MSG['body']);
-  echo " <table width=100% border='0' cellspacing='1' cellpadding='3'>
+  $MSG['firma'] = secure_v($MSG['firma']);
+  
+  echo<<<EOF
+<table width=100% border='0' cellspacing='1' cellpadding='3'>
 <tr>
- <td valign='middle' class='row4' width='1%'><span class='normalname'><u>$autore</u></a></span>
-   <a name=$postid></a>
+ <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></a></span>
+   <a name={$postid}></a>
  </td>
  <td class='row4' valign='top' width='99%'>
   <div align='left' class='row4' style='float:left;padding-top:4px;padding-bottom:4px'>
-   <span class='postdetails'><b>".$lang['shmsg_sendon']."</b>{$write_date}</span>
+   <span class='postdetails'><b>{$lang['shmsg_sendon']}</b>{$write_date}</span>
   </div>
   <div align='right'>
   </div>
@@ -88,31 +90,27 @@ function printmsg ($MSG,$usercolor) {
 </tr>
 <tr>
  <td valign='top' class='post2'>
-  <span class='postdetails'><br>
+  <span class='postdetails'><br />
   {$avatar}
-  ".$lang['shmsg_mbrtype']."<br>
-  ".$lang['shmsg_adminauth']."{$auth}<br>
-  ".$lang['shmsg_group']."{$gruppo}<br>
-  ".$lang['shmsg_messages']."{$MSG['msg_num']}<br>
-  ".$lang['shmsg_joined']."{$register_date}<br><br>
-  </span><br>
-  <div align='center'>
-  <table border='0' cellspacing='0' style='border-collapse: collapse' width='60%' >
-      <tr>
-        <td bgcolor='#{$usercolor['sx_color']}' width='50%'><font color='#{$usercolor['sx_color_i']}'>{$usercolor['sx_color']}</font></td>
-        <td bgcolor='#{$usercolor['dx_color']}' width='50%'><font color='#{$usercolor['dx_color_i']}'>{$usercolor['dx_color']}</font></td>
-      </tr>
-    </table>
+  {$lang['shmsg_mbrtype']}<br />
+  {$lang['shmsg_adminauth']}{$auth}<br />
+  {$lang['shmsg_group']}{$gruppo}<br />
+  {$lang['shmsg_messages']}{$MSG['msg_num']}<br />
+  {$lang['shmsg_joined']}{$register_date}<br /><br />
+  </span><br />
+  <div align="center"><span
+   style="padding:2px;background:#{$usercolor['sx_color']};color:#{$usercolor['sx_color_i']};">{$usercolor['sx_color']}</span><span
+   style="padding:2px;background:#{$usercolor['dx_color']};color:#{$usercolor['dx_color_i']};">{$usercolor['dx_color']}</span>
   </div>
-
-  <img src='?g=1000' alt='' width='160' height='1' /><br />
+  <img src='img/spacer.gif' alt='' width='160' height='1' /><br />
  </td>
  <td width='100%' valign='top' class='post2'>
   <table border=1 bordercolor='#DEDEFF' cellspacing=0 cellpadding=0 width=100%>
    <tr>
-    <td bordercolor='#F0F0FF' class='postdetails'><b>".$lang['shmsg_title']."
+    <td bordercolor='#F0F0FF' class='postdetails'><b>{$lang['shmsg_title']}
 
-</b>";
+</b>
+EOF;
  $title=$MSG['title'];
  if($MSG['subtitle']){
     $title=$title.", ".$MSG['subtitle'];
@@ -120,10 +118,10 @@ function printmsg ($MSG,$usercolor) {
 
  echo secure_v($title)."</td>
    </tr>
-  </table><br>
+  </table><br />
   <div class='postcolor'> ".convert($MSG['body'])."</div>
-  <br><br>--------------------<br>
-  <div class='signature'>".secure_v($MSG['firma'])."</div>
+  <br /><br />--------------------<br />
+  <div class='signature'>".convert($MSG['firma'])."</div>
  </td>
 </tr>
 <tr>
@@ -192,13 +190,13 @@ function PageSelect($pos) {
     ?>
     </td>
     <td align="right" width="80%">
-      <a href="reply.php?SEZID=<?PHP echo $_REQUEST["SEZID"]; ?>&THR_ID=<?PHP echo $_REQUEST["THR_ID"];?>"> <? echo " <img src='img/buttons/".$blanguage."/t_reply.gif' border='0' alt='Rispondi' /></a>"; ?>
+      <a href="reply.php?SEZID=<?php echo $_REQUEST["SEZID"]; ?>&THR_ID=<?php echo $_REQUEST["THR_ID"];?>"> <?php echo " <img src='img/buttons/".$blanguage."/t_reply.gif' border='0' alt='Rispondi' /></a>"; ?>
     </td>
     <td align="right" width="80%">
-      <a href="writenewmsg.php?SEZID=<?PHP echo $_REQUEST[SEZID]; ?>" class="normalname"> <? echo " <img src='img/buttons/".$blanguage."/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>"; ?>
+      <a href="writenewmsg.php?SEZID=<?php echo $_REQUEST[SEZID]; ?>" class="normalname"> <?php echo " <img src='img/buttons/".$blanguage."/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>"; ?>
     </td>
     </tr>
-    <?
+    <?php
   } else {
     echo "
 	<script type=\"text/javascript\">
@@ -259,8 +257,8 @@ function FastReply() {
 
 		<div id=\"FastReply\" style=\"visibility:hidden;display:none;\" class='post2'>
 		<form method=post action='reply_dest.php'>
-			<input type=hidden name=\"sezid\" value='{$_REQUEST[SEZID]}'>
-			<input type=hidden name=\"repof\" value='{$_REQUEST[THR_ID]}'>
+			<input type=hidden name=\"sezid\" value='{$_REQUEST[SEZID]}' />
+			<input type=hidden name=\"repof\" value='{$_REQUEST[THR_ID]}' />
 		<div id=\"head01\" align=left class='maintitle'>
 			FastReply:
 		</div>
@@ -277,7 +275,7 @@ function FastReply() {
    		</div>
    		<div id=\"colo-dx\"></div>
   		<div id=\"centrale\" class='post2' align=center>
-		<br>
+		<br />
 		<table border='0' cellspacing='0' cellpadding='0'>
 		 <tr>
 		  <td align='center'>";
@@ -293,7 +291,7 @@ function FastReply() {
 			<input type='submit' name='submit' value='".$lang['shmsg_submit']."' accesskey='s' />
 			<input type='button' name='nfr' onclick=\"show_hide('FastReply');\" value='".$lang['shmsg_hidefp']."' accesskey='h' />
 			</center>
-			<br>
+			<br />
 		  </td>
 		  <td>
 		  </td>
@@ -308,7 +306,7 @@ function FastReply() {
 ?>
 <tr>
 <td>
-<?PHP
+<?php
 
 $SNAME=$_ENV['sesname'];
 $MSGID=pack("H*",$_REQUEST['THR_ID']);
@@ -350,10 +348,10 @@ mysql_query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$
 mysql_query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
 
 ?>
-<a href="searcher.pm?MODO=2&REP_OF=<?PHP print urlencode($MSGID);?>">
-<? echo "".$lang['shmsg_findnewmsg']."</a><br>"; ?>
+<a href="searcher.pm?MODO=2&REP_OF=<?php print urlencode($MSGID);?>">
+<?php echo "".$lang['shmsg_findnewmsg']."</a><br />"; ?>
 
-<?PHP
+<?php
   PageSelect(1);
 
   if ($CurrPag<1)
@@ -380,6 +378,6 @@ $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
 ?>
 </td>
 </tr>
-<?PHP
+<?php
 include ("end.php");
 ?>

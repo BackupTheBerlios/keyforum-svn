@@ -11,6 +11,7 @@ $lang['reply_body']  = "Corpo:";
 $lang['reply_avatar']  = "Avatar*:";
 $lang['reply_signature']  = "Firma*:";
 $lang['reply_submit']  = "Aggiungi Risposta";
+$lang['reply_preview']  = "Anteprima";
 $lang['reply_info3']  = "*Basta che la firma o l'avatat contengano un valore per cambiare nel database il parametro ad entrambi.";
 $lang['reply_info4']  = "Se vuoi cambiare la firma ma non l'avatar, devi riscriverli entrambi.";
 

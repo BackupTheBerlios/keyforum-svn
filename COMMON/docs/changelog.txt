@@ -1,6 +1,8 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-25
 Oberon:		[ADD] Reload automatico pagine
+Oberon:		[ADD] Supporto BBCode per la firma
+Oberon:		[ADD] Anteprima per le risposte
 
 2005-11-20
 Luftw@ffer:	[ADD] Visualizza il sottotitolo, se presente, quando si visualizza un thread
