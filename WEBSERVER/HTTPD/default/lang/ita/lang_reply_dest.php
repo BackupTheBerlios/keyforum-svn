@@ -11,4 +11,9 @@ $lang['reply_wait']  = "Attendi...";
 $lang['reply_thanks']  = "Grazie";
 $lang['reply_wait2']  = "Attendi mentre viene caricata la pagina...";
 $lang['reply_nowait']  = "Oppure clicca qui se non vuoi aspettare";
+$lang['reply_error']  = "Errore";
+$lang['reply_ok']  = "Risposta aggiunta correttamente";
+$lang['reply_error2']  = "Forum inesistente";
+$lang['reply_error3']  = "Errore sconosciuto: messaggio non accettato dal core";
+$lang['reply_nowait2']  = "Clicca qui per tornare al thread";
 ?>

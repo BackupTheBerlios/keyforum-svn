@@ -74,22 +74,46 @@ $risp=$core->Read();
 <html>
  <head>
   <link rel="shortcut icon" href="favicon.ico">
-  <title><? echo $lang['reply_wait']; ?></title>
-  <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page'>
-  <script type="text/javascript"> </script>
+  <title><?
+         if($risp['FORUM']['ADDMSG']==1){
+           echo $lang['reply_wait'];
+         }else{
+           echo $lang['reply_error'];
+         }
+       ?></title>
+  <? if($risp['FORUM']['ADDMSG']==1){ ?>
+   <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page'>
+  <? } ?>
   <link type="text/css" rel="stylesheet" href="style_page_redirect.css">
  </head>
  <body>
   <div id="redirectwrap">
-   <h4><? echo $lang['reply_thanks']; ?></h4>
+   <h4><?
+         if($risp['FORUM']['ADDMSG']==1){
+           echo $lang['reply_thanks'];
+         }else{
+           echo "<font color='red'>".$lang['reply_error']."</font>";
+         }
+       ?></h4>
    <p>
-<?
-// echo $risp['FORUM']['ADDMSG']."<br>";
-// echo "alfa<br>";
-?>
-         <? echo $lang['reply_wait2']; ?><br><br>
+    <?
+      if($risp['FORUM']['ADDMSG']==1){
+        echo $lang['reply_ok']."<br>".$lang['reply_wait2'];
+      }elseif($risp['FORUM']['ADDMSG']==-2){
+        echo "<b>".$lang['reply_error2']."</b><br>";
+      }elseif($risp['FORUM']['ADDMSG']==-1){
+        echo "<b>".$lang['reply_error3']."</b><br>";
+      }
+    ?><br><br>
    </p>
-   <p class="redirectfoot">(<a href="showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page"><? echo $lang['reply_nowait']; ?></a>)</p>
+   <p class="redirectfoot">(<a href="showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page"><?
+      if($risp['FORUM']['ADDMSG']==1){
+         echo $lang['reply_nowait'];
+      }else{
+         echo $lang['reply_nowait2'];
+      }
+    ?></a>)
+   </p>
   </div>
  </body>
 </html>
