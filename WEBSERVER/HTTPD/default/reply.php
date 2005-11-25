@@ -54,7 +54,7 @@ if($_REQUEST["preview"]) {
   include_once("lib/bbcode_parser.php");
   
   $box_text = htmlspecialchars(stripslashes($_REQUEST["body"]));
-  $preview_text = "<div style=\"padding: 10px;width:95%\">{$lang['reply_preview']}:<br /><br />".convert($box_text)."</div><hr />";
+  $preview_text = "<div style=\"padding: 10px;width:95%\">{$lang['reply_preview']}:<br /><br />".convert(secure_v($_REQUEST["body"]))."</div><hr />";
 }
 
 echo<<<EOF
@@ -75,7 +75,7 @@ echo<<<EOF
     document.getElementById('centrale').style.height = altok + 'px';
     document.getElementById('FastReply').style.height = altokok + 'px';
   }
--->
+//-->
 </script>
 
 <div id="FastReply" class='post2'>
