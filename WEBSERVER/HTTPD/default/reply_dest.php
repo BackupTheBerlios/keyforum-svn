@@ -3,8 +3,7 @@
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 CheckSession();
-?>
-<?
+
 $blanguage='ita'; // Lingua di visualizzazione
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV["sesname"];
@@ -69,51 +68,25 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
 $core->Send($mreq);
 $risp=$core->Read();
-?>
 
-<html>
- <head>
-  <link rel="shortcut icon" href="favicon.ico">
-  <title><?
-         if($risp['FORUM']['ADDMSG']==1){
-           echo $lang['reply_wait'];
-         }else{
-           echo $lang['reply_error'];
-         }
-       ?></title>
-  <? if($risp['FORUM']['ADDMSG']==1){ ?>
-   <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page'>
-  <? } ?>
-  <link type="text/css" rel="stylesheet" href="style_page_redirect.css">
- </head>
- <body>
-  <div id="redirectwrap">
-   <h4><?
-         if($risp['FORUM']['ADDMSG']==1){
-           echo $lang['reply_thanks'];
-         }else{
-           echo "<font color='red'>".$lang['reply_error']."</font>";
-         }
-       ?></h4>
-   <p>
-    <?
-      if($risp['FORUM']['ADDMSG']==1){
-        echo $lang['reply_ok']."<br>".$lang['reply_wait2'];
-      }elseif($risp['FORUM']['ADDMSG']==-2){
-        echo "<b>".$lang['reply_error2']."</b><br>";
-      }elseif($risp['FORUM']['ADDMSG']==-1){
-        echo "<b>".$lang['reply_error3']."</b><br>";
-      }
-    ?><br><br>
-   </p>
-   <p class="redirectfoot">(<a href="showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page"><?
-      if($risp['FORUM']['ADDMSG']==1){
-         echo $lang['reply_nowait'];
-      }else{
-         echo $lang['reply_nowait2'];
-      }
-    ?></a>)
-   </p>
-  </div>
- </body>
-</html>
+// Redirect
+include_once("redirect.inc.php");
+
+$redirurl = "showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
+
+switch($risp['FORUM']['ADDMSG']) {
+  case 1:
+    redirect($lang['reply_wait'],$lang['reply_thanks'],$lang['reply_ok']."<br />".$lang['reply_wait2'],$redirurl,$lang['reply_nowait'],1);
+    break;
+  case -1:
+    redirect($lang['reply_error'],"<span style=\"color:red\">".$lang['reply_error']."</span>","<b>".$lang['reply_error3']."</b>",$redirurl,$lang['reply_nowait2'],0);
+    break;
+  case -2:
+    redirect($lang['reply_error'],"<span style=\"color:red\">".$lang['reply_error']."</span>","<b>".$lang['reply_error2']."</b>",$redirurl,$lang['reply_nowait2'],0);
+    break;
+  default:
+    redirect("0",$lang['reply_thanks'],$lang['reply_ok']."<br />".$lang['reply_wait2'],$redirurl,$lang['reply_nowait']);
+    break;
+}
+
+?>
