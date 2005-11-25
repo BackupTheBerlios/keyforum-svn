@@ -124,10 +124,10 @@ function mklastselected() {
     </p>
       <form method="POST" name="boardlinkform">
        <p>
-        <a href="search.php<? if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><? echo $lang['search']; ?></a>
+        <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>
         |
         <select class="content" name="boardlink" size="1" onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
-          <option selected value=''><? echo $lang['sel_otherbrd']; ?></option>
+          <option selected value=''><?php echo $lang['sel_otherbrd']; ?></option>
    <?php
       $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
       $responsewse=mysql_query($querywse) or Muori ("Query non valida: " . mysql_error());
@@ -163,8 +163,8 @@ function mklastselected() {
   </div>
 </div>
 <div id="userlinks">
-  <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><? echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><? echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><? echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><? echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><? echo $lang['userlink_brdlst']; ?></a> | <? echo $lang['userlink_wlcm']; ?>
+  <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><?php echo $lang['userlink_close']; ?></a></b></p>
+  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
    <?php
       if ($sess_auth)
         echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
@@ -175,12 +175,12 @@ function mklastselected() {
 </div>
 <form name="reloader" style="display:inline;float:right;">
 <select name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
-  <option value="null" selected="selected">Non aggiornare</option>
-  <option value="60">Aggiorna ogni minuto</option>
-  <option value="120">Aggiorna ogni 2 minuti</option>
-  <option value="180">Aggiorna ogni 3 minuti</option>
-  <option value="300">Aggiorna ogni 5 minuti</option>
-  <option value="600">Aggiorna ogni 10 minuti</option>
+  <option value="null" selected="selected"><?php echo $lang['reload_no']; ?></option>
+  <option value="60"><?php echo $lang['reload_60s']; ?></option>
+  <option value="120"><?php echo $lang['reload_120s']; ?></option>
+  <option value="180"><?php echo $lang['reload_180s']; ?></option>
+  <option value="300"><?php echo $lang['reload_300s']; ?></option>
+  <option value="600"><?php echo $lang['reload_600s']; ?></option>
 </select>
 </form>
 <div id="navstrip">

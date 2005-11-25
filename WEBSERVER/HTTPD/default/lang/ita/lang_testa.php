@@ -15,6 +15,11 @@ $lang['userlink_guest']  = "Visitatore";
 $lang['userlink_login']  = "Login";
 $lang['userlink_signup']  = "Registrati";
 $lang['navstrp_findex']  = "Indice del Forum";
-
+$lang['reload_no']  = "Non aggiornare";
+$lang['reload_60s']  = "Aggiorna ogni minuto";
+$lang['reload_120s']  = "Aggiorna ogni 2 minuti";
+$lang['reload_180s']  = "Aggiorna ogni 3 minuti";
+$lang['reload_300s']  = "Aggiorna ogni 5 minuti";
+$lang['reload_600s']  = "Aggiorna ogni 10 minuti";
 
 ?>
