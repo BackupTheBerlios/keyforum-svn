@@ -44,14 +44,18 @@ sub act_FORUM_ADDMSG {
 	return undef if ref($data) ne "HASH";
 	my ($md5,$fdest)=($data->{'MD5'},$data->{'FDEST'});
 	unless (exists $GLOBAL::Rule{$fdest}) {
-		$this->{tosend}->{'FORUM'}->{'ADDMSG'}='Il forum dove vuoi postare non è presente nel core.';
+		$this->{tosend}->{'FORUM'}->{'ADDMSG'}=-2;
 		return undef;
 	}
 	my $msg={};
 	$msg->{$md5}=$data;
-	$GLOBAL::Rule{$fdest}->AddRows($msg);
-	$GLOBAL::Gate{$fdest}->OffertHashBrCa(["$md5"]);
-	$this->{tosend}->{'FORUM'}->{'ADDMSG'}='MSG innoltrato al core\n';
+	my ($AddedRows, $ReqRows)=$GLOBAL::Rule{$fdest}->AddRows($msg);
+	if (scalar(@$AddedRows)) {
+		$GLOBAL::Gate{$fdest}->OffertHashBrCa($AddedRows);
+		$this->{tosend}->{'FORUM'}->{'ADDMSG'}=1;
+	} else {
+		$this->{tosend}->{'FORUM'}->{'ADDMSG'}=-1;
+	}
 }
 sub act_CORE {
 	my ($this,$data)=@_;
