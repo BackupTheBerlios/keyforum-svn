@@ -6,7 +6,7 @@ var quoteStatus = 0;
 var codeStatus = 0;
 
 	function emot(st) {
-		obj_body = document.forms[1].elements['body'];
+		obj_body = document.forms[2].elements['body'];
 		lastchar = obj_body.value.charAt(obj_body.value.length-1);
 		if (lastchar == ' ' || lastchar == '\n' || obj_body.value.length==0)
 			obj_body.value = obj_body.value + st + ' ';
@@ -16,7 +16,7 @@ var codeStatus = 0;
 	}
 
 	function toggleTag(tag) {
-		obj_body = document.forms[1].elements['body'];
+		obj_body = document.forms[2].elements['body'];
 		tstat = eval(tag + 'Status');
 		if (tag.toLowerCase() == 'bold') tagchar = 'B';
 		if (tag.toLowerCase() == 'italic') tagchar = 'I';
@@ -44,7 +44,7 @@ var codeStatus = 0;
 			desc = prompt("Inserisci il titolo del link", lnk);
 			if (desc != null && desc != "") {
 				if (lnk.substring(0,4).toLowerCase() == "www.") lnk = "http://" + lnk;
-				obj_body = document.forms[1].elements['body'];
+				obj_body = document.forms[2].elements['body'];
 				obj_body.value = obj_body.value + '[' + linktag + '=' + lnk + ']' + desc + '[/' + linktag + ']';
 				obj_body.focus();
 			}
@@ -55,7 +55,7 @@ var codeStatus = 0;
 	function btnInsertImage() {
 		lnk = prompt("Inserisci l'indirizzo web dell'immagine:", "http://");
 		if (lnk != null && lnk != "") {
-			obj_body = document.forms[1].elements['body'];
+			obj_body = document.forms[2].elements['body'];
 			obj_body.value = obj_body.value + '[IMG]' + lnk + '[/IMG]';
 			obj_body.focus();
 		}
@@ -64,7 +64,7 @@ var codeStatus = 0;
 	function btnInsertThumbImage() {
 		lnk = prompt("Inserisci l'indirizzo web dell'immagine:", "http://");
 		if (lnk != null && lnk != "") {
-			obj_body = document.forms[1].elements['body'];
+			obj_body = document.forms[2].elements['body'];
 			obj_body.value = obj_body.value + '[TMB]' + lnk + '[/TMB]';
 			obj_body.focus();
 		}
@@ -73,12 +73,12 @@ var codeStatus = 0;
 	function btnInsertEmail() {
 		lnk = prompt("Inserisci l'indirizzo email:", "");
 		if (lnk != null && lnk != "") {
-			obj_body = document.forms[1].elements['body'];
+			obj_body = document.forms[2].elements['body'];
 			obj_body.value = obj_body.value + '[EMAIL]' + lnk + '[/EMAIL]';
 			obj_body.focus();
 		}
 	}
 
 	function btnHover(str) {
-		document.forms[1].elements['txtAbout'].value = str;
+		document.forms[2].elements['txtAbout'].value = str;
 	}
