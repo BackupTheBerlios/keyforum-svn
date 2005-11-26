@@ -102,7 +102,7 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 <?php echo "   ".$lang['reg_import']." <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"100000\"> "; ?>
    
    <input name="userfile" type="file"><br>
-   <input type="submit" value="Invia">
+<?php echo "   <input type=\"submit\" value=\"".$lang['reg_submit']."\"> "; ?>
 </form>
 </center>
 
