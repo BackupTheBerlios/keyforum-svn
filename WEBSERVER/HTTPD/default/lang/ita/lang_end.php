@@ -15,6 +15,6 @@ $lang['perl_noderror3'] = "Nessun utente è connesso alla board!";
 $lang['perl_node1'] = "Ci sono ";
 $lang['perl_node2'] = " nodi connessi";
 $lang['timeout'] = "Il core non ha risposto entro il timeout";
-
+$lang['language_selection'] = "Scegli la Lingua";
 
 ?>

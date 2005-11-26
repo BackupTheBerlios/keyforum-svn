@@ -15,6 +15,6 @@ $lang['perl_noderror3'] = "Nobody connected at this board!";
 $lang['perl_node1'] = "There are ";
 $lang['perl_node2'] = " connected nodes";
 $lang['timeout'] = "Timeout";
-
+$lang['language_selection'] = "Language selection";
 
 ?>

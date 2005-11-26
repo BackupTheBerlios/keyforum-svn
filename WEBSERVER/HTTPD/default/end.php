@@ -12,7 +12,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
  echo"
  <form method=\"POST\" name=\"langform\">
    <select class=content name=\"langjump\" size=\"1\" onchange=\"location.href=document.langform.langjump.options[document.langform.langjump.selectedIndex].value\" style=\"font-family: Verdana; font-size: 8pt\" >
-   		<optgroup label=\"Scegli la Lingua\"> 			
+   		<optgroup label=\"".$lang['language_selection']."\"> 			
    <option ".$seleng["eng"]." value='".$newurl."eng'>English</option>
    <option ".$seleng["ita"]." value='".$newurl."ita' >Italiano</option>
    		</optgroup>
