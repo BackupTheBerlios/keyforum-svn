@@ -5,6 +5,22 @@ $lang = $std->load_lang('lang_end', $blanguage );
 <tr>
   <td>
    <br><br>
+   <? $newurl="chlang.php?".$_SERVER['QUERY_STRING']."&script=".$_SERVER['PHP_SELF']."&lang="; 
+   
+   $seleng["$blanguage"]="selected";
+
+ echo"
+ <form method=\"POST\" name=\"langform\">
+   <select class=content name=\"langjump\" size=\"1\" onchange=\"location.href=document.langform.langjump.options[document.langform.langjump.selectedIndex].value\" style=\"font-family: Verdana; font-size: 8pt\" >
+   		<optgroup label=\"Scegli la Lingua\"> 			
+   <option ".$seleng["eng"]." value='".$newurl."eng'>English</option>
+   <option ".$seleng["ita"]." value='".$newurl."ita' >Italiano</option>
+   		</optgroup>
+   	</select>
+</form>
+ "; 
+ ?> 
+  
    <?PHP
        if ((!$SEZ_DATA['ID'])AND(!$whereiam)){
    ?>

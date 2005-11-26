@@ -165,7 +165,7 @@ class FUNC {
 	}
 
 	$queryset = substr($queryset,0,-1);
-	$query="update $sess_name_localmember set $queryset where HASH='{$userdata['HASH']}'"; 
+	$query="update {$sess_name}_localmember set $queryset where HASH='{$userdata['HASH']}'"; 
 	$result = mysql_query($query) or die("error on query: " . mysql_error());
 	
 	return 1;
@@ -173,6 +173,35 @@ class FUNC {
 	}
 
 
+// *******************************
+// Redirector
+// *******************************
+
+function Redirect($pagetitle,$url,$msgtitle,$msg,$clickinvite) {
+
+$html="
+<html>
+ <head>
+  <link rel=\"shortcut icon\" href=\"favicon.ico\">
+  <title>$pagetitle</title>
+   <meta http-equiv='refresh' content='2; url=$url'>
+  <link type=\"text/css\" rel=\"stylesheet\" href=\"style_page_redirect.css\">
+ </head>
+ <body>
+  <div id=\"redirectwrap\">
+   <h4>$msgtitle</h4>
+   <p>
+   $msg
+   </p>
+   <p class=\"redirectfoot\">(<a href=\"$url\">$clickinvite</a>)
+   </p>
+  </div>
+ </body>
+</html>";
+
+echo $html;
+
+}
 
 }
 

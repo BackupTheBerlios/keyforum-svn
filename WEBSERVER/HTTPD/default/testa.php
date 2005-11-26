@@ -179,6 +179,8 @@ function mklastselected() {
     ?>
    </p>
 </div>
+
+
 <form name="reloader" style="display:inline;float:right;">
 <select class="forminput" name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
   <option value="null" selected="selected"><?php echo $lang['reload_no']; ?></option>
@@ -189,6 +191,7 @@ function mklastselected() {
   <option value="600"><?php echo $lang['reload_600s']; ?></option>
 </select>
 </form>
+
 <div id="navstrip">
   <img src="img/3.gif" alt="" /> <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
 <?php
