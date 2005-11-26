@@ -64,7 +64,7 @@ if ($riga = mysql_fetch_assoc($risultato)) {
 //-->
 </script>
 <div id="FastReply" class='post2'>
-<form action="reply_dest.pl" method="post">
+<form action="reply_dest.php" method="post">
   <input type="hidden" name="sezid" value='<?PHP echo $_REQUEST["SEZID"];?>'>
   <div id="colo-sx" class='post2' align=center>
     <table width="100" border="0" cellspacing="0" cellpadding="3">
