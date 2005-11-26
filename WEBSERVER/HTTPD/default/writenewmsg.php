@@ -31,7 +31,7 @@ $lang = $std->load_lang('lang_writenewmsg', $blanguage );
 
 <div id="FastReply" class='post2'>
 
-<form method="post" action="destnewmsg.pl">
+<form method="post" action="destnewmsg2.php">
 <input type=hidden name=sezid value="<?PHP print $_REQUEST["SEZID"] ?>">
 
   <div id="colo-sx" class='post2' align=center>
