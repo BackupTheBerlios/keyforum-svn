@@ -16,4 +16,5 @@ $lang['reply_ok']  = "Reply successfully inserted";
 $lang['reply_error2']  = "Board not found";
 $lang['reply_error3']  = "Unknown error: core cannot process message";
 $lang['reply_nowait2']  = "Click here to go back";
+$lang['reply_ban'] = "User is banned from this forum";
 ?>

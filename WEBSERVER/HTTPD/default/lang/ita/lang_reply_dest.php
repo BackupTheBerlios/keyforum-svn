@@ -16,4 +16,5 @@ $lang['reply_ok']  = "Risposta aggiunta correttamente";
 $lang['reply_error2']  = "Forum inesistente";
 $lang['reply_error3']  = "Errore sconosciuto: messaggio non accettato dal core";
 $lang['reply_nowait2']  = "Clicca qui per tornare al thread";
+$lang['reply_ban'] = "L'utente è bannato da questo forum";
 ?>

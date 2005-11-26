@@ -3,7 +3,8 @@
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 CheckSession();
-
+?>
+<?
 $blanguage='ita'; // Lingua di visualizzazione
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV["sesname"];
@@ -24,9 +25,7 @@ $KEY_DECRYPT=md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'],TRUE);// = pass
   $risultato = mysql_query($query) or die ($lang['inv_query'] . mysql_error());
 $riga = mysql_fetch_assoc($risultato) or die($lang['reply_user']);
 $privkey=base64_decode($riga[PASSWORD]);
-/* Vedi se l'utente è bannato, CanWrite in forumlib.pm
-$querysql="SELECT ban FROM " . $_ENV['sesname'] . "_membri WHERE HASH='" .
-*/
+
 $PKEY=$std->getpkey($SNAME);
 $req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
@@ -37,6 +36,15 @@ if (!$risp=$core->Read()) die ($lang['reply_timeout']);
 $PKEY=$risp[FUNC][Base642Dec];
 if ( strlen($PKEY) < 120 ) die($lang['reply_admin']);
 if (strlen($risp[FUNC][BlowDump2var][hash])!=16) die ($lang['reply_pdata']);
+
+$userhash=$risp[FUNC][BlowDump2var][hash];
+if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
+$userhash=mysql_real_escape_string($userhash);
+
+$banquery="SELECT ban FROM $SNAME" . "_membri WHERE HASH='$userhash';";
+$banresult=mysql_query($banquery);
+$banned=mysql_fetch_row($banresult);
+if ( $banned[0] ) die($lang['reply_ban']);
 
 $querysql="SELECT count(*) FROM " . $SNAME . "_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
 $sqlresult=mysql_query($querysql);
@@ -68,25 +76,51 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
 $core->Send($mreq);
 $risp=$core->Read();
-
-// Redirect
-include_once("redirect.inc.php");
-
-$redirurl = "showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
-
-switch($risp['FORUM']['ADDMSG']) {
-  case 1:
-    redirect($lang['reply_wait'],$lang['reply_thanks'],$lang['reply_ok']."<br />".$lang['reply_wait2'],$redirurl,$lang['reply_nowait'],1);
-    break;
-  case -1:
-    redirect($lang['reply_error'],"<span style=\"color:red\">".$lang['reply_error']."</span>","<b>".$lang['reply_error3']."</b>",$redirurl,$lang['reply_nowait2'],0);
-    break;
-  case -2:
-    redirect($lang['reply_error'],"<span style=\"color:red\">".$lang['reply_error']."</span>","<b>".$lang['reply_error2']."</b>",$redirurl,$lang['reply_nowait2'],0);
-    break;
-  default:
-    redirect("0",$lang['reply_thanks'],$lang['reply_ok']."<br />".$lang['reply_wait2'],$redirurl,$lang['reply_nowait']);
-    break;
-}
-
 ?>
+
+<html>
+ <head>
+  <link rel="shortcut icon" href="favicon.ico">
+  <title><?
+         if($risp['FORUM']['ADDMSG']==1){
+           echo $lang['reply_wait'];
+         }else{
+           echo $lang['reply_error'];
+         }
+       ?></title>
+  <? if($risp['FORUM']['ADDMSG']==1){ ?>
+   <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page'>
+  <? } ?>
+  <link type="text/css" rel="stylesheet" href="style_page_redirect.css">
+ </head>
+ <body>
+  <div id="redirectwrap">
+   <h4><?
+         if($risp['FORUM']['ADDMSG']==1){
+           echo $lang['reply_thanks'];
+         }else{
+           echo "<font color='red'>".$lang['reply_error']."</font>";
+         }
+       ?></h4>
+   <p>
+    <?
+      if($risp['FORUM']['ADDMSG']==1){
+        echo $lang['reply_ok']."<br>".$lang['reply_wait2'];
+      }elseif($risp['FORUM']['ADDMSG']==-2){
+        echo "<b>".$lang['reply_error2']."</b><br>";
+      }elseif($risp['FORUM']['ADDMSG']==-1){
+        echo "<b>".$lang['reply_error3']."</b><br>";
+      }
+    ?><br><br>
+   </p>
+   <p class="redirectfoot">(<a href="showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $_REQUEST['repof'] ?>&pag=last#end_page"><?
+      if($risp['FORUM']['ADDMSG']==1){
+         echo $lang['reply_nowait'];
+      }else{
+         echo $lang['reply_nowait2'];
+      }
+    ?></a>)
+   </p>
+  </div>
+ </body>
+</html>

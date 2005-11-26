@@ -24,10 +24,6 @@ $KEY_DECRYPT=md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'],TRUE);// = pass
 $riga = mysql_fetch_assoc($risultato) or die($lang['reply_user']);
 $privkey=base64_decode($riga[PASSWORD]);
 
-/* Vedi se l'utente è bannato, CanWrite in forumlib.pm
-$querysql="SELECT ban FROM " . $_ENV['sesname'] . "_membri WHERE HASH='" .
-*/
-
 $PKEY=$std->getpkey($SNAME);
 $req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
@@ -38,6 +34,14 @@ if (!$risp=$core->Read()) die ($lang['reply_timeout']);
 $PKEY=$risp[FUNC][Base642Dec];
 if ( strlen($PKEY) < 120 ) die($lang['reply_admin']);
 if ( strlen($risp[FUNC][BlowDump2var][hash]) != 16 ) die ($lang['reply_pdata']);
+
+$userhash=$risp[FUNC][BlowDump2var][hash];
+if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
+$userhash=mysql_real_escape_string($userhash);
+$banquery="SELECT ban FROM $SNAME" . "_membri WHERE HASH='$userhash';";
+$banresult=mysql_query($banquery);
+$banned=mysql_fetch_row($banresult);
+if ( $banned[0] ) die($lang['reply_ban']);
 
 $mreq['FORUM']['ADDMSG'];
 $mreq['FORUM']['ADDMSG']['SEZ']=$_REQUEST['sezid'];
