@@ -56,7 +56,7 @@ if ($sess_auth==1) {
       <td background="img/login_8.gif"><input type=text name=nick></td>
       <td background="img/login_8.gif" height="24"><font size="1">&nbsp;</font></td>
       <td background="img/login_A.gif" rowspan="3" width="8"><font size="1">&nbsp;</font></td>-->
-      <td align="right">Nick:&nbsp;</td>
+      <td align="right">'.$lang['login_username'].'&nbsp;</td>
       <td><input type=text name=nick></td>
     </tr>
     <tr>
@@ -64,7 +64,7 @@ if ($sess_auth==1) {
       <td background="img/login_8.gif" align="right">Password:&nbsp;</td>
       <td background="img/login_8.gif"><input type=password name=passwd></td>
       <td background="img/login_8.gif" height="24"><font size="1">&nbsp;</font></td>-->
-      <td align="right">Password:&nbsp;</td>
+      <td align="right">'.$lang['login_password'].'&nbsp;</td>
       <td ><input type=password name=passwd></td>
     </tr>
     <tr>
