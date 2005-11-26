@@ -1,5 +1,6 @@
 ================ KeyForum 0.42 Beta 2 ===========================
 2005-11-26
+mmorselli:		[ADD] cambio lingua
 mmorselli:		[ADD] preferenze utente
 
 2005-11-25
