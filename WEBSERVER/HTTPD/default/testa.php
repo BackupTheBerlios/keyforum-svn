@@ -1,26 +1,32 @@
 <?php
 include "lib/lib.php"; # Librerie per creare la connessione MySQL
 
-CheckSession();
 ?>
 <html>
 <head>
 <title><?php
 
-$blanguage='ita'; // Lingua di visualizzazione
-// carico la lingua per la testa
-$lang = $std->load_lang('lang_testa', $blanguage );
+
 $ThreadXPage = 20;
 $PostXPage = 10;
 $UserXPage = 100;
 $BoardXPage = 20;
 $Section = 3; # Numero di pagine da visualizzare a sn e a ds dell'attuale (es. .. 2 3 [4] 5 6 ..)
+
 $SNAME=$_ENV["sesname"];
 
 $queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
 $responseacbd=mysql_query($queryacbd) or Muori ($lang['inv_query'] . mysql_error());
 $valueacbd=mysql_fetch_assoc($responseacbd);
 $BNAME=$valueacbd['SUBKEY'];
+
+if($userdata['LANG']) {
+$blanguage=$userdata['LANG']; // Lingua di visualizzazione
+} else {$blanguage="eng";}
+
+// carico la lingua per la testa
+$lang = $std->load_lang('lang_testa', $blanguage );
+
 
   if (pack("H*",$_REQUEST[THR_ID])){
     $MSGID=mysql_escape_string(pack("H*",$_REQUEST[THR_ID]));

@@ -3,6 +3,7 @@
 
 include ("testa.php");
 
+
 // carico la lingua per la index
 $lang = $std->load_lang('lang_index', $blanguage );
 
@@ -87,5 +88,6 @@ $lang = $std->load_lang('lang_index', $blanguage );
 </tr>
 
 <?PHP
+
 include ("end.php");
 ?>

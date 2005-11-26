@@ -65,6 +65,7 @@ $GLOBALS['sess_nick'] = &$sess_nick;
 $GLOBALS['sess_password'] = &$sess_password;
 $GLOBALS['sess_auth'] = &$sess_auth;
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
+
 function CheckSession() {
   $query="SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
   $risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
@@ -153,5 +154,10 @@ function secure_v($val) {
 require "lib/functions.php";
 require "lib/core.php";
 $std   = new FUNC;
+
+CheckSession();
+
+// *** DATI UTENTE ****
+$userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
 
 ?>

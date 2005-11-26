@@ -136,19 +136,18 @@ class FUNC {
 // Personal User Data
 // *********************************
 
-	function GetUserData() {
-	 global $GLOBALS;
+	function GetUserData($sess_name,$sess_nick,$sess_password) {
 	 
 	 $userdata = array();
 	 
-	 if(!$GLOBALS['sess_nick']) { return $userdata; }
+	 if(!$sess_nick) { return $userdata; }
 	 
 	 // hex id
-	 $hash=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']);
+	 $hash=md5($sess_password.$sess_nick);
 	 
 	 
 	 // all user data
-	 $query = "SELECT * FROM {$GLOBALS['SNAME']}_localmember  WHERE HASH='$hash'";
+	 $query = "SELECT * FROM {$sess_name}_localmember  WHERE HASH='$hash'";
 	 $result = mysql_query($query) or die("error on query: " . mysql_error());
 	 $userdata = mysql_fetch_assoc($result);
 	 return $userdata;
@@ -156,8 +155,7 @@ class FUNC {
 	 }
 
 
-	function UpdateUserData($userdata) {
-	global $GLOBALS;
+	function UpdateUserData($sess_name,$userdata) {
 	
 	if(!$userdata['HASH']){ return 0; }
 	
@@ -167,7 +165,7 @@ class FUNC {
 	}
 
 	$queryset = substr($queryset,0,-1);
-	$query="update {$GLOBALS['SNAME']}_localmember set $queryset where HASH='{$userdata['HASH']}'"; 
+	$query="update $sess_name_localmember set $queryset where HASH='{$userdata['HASH']}'"; 
 	$result = mysql_query($query) or die("error on query: " . mysql_error());
 	
 	return 1;
