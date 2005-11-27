@@ -1,4 +1,7 @@
-================ KeyForum 0.42 Beta 2 ===========================
+================ KeyForum 0.43 Alfa ===========================
+2005-11-27
+Luftw@ffer:		[ADD] Base per personalizzazione di Thread e Post per pagina
+
 2005-11-26
 mmorselli:		[ADD] cambio lingua
 mmorselli:		[ADD] preferenze utente
