@@ -7,8 +7,12 @@ include "lib/lib.php"; # Librerie per creare la connessione MySQL
 <title><?php
 
 
-$ThreadXPage = 20;
-$PostXPage = 10;
+if($userdata['TPP']) {
+$ThreadXPage=$userdata['TPP']; // N° di thread per pagina
+} else {$ThreadXPage = 20;}
+if($userdata['PPP']) {
+$PostXPage=$userdata['PPP']; // N° di post per pagina
+} else {$PostXPage = 10;}
 $UserXPage = 100;
 $BoardXPage = 20;
 $Section = 3; # Numero di pagine da visualizzare a sn e a ds dell'attuale (es. .. 2 3 [4] 5 6 ..)
