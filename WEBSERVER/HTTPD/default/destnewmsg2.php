@@ -3,8 +3,6 @@
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 CheckSession();
-?>
-<?
 
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
 
