@@ -40,7 +40,6 @@ else {
   $SQLQuery1 = "SELECT count(msg.hash) as num FROM {$SNAME}_newmsg as msg $NickTable where visibile = '1' and $where";
   $SQLQuery2 = "SELECT count(msg.hash) as num FROM {$SNAME}_reply as msg $NickTable where visibile = '1' and $where";
   $SQLQuery = "select sum(num) as num from (($SQLQuery1) UNION ($SQLQuery2)) as result_num";
-  echo $SQLQuery."<br><br>";
 
   $risultato=mysql_query($SQLQuery) or Muori ("Query non valida: " . mysql_error());
   if ($riga = mysql_fetch_assoc($risultato))
@@ -53,9 +52,9 @@ else {
   $SQLQuery1 = "SELECT msg.hash, '' as rep_of, msg.sez, msg.edit_of, msg.type, msg.date, msg.title, msg.subtitle, msg.body FROM {$SNAME}_newmsg as msg $NickTable where visibile = '1' and $where";
   $SQLQuery2 = "SELECT msg.hash, msg.rep_of, 0 as sez, msg.edit_of, msg.type, msg.date, msg.title, '' as subtitle, msg.body FROM {$SNAME}_reply as msg $NickTable where visibile = '1' and $where";
   $SQLQuery = "select * from (($SQLQuery1) UNION ($SQLQuery2)) as result_msg order by `".$_REQUEST["sort_key"]."` ".$_REQUEST["sort_order"];
-  echo $SQLQuery."<br><br>";
   $risultato=mysql_query($SQLQuery) or Muori ("Query non valida: " . mysql_error());
   while ($riga = mysql_fetch_assoc($risultato)) {
+    echo '<a href="">link</a><br>';
   }
 }
 
