@@ -18,7 +18,7 @@ $lang = $std->load_lang('lang_ednewmsg', $blanguage );
   $query="SELECT title,subtitle,body from {$SNAME}_newmsg as msg where EDIT_OF='$EDITID' and visibile='1';";
   $risultato=mysql_query($query);
   if ($riga = mysql_fetch_assoc($risultato)) {
-    $Testo = htmlspecialchars($riga["body"]);
+    $Testo = htmlspecialchars(stripslashes($riga["body"]));
     $Titolo = secure_v($riga["title"]);
     $SubTitolo = secure_v($riga["subtitle"]);
   }

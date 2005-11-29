@@ -35,7 +35,7 @@ if ($riga = mysql_fetch_assoc($risultato)) {
 
   $risultato=mysql_query($query);
   if ($riga = mysql_fetch_assoc($risultato)) {
-    $Testo = htmlspecialchars($riga["body"]);
+    $Testo = htmlspecialchars(stripslashes($riga["body"]));
     $Titolo = secure_v($riga["title"]);
   }
   else {
