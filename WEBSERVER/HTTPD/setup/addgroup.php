@@ -152,6 +152,17 @@ mysql_query("CREATE TABLE  `".$sesname."_reply` (
   KEY (`AUTORE`)
 ) TYPE=MyISAM;") or die(mysql_error());
 
+mysql_query("CREATE TABLE  `".$sesname."_extdati` (
+  `HASH` BINARY(16) NOT NULL PRIMARY KEY,
+  `AUTORE` BINARY(16) NOT NULL,
+  `DATE` INT UNSIGNED NOT NULL,
+  `TITLE` tinytext NOT NULL default '',
+  `BODY` BLOB NOT NULL,
+  `SIGN` tinyblob NOT NULL default '',
+  KEY (`DATE`),
+  KEY (`AUTORE`)
+) TYPE=MyISAM;") or die(mysql_error());
+
 mysql_query("CREATE TABLE  `".$sesname."_admin` (
   `HASH` BINARY(16) NOT NULL PRIMARY KEY,
   `TITLE` tinytext NOT NULL default '',
