@@ -90,6 +90,7 @@ mysql_query("CREATE TABLE  `".$sesname."_membri` (
   `ban` enum('0','1') NOT NULL default '0',
   `present` enum('0','1') NOT NULL default '1',
   `msg_num` INT UNSIGNED NOT NULL default '0',
+  `tot_msg_num` INT UNSIGNED NOT NULL default '0',
   `edit_firma` INT UNSIGNED NOT NULL default '0',
   `edit_adminset` INT UNSIGNED NOT NULL default '0',
   `EXTRA` BLOB NOT NULL default '',
