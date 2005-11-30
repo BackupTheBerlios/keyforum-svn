@@ -32,7 +32,7 @@ include ("testa.php");
 </table>
 <bR>
 <h1><center>Crea Nuovo Forum</center></h1>
-<form method=post action=group.pl>
+<form method=post action=addgroup.php>
 <input type=hidden name=MakeNew value=1>
 <table border=1 cellspacing=1 cellpadding=1 bordercolor=black>
 <tr><td>Nome (*Identificatore):</td><td><input type=text name=name></td></tr>
