@@ -1,7 +1,7 @@
 <?
 
 $host="127.0.0.1";
-$timeout= 1;
+$timeout= 0.5;
 
 // *********
 // leggo configurazione da file XML (richiede il modulo CONFIG di PEAR)
