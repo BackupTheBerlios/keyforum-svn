@@ -11,7 +11,6 @@ sub new {
 }
 sub EditSez {
 	my ($this, $com,$date)=@_;
-	return undef if ref($com) ne "HASH";
 	return undef unless defined $com->{SEZID};
 	return undef if $com->{SEZID}=~ /\D/;
 	# Inserisco il nuovo record. Se non esiste viene creato altrimenti mi darà errore.
@@ -35,13 +34,12 @@ sub EditSez {
 }
 sub execute {
 	my ($this, $command,$date)=@_;
-	$command=BinDump::MainDeDump(MIME::Base64::decode_base64($command));
+	$command=MIME::Base64::decode_base64($command);
 	return undef if ref($command) ne "HASH";
 	my ($key, $value, $sing);
 	while (($key, $value)=each %$command) {
-		next if ref($value) ne "ARRAY";
 		$this->ConfTable($value,$date),next if $key eq "ConfTable";
-		foreach $sing (@$value) {
+		foreach $sing (wantlist($value)) {
 			next if ref($sing) ne "HASH";
 			$this->EditSez($sing,$date), next if $key eq "EditSez";
 			$this->AuthMem($sing,$date), next if $key eq "AuthMem";
@@ -65,6 +63,7 @@ sub ConfTable {
 	$this->{DB}->do("TRUNCATE TABLE ".$fname."_conf");
 	$sth=$this->{DB}->prepare("INSERT INTO ".$fname."_conf (`GROUP`,`FKEY`,`SUBKEY`,`VALUE`) VALUE(?,?,?,?)");
 	$sth->execute('ADMIN','LAST_EDIT','DATA',$date);
+	$com=wantlistref($com);
 	$sth->execute($_->{a} || '',$_->{b} || '',$_->{c} || '',$_->{d} || '') while $_=pop(@$com);
 	return 1;
 	
@@ -81,6 +80,19 @@ sub AuthMem {
 		$this->{DB}->do("INSERT INTO ".$this->{Fname}."_membri (`HASH`,`is_auth`,`AUTH`,`present`) VALUES(?,?,?,'0');",undef,$com->{HASH},'1',$com->{AUTH});
 	}
 	
+}
+sub wantlist {
+    my $var=shift;
+    return values(%$var) if ref($var) eq "HASH";
+    return @$var if ref($var) eq "ARRAY";
+    return();
+}
+sub wantlistref {
+    my $var=shift;
+    return $var if ref($var) eq "ARRAY";
+    return undef if ref($var) ne "HASH";
+    my @vet=values(%$var);
+    return \@vet;
 }
 # EditSez Aggiunge/Modifica nuove sezioni.
 # AuthMem Assegna una firma dell'admin ad un membro

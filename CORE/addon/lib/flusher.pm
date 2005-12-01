@@ -8,8 +8,8 @@ sub new {
 	$this->{DB}=$DB;
 	
 	# Aumento la vita delle righe da eliminare appena aviato keyforum
-	$DB->do("UPDATE ".$fname."_purgatorio SET `DELETE_DATE`=`DELETE_DATE`+3600 WHERE `DELETE_DATE`>=?",undef,time);
-	$DB->do("UPDATE ".$fname."_purgatorio SET `DELETE_DATE`=? WHERE `DELETE_DATE`<?",undef,time+3600,time);
+	#$DB->do("UPDATE ".$fname."_purgatorio SET `DELETE_DATE`=`DELETE_DATE`+3600 WHERE `DELETE_DATE`>=?",undef,time);
+	#$DB->do("UPDATE ".$fname."_purgatorio SET `DELETE_DATE`=? WHERE `DELETE_DATE`<?",undef,time+3600,time);
 	
 	# Carico la configurazione della board
 	my $sth=$DB->prepare("SELECT `GROUP`, `FKEY`, `SUBKEY`,`VALUE` FROM ".$fname."_conf ORDER BY `GROUP`, `FKEY`,`SUBKEY`;");

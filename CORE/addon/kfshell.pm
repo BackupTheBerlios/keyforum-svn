@@ -10,29 +10,51 @@ use Math::Pari;
 my $uptime=time();
 my $win32api=0;
 my $hWnd;
+my $TMPVAR={};
+
 sub new {
 	my ($ogg,$sock,$server)=@_;
 	return undef unless $GLOBAL::ctcp->AddSock($sock,(MaxSleep=>120,type=>'compbase'));
 	my $this=bless({},'kfshell');
 	$this->{num}=$ogg;
 	$GLOBAL::CLIENT{$ogg}=$this;
-	$this->ResetSendVar;
 	return $this;
 }
 
 sub RecData {
 	my ($this,$ogg,$data,$sock)=@_;
 	return undef if ref($data) ne "HASH";
+	$this->ResetSendVar();
 	$this->act_RSA($data->{RSA}) if exists $data->{RSA};
 	$this->act_INFO($data->{INFO}) if exists $data->{INFO};
 	$this->act_HASHREQ($data->{HASHREQ}) if exists $data->{HASHREQ};
 	$this->act_FUNC($data->{FUNC}) if exists $data->{FUNC};
 	$this->act_FORUM($data->{FORUM}) if exists $data->{FORUM};
 	$this->act_CORE($data->{'CORE'}) if exists $data->{'CORE'};
+	$this->act_TMPVAR($data->{'TMPVAR'}) if exists $data->{'TMPVAR'};
 	die("\n\nKeyForum chiuso per una richiesta dalla Shell.\n\n") if exists($data->{CHIUDI}) && $data->{CHIUDI};
 	$GLOBAL::ctcp->send($this->{num},$this->{tosend});
-	$this->ResetSendVar();
+	
 }
+sub act_TMPVAR {
+	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
+	$this->{tosend}->{TMPVAR}={} unless exists $this->{tosend}->{TMPVAR};
+	delete $TMPVAR->{$data->{DELVAR}} if exists $data->{DELVAR};
+	aggiungi($TMPVAR,$data->{ADDVAR}) if exists $data->{ADDVAR};
+	$this->{tosend}->{TMPVAR}->{DUMP}=$TMPVAR->{$data->{DUMP}} if exists $data->{DUMP};
+	$this->{tosend}->{TMPVAR}->{BINDUMP}=BinDump::MainDump($TMPVAR->{$data->{BINDUMP}},0,1) if exists $data->{BINDUMP};
+}
+sub aggiungi {
+    my ($var,$adder)=@_;
+    return undef if ref($adder) ne "HASH";
+    while (my ($key,$value)=each(%$adder)) {
+        $var->{$key}=$value,next if ref($value) ne "HASH";
+        $var->{$key}={} if ref($var->{$key}) ne "HASH";
+        aggiungi($var->{$key},$value);
+    }
+}
+
 sub act_FORUM {
 	my ($this,$data)=@_;
 	return undef if ref($data) ne "HASH";
@@ -93,6 +115,7 @@ sub act_FUNC {
 	$this->{tosend}->{'FUNC'}->{BlowDump2var}=BinDump::MainDeDump(DeCryptBlowFish($data->{BlowDump2var}->{Key},$data->{BlowDump2var}->{Data}))
 		if exists $data->{BlowDump2var};
 	$this->{tosend}->{'FUNC'}->{BinDump2var}=BinDump::MainDeDump($data->{BinDump2var}) if exists $data->{BinDump2var};
+	$this->{tosend}->{'FUNC'}->{var2BinDump}=BinDump::MainDump($data->{var2BinDump},0,1) if exists $data->{var2BinDump};
 }
 sub ResetSendVar {
 	my $this=shift;
@@ -129,6 +152,20 @@ sub act_RSA {
 	return undef if ref($data) ne "HASH";
 	$this->{tosend}->{RSA}={} unless exists $this->{tosend}->{RSA};
 	$this->act_RSA_FIRMA($data->{FIRMA}) if exists $data->{FIRMA};
+	$this->act_RSA_GENKEY($data->{GENKEY}) if exists $data->{GENKEY};
+}
+sub act_RSA_GENKEY {
+	my ($this,$data)=@_;
+	my $verbosity=$data->{CONSOLE_OUTPUT} || '0';
+	$this->{tosend}->{RSA}->{GENKEY}={} unless exists $this->{tosend}->{RSA}->{GENKEY};
+	my $rsa=new Crypt::RSA;
+	my ($public, $private) = $rsa->keygen (Identity  => 'io', Size => 1024,Verbosity => $verbosity) or return(
+		$this->{tosend}->{RSA}->{GENKEY}->{ERR}=$rsa->errstr());
+	$this->{tosend}->{RSA}->{GENKEY}->{pub}="".$public->{n};
+	$private=PrivateKey2Base64($private,0);
+	$private=CryptBlowFish($data->{PWD},$private) if $data->{PWD};
+	$this->{tosend}->{RSA}->{GENKEY}->{priv}=MIME::Base64::encode_base64($private,'');
+	
 }
 sub act_INFO_FORUM {
 	my ($this,$data)=@_;
@@ -165,6 +202,18 @@ sub act_RSA_FIRMA {
 # FUNZIONI VARIE
 
 # Decripta e scompatta la chiave privata
+sub CryptBlowFish {
+	my ($key, $testo_normale)=@_;
+	my ($pezzo,$cipher,$testo_criptato);
+	return undef unless $cipher = new Crypt::Blowfish $key;
+	$testo_normale=pack("I/a*", $testo_normale);
+	while (length($testo_normale)>0) {
+		$pezzo=substr($testo_normale, 0, 8, "");
+		$pezzo.="\x00"x(8-length($pezzo)) if length($pezzo)<8;
+		$testo_criptato.=$cipher->encrypt($pezzo);
+	}
+	return $testo_criptato;
+}
 sub GetPrivateKey {
 	my ($codice,$pwd)=@_;
 	my ($PRIVATE_DATA,$RSA_PRIVATE);
@@ -181,12 +230,23 @@ sub GetPrivateKey {
 	}
 	$RSA_PRIVATE->{Version} = "1.91";
 	$RSA_PRIVATE->{Checked} = 0;
-	$RSA_PRIVATE->{Identity} => 'Board';
-	$RSA_PRIVATE->{'Cipher'} => 'Blowfish';
+	$RSA_PRIVATE->{'Identity'} = 'Board';
+	$RSA_PRIVATE->{'Cipher'} = 'Blowfish';
 	bless($RSA_PRIVATE,'Crypt::RSA::Key::Private');
 	return $RSA_PRIVATE;
 }
-
+sub PrivateKey2Base64 {
+	my ($private,$encode)=@_;
+	my $subpr={};
+	$subpr->{Version} = "1.91";
+	$subpr->{Checked} = "0";
+	$subpr->{Identity} = "io";
+	$subpr->{private}={};
+	my ($key, $value);
+	$subpr->{private}->{$key}="$value" while ($key, $value)=each %{$private->{private}};
+	return MIME::Base64::encode_base64(BinDump::MainDump($subpr,0,1),'') if $encode;
+	return BinDump::MainDump($subpr,0,1);
+}
 # Decripta dati criptati in blowfish
 sub DeCryptBlowFish {
 	my ($key, $testo_criptato)=@_;
@@ -212,6 +272,7 @@ sub DeCryptBlowFish {
 	$GLOBAL::SERVER{fileno($kfshell)}=\&kfshell::new;
 	$GLOBAL::ctcp->AddSock($kfshell,(type=>'server')) or errore("Errore non previsto nell'aggiunta del'oggetto server SHELL\n");
 }
+print "KFSHELL: KeyForum Shell avviato ed in ascolto sulla porta ".$GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA}.".\n";
 sub errore {
 	my $errore=shift;
 	die("Errore nel modulo kfshell.pm : $errore\n");

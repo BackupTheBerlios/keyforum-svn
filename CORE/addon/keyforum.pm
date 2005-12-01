@@ -83,6 +83,10 @@ sub tryconn {
 	my ($success,$ogg, $sock,$ip)=@_;
 	GestIP::remove2try($ip);
 	return undef unless $success;
+	if ($sock->peerhost eq $sock->sockhost) { # Se è localhost
+		GestIP::Banna($sock->peerhost);
+		close($sock);
+	}
 	new($ogg, $sock);
 }
 sub DESTROY {
@@ -283,7 +287,7 @@ sub MakeShareSession {
 	
 	# Creo la chiave che identificherà quello specifico forum (in base alla chiave pubblica)
 	my $Identificatore=Digest::SHA1::sha1("$public_key");
-	print "creato sharesessione obj ".unpack("H*",$Identificatore)."\n";
+	
 	# Creo l'oggetto Rule.
 	# La classe FRule è l'abbreviazione di ForumRule, regole del forum.
 	# I metodi dell'oggetto mi dicono se certe azioni da parte di certi utenti sono permesse
@@ -327,7 +331,7 @@ sub MakeShareSession {
 		}
 	) or return errore("Impossibile completare alcune operazione per il forum $ForumName\n");
 	AddGate($Identificatore,$Gate,$rule,$GLOBAL::CONFIG->{SHARESERVER});
-	print "INDEX: Aggiunta board con PKEY:$public_key\n";
+	print "KEYFORUM: Aggiunta la board con ID ".unpack("H*",$Identificatore)."\n";
 }
 sub StartUp {
 	errore("Non è specificata una porta TCP per KeyForum!\n") unless $GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA};
@@ -336,6 +340,7 @@ sub StartUp {
 			LocalAddr => $GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{BIND},
 			Proto => 'tcp'
 		) or errore("Impossibile creare il server SHARESERVER sulla porta ".$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA}."\nErrore:$!\n");
+	print "KEYFORUM: Avviato ed in ascolto sulla porta ".$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA}."\n";
 	$GLOBAL::SERVER{fileno($keyforum)}=\&keyforum::new;
 	$GLOBAL::ctcp->AddSock($keyforum,(type=>'server',group=>$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{GROUP})) or errore("Errore non previsto nell'aggiunta del'oggetto server KeyForum\n");
 	# Configuro KeyForumDebug
@@ -358,4 +363,5 @@ sub errore {
 	die("Errore nel modulo keyforum.pm : $errore\n");
 }
 &StartUp;
+
 1;

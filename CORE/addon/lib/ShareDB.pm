@@ -51,7 +51,7 @@ sub tab_conf {
 	$this->{TabConf}=\%tab_conf;
 	$sth=$this->{DataBase}->prepare("SELECT ".($this->{TabConf}->{Identificatore}).",".($this->{TabConf}->{Type})." FROM ".($this->{TabConf}->{Table}));
 	$sth->execute() or return Error($this->{DataBase}->errstr."\n");
-	print "Creazione indice degli HASH\n";
+	print "KEYFORUM: Creazione indice degli HASH.\n";
 	$this->{DBM}->{$md5_list->[0]}=$md5_list->[1] while $md5_list=$sth->fetchrow_arrayref;
 	$sth->finish;
 	my ($query, $type, $list);
@@ -68,7 +68,7 @@ sub tab_conf {
 	$this->{Query}->{SendTime}=$this->{DataBase}->prepare("UPDATE ".($this->{TabConf}->{Table})." SET SNDTIME=SNDTIME+1 WHERE HASH=?");
 	$this->{Query}->{GetType}=$this->{DataBase}->prepare("SELECT TYPE FROM ".$this->{TabConf}->{Table}." WHERE HASH=?");
 	$this->{Query}->{Contali}=$this->{DataBase}->prepare("SELECT ID FROM ".$this->{TabConf}->{Table}." ORDER BY ID DESC LIMIT 1");
-	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' ORDER BY WRITE_DATE DESC LIMIT 100");
+	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' ORDER BY WRITE_DATE DESC LIMIT 150");
 	#$this->{Query}->{SelPrio}=$this->{DataBase}->prepare("SELECT HASH FROM ".$this->{fname}."_priority ORDER BY `PRIOR` LIMIT 50");
 	$this->{Query}->{DelePrio}=$this->{DataBase}->prepare("DELETE FROM ".$this->{fname}."_priority WHERE HASH=?");
 	
@@ -94,7 +94,7 @@ sub NewSession {
 	my $hash_req={};
 	$hash_req->{MODO}=4;
 	$hash_req->{TYPE}=3;	
-	$hash_req->{LIMIT}=85;
+	$hash_req->{LIMIT}=120;
 	$hash_req->{ORDER}='DESC';
 	$this->{Sender}->($this->{TabConf}->{ShareName},'HASH_REQ', $oggname, $hash_req);
 	my $msgref=$this->PrendiUltimiMsg();
@@ -182,7 +182,7 @@ sub ROW_REQ {
 				next if exists $refe->{$thisrow};
 				delete $buff->{HASH};
 				$refe->{$thisrow}=$buff;$numrow++;
-				$this->{Query}->{SendTime}->execute($thisrow);
+				#$this->{Query}->{SendTime}->execute($thisrow);
 				last MAINFOR if $numrow>300;
 			}
 			$query->finish;

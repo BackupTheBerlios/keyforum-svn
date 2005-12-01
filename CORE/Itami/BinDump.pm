@@ -22,6 +22,7 @@ my %TagName;
 # Ritorna il pacchetto binario dumpato.
 sub MainDump {
 	my ($refvar,$onlyregister, $subref)=@_;
+	$subref=1;$onlyregister=0;
 	return undef unless UNIVERSAL::isa($refvar,'HASH');
 	return "\x01".HashDump($refvar,$onlyregister, $subref);
 }
@@ -46,7 +47,7 @@ sub HashDeDump {
 		($key,$value)=(undef,undef);
 		$key=GetKeyName($pacchetto);
 		$value=GetValue($pacchetto);
-		$hash->{$key}=$value if $key && $value;
+		$hash->{$key}=$value if defined($key) && defined($value);
 	}
 	return $hash;
 }
@@ -94,8 +95,8 @@ sub HashDump {
 	WDUMP: while ( my ($key, $value) = each %$refvar ) {
 		KNAME:
 		{
-			$KeyName=$TagName{$key},last KNAME if exists $TagName{$key};
-			$KeyName="\x01".pack("C/a*",$key),last KNAME unless $onlyregister;
+			#$KeyName=$TagName{$key},last KNAME if exists $TagName{$key};
+			$KeyName="\x01".pack("C/a*","$key"),last KNAME unless $onlyregister;
 			next WDUMP;
 		}
 		# 1=Unsigned Char | 2=Unsigned Short | 3=Unsigned Integer | 4=HASH
