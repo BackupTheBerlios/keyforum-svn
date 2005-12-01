@@ -1,20 +1,10 @@
 <?
-function GetUserColor($MSG) {
-  $userhash=unpack("H32hex",$MSG['memhash']);
-  // colori normali
-  $usercolor['sx_color']=substr($userhash['hex'],0,6);
-  $usercolor['dx_color']=substr($userhash['hex'],-6);
-  // colori invertiti
-  $usercolor['sx_color_i']=dechex(16777215- hexdec($usercolor['sx_color']));
-  $usercolor['dx_color_i']=dechex(16777215- hexdec($usercolor['dx_color']));
-  return $usercolor;
-}
-
 function printmsg($MSG) {
   global $GLOBALS;
   global $blanguage;
   global $lang;
-  $usercolor = GetUserColor($MSG);
+  global $std;
+  $usercolor = $std->GetUserColor($MSG['memhash']);
   $mio_nick = $GLOBALS['sess_nick'];
   if ($MSG['date'])
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['date']);

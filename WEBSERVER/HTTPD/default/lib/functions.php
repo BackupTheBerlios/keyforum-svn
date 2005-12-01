@@ -203,6 +203,21 @@ echo $html;
 
 }
 
+// *******************************
+// GetUserColor, ritorna la coppia di colori a partire dal hash
+// *******************************
+
+function GetUserColor($hash) {
+  $userhash=unpack("H32hex",$hash);
+  // colori normali
+  $usercolor['sx_color']=substr($userhash['hex'],0,6);
+  $usercolor['dx_color']=substr($userhash['hex'],-6);
+  // colori invertiti
+  $usercolor['sx_color_i']=dechex(16777215- hexdec($usercolor['sx_color']));
+  $usercolor['dx_color_i']=dechex(16777215- hexdec($usercolor['dx_color']));
+  return $usercolor;
+}
+
 }
 
 ?>
