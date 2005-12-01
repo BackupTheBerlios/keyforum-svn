@@ -1,13 +1,14 @@
 ================ KeyForum 0.43 Alfa ===========================
 2005-12-01
+Hierro:         [MOD] Estratta la visualizzazione di un messaggio in un nuovo file
 Hierro:         [MOD] Abbassato il timeout da 1sec a 0.5sec nel controllo porte libere
 
 2005-11-27
-Luftw@ffer:		[ADD] Base per personalizzazione di Thread e Post per pagina
+Luftw@ffer:	[ADD] Base per personalizzazione di Thread e Post per pagina
 
 2005-11-26
-mmorselli:		[ADD] cambio lingua
-mmorselli:		[ADD] preferenze utente
+mmorselli:	[ADD] cambio lingua
+mmorselli:	[ADD] preferenze utente
 
 2005-11-25
 Oberon:		[ADD] Reload automatico pagine
