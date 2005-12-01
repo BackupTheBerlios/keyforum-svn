@@ -1,4 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
+2005-12-01
+Hierro:         [MOD] Abbassato il timeout da 1sec a 0.5sec nel controllo porte libere
+
 2005-11-27
 Luftw@ffer:		[ADD] Base per personalizzazione di Thread e Post per pagina
 
