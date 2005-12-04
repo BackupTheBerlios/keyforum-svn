@@ -1,4 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
+2005-12-04
+Hierro:         [MOD] Prima bozza di ricerca semi-funzionante
+
 2005-12-01
 Hierro:         [MOD] Estratta la visualizzazione di un messaggio in un nuovo file
 Hierro:         [MOD] Abbassato il timeout da 1sec a 0.5sec nel controllo porte libere
