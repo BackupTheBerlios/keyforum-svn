@@ -111,7 +111,8 @@ $lang = $std->load_lang('lang_end', $blanguage );
   </td>
 </tr>
 <tr>
-  <td align=center><br>KeyForum 0.43 <b>Alfa</b></td>
+<? $revision = file("revision.txt"); ?>
+  <td align=center><br>KeyForum 0.43 <b>Alfa</b> rev. <? echo $revision[0]; ?></td>
 </tr>
 </table>
 <a name="end_page"></a>
