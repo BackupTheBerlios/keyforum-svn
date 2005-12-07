@@ -2,23 +2,23 @@ package FRule;
 use strict;
 use Itami::ConvData;
 use Math::Pari;
-#require "Depend.pm";
 require "CheckFormat.pm";
 require "CheckRsa.pm";
 use Itami::Adder;
-#require "SignTime.pm";
 require "admin.pm";
+require "antiflood.pm";
+$GLOBAL::Fconf={};
 sub new {
 	my ($packname, $DB, $fname, $Identificatore, $public_key, $buffer_rule)=@_;
-	my $sth=$DB->prepare("SELECT `GROUP`, `FKEY`, `SUBKEY`,`VALUE` FROM ".$fname."_conf ORDER BY `GROUP`, `FKEY`,`SUBKEY`");
+	my $sth=$DB->prepare("SELECT `GROUP`, `FKEY`, `SUBKEY`,`VALUE` FROM ".$fname."_conf WHERE `GROUP`='CORE' OR `GROUP`='ANTIFLOOD_AUTH' ORDER BY `GROUP`, `FKEY`,`SUBKEY`");
 	$sth->execute or return Error($DB->errstr."\n");
 	my (@tmp);
-	my $config={};
-	addhashref($config,@tmp) while @tmp=$sth->fetchrow_array;
+	$GLOBAL::Fconf->{$Identificatore}={};
+	addhashref($GLOBAL::Fconf->{$Identificatore},@tmp) while @tmp=$sth->fetchrow_array;
 	$sth->finish;
 	my $this=bless({},$packname);
 	$this->{DB}=$DB;
-	$this->{Config}=$config;
+	$this->{Config}=$GLOBAL::Fconf->{$Identificatore};
 	$this->{Name}=$fname;
 	$this->{Adder}=Adder->new($DB, $fname);
 	$this->{PKEYADMIN}=$public_key;
@@ -35,20 +35,10 @@ sub new {
 	$this->{UnivocitaPkey}=$DB->prepare("SELECT count(*) FROM ".$fname."_membri WHERE PKEY=?;");
 	$this->{AntiFloodCheck}=$DB->prepare("SELECT count(*) FROM ".$fname."_congi WHERE AUTORE=? AND WRITE_DATE>? AND WRITE_DATE<?;");
 	$this->{AdminComm}=admin->new($DB,$fname);
-	$this->AntiFloodFormat();
+	$this->{AntiFlood}=AntiFlood->new($fname,$Identificatore);
 	return $this;
 }
-sub AntiFloodFormat {
-	my $this=shift;
-	return undef if ref($this->{Config}->{ANTIFLOOD_AUTH}) ne "HASH";
-	my $hashref=$this->{Config}->{ANTIFLOOD_AUTH};
-	foreach my $buf (sort(keys(%$hashref))) {
-		$hashref->{$buf}->{RANGE_TIME}=int($hashref->{$buf}->{RANGE_TIME}/2);
-		$hashref->{$buf}->{MAX_MSG}=int($hashref->{$buf}->{MAX_MSG})+2;
-		delete($hashref->{$buf}), next if $hashref->{$buf}->{RANGE_TIME}<1;
-		delete($hashref->{$buf}), next if $hashref->{$buf}->{MAX_MSG}<1;
-	}	
-}
+
 sub AddRows {
 	my ($this, $hashref)=@_;
 	#print "Controllo la formattazione\n";
@@ -69,32 +59,20 @@ sub AddRows {
 				next;
 			}
 			next unless $this->RULE($truemd5,$msg);
+			
 			push(@{$risultato[0]},$truemd5);
 		}
 	}
 	return @risultato;
 }
-sub AntiFlood {
-	my ($this, $autore,$data)=@_;
-	return undef if ref($this->{Config}->{ANTIFLOOD_AUTH}) ne "HASH";
-	my $hashref=$this->{Config}->{ANTIFLOOD_AUTH};my $num;
-	foreach my $buf (sort(keys(%$hashref))) {
-		$this->{AntiFloodCheck}->execute($autore,
-						$data-$hashref->{$buf}->{RANGE_TIME},
-						$data+$hashref->{$buf}->{RANGE_TIME});
-		$num=$this->{AntiFloodCheck}->fetchrow_arrayref->[0];
-		$this->{AntiFloodCheck}->finish();
-		return 1 if $num > $hashref->{$buf}->{MAX_MSG};
-	}
-	return undef;
-}
+
 sub RULE {
 	my($this, $md5, $msg)=@_;
 	return undef if $msg->{DATE}>Time::Local::timelocal(gmtime(time()+$GLOBAL::ntpoffset))+3700;
 	return $this->RULE_TYPE3($md5, $msg) if $msg->{TYPE}==3;
 	return undef if $msg->{DATE}<$this->{Config}->{'CORE'}->{'MSG'}->{'MAX_OLD'};
 	return $this->RULE_TYPE4($md5, $msg) if $msg->{TYPE}==4;
-	return undef if $this->AntiFlood($msg->{AUTORE},$msg->{DATE});
+	return undef unless $this->{AntiFlood}->Check($msg->{AUTORE},$msg->{DATE});
 	return $this->RULE_TYPE1($md5, $msg) if $msg->{TYPE}==1;
 	return $this->RULE_TYPE2($md5, $msg) if $msg->{TYPE}==2;
 	return undef;
@@ -128,11 +106,19 @@ sub RULE_TYPE2 {
 		}
 		kfdebug::scrivi(26,1,25,undef,undef,$datimembro->[2]); #àAgiunta edit di 
 		$this->{Adder}->_AddType2_edit($md5,$msg);
+		$this->AddToFloodList($msg->{AUTORE},$msg->{DATE});
 		return 1;
 	}
+	$this->AddToFloodList($msg->{AUTORE},$msg->{DATE});
 	kfdebug::scrivi(26,1,26,undef,undef,$datimembro->[2]);  # AGgiunta risposta di X
 	$this->{Adder}->_AddType2($md5,$msg);
 	return 1;
+}
+sub AddToFloodList {
+	my $this=shift;
+	return undef unless $this->{AntiFlood};
+	$this->{AntiFlood}->dbminsert(@_);
+	
 }
 sub RULE_TYPE1 {
 	my($this, $md5, $msg)=@_;
@@ -163,9 +149,11 @@ sub RULE_TYPE1 {
 			return undef unless $mod=~ m/$hex/i;
 		}
 		kfdebug::scrivi(25,1,27,undef,undef,$datimembro->[2]);
+		$this->AddToFloodList($msg->{AUTORE},$msg->{DATE});
 		return $this->{Adder}->_AddType1_edit($md5,$msg);
 	}
 	kfdebug::scrivi(25,1,28,undef,undef,$datimembro->[2]);
+	$this->AddToFloodList($msg->{AUTORE},$msg->{DATE});
 	return $this->{Adder}->_AddType1($md5,$msg);
 }
 sub RULE_TYPE4 {

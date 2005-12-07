@@ -1,6 +1,6 @@
 BEGIN {push(@INC, './addon','./addon/lib');}
-print "Avvio KeyForum....\n";
-sleep 1;
+print "INDEX: Caricamento libreria dinamiche.\n";
+
 use strict;
 LoadLibrary("Itami::GloIni");
 LoadLibrary("DBI");
@@ -15,23 +15,14 @@ LoadLibrary("Crypt::RSA");
 LoadLibrary("Digest::MD5");
 LoadLibrary("Digest::SHA1");
 LoadLibrary("File::Glob ':glob'");
-#require "ShareDB.pm";
-#require "FRule.pm";
-#require "ShSession.pm";
-#require "SignTime.pm";
-#require "PerlScript.pm";
-#require "GestIp.pm";
-#require "kfdebug.pm";
-#require "kfshell.pm";
-#$GLOBAL::SERVER={};
 $GLOBAL::CycleFunc=[];
-#$GLOBAL::CLIENT={};
-print "Connessione a MySQL server...\n";
+print "INDEX: Connessione a MySQL server...\n";
 $GLOBAL::ctcp=cTcp->new();
 &Init; # Connessione al server MySQL e caricamento della tabella conf.
-
+print "INDEX: Caricamento AddOn\n";
 &LoadAddOn;  # Carico gli addon specificati con CONFIG
-my $ref;
+print "INDEX: Tutti gli AddOn sono stati caricati.\nINDEX: Gestione Socket iniziata.\n";
+my ($ref,$data,$ip);
 while (1) {
 	foreach my $buf (@{$GLOBAL::CycleFunc}) {
 		$buf->check;	
@@ -48,7 +39,7 @@ while (1) {
 	if (exists $ref->{CanRead}) {
 		foreach my $value (@{$ref->{CanRead}}) {
 			next unless exists $GLOBAL::CLIENT{fileno $value};
-			$GLOBAL::CLIENT{fileno $value}->RecData(fileno $value,$_,$value) while $_=$GLOBAL::ctcp->recv($value);
+			$GLOBAL::CLIENT{fileno $value}->RecData(fileno $value,$data,$value,$ip) while $data=$GLOBAL::ctcp->recv($value,\$ip);
 		}
 	}
 	if (exists $ref->{'Disconnessi'}) {
@@ -98,6 +89,7 @@ sub LoadAddOn {
 	return undef if ref($lista) ne "HASH";
 	while (my ($key, $value)=each(%$lista)) {
 		next if lc($value) ne 'load';
+		print "INDEX: Carico $key\n";
 		eval "require \"".$key.".pm\";";
 		next unless $@;
 		print "Errore nel caricamento di un addon:\n$@\n";
