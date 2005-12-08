@@ -9,7 +9,7 @@ cd CORE\Perl
 ECHO Premi il pulsante EXTRACT quando ti viene richiesto...
 start /w perl.exe
 
-ECHO Terminato... ora esegui start.bat
+ECHO Terminato... ora esegui start_keyforum.bat
 ECHO;
 pause
 
