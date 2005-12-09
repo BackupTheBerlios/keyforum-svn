@@ -5,7 +5,8 @@ use strict;
 
 sub new {
     my ($pack,$fname,$id)=@_;
-    return undef if ref($GLOBAL::Fconf->{$id}->{ANTIFLOOD_AUTH}) ne "HASH";
+    my $this=bless({},'AntiFlood');
+    return $this if ref($GLOBAL::Fconf->{$id}->{ANTIFLOOD_AUTH}) ne "HASH";
     my @raf; # regole anti flood
     my $ref=$GLOBAL::Fconf->{$id}->{ANTIFLOOD_AUTH};
     # Controllo che le regole antiflood siano valide e le aggiungo ad un vettore
@@ -16,8 +17,8 @@ sub new {
         next if $ref->{$buf}->{MAX_MSG}==0 or $ref->{$buf}->{RANGE_TIME}<10;
         push(@raf,$ref->{$buf});
     }
-    return undef if $#raf<0; #esco se non ci sono regole valide
-    my $this=bless({},'AntiFlood');
+    return $this if $#raf<0; #esco se non ci sono regole valide
+    
     $this->{rule}=\@raf;
     my $filename=$GLOBAL::CONFIG->{TEMP_DIRECTORY}."/".$fname."AF.dbm";
     #Creo il file DBM dove salvare i dati
@@ -34,6 +35,7 @@ sub new {
         $this->dbminsert($tmp->[2],$tmp->[1]);
     }
     print "ANTIFLOOD: Inseriti $cont hash in lista.\n";
+    $this->{Attivato}=1;
     return $this;
 }
 
@@ -46,6 +48,7 @@ sub error {
 }
 sub Check {
     my ($this,$autore,$date)=@_;
+    return undef unless $this->{Attivato};
     my $ff=0;
     foreach my $buf (@{$this->{rule}}) {
         return undef if $this->{DBM}->{$autore.pack("I",int($date/$buf->{RANGE_TIME})).chr($ff++)}>=$buf->{MAX_MSG};
@@ -54,6 +57,7 @@ sub Check {
 }
 sub dbminsert {
     my ($this,$autore,$date)=@_;
+    return undef unless $this->{Attivato};
     my $ff=0;
     foreach my $buf (@{$this->{rule}}) {
         $this->{DBM}->{$autore.pack("I",int($date/$buf->{RANGE_TIME})).chr($ff++)}++;
