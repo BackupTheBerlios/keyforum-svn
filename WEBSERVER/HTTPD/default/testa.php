@@ -1,5 +1,5 @@
 <?php
-include "lib/lib.php"; # Librerie per creare la connessione MySQL
+require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 ?>
 <html>
