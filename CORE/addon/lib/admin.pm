@@ -50,23 +50,23 @@ sub execute {
 sub ConfTable {
 	my ($this,$com,$date)=@_;
 	my $fname=$this->{Fname};
-	my $last_edit;
-	my $sth=$this->{DB}->prepare("SELECT `VALUE` FROM ".$fname."_conf WHERE `GROUP`='ADMIN' AND `FKEY`='LAST_EDIT' AND SUBKEY='DATA'");
-	$sth->execute;
-	if ($last_edit=$sth->fetchrow_arrayref) {
-		$last_edit=$last_edit->[0];
-		$sth->finish;
-		return undef if $date<$last_edit;
-	} else {
-		$sth->finish;	
+	return undef unless $com=wantlistref($com);
+	my $inserisci = $this->{DB}->prepare("INSERT INTO ".$fname."_conf (`GROUP`,`FKEY`,`SUBKEY`,`VALUE`,`date`,`present`) VALUES(?,?,?,?,?,?)");
+	my $update = $this->{DB}->prepare("UPDATE ".$fname."_conf SET `VALUE`=?,`date`=?,`present`=? WHERE `GROUP`=? AND `FKEY`=? AND `SUBKEY`=? AND `date`<?");
+	while(my $riga=pop(@$com)) {
+		next if ref($riga) ne "HASH";
+		if ($riga->{present}) { #Se deve essere presente la riga
+			$update->execute($riga->{d} || '',$date,'1',$riga->{a} || '',$riga->{b} || '',$riga->{c} || '',$date);
+			next if $update->rows;
+			$inserisci->execute($riga->{a} || '',$riga->{b} || '',$riga->{c} || '',$riga->{d} || '',$date,'1');
+			next;
+		}
+		#se deve essere cancellata.
+		$update->execute('',$date,'0',$riga->{a} || '',$riga->{b} || '',$riga->{c} || '',$date);
+		next if $update->rows;
+		$inserisci->execute($riga->{a} || '',$riga->{b} || '',$riga->{c} || '','',$date,'0');
 	}
-	$this->{DB}->do("TRUNCATE TABLE ".$fname."_conf");
-	$sth=$this->{DB}->prepare("INSERT INTO ".$fname."_conf (`GROUP`,`FKEY`,`SUBKEY`,`VALUE`) VALUE(?,?,?,?)");
-	$sth->execute('ADMIN','LAST_EDIT','DATA',$date);
-	$com=wantlistref($com);
-	$sth->execute($_->{a} || '',$_->{b} || '',$_->{c} || '',$_->{d} || '') while $_=pop(@$com);
 	return 1;
-	
 }
 sub AuthMem {
 	my ($this,$com,$date)=@_;

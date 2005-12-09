@@ -57,7 +57,9 @@ mysql_query("CREATE TABLE  `".$sesname."_conf` (
   `GROUP` varchar(100) NOT NULL default '',
   `FKEY` varchar(100) NOT NULL default '',
   `SUBKEY` varchar(100) NOT NULL default '',
-  `VALUE` varchar(255) NOT NULL default '',
+  `VALUE` MEDIUMTEXT NOT NULL,
+  `present` tinyint(3) unsigned NOT NULL default '1',
+  `date` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`GROUP`,`FKEY`,`SUBKEY`)
 ) TYPE=MyISAM;") or die(mysql_error());
 mysql_query("CREATE TABLE  `".$sesname."_congi` (
