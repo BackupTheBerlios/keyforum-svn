@@ -20,6 +20,16 @@ $nick = $_REQUEST['nick'];
 $password = $_REQUEST['password'];
 $privkey = $_REQUEST['privkey'];
 
+// valori opzionali
+$rlang = $_REQUEST['lang'];
+$rtpp = $_REQUEST['TPP'];
+$rppp = $_REQUEST['PPP'];
+
+if($rlang) {$optfield .= ",lang"; $optvalue .= ",'$rlang'";}
+if($rtpp) {$optfield .= ",tpp"; $optvalue .= ",'$rtpp'";}
+if($rppp) {$optfield .= ",ppp"; $optvalue .= ",'$rppp'";}
+
+
 if ( isset($nick) and isset($password) and isset($privkey) ) {
         $PKEY=$std->getpkey($SNAME);
         if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
@@ -29,10 +39,11 @@ if ( isset($nick) and isset($password) and isset($privkey) ) {
         // ?? Error("L'Antiflood che controlla le registrazioni effettuate nel sistema ti impedisce di registrare al momento, riprova più tardi\n<br>") unless ForumLib::CanRegisterFlood($ENV{sesname}, time());
         
         $identif = md5( md5($password,TRUE) . $nick );
-        $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password) VALUES ('"
-                        . $identif . "','" . mysql_real_escape_string($privkey) . "')";
+        $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
+                        . $identif . "','" . mysql_real_escape_string($privkey) . "' $optvalue)";
         if ( !mysql_query($sql_insert) ) die("".$lang['reg_usererr']."");
         else echo "".$lang['reg_importok']."";
+        include ("end.php");
         exit;
 }
 
@@ -139,6 +150,11 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
     <br>
 <? echo"   ".$lang['reg_tpp']."";?><input type="text" name="TPP" value="<? echo $usertpp; ?>"  size="4"><? echo"".$lang['reg_ppp']."";?> 
     <input type="text" name="PPP" value="<? echo $userppp; ?>"  size="4"></td>
+</tr>
+<tr>
+  <td class="row1" colspan="2" align="center">
+  <input type=submit value="<? echo $lang['reg_submit']; ?>" ><br>
+  </td>
 </tr>
 </table>
 <center>
