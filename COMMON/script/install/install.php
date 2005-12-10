@@ -39,6 +39,16 @@ $apacheconf  = "ServerRoot \"$apachedir/WEBSERVER/apache\"\n";
 $apacheconf .= "LoadModule php5_module \"$apachedir/WEBSERVER/apache/bin/php5apache2.dll\"\n";
 $apacheconf .= "Alias /config \"$apachedir/COMMON/config/\"\n\n";	
 
+// CGI-BIN
+$apacheconf .= "ScriptAlias /cgi-bin/ \"$apachedir/WEBSERVER/HTTPD/cgi-bin/\"\n\n";
+
+$apacheconf .= "<Directory \"$apachedir/WEBSERVER/HTTPD/cgi-bin/\">\n";
+$apacheconf .= "   AllowOverride None\n";
+$apacheconf .= "   Options None\n";
+$apacheconf .= "   Order allow,deny\n";
+$apacheconf .= "   Allow from all\n";
+$apacheconf .= "</Directory>\n\n";
+
 	
 $sql="SELECT subkey,fkey,value FROM config WHERE (fkey='DIRECTORY' OR fkey='PORTA' OR fkey='BIND') AND main_group='WEBSERVER'  GROUP BY subkey,fkey ORDER BY subkey";
 $result = mysql_query($sql);
