@@ -90,7 +90,7 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 </tr>
 <tr>
 	<?php echo "<td class=row1>".$lang['reg_password']."</td>";?>
-	<td class=row2><input type=text name=password></td>
+	<td class=row2><input type=password name=password></td>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
