@@ -22,17 +22,17 @@ $privkey = $_REQUEST['privkey'];
 
 if ( isset($nick) and isset($password) and isset($privkey) ) {
         $PKEY=$std->getpkey($SNAME);
-        if ( strlen($PKEY) < 120 ) die("<br>La chiave pubblica dell'admin non è valida, non posso valida il messaggio.\n");
-        if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("<br>Il nick non rispetta la lunghezza corretta (min 3, max 30).\n");
-        if ( strlen($password) < 3 or strlen($password) > 30 ) die("<br>La password non rispetta la lunghezza corretta.\n");
+        if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
+        if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("".$lang['reg_nicknotvalid']."");
+        if ( strlen($password) < 3 or strlen($password) > 30 ) die("".$lang['reg_passnotvalid']."");
         // ?? Error("Non hai i permessi per registrare un utente su questa board\n<br>") unless ForumLib::PermessiRegistrazione($ENV{sesname});
         // ?? Error("L'Antiflood che controlla le registrazioni effettuate nel sistema ti impedisce di registrare al momento, riprova più tardi\n<br>") unless ForumLib::CanRegisterFlood($ENV{sesname}, time());
         
         $identif = md5( md5($password,TRUE) . $nick );
         $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password) VALUES ('"
                         . $identif . "','" . mysql_real_escape_string($privkey) . "')";
-        if ( !mysql_query($sql_insert) ) die("<br>Errore nell'inserimento dell'utente!\n");
-        else echo "<br>Utente importato correttamente, puoi effettuare il login.\n";
+        if ( !mysql_query($sql_insert) ) die("".$lang['reg_usererr']."");
+        else echo "".$lang['reg_importok']."";
         exit;
 }
 
@@ -55,7 +55,7 @@ if ($file->isValid()) {
 	$real = $file->getProp('real');
 	// echo "Uploaded $real as $dest_name in $dest_dir\n";
 } elseif ($file->isMissing()) {
-	echo "No file selected\n";
+	echo "".$lang['reg_nofile']."";
 } elseif ($file->isError()) {
 	echo $file->errorMsg() . "\n";
 }
@@ -91,8 +91,7 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 <form method=post action="register.php">
 <table align=center width=550>
 <tr>
- <td class=row3 colspan="2" align=center><b>Inserisci solo utente e password per registrare un 
- nuovo utente</b></td>
+<? echo" <td class=row3 colspan=\"2\" align=center><b>".$lang['reg_info3']."</td>";?>
 </tr>
 <tr>
  <td class=row1><? echo $lang['reg_nick']; ?></td>
@@ -109,7 +108,7 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 </tr>
 <tr>
   <td class="row3" colspan="2" align="center">
-    <b>Oppure inserisci anche la chiave privata per importarne uno esistente</b></td>
+<? echo"    ".$lang['reg_info4']."</td>";?>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
@@ -123,22 +122,22 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 </tr>
 <tr>
   <td class="row3" colspan="2" align="center">
-    <b>altri dati opzionali</b></td>
+<? echo"    ".$lang['reg_info5']."</td>";?>
 </tr>
 <tr>
   <td class="row2" colspan="2" align="center">
-    lingua
+<? echo"    ".$lang['reg_language']."";?>
     
     <? $langselect[$userlang]="selected"; ?>
     
     <select size="1" name="lang">
     <optgroup label='Language selection'>
-    <option <? echo $langselect['eng']; ?> value="eng">Inglese</option>
+    <option <? echo $langselect['eng']; ?> value="eng">English</option>
     <option <? echo $langselect['ita']; ?> value="ita">Italiano</option>
     </select>
     
     <br>
-    Thread per pagina <input type="text" name="TPP" value="<? echo $usertpp; ?>"  size="4"> Post per pagina
+<? echo"   ".$lang['reg_tpp']."";?><input type="text" name="TPP" value="<? echo $usertpp; ?>"  size="4"><? echo"".$lang['reg_ppp']."";?> 
     <input type="text" name="PPP" value="<? echo $userppp; ?>"  size="4"></td>
 </tr>
 </table>
@@ -152,8 +151,7 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 <table align=center width=550>
 <tr><td align="center"> 
 <br>
-<p><b>Puoi compilare automaticamente questo modulo
-importando i dati da un file precedentemente salvato</b></p>
+<? echo"<p><b>".$lang['reg_importinfo']."</b></p>";?>
 <p>&nbsp;<? echo "   ".$lang['reg_import']; ?>
 <input name="userfile" type="file"><br>
 <input type="submit" value="<? echo $lang['reg_submit'] ?>">
