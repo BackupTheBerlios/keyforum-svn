@@ -9,11 +9,12 @@ $rawpasswd=pack("H*",md5($_REQUEST['passwd']));
 $identificatore=md5($rawpasswd.$_REQUEST['nick']);
 $SNAME=$_ENV['sesname'];
 
-$ris=mysql_query("SELECT PASSWORD from {$SNAME}_LOCALMEMBER WHERE HASH='{$identificatore}'");
+$ris=mysql_query("SELECT * from {$SNAME}_LOCALMEMBER WHERE HASH='{$identificatore}'");
 
-if($pwd=mysql_fetch_assoc($ris))
+if($userdata=mysql_fetch_assoc($ris))
 {
-   if($_REQUEST['B_Export']) { UserExport($_REQUEST['nick'],$pwd['PASSWORD']);}
+   if($_REQUEST['B_Export']) { UserExport($userdata);}
+
 } else {
 // dati inviati, ma utente non trovato
 $whereiam="userexport";
@@ -43,7 +44,6 @@ echo"
     <tr>
       <td align=\"center\">
       <form method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?submit=1\">
-
 <table cellSpacing=\"0\" cellPadding=\"0\" border=\"0\" id=\"table3\">
   <tr>
     <td align=\"right\">
@@ -52,14 +52,16 @@ echo"
     <p ><input value=\"".$_REQUEST['nick']."\" name=\"nick\"></td>
   </tr>
   <tr>
-
     <td align=\"right\">
      <p >".$lang['usrexp_password']."&nbsp;</td>
     <td>
     <p ><input type=\"password\" value=\"".$_REQUEST['passwd']."\" name=\"passwd\"></td>
   </tr>
+        <td align=\"right\" colspan=\"2\">
+       <p align=\"left\" ><input type=\"checkbox\" name=\"pwdexport\" value=\"1\">esporta 
+       anche la password (opzione sconsigliata)<p ></td>
+  </tr>  
 </table>
-
    <p><input type=\"submit\" value=\"".$lang['usrexp_export']."\" name=\"B_Export\"></p>
       </form>
       <p>&nbsp;</td>
@@ -70,15 +72,22 @@ echo"
 
 
 
-function UserExport($nick,$key)
+function UserExport($userdata)
 {
+global $_REQUEST;
 // modificando gli header l'output viene salvato invece che visualizzato
 $filename = "userdata.xml";
 
+if($_REQUEST['pwdexport']) {$userpwd=$_REQUEST['passwd'];}
+
 $xmlcont="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
   <USERDATA>
-  <NICK>$nick</NICK>
-  <KEY>$key</KEY>
+  <NICK>{$_REQUEST['nick']}</NICK>
+  <PWD>$userpwd</PWD>
+  <KEY>{$userdata['PASSWORD']}</KEY>
+  <LANG>{$userdata['LANG']}</LANG>
+  <TPP>{$userdata['TPP']}</TPP>
+  <PPP>{$userdata['PPP']}</PPP>
   </USERDATA>";
 
 header("Content-type: text/xml");

@@ -74,6 +74,11 @@ $userdata = $root->toArray();
 
 $userkey=$userdata['root']['USERDATA']['KEY'];
 $usernick=$userdata['root']['USERDATA']['NICK'];
+$userpwd=$userdata['root']['USERDATA']['PWD'];
+$usertpp=$userdata['root']['USERDATA']['TPP'];
+$userppp=$userdata['root']['USERDATA']['PPP'];
+$userlang=$userdata['root']['USERDATA']['LANG'];
+
 
 
 }
@@ -82,20 +87,29 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 
 
 <tr><td>
+
 <form method=post action="register.php">
-<table align=center width=350>
+<table align=center width=550>
 <tr>
-	<?php echo "<td class=row1>".$lang['reg_nick']."</td>";?>
+ <td class=row3 colspan="2" align=center><b>Inserisci solo utente e password per registrare un 
+ nuovo utente</b></td>
+</tr>
+<tr>
+ <td class=row1><? echo $lang['reg_nick']; ?></td>
 	<td class=row2><input type=text value="<? echo $usernick; ?>" name=nick></td>
 </tr>
 <tr>
-	<?php echo "<td class=row1>".$lang['reg_password']."</td>";?>
-	<td class=row2><input type=password name=password></td>
+	<td class=row1><? echo $lang['reg_password']; ?></td>
+	<td class=row2><input type=password value="<? echo $userpwd; ?>"  name=password></td>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
-    <?php echo "<input type=submit value=\" ".$lang['reg_submit']." \"><br>";?>
+  <input type=submit value="<? echo $lang['reg_submit']; ?>" ><br>
   </td>
+</tr>
+<tr>
+  <td class="row3" colspan="2" align="center">
+    <b>Oppure inserisci anche la chiave privata per importarne uno esistente</b></td>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
@@ -104,22 +118,48 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 </tr>
 <tr>
   <td class="row2" colspan="2" align="center">
-    <textarea cols="50" rows="5" name="privkey" wrap="virtual"><? echo $userkey; ?></textarea>
+    <textarea cols="60" rows="5" name="privkey" wrap="virtual"><? echo $userkey; ?></textarea>
   </td>
+</tr>
+<tr>
+  <td class="row3" colspan="2" align="center">
+    <b>altri dati opzionali</b></td>
+</tr>
+<tr>
+  <td class="row2" colspan="2" align="center">
+    lingua
+    
+    <? $langselect[$userlang]="selected"; ?>
+    
+    <select size="1" name="lang">
+    <optgroup label='Language selection'>
+    <option <? echo $langselect['eng']; ?> value="eng">Inglese</option>
+    <option <? echo $langselect['ita']; ?> value="ita">Italiano</option>
+    </select>
+    
+    <br>
+    Thread per pagina <input type="text" name="TPP" value="<? echo $usertpp; ?>"  size="4"> Post per pagina
+    <input type="text" name="PPP" value="<? echo $userppp; ?>"  size="4"></td>
 </tr>
 </table>
 <center>
-
 </center>
 </form>
 
 <center>
-<br>
 <form action="<?php echo $_SERVER['PHP_SELF'];?>?submit=1" method="post" enctype="multipart/form-data">
-<?php echo "   ".$lang['reg_import']." <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"100000\"> "; ?>
-   
-   <input name="userfile" type="file"><br>
-<?php echo "   <input type=\"submit\" value=\"".$lang['reg_submit']."\"> "; ?>
+<input type="hidden" name="MAX_FILE_SIZE" value="100000">
+<table align=center width=550>
+<tr><td align="center"> 
+<br>
+<p><b>Puoi compilare automaticamente questo modulo
+importando i dati da un file precedentemente salvato</b></p>
+<p>&nbsp;<? echo "   ".$lang['reg_import']; ?>
+<input name="userfile" type="file"><br>
+<input type="submit" value="<? echo $lang['reg_submit'] ?>">
+</p>
+  </td></tr>
+</table> 
 </form>
 </center>
 
