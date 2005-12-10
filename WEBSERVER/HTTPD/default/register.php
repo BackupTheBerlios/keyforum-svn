@@ -16,9 +16,26 @@ require 'HTTP/Upload.php';
 // carico la lingua per la registrazione
 $lang = $std->load_lang('lang_register', $blanguage );
 
-?>
+$nick = $_REQUEST['nick'];
+$password = $_REQUEST['password'];
+$privkey = $_REQUEST['privkey'];
 
-<?
+if ( isset($nick) and isset($password) and isset($privkey) ) {
+        $PKEY=$std->getpkey($SNAME);
+        if ( strlen($PKEY) < 120 ) die("<br>La chiave pubblica dell'admin non è valida, non posso valida il messaggio.\n");
+        if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("<br>Il nick non rispetta la lunghezza corretta (min 3, max 30).\n");
+        if ( strlen($password) < 3 or strlen($password) > 30 ) die("<br>La password non rispetta la lunghezza corretta.\n");
+        // ?? Error("Non hai i permessi per registrare un utente su questa board\n<br>") unless ForumLib::PermessiRegistrazione($ENV{sesname});
+        // ?? Error("L'Antiflood che controlla le registrazioni effettuate nel sistema ti impedisce di registrare al momento, riprova più tardi\n<br>") unless ForumLib::CanRegisterFlood($ENV{sesname}, time());
+        
+        $identif = md5( md5($password,TRUE) . $nick );
+        $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password) VALUES ('"
+                        . $identif . "','" . mysql_real_escape_string($privkey) . "')";
+        if ( !mysql_query($sql_insert) ) die("<br>Errore nell'inserimento dell'utente!\n");
+        else echo "<br>Utente importato correttamente, puoi effettuare il login.\n";
+        exit;
+}
+
 
 if (isset($submit)) {
 
@@ -65,7 +82,7 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 
 
 <tr><td>
-<form method=post action="registra.pl">
+<form method=post action="register.php">
 <table align=center width=350>
 <tr>
 	<?php echo "<td class=row1>".$lang['reg_nick']."</td>";?>
@@ -87,7 +104,7 @@ $usernick=$userdata['root']['USERDATA']['NICK'];
 </tr>
 <tr>
   <td class="row2" colspan="2" align="center">
-    <textarea cols="50" rows="5" name="pkey" wrap="virtual"><? echo $userkey; ?></textarea>
+    <textarea cols="50" rows="5" name="privkey" wrap="virtual"><? echo $userkey; ?></textarea>
   </td>
 </tr>
 </table>
