@@ -21,6 +21,21 @@ function convert($text) {
   $text = preg_replace("#\[code\](.+?)\[/code\]#ies"        , "convert_code('\\1')"  , $text);
   $text = preg_replace("#\[spoiler\](.+?)\[/spoiler\]#ies" , "convert_spoiler('\\1')" , $text);
   $text = preg_replace("#(\[quote(.+?)?\].*\[/quote\])#ies" , "convert_quote('\\1')" , $text);
+  
+//-------------------------
+// [LIST]    [*]    [/LIST]
+//-------------------------
+
+while( preg_match( "#\n?\[list\](.+?)\[/list\]\n?#ies" , $text ) )
+{
+	$text = preg_replace( "#\n?\[list\](.+?)\[/list\]\n?#ies", "regex_list('\\1')" , $text );
+}
+
+while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
+{
+	$text = preg_replace( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies", "regex_list('\\2','\\1')" , $text );
+}
+
 
   // Stili
   $text = preg_replace("#\[b\](.+?)\[/b\]#is", "<b>\\1</b>", $text);
@@ -64,6 +79,8 @@ function convert($text) {
     $emoq = preg_quote($emo, "/");
     $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$img."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
   }
+    
+     
     
   return $text;
 }
@@ -249,5 +266,37 @@ function unconvert_style($type,$opt,$text) {
 
   return $text;
 }
+
+
+	/**************************************************/
+	// List
+	// 
+	/**************************************************/
+	
+	function regex_list( $text="", $type="" )
+	{
+		if ($text == "")
+		{
+			return;
+		}
+		
+		if ( $type == "" )
+		{
+		
+			return "<ul>".regex_list_item($text)."</ul>";
+		}
+		else
+		{
+			return "<ol type='$type'>".regex_list_item($text)."</ol>";
+		}
+	}
+	
+	function regex_list_item($text)
+	{
+		$text = preg_replace( "#\[\*\]#", "</li><li>" , trim($text) );
+		$text = preg_replace( "#^</?li>#"  , "", $text );
+		return str_replace( "\n</li>", "</li>", $text."</li>" );
+	}
+
 
 ?>
