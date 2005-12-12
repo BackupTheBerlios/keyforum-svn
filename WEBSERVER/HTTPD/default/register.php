@@ -31,8 +31,6 @@ if($rppp) {$optfield .= ",ppp"; $optvalue .= ",'$rppp'";}
 
 
 if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the user
-        $PKEY=$std->getpkey($SNAME);
-        if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
         if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("".$lang['reg_nicknotvalid']."");
         if ( strlen($password) < 3 or strlen($password) > 30 ) die("".$lang['reg_passnotvalid']."");
         // ?? Error("Non hai i permessi per registrare un utente su questa board\n<br>") unless ForumLib::PermessiRegistrazione($ENV{sesname});
@@ -48,10 +46,10 @@ if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the 
 }
 
 if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new user
+	$identif = md5(md5($password,TRUE) . $nick);
 	$corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
 	$corereq['RSA']['GENKEY']['PWD']=md5($nick . md5($password,TRUE),TRUE);
-	$identif = md5(md5($password,TRUE) . $nick);
-	$PKEY=$std->getpkey($SNAME);
+	$corereq['FUNC']['Base642Dec']=$std->getpkey($SNAME);
 	
 	$coresk = new CoreSock;
 	if ( !$coresk->Send($corereq) ) die("Errore in send1!");
@@ -59,9 +57,11 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	if ( !$coreresp ) die("Errore in read1!");
 	$rsapub = $coreresp['RSA']['GENKEY']['pub'];
 	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];
+	$PKEY = $coreresp[FUNC][Base642Dec];
 	$date = $coreresp['CORE']['INFO']['GMT_TIME'];
 	
 	unset($coreresp,$corereq);
+	if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
 	
 	$hash = md5($PKEY . $nick . $date . $rsapub,TRUE);
 	$corereq['RSA']['FIRMA'][0]['md5'] = $hash;
