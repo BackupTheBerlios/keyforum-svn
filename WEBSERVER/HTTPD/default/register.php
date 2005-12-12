@@ -30,7 +30,7 @@ if($rtpp) {$optfield .= ",tpp"; $optvalue .= ",'$rtpp'";}
 if($rppp) {$optfield .= ",ppp"; $optvalue .= ",'$rppp'";}
 
 
-if ( isset($nick) and isset($password) and isset($privkey) ) {
+if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the user
         $PKEY=$std->getpkey($SNAME);
         if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
         if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("".$lang['reg_nicknotvalid']."");
@@ -47,6 +47,59 @@ if ( isset($nick) and isset($password) and isset($privkey) ) {
         exit;
 }
 
+if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new user
+	$corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
+	$corereq['RSA']['GENKEY']['PWD']=md5($nick . md5($password,TRUE),TRUE);
+	$identif = md5(md5($password,TRUE) . $nick);
+	$PKEY=$std->getpkey($SNAME);
+	
+	$coresk = new CoreSock;
+	if ( !$coresk->Send($corereq) ) die("Errore in send1!");
+	$coreresp = $coresk->Read(120);
+	if ( !$coreresp ) die("Errore in read1!");
+	$rsapub = $coreresp['RSA']['GENKEY']['pub'];
+	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];
+	$date = $coreresp['CORE']['INFO']['GMT_TIME'];
+	
+	unset($coreresp,$corereq);
+	
+	$hash = md5($PKEY . $nick . $date . $rsapub,TRUE);
+	$corereq['RSA']['FIRMA'][0]['md5'] = $hash;
+	$corereq['RSA']['FIRMA'][0]['priv_key'] = md5($nick . md5($password,TRUE),TRUE);
+	$corereq['RSA']['FIRMA'][0]['priv_pwd'] = base64_decode($rsapriv);
+	
+	if ( !$coresk->Send($corereq) ) die("Errore in send2!");
+	$coreresp = $coresk->Read();
+	if ( !$coreresp ) die("Errore in read2!");
+	
+	if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) die($coreresp['RSA']['FIRMA']["ERR" . $hash]);
+	$firma_rsa = $coreresp['RSA']['FIRMA'][$hash];
+	unset($coreresp,$corereq);
+	
+	echo "Adding user into the local members table... ";
+	$sqladd = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
+                    . $identif . "','" . mysql_real_escape_string($rsapriv) . "' $optvalue)";
+        if ( !mysql_query($sqladd) ) die("".$lang['reg_usererr']."");
+        else echo "Ok<br><br>";
+	
+	echo "Adding user into the system... ";
+	$addreq['FORUM']['ADDMSG']['MD5'] = $hash;
+	$addreq['FORUM']['ADDMSG']['AUTORE'] = $nick;
+	$addreq['FORUM']['ADDMSG']['DATE'] = $date;
+	$addreq['FORUM']['ADDMSG']['PKEY'] = $rsapub;
+	$addreq['FORUM']['ADDMSG']['SIGN'] = $firma_rsa;
+	$addreq['FORUM']['ADDMSG']['TYPE'] = '4';
+	$addreq['FORUM']['ADDMSG']['FDEST'] = sha1($PKEY,TRUE);
+	
+	if ( !$coresk->Send($addreq) ) die("Error sending the request to the core!");
+	$coreresp = $coresk->Read();
+	if ( !$coreresp ) die("Error receiving response form the core!");
+	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) die("Forum unknown, cannot register the user.");
+	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) die("The Core didn't accept the message, aborting.");
+	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) echo "Ok<br><br>";
+	include("end.php");
+	exit(0);			
+}
 
 if (isset($submit)) {
 
