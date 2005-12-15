@@ -1,4 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
+2005-12-15
+mmorselli:		[ADD] nascondi/visualizza firme
+
 2005-12-04
 Hierro:         [MOD] Prima bozza di ricerca semi-funzionante
 

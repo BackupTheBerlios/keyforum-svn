@@ -4,6 +4,7 @@ function printmsg($MSG) {
   global $blanguage;
   global $lang;
   global $std;
+  global $userdata;
   $usercolor = $std->GetUserColor($MSG['memhash']);
   $mio_nick = $GLOBALS['sess_nick'];
   if ($MSG['date'])
@@ -57,7 +58,9 @@ function printmsg($MSG) {
   }
   
   $MSG['body'] = secure_v($MSG['body']);
-  $MSG['firma'] = secure_v($MSG['firma']);
+   
+  // visualizzo le firme ?
+  if($userdata['HIDESIG']) { $MSG['firma']=""; } else { $MSG['firma'] = secure_v($MSG['firma']);}
   
   echo<<<EOF
 <table width=100% border='0' cellspacing='1' cellpadding='3'>
