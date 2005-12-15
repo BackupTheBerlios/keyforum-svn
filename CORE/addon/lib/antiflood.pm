@@ -48,7 +48,7 @@ sub error {
 }
 sub Check {
     my ($this,$autore,$date)=@_;
-    return undef unless $this->{Attivato};
+    return 1 unless $this->{Attivato};
     my $ff=0;
     foreach my $buf (@{$this->{rule}}) {
         return undef if $this->{DBM}->{$autore.pack("I",int($date/$buf->{RANGE_TIME})).chr($ff++)}>=$buf->{MAX_MSG};
@@ -57,7 +57,7 @@ sub Check {
 }
 sub dbminsert {
     my ($this,$autore,$date)=@_;
-    return undef unless $this->{Attivato};
+    return 1 unless $this->{Attivato};
     my $ff=0;
     foreach my $buf (@{$this->{rule}}) {
         $this->{DBM}->{$autore.pack("I",int($date/$buf->{RANGE_TIME})).chr($ff++)}++;

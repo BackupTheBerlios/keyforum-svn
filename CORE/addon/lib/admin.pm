@@ -34,7 +34,7 @@ sub EditSez {
 }
 sub execute {
 	my ($this, $command,$date)=@_;
-	$command=MIME::Base64::decode_base64($command);
+	$command=BinDump::MainDeDump(MIME::Base64::decode_base64($command));
 	return undef if ref($command) ne "HASH";
 	my ($key, $value, $sing);
 	while (($key, $value)=each %$command) {
