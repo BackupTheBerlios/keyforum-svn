@@ -11,11 +11,8 @@
 | -------------------------------------------------------------------------
 */
 
-// Lista emoticons
-include_once("./img/emoticons/emoticons.php");
 
 function convert($text) {
-  global $emoticons;
 
   // BBCode che richiedono una funzione
   $text = preg_replace("#\[code\](.+?)\[/code\]#ies"        , "convert_code('\\1')"  , $text);
@@ -75,13 +72,18 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = str_replace("[cuthere]", "<!--cuthere-->", $text);
     
   // Conversione faccine
-  foreach ($emoticons as $emo => $img) {
-    $emoq = preg_quote($emo, "/");
-    $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$img."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
+
+  $query="SELECT typed, image from keyfo_emoticons";
+  $res=mysql_query($query) or die(mysql_error());
+
+  while ($row = mysql_fetch_assoc($res))
+  {
+  $emo=$row['typed'];
+  $img=$row['image'];
+  $emoq = preg_quote($emo, "/");
+  $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$img."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
   }
-    
-     
-    
+   
   return $text;
 }
 
