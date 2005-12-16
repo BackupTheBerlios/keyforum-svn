@@ -1,4 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
+2005-12-16:	
+mmorselli:		[ADD] emoticon nel db
+
 2005-12-15
 mmorselli:		[ADD] nascondi/visualizza firme
 

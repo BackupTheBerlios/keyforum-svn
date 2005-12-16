@@ -1,3 +1,6 @@
+2005-12-16:	
+mmorselli:		[ADD] aggiunte tabelle *_emoticons
+
 2005-12-15
 mmorselli:		[ADD] nascondi/visualizza firme
 
