@@ -47,23 +47,34 @@ if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the 
 
 if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new user
 	$identif = md5(md5($password,TRUE) . $nick);
-	$corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
-	$corereq['RSA']['GENKEY']['PWD']=md5($nick . md5($password,TRUE),TRUE);
-	$corereq['FUNC']['Base642Dec']=$std->getpkey($SNAME);
+	$PKEY64 = $std->getpkey($SNAME);
+	$corereq['RSA']['GENKEY']['CONSOLE_OUTPUT'] = 0;
+	$corereq['RSA']['GENKEY']['PWD'] = md5($nick . md5($password,TRUE),TRUE);
+	$corereq['RSA']['GENKEY']['NICK'] = $nick;
+	$corereq['RSA']['GENKEY']['PKEY64'] = $PKEY64;
+	// quando invio una richiesta GENKEY dove è presente NICK sto generando una chiave per un utente, il core mi ritorna anche la PKEY in decimale in ['pkeydec']
+	// e l'hash del messaggio in ['hash'] così evito di fare richieste/conti dopo
 	
 	$coresk = new CoreSock;
 	if ( !$coresk->Send($corereq) ) die("Errore in send1!");
 	$coreresp = $coresk->Read(120);
 	if ( !$coreresp ) die("Errore in read1!");
-	$rsapub = $coreresp['RSA']['GENKEY']['pub'];
-	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];
-	$PKEY = $coreresp[FUNC][Base642Dec];
-	$date = $coreresp['CORE']['INFO']['GMT_TIME'];
+	$rsapub = $coreresp['RSA']['GENKEY']['pub'];		// in decimale
+	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];		// in base64
+	$PKEY = $coreresp['RSA']['GENKEY']['pkeydec'];		//pkey del forum in decimale
+	$date = $coreresp['RSA']['GENKEY']['date'];			// la prendo così perchè deve essere quella usata per creare l'hash
+	$hash = $coreresp['RSA']['GENKEY']['hash'];
 	
 	unset($coreresp,$corereq);
 	if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
+	$corereq['FUNC']['Dec2Bin'] = $rsapub;			// converto la chiave pubblica in binario
+	if ( !$coresk->Send($corereq) ) die("Error sending a request to the core!");
+	$coreresp = $coresk->Read();
+	if ( !$coreresp ) die("Error receiving a response from the core!");
+	$rsapub_bin = $coreresp['FUNC']['Dec2Bin'];
+	unset($coreresp, $corereq);
 	
-	$hash = md5($PKEY . $nick . $date . $rsapub,TRUE);
+	//$hash = md5($PKEY . $nick . $date . $rsapub,TRUE);
 	$corereq['RSA']['FIRMA'][0]['md5'] = $hash;
 	$corereq['RSA']['FIRMA'][0]['priv_key'] = md5($nick . md5($password,TRUE),TRUE);
 	$corereq['RSA']['FIRMA'][0]['priv_pwd'] = base64_decode($rsapriv);
@@ -82,11 +93,13 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
         if ( !mysql_query($sqladd) ) die("".$lang['reg_usererr']."");
         else echo "Ok<br><br>";
 	
+	echo "<br>";
+	
 	echo "Adding user into the system... ";
 	$addreq['FORUM']['ADDMSG']['MD5'] = $hash;
 	$addreq['FORUM']['ADDMSG']['AUTORE'] = $nick;
 	$addreq['FORUM']['ADDMSG']['DATE'] = $date;
-	$addreq['FORUM']['ADDMSG']['PKEY'] = $rsapub;
+	$addreq['FORUM']['ADDMSG']['PKEY'] = $rsapub_bin;
 	$addreq['FORUM']['ADDMSG']['SIGN'] = $firma_rsa;
 	$addreq['FORUM']['ADDMSG']['TYPE'] = '4';
 	$addreq['FORUM']['ADDMSG']['FDEST'] = sha1($PKEY,TRUE);
