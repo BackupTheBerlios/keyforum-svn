@@ -15,6 +15,6 @@ function show_db_image($image, $extn)
 header('Content-Control: cache');
 header('Content-Type: image/'. date('r', time()+86400)); // expire in 24H
 header('Content-Type: image/'.$extn);
-echo base64_decode($image);
+echo $image;
 }
 ?>
