@@ -88,9 +88,9 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   
   if ($row['internal'])
    {
-   $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$img."' style='vertical-align:middle' border='0' src='showemo.php?id=".$id."' /><!--emoend-->", $text); 
+   $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' style='vertical-align:middle' border='0' src='showemo.php?id=".$id."' /><!--emoend-->", $text); 
     } else {
-  $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$img."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
+  $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
    }
   }
    
