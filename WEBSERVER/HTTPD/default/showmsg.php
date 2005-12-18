@@ -75,6 +75,12 @@ function PageSelect($pos) {
 				obj.style.display = \"none\";
 			}
 		}
+		
+	function emopopup()
+	{
+	  window.open('emopopup.php','Emoticons','width=770,height=500,resizable=yes,scrollbars=yes'); 
+	}	
+		
 	-->
 	</script>
 	";

@@ -28,3 +28,11 @@
      <td><a href="javascript:emot(':blink:');"><img src="img/emoticons/blink.gif" border="0" alt=":blink:"></a></td>
      <td><a href="javascript:emot(':excl:');"><img src="img/emoticons/ph34r.gif" border="0" alt=":excl:"></a></td>
     </tr>
+     <tr>
+         <td>&nbsp;</td>
+         <td>&nbsp;</td>
+         <td>&nbsp;</td>
+         <td>&nbsp;</td>
+        </tr>
+        <tr>
+    <tr><td colspan="4" align="center"><a href='javascript:' onclick='emopopup()'>Mostra tutte</a></td></tr>
