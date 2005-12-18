@@ -1,6 +1,7 @@
 package kfshell;
 use strict;
 use Crypt::RSA;
+use Digest::MD5;
 use MIME::Base64;
 use Crypt::Blowfish;
 use Itami::ConvData;
@@ -162,7 +163,19 @@ sub act_RSA_GENKEY {
 	my ($public, $private) = $rsa->keygen (Identity  => 'io', Size => 1024,Verbosity => $verbosity) or return(
 		$this->{tosend}->{RSA}->{GENKEY}->{ERR}=$rsa->errstr());
 	$this->{tosend}->{RSA}->{GENKEY}->{pub}="".$public->{n};
-	$private=PrivateKey2Base64($private,0);
+	if (exists $data->{NICK}) { # richiesta di chiave privata per un utente, aggiungo hash e data
+		my $pkey_dec = ConvData::Base642Dec($data->{PKEY64});
+		my $store_date = Time::Local::timelocal(gmtime(time()+$GLOBAL::ntpoffset));
+		my $store_hash = Digest::MD5::md5($pkey_dec.$data->{NICK}.$store_date.$public->{n});
+		$this->{tosend}->{RSA}->{GENKEY}->{date} = $store_date;
+		$this->{tosend}->{RSA}->{GENKEY}->{hash} = $store_hash;
+		$this->{tosend}->{RSA}->{GENKEY}->{pkeydec} = $pkey_dec;
+		
+		$private = PrivateKey2Base64($private,0,$store_hash,$store_date);
+	}
+	else { 
+		$private=PrivateKey2Base64($private,0,0,0);
+	}
 	$private=CryptBlowFish($data->{PWD},$private) if $data->{PWD};
 	$this->{tosend}->{RSA}->{GENKEY}->{priv}=MIME::Base64::encode_base64($private,'');
 	
@@ -236,12 +249,16 @@ sub GetPrivateKey {
 	return $RSA_PRIVATE;
 }
 sub PrivateKey2Base64 {
-	my ($private,$encode)=@_;
+	my ($private,$encode,$hash,$date)=@_;
 	my $subpr={};
 	$subpr->{Version} = "1.91";
 	$subpr->{Checked} = "0";
 	$subpr->{Identity} = "io";
 	$subpr->{private}={};
+	if ($hash && $date) {
+		$subpr->{hash} = $hash;
+		$subpr->{date} = $date;
+	}
 	my ($key, $value);
 	$subpr->{private}->{$key}="$value" while ($key, $value)=each %{$private->{private}};
 	return MIME::Base64::encode_base64(BinDump::MainDump($subpr,0,1),'') if $encode;
