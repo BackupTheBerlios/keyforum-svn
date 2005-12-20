@@ -48,10 +48,16 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = preg_replace("#\[size\s*=(\d)\](.+?)\[/size\]#ies", "convert_style('size','\\1','\\2')", $text);
 
     // Link
-  $text = preg_replace("#(^|\s|<br \/>)([\w]{1,6}://(\|)*[\w]+[^\s]+)#ie"               , "convert_link('\\2','\\2','\\1')", $text);
+  $text = preg_replace("#(^|\s|<br \/>)([\w]{1,6}://(\|)*[\w]+[^\s]+)#ie"               , "convert_link('\\2','\\2','\\1',1)", $text);
+
   $text = preg_replace("#\[url\](\S+?)\[/url\]#ie"                                      , "convert_link('\\1','\\1')", $text);
   $text = preg_replace("#\[url\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/url\]#ie", "convert_link('\\1','\\2')", $text);
   $text = preg_replace("#\[url\s*=\s*(\S+?)\s*\](.*?)\[\/url\]#ie"                      , "convert_link('\\1','\\2')", $text);
+
+  $text = preg_replace("#\[forum_url\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/forum_url\]#ie", "convert_forum_link('\\1','\\2')", $text);  
+  $text = preg_replace("#\[forum_url\](\S+?)\[/forum_url\]#ie"                                      , "convert_forum_link('\\1','\\1')", $text);
+  $text = preg_replace("#\[forum_url\s*=\s*(\S+?)\s*\](.*?)\[\/forum_url\]#ie"                      , "convert_forum_link('\\1','\\2')", $text);  
+  
   $text = preg_replace("#\[email\](\S+?)\[/email\]#i"                                                              , "<a href='mailto:\\1'>\\1</a>", $text);
   $text = preg_replace("#\[email\s*=\s*\&quot\;([\.\w\-]+\@[\.\w\-]+\.[\.\w\-]+)\s*\&quot\;\s*\](.*?)\[\/email\]#i", "<a href='mailto:\\1'>\\2</a>", $text);
   $text = preg_replace("#\[email\s*=\s*([\.\w\-]+\@[\.\w\-]+\.[\w\-]+)\s*\](.*?)\[\/email\]#i"                     , "<a href='mailto:\\1'>\\2</a>", $text);
@@ -97,60 +103,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   return $text;
 }
 
-
-
-
-// Nel caso servisse...
-function unconvert($text) {
-
-  $text = preg_replace("#<!--emostart=(.+?)-->.+?<!--emoend-->#", "\\1" , $text );
-    
-  $text = preg_replace("#<br />#", "\n", $text);
-    
-  // Prima quelle che richiedono/richiedevano una funzione
-  $text = preg_replace("#<!--codestart--><div class=\"codetl\">CODE</div><div class=\"codetx\">#", "[code]", $text);
-  $text = preg_replace("#</div><!--codeend-->#", "[/code]", $text);
-  $text = preg_replace("#<!--quotestart--><div class=\"quotetl\">QUOTE</div><div class=\"quotetx\">#", "[quote]", $text);
-  $text = preg_replace("#<!--quotestart--><div class=\"quotetl\">QUOTE \(([^>]+?)\)</div><div class=\"quotetx\">#", "[quote=\\1]", $text);
-  $text = preg_replace("#</div><!--quoteend-->#", "[/quote]", $text);
-  $text = preg_replace("#<!--spoilerstart-->(.+?)<!--spoilertext-->#", "[spoiler]", $text);
-  $text = preg_replace("#</div></div><!--spoilerend-->#", "[/spoiler]", $text);
-    
-  // Stili
-  $text = preg_replace("#<b>(.+?)</b>#is", "[b]\\1[/b]", $text);
-  $text = preg_replace("#<i>(.+?)</i>#is", "[i]\\1[/i]", $text);
-  $text = preg_replace("#<u>(.+?)</u>#is", "[u]\\1[/u]", $text);
-  $text = preg_replace("#<s>(.+?)</s>#is", "[s]\\1[/s]", $text);
-  $text = preg_replace("#<!--colorstart--><span style=['\"]color:(\S+?)['\"]>(.+?)</span><!--colorend-->#se", "unconvert_style('color','\\1','\\2')", $text);
-  $text = preg_replace("#<!--bgcolorstart--><span style=['\"]background:(\S+?)['\"]>(.+?)</span><!--bgcolorend-->#se", "unconvert_style('bgcolor','\\1','\\2')", $text);
-  $text = preg_replace("#<!--fontstart--><span style=['\"]font-family:(.+?)['\"]>(.+?)</span><!--fontend-->#se", "unconvert_style('font','\\1','\\2')", $text);
-  $text = preg_replace("#<!--sizestart--><span style=['\"]line-height:100%;font-size:(\d\d?)pt['\"]>(.+?)</span><!--sizeend-->#se", "unconvert_style('size','\\1','\\2')", $text);
-    
-  // Link
-  $text = preg_replace("#<a href=[\"'](\S+?)['\"] target=[\"'](\w+?)[\"']>(.+?)</a>#", "[url=\"\\1\"]\\3[/url]", $text);
-  $text = preg_replace("#<a href=[\"']mailto:(\S+?)['\"]>(.+?)</a>#", "[email=\\1]\\2[/email]", $text);
-  $text = preg_replace("#<a name=\"(.+?)\"><!--anchor--></a>#", "[anchor=\\1]", $text);
-    
-  // Immagini
-  $text = preg_replace("#<img alt=[\"']user posted image[\"'] border=[\"']0[\"'] src=[\"'](.+?)[\"'] />#","[img]\\1[/img]", $text);
-  $text = preg_replace("#<img style=[\"']float: left[\"'] align=[\"']left[\"'] alt=[\"']user posted image[\"'] border=[\"']0[\"'] src=[\"'](.+?)[\"'] />#"        , "[img=left]\\1[/img]", $text);
-  $text = preg_replace("#<div align=[\"']center[\"']><img align=[\"']center[\"'] alt=[\"']user posted image[\"'] border=[\"']0[\"'] src=[\"'](.+?)[\"'] /></div>#", "[img=center]\\1[/img]", $text);
-  $text = preg_replace("#<img style=[\"']float: right[\"'] align=[\"']right[\"'] alt=[\"']user posted image[\"'] border=[\"']0[\"'] src=[\"'](.+?)[\"'] />#"      , "[img=right]\\1[/img]", $text);
-    
-  $text = preg_replace("#<img width=[\"'](.+?)[\"'] alt=[\"']user posted image[\"'] border=[\"']0[\"'] src=[\"'](.+?)[\"'] />#","[img width=\\1]\\2[/img]", $text);
-    
-  // Allineamento
-  $text = preg_replace("#<div align=[\"']center[\"']>(.+?)</div>#", "[center]\\1[/center]", $text);
-  $text = preg_replace("#<div align=[\"']left[\"']>(.+?)</div>#"  , "[left]\\1[/left]", $text);
-  $text = preg_replace("#<div align=[\"']right[\"']>(.+?)</div>#" , "[right]\\1[/right]", $text);
-    
-  // Conversioni semplici
-  $text = str_replace("<hr />", "[hr]",$text);
-  $text = str_replace("<!--cuthere-->", "[cuthere]",$text);
-    
-  return $text;
-}
-  
+ 
 function convert_code($text) {
 
   if (preg_match( "/\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\]/i", $text) ) {
@@ -195,7 +148,7 @@ function convert_spoiler($text) {
   return $text;
 }
 
-function convert_link($url,$show,$before="") {
+function convert_link($url,$show,$before="",$simple=0) {
 
   $newpage = 0;
 
@@ -208,21 +161,47 @@ function convert_link($url,$show,$before="") {
   $url = preg_replace("/\]/", "&#93;", $url);
   $url = preg_replace("/&amp;/", "&", $url);
 
+  // Controllo testo
+  $show = preg_replace("/&amp;/", "&", $show);
+  $show = preg_replace("/javascript:/i", "java script&#58;", $show);
+  
+  if($simple) {$url=str_replace("<br","",$url);$show=$url;}
+
   // Protocollo?
   if (!preg_match("#^([\w]{1,6}://|\#)#", $url))$url = "http://".$url;
 
   // Apertura in nuova pagina
   if (preg_match("#^((http|https|ftp)://|\#)#", $url)) $newpage = 1;
 
-  // Controllo testo
-  $show = preg_replace("/&amp;/", "&", $show);
-  $show = preg_replace("/javascript:/i", "java script&#58;", $show);
-
   if ($newpage) $text = "<a href='".$url."' target='_blank'>".$show."</a>";
   else $text = "<a href='".$url."' target='_self'>".$show."</a>";
 
   return $before.$text;
 }
+
+function convert_forum_link($url,$show,$before="") {
+
+  if (preg_match("/\[\/(quote|code|spoiler)/i", $url)) return $before.$url;
+
+  // Javascript non ammessi
+  if (preg_match("/javascript:/i", $url)) return $before.$url;
+    
+  $url = preg_replace("/\[/", "&#91;", $url);
+  $url = preg_replace("/\]/", "&#93;", $url);
+  $url = preg_replace("/&amp;/", "&", $url);
+  
+  // divido indirizzo da script
+ $url =  stristr(eregi_replace("http://", "", $url), "/");
+
+  // Controllo testo
+  $show = preg_replace("/&amp;/", "&", $show);
+  $show = preg_replace("/javascript:/i", "java script&#58;", $show);
+
+  $text = "<a href='".$url."' target='_blank'>".$show."</a>";
+  
+  return $before.$text;
+}
+
 
 function convert_style($type,$opt,$text) {
 
