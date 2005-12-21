@@ -20,5 +20,6 @@ $lang['usrlist_orderby_msg'] = "Messaggi";
 $lang['usrlist_orderby'] = "Ordina per";
 $lang['usrlist_order_des'] = "Decrescente";
 $lang['usrlist_order_asc'] = "Crescente";
+$lang['usrlist_action'] = "Azione";
 
 ?>

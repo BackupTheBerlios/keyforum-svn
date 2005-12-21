@@ -142,8 +142,9 @@ if(!$_REQUEST['order']){
     <p class="expand"></p>
     <?PHP echo "<p>".$lang['usrlist_userlist']."</p>";?>
   </div>
+  <form method="POST" action="authusers.php">
   <table cellspacing="1">
-   <?PHP echo"
+  <?PHP echo"
     <tr>
       <th align=\"right\" width=\"1%\" class='titlemedium'>".$lang['usrlist_num']."</th>
       <th align=\"left\" width=\"21%\" class='titlemedium'>&nbsp;".$lang['usrlist_nick']."</th>
@@ -151,6 +152,7 @@ if(!$_REQUEST['order']){
       <th align=\"center\" width=\"16%\" class='titlemedium'>".$lang['usrlist_date']."</th>
       <th align=\"right\" width=\"11%\" class='titlemedium'>".$lang['usrlist_messages']."</th>
       <th align=\"center\" width=\"21%\" class='titlemedium'>".$lang['usrlist_gruop']."</th>
+	  <th align=\"center\" width=\"4%\" class='titlemedium'>".$lang['usrlist_action']."</th>
     </tr>";?>
 <?PHP
 if($_REQUEST['validati']){
@@ -181,21 +183,27 @@ while($ris=mysql_fetch_assoc($risultato)) {
 	<td class='row1' align='right'>".$ris['msg_num']."</td>
 	<td class='row2' align='center'>";
 	if($ris['is_auth']){
-	  echo $lang['usrlist_member'];
-	}else{
-	  echo $lang['usrlist_validated'];
+	  echo $lang['usrlist_member'] . "</td>\n<td class='row2'>";
+	} else {
+		echo $lang['usrlist_validated'];
+		echo "</td>\n\t<td class='row2'><input type=\"checkbox\" name=\"toauth[$i]\" value=\"$userhash[hex]\" />Auth";
+		$displaysubmit=1;
 	};
 	echo "</td>\n</tr>";
 };
 
 ?>
+ 
   </table>
 </div>
 
-<? PageSelect(); ?>
+<table width=100%>
+	<tr><td> <? PageSelect(); ?> </td>
+		<td align='right'><?PHP if ($displaysubmit)
+							echo "<input type='submit' value='Do it!' name='doauth' class='button'></td>";?>
+	</tr>
+</table>
 
- </td>
-</tr>
 <?PHP
 include ("end.php");
 ?>
