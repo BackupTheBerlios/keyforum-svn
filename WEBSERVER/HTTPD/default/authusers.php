@@ -24,7 +24,7 @@ else {	// got privkey, auth'em!
 	//var_dump($_REQUEST['toauth']);
 	while (list ($key, $userhash) = each ($_REQUEST['toauth'])) {
 		if (strlen($userhash) != 32) die ("Selected user hash (id $key) has wrong lenght!");
-		$command['AuthMem']['HASH'][] = $userhash;
+		//$command['AuthMem']['HASH'][] = $userhash;
 		$tosign['HASH'][] = pack("H32",$userhash);
 	}
 
@@ -33,12 +33,12 @@ else {	// got privkey, auth'em!
 	//$title = "User(s) auth";		//admin message title, optional
 	
 	//$i=0;
-	reset($command);
+	//reset($command);
 	reset($tosign);
 	
 	foreach ( $tosign['HASH'] as $key1 => $hash ) {
-		$corereq['RSA']['FIRMA'][$key1][md5] = $hash;
-		$corereq['RSA']['FIRMA'][$key1][priv_pwd] = base64_decode($_REQUEST['privkey']);
+		$corereq['RSA']['FIRMA'][$key1]['md5'] = $hash;
+		$corereq['RSA']['FIRMA'][$key1]['priv_pwd'] = base64_decode($_REQUEST['privkey']);
 	}
 	//var_dump($corereq);
 	$PKEY64 = $std->getpkey($SNAME);
@@ -48,19 +48,41 @@ else {	// got privkey, auth'em!
 	$coreresp = $coresk->Read();
 	//var_dump($coreresp);
 	//if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) die($coreresp['RSA']['FIRMA']["ERR" . $hash]);
-	foreach ($tosign['HASH'] as $hash ) {
+	foreach ($tosign['HASH'] as $key2 => $hash ) {
 		if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) die("Core didn't sign hash $hash, aborting!\n");
-		$command['AuthMem']['AUTH'][] = $coreresp['RSA']['FIRMA'][$hash];
+		//$tosign['AUTH'][$key2] = $coreresp['RSA']['FIRMA'][$hash];
+		//$command['AuthMem']['AUTH'][] = $coreresp['RSA']['FIRMA'][$hash];
+		//$hex_hash = unpack("H32",$hash);
+		//if (strlen($hex_hash[1]) != 32) die("Error unpacking user hash!\n");
+		$mem['HASH']=$hash;
+		$mem['AUTH']=$coreresp['RSA']['FIRMA'][$hash];
+		$command['AuthMem'][$key2] = $mem;
+		//$command['AuthMem'][$key2]['AUTH'] = $coreresp['RSA']['FIRMA'][$hash];
 	}
+	echo "vardump :" . var_dump($command);
 	if ( strlen($coreresp['FUNC']['Base642Dec']) < 120 ) die("Error, forum public key invalid!\n");
 	$PKEY = $coreresp['FUNC']['Base642Dec'];
 	$date = $coreresp['CORE']['INFO']['GMT_TIME'];
+	
 	unset($corereq,$coreresp);
 	
 	$code = base64_encode($std->var2binary($command));
 	//my $md5=Digest::MD5::md5($ENV{PKEY}.$MSG{'DATE'}.$MSG{'TITLE'}.$MSG{'COMMAND'});
-	
+	//echo var_dump($code) . "<br><br>" . var_dump($command);
+		
 	$msg_md5 = pack("H32",md5($PKEY . $date . "User(s) auth" . $code));
+	
+	$corereq['RSA']['FIRMA'][0]['md5'] = $msg_md5;
+	$corereq['RSA']['FIRMA'][0]['priv_pwd'] = base64_decode($_REQUEST['privkey']);
+	
+	if ( !($coresk->Send($corereq)) ) die("Error sending data to the core!\n");
+	$coreresp = $coresk->Read();
+	
+	if ( empty($coreresp['RSA']['FIRMA'][$msg_md5]) ) die("Error signing admin command.\n");
+	unset($corereq);
+	
+	$corereq['FORUM']['ADDMSG']['SIGN'] = $coreresp['RSA']['FIRMA'][$msg_md5];
+	unset($coreresp);
 	$corereq['FORUM']['ADDMSG']['MD5'] = $msg_md5;
 	$corereq['FORUM']['ADDMSG']['DATE'] = $date;
 	$corereq['FORUM']['ADDMSG']['TITLE'] = "User(s) auth";
@@ -70,7 +92,7 @@ else {	// got privkey, auth'em!
 	
 	if ( !($coresk->Send($corereq)) ) die("Error sending data to the core!\n");
 	$coreresp = $coresk->Read();
-	echo "Errore: " . $coreresp['FORUM']['ADDMSG']['ERRORE'] . "<br>";
+	//echo "Errore: " . $coreresp['FORUM']['ADDMSG']['ERRORE'] . "<br>";
 	if ( !$coreresp ) die("Error receiving response form the core!");
 	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) die("Forum unknown, cannot auth user(s).");
 	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) die("The Core didn't accept the message, aborting.");
