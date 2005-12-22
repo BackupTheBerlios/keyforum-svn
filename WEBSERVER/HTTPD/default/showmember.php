@@ -18,6 +18,7 @@ Select    AUTORE
 from {$SNAME}_membri
 WHERE HASH = '$hash' LIMIT 1";//not used AUTH, TYPE, SIGN ,is_auth ,ban, present, edit_firma, edit_adminset
 $result = mysql_query($query) or die(mysql_error().$query);
+if(!mysql_num_rows($result)) Muori("ShowMember: user does NOT exist");
 $pdata = mysql_fetch_array($result);
 
 //statistiche messaggi
@@ -29,7 +30,7 @@ if(!$totmsg)
 	FROM {$SNAME}_sez WHERE 1;";
 	list($totmsg) = mysql_fetch_row(mysql_query($query));
 }
-//2 - max dei messaggi totali personali gruppati per sezione //TO DO _ Da correggere :) ad alcuni va e per altri no, però la query è stata completamente inventata :) non ho la minima idea di quello che faccia :) 
+//2 - max dei messaggi totali personali gruppati per sezione //TO DO _ Da correggere :)  per tenere presente i messaggi invisibili
 $query = "
 SELECT    count(ID) as num_reply
 	, {$SNAME}_sez.id
@@ -37,7 +38,7 @@ SELECT    count(ID) as num_reply
 FROM {$SNAME}_sez 
 join {$SNAME}_newmsg on {$SNAME}_newmsg.sez 	= {$SNAME}_sez.id
 left outer join {$SNAME}_reply on {$SNAME}_reply.rep_of 	= {$SNAME}_newmsg.hash 
-where {$SNAME}_newmsg.autore = '$hash' or {$SNAME}_reply.autore = '$hash'
+where ({$SNAME}_newmsg.autore = '$hash' or {$SNAME}_reply.autore = '$hash') and ({$SNAME}_reply.visibile='1' and {$SNAME}_newmsg.visibile='1')
 group by sez_name
 order by num_reply desc
 LIMIT 1";
