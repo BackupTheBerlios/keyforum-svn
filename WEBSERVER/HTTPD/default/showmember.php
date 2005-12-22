@@ -119,7 +119,6 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 				<br />
 				<?=$user['avatar']?>
 				<div><?=$user['surnick']?></div>
-				<div><img src="<?=$user['group']['image']?>" alt="<?=$user['group']['text']?>" /></div>
 				<br />
 				<div class="postdetails">
 					<?=$lang['shmsg_group']?>  <?=$user['group']['text']?><br />
