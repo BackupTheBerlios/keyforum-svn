@@ -22,6 +22,9 @@ $lang['shmbr_sendpvt']  = "Send a Personal Message";
 $lang['shmbr_pvt']  = "Private";
 $lang['shmbr_miscinfo']  = "Information";
 $lang['shmbr_home']  = "Homepage";
+$lang['shmbr_birthday'] = "Birthday";
+$lang['shmbr_location'] = "Location";
+$lang['shmbr_interests'] = "Interests";
 $lang['shmbr_otherinfo']  = "Additional Information";
 $lang['shmbr_sign']  = "Signature";
 
