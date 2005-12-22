@@ -27,5 +27,7 @@ $lang['shmbr_location'] = "Provenienza:";
 $lang['shmbr_interests'] = "Interessi";
 $lang['shmbr_otherinfo'] = "Informazioni aggiuntive";
 $lang['shmbr_sign'] = "Firma";
+$lang['shmbr_group']  = "Gruppo: ";
+$lang['shmbr_joined']  = "Iscritto il: ";
 
 ?>

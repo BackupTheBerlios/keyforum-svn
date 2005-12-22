@@ -27,5 +27,7 @@ $lang['shmbr_location'] = "Location";
 $lang['shmbr_interests'] = "Interests";
 $lang['shmbr_otherinfo']  = "Additional Information";
 $lang['shmbr_sign']  = "Signature";
+$lang['shmsg_group']  = "Group: ";
+$lang['shmsg_joined']  = "Joined: ";
 
 ?>

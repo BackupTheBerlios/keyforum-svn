@@ -103,13 +103,11 @@ list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['
 
 // carico la lingua per la gestip
 include ("testa.php");
-$lang = $std->load_lang('lang_showmsg', $blanguage );
 $lang = $std->load_lang('lang_showmember', $blanguage );
 //Preparing output
 $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 //OUTPUT
 // v. 0.6
-//$lang = $std->load_lang('lang_showmember', $blanguage );
 ?>
 
 <div class="borderwrap">
@@ -124,8 +122,8 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 				<div><img src="<?=$user['group']['image']?>" alt="<?=$user['group']['text']?>" /></div>
 				<br />
 				<div class="postdetails">
-					<?=$lang['shmsg_group']?>:: <?=$user['group']['text']?><br />
-  					<?=$lang['shmsg_joined']?>::<?=$user['reg_date']?>
+					<?=$lang['shmsg_group']?>  <?=$user['group']['text']?><br />
+  					<?=$lang['shmsg_joined']?>  <?=$user['reg_date']?>
 				</div>
 				<!--{WARN_LEVEL}-->
 			</td>
