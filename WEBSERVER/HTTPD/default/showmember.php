@@ -1,9 +1,11 @@
 <?PHP
-require_once('lib/lib.php');
+include ("testa.php");
 include_once("lib/bbcode_parser.php");
-$SNAME=$_ENV['sesname'];
+$lang = $std->load_lang('lang_showmember', $blanguage );
+$whereiam='showmember';
 
 //ACQUISIZIONE DATI
+$SNAME=$_ENV['sesname'];
 $id = $_GET['MEM_ID'];
 $hash = addslashes(pack('H*',$id));
 
@@ -101,17 +103,10 @@ $user['last_action']['data'] = strftime("%d/%m/%y",$user['last_action']['data'])
 $user['sign']  = convert($user['sign']);
 list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['reply_id']);
 
-// carico la lingua per la gestip
-include ("testa.php");
-$lang = $std->load_lang('lang_showmember', $blanguage );
-//Preparing output
-$title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 //OUTPUT
-// v. 0.6
 ?>
-
-<div class="borderwrap">
-<? echo"	<div class='maintitle'>".$lang['shmbr_maintitle'].""; ?> <?=$user['nick']?></div>
+<tr><td><div class="borderwrap">
+<div class='maintitle'><?=$lang['shmbr_maintitle']?> <?=$user['nick']?></div>
 	<table cellspacing="1">
 		<tr>
 			<td width="1%" nowrap="nowrap" valign="top" class="row1">
@@ -121,12 +116,12 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 				<div><?=$user['surnick']?></div>
 				<br />
 				<div class="postdetails">
-					<?=$lang['shmsg_group']?>  <?=$user['group']['text']?><br />
-  					<?=$lang['shmsg_joined']?>  <?=$user['reg_date']?>
+					<?=$lang['shmbr_group']?>  <?=$user['group']['text']?><br />
+  					<?=$lang['shmbr_joined']?>  <?=$user['reg_date']?>
 				</div>
 				<!--{WARN_LEVEL}-->
 			</td>
-			<td width="30%" align="center" nowrap="nowrap" valign="top" class="row1">
+			<td width="30%" align="center" nowrap="nowrap"  valign="top" class="row1">
 				<fieldset>
 					<legend><b></b></legend>
 					<table cellspacing="0">
@@ -147,18 +142,17 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 						</tr>					</table>
 				</fieldset>
 			</td>
-			<td width="1%" align="right" class="row1"></td>
 		</tr>
 	</table>
 </div>
 <br />
-<table cellspacing="1">
+<table cellspacing="1" width="100%">
 	<tr>
 		<!-- STATS -->
 		<td width="50%" valign="top" style="padding-left: 0;">
 			<table cellspacing="1" class="borderwrap">
 				<tr>
-					<td align="center" colspan="2" class="maintitle"><? echo" ".$lang['shmbr_stat']." "; ?></td>
+					<td align="center" colspan="2" class="maintitle"><?=$lang['shmbr_stat']?></td>
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_time']." "; ?></b></td>
@@ -166,25 +160,34 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 				</tr>
 				<tr>
 					<td class="row2" width="30%" valign="top"><b><?=$lang['shmbr_totalmsg']?></b></td>
-					<td width="70%" class="row1"><b><?=$user['msg_num']['tot']?></b>
-					<br />( <?=$user['msg_num']['daily']?> <? echo" ".$lang['shmbr_msgbyday']." "; ?> / <?=$user['msg_num']['perc']?>% <? echo" ".$lang['shmbr_ofall']." "; ?> )
+					<td width="70%" class="row1">
+						<b><?=$user['msg_num']['tot']?></b>
+						<br />
+						( <?=$user['msg_num']['daily']?> <? echo" ".$lang['shmbr_msgbyday']." "; ?> 
+						/ <?=$user['msg_num']['perc']?>% <? echo" ".$lang['shmbr_ofall']." "; ?> )
 					</td>
 				</tr>
 				<tr>
-					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_activity']." "; ?></b></td>
+					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_activity']." "; ?></b></td>
 					<td class="row1">
-	<a href="sezioni.php?SEZID=<?=$user['msg_sez']['sez_id']?>">
-		<b><?=$user['msg_sez']['sez_name']?></b>
-	</a><br />
-	( <?=$user['msg_sez']['tot']?> <? echo" ".$lang['shmbr_boardmsg']." "; ?> / <?=$user['msg_sez']['perc']?>% <? echo" ".$lang['shmbr_activemsg']." "; ?> )</td>
+						<a href="sezioni.php?SEZID=<?=$user['msg_sez']['sez_id']?>">
+							<b><?=$user['msg_sez']['sez_name']?></b>
+						</a><br />
+						( <?=$user['msg_sez']['tot']?> <? echo" ".$lang['shmbr_boardmsg']." "; ?> 
+						/ <?=$user['msg_sez']['perc']?>% <?=" ".$lang['shmbr_activemsg']." "; ?> )</td>
 				</tr>
 				<tr>
-					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_lastactive']." "; ?></b></td>
-					<td class="row1"><?=$user['last_action']['data']?> in <a href='showmsg.php?SEZID=<?=$user['last_action']['sez']?>=&THR_ID=<?=$user['last_action']['reply_id']?>&pag=last#end_page'><?=$user['last_action']['title']?></a> </td>
+					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_lastactive']." "; ?></b></td>
+					<td class="row1">
+						<?=$user['last_action']['data']?> in 
+						<a href='showmsg.php?SEZID=<?=$user['last_action']['sez']?>=&THR_ID=<?=$user['last_action']['reply_id']?>&pag=last#end_page'><?=$user['last_action']['title']?></a> 
+					</td>
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_status']." "; ?></b></td>
-					<td class="row1"><img src='<?=$user['online']['image']?>' border='0'  alt='<?=$user['online']['text']?>' />(<?=$user['online']['text']?>)<? echo" ".$lang['shmbr_toremove']." "; ?></td>
+					<td class="row1">
+						<!--<img src='<?=$user['online']['image']?>' border='0'  alt='<?=$user['online']['text']?>' />-->		
+						(<?=$user['online']['text']?>)<? echo" ".$lang['shmbr_toremove']." "; ?></td>
 				</tr>
 			</table>
 		</td>
@@ -192,30 +195,42 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 		<td width="50%" valign="top" style="padding-right: 0;">
 			<table cellspacing="1" class="borderwrap">
 				<tr>
-					<td align="center" colspan="2" class="maintitle"><? echo" ".$lang['shmbr_details']." "; ?></td>
+					<td align="center" colspan="2" class="maintitle"><?=$lang['shmbr_details']?></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/profile_aim.gif' border='0'  alt='AIM' /></td>
+					<td width="1%" class="row1">
+						<img src='img/profile_aim.gif' border='0' alt='AIM' />
+					</td>
 					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/profile_yahoo.gif' border='0'  alt='Yahoo' /></td>
+					<td width="1%" class="row1">
+						<img src='img/profile_yahoo.gif' border='0'  alt='Yahoo' />
+					</td>
 					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/profile_icq.gif' border='0'  alt='ICQ' /></td>
+					<td width="1%" class="row1">
+						<img src='img/profile_icq.gif' border='0'  alt='ICQ' />
+					</td>
 					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/profile_msn.gif' border='0'  alt='MSN' /></td>
+					<td width="1%" class="row1">
+						<img src='img/profile_msn.gif' border='0'  alt='MSN' />
+					</td>
 					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/f_norm_no.gif' border='0'  alt='Contact' /></td>
-					<td width="99%" class="row2"><a href=""><? echo" ".$lang['shmbr_sendpvt']." "; ?></a></td>
+					<td width="1%" class="row1">
+						<img src='img/f_norm_no.gif' border='0'  alt='Contact' /></td>
+					<td width="99%" class="row2">
+						<a href=""><?=$lang['shmbr_sendpvt']?></a></td>
 				</tr>
 				<tr>
-					<td width="1%" class="row1"><img src='img/f_norm_no.gif' border='0'  alt='Contact' /></td>
+					<td width="1%" class="row1">
+						<img src='img/f_norm_no.gif' border='0'  alt='Contact' />
+					</td>
 					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_pvt']." "; ?></i></td>
 				</tr>
 			</table>
@@ -224,25 +239,26 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 		<!-- information -->
 	</tr>
 	<tr>
+		<!-- Varie -->
 		<td width="50%" valign="top" style="padding-left: 0;">
 			<table cellspacing="1" class="borderwrap" width='100%'>
 				<tr>
-					<td align="center" colspan="2" class="maintitle"><? echo" ".$lang['shmbr_miscinfo']." "; ?></td>
+					<td align="center" colspan="2" class="maintitle"><?=$lang['shmbr_miscinfo']?></td>
 				</tr>
 				<tr>
-					<td class="row2" width="30%" valign="top"><b><? echo" ".$lang['shmbr_home']." "; ?></b></td>
+					<td class="row2" width="30%" valign="top"><b><?=$lang['shmbr_home']?></b></td>
 					<td width="70%" class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_birthday']." "; ?></b></td>
+					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_birthday']." "; ?></b></td>
 					<td class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_location']." "; ?></b></td>
+					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_location']." "; ?></b></td>
 					<td class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 				<tr>
-					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_interests']." "; ?></b></td>
+					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_interests']." "; ?></b></td>
 					<td class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
 				</tr>
 			</table>
@@ -251,15 +267,20 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 		<td width="50%" valign="top" style="padding-right: 0;">
 			<table cellspacing="1" class="borderwrap" width='100%'>
 				<tr>
-					<td align="center" colspan="2" class="maintitle"><? echo" ".$lang['shmbr_otherinfo']." "; ?></td>
+					<td align="center" colspan="2" class="maintitle">
+				   		<?=$lang['shmbr_otherinfo']?>
+					</td>
 				</tr>
 				<tr>
-	<td colspan="2" align="center" class="row2"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
-</tr>
+					<td colspan="2" align="center" class="row2">
+						<i><? echo" ".$lang['shmbr_noinfo']." "; ?></i>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>
-</table><br />
+</table>
+<br />
 <div class="borderwrap">
 <table cellspacing="1" width='100%'>
 	<tr>
@@ -271,5 +292,5 @@ $title = 'Visualizzazione Profilo Utente :: ' . $user['nick'];
 		</td>
 	</tr>
 </table>
-</div>
+</div></td></tr>
 <?php include("end.php");?>
