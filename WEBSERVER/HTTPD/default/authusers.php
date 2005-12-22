@@ -10,13 +10,14 @@ $whereiam = "authusers";
 if ( empty($_REQUEST['privkey']) ) {	// show hash list to auth
 	echo "<form method=\"POST\" action=\"authusers.php\">";
 	echo "<table cellspacing=\"1\" align='center'>\n";
+	echo "<tr><th class='darkrow2' align='center'>ID</th><th class='darkrow2' align='center'>Hash</th></tr>";
 	while (list ($key, $userhash) = each ($_REQUEST['toauth'])) {
 		if (strlen($userhash) != 32) die ("Selected user hash (id $key) has wrong lenght!");
-		echo "<tr><td class='row1' align='center'>$key</td><td class='row2' align='center'>$userhash</td></tr>\n";
+		echo "<tr><td class='row1' align='center'>$key</td><td class='row1' align='center'>$userhash</td></tr>\n";
 		echo "<input type='hidden' name='toauth[$key]' value='$userhash'>";
 	}
-	echo "<tr><td><textarea cols=35 rows=5 name=\"privkey\"></textarea></td></tr>\n";
-	echo "<tr><td class='row1' align='center'><input type=submit name='submit'></td></tr>\n";
+	echo "<tr><td class='row2'>Private Key</td><td><textarea cols=35 rows=5 name=\"privkey\"></textarea></td></tr>\n";
+	echo "<tr><td class='row1'></td><td class='row1' align='center'><input type=submit class='button' name='submit'></td></tr>\n";
 	echo "</table>";
 	echo "</form>";
 }
