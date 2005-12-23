@@ -91,8 +91,8 @@ $user['avatar'] = ($user['avatar'] ? "<div><img src='{$user['avatar']}' border='
 //statistiche messaggi
 $tmp = (time() - $user['reg_date'])/(60*60*24); //86400 seconds in a day
 $user['msg_num']['daily'] = number_format($user['msg_num']['tot']/$tmp,2);
-$user['msg_num']['perc'] = number_format($user['msg_num']['tot']*100/$totmsg,1);
-$user['msg_sez']['perc'] = number_format($user['msg_sez']['tot']*100/$user['msg_num']['tot'],1);
+if($totmsg)$user['msg_num']['perc'] = number_format($user['msg_num']['tot']*100/$totmsg,1); //to avoid division by 0
+if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_sez']['tot']*100/$user['msg_num']['tot'],1); //to avoid division by 0
 
 
 //Formatting data
