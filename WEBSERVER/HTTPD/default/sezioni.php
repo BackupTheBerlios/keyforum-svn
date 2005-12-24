@@ -56,6 +56,8 @@ function PageSelect() {
 }
 ?>
 
+<tr>
+ <td>
 
 <?
 
@@ -139,7 +141,7 @@ function PageSelect() {
    {    
 echo "<tr> 
           <td class='darkrow2' colspan=6>&nbsp;</td>
-        </tr></table>";
+        </tr></table></div>";
 }
 
 // end sottoforum
@@ -148,8 +150,6 @@ echo "<tr>
 ?>
 
 
-<tr>
- <td>
 <?PHP
 $SEZID=$_REQUEST['SEZID'];
 $SNAME=$_ENV['sesname'];
@@ -256,13 +256,14 @@ while ($riga = mysql_fetch_assoc($risultato)) {
 }
 
 
+
 echo "</table></div>";
  echo "</td></tr>";
 
 PageSelect(); 
 
-
 } // FI - Forum di categoria
+
 
 include ("end.php");
 ?>
