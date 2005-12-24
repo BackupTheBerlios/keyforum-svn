@@ -80,7 +80,7 @@ echo "
     }
 echo "<tr> 
           <td class='darkrow2' colspan=6>&nbsp;</td>
-        </tr></table>";
+        </tr></table></div><br>";
   
 
   
@@ -90,8 +90,6 @@ echo "<tr>
 
 ?>
 
-
-</div>
  </td>
 </tr>
 
