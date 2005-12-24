@@ -10,4 +10,14 @@ $lang['topic_starter']  = "Topic Starter";
 $lang['toppic_views']  = "Views";
 $lang['topic_laction']  = "Last Action";
 $lang['inv_query']  = "Invalid query: ";
+
+$lang['col_forum']  = "Forum";
+$lang['col_topic']  = "Topic";
+$lang['col_replies']  = "Replies";
+$lang['col_lastpost']  = "Last Post Info";
+$lang['col_moderators']  = "Moderators";
+$lang['last_in']  = "In: ";
+$lang['last_data']  = "Date: ";
+$lang['last_from']  = "From: ";
+
 ?>

@@ -1,4 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
+
+2005-12-24:	
+mmorselli:		[ADD] sottosezioni nei forum
+
 2005-12-19:	
 mmorselli:		[FIX] FORUM_URL bbcode
 

@@ -45,6 +45,7 @@ function PageSelect() {
   }
 
     ?>
+    
       <td align=right>
         <a href='writenewmsg.php?SEZID=<? echo $_REQUEST["SEZID"]; ?>'> <? echo "  <img src='img/buttons/".$blanguage."/t_new.gif' border=0></a>"; ?>
       </td>
@@ -55,12 +56,107 @@ function PageSelect() {
 }
 ?>
 
+
+<?
+
+// sottoforum
+
+  $mainzedid=$_REQUEST["SEZID"];
+  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ID;";
+  $sez = mysql_query($query) or die($lang['inv_query'] . mysql_error());
+  
+  // esistono sottoforum ?
+  if(mysql_num_rows($sez))
+   {
+   
+   echo "
+   <div class='borderwrap'>
+     <div class='maintitle'>
+       <p class='expand'></p>
+       <p>{$SEZ_DATA['SEZ_NAME']}</p>
+     </div>";
+
+     echo "
+     <table cellspacing=\"1\">
+       <tr>
+         <th align=\"left\" width=\"50%\" colspan=\"2\" class='titlemedium'>".$lang['col_forum']."</th>
+         <th align=\"center\" width=\"1%\" class='titlemedium'>".$lang['col_topic']."</th>
+         <th align=\"center\" width=\"1%\" class='titlemedium'>".$lang['col_replies']."</th>
+         <th align=\"left\" width=\"29%\" class='titlemedium'>".$lang['col_lastpost']."</th>
+         <th align=\"center\" width=\"15%\" class='titlemedium'>".$lang['col_moderators']."</th>
+       </tr>
+    ";
+   }
+  
+  while ($sezval = mysql_fetch_assoc($sez)) {
+  
+      $MSG=GetLastMsg($sezval['ID']);
+      if ($MSG['time_action']) 
+        $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['time_action']);
+      else 
+        $write_date='';
+      if ($MSG['hash']) 
+        $hash=unpack("H32alfa",$MSG['hash']);
+      else 
+        $hash['alfa']='';
+      if ($MSG['nickhash'])
+        $nickhash=unpack("H32alfa",$MSG['nickhash']);
+      else 
+        $nickhash['alfa']='';
+      if(strlen($MSG['TITLE'])>50){
+         $msg=substr($MSG['TITLE'], 0, 50)."...";
+      }else{
+         $msg=$MSG['TITLE'];
+      }
+      echo '
+      <tr>
+        <td class="row4" align="center"><img src="img/bf_new.gif"></td>
+        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval['ID'].'">'.secure_v($sezval['SEZ_NAME']).'</a></b><br /><span class="desc">'.secure_v($sezval['SEZ_DESC']).'<br /><br /></span></td>
+        <td class="row2" align="center">'.$sezval['THR_NUM'].'</td>
+        <td class="row2" align="center">'.$sezval['REPLY_NUM'].'</td>
+        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&THR_ID='.$hash['alfa'].'&pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
+        <td class="row2" align="center">';
+        $matr=explode("%",$sezval['MOD']);
+        for($counter=0; $counter<(strlen($sezval['MOD'])/33); $counter++){
+          if (!$nick[$matr[$counter]]) {
+            $modhash=pack("H*",$matr[$counter]);
+            $modquery = "SELECT AUTORE FROM ".$_ENV["sesname"]."_membri WHERE HASH='".mysql_escape_string($modhash)."';";
+            $modres = mysql_query($modquery) or die($lang['inv_query'] . mysql_error());
+            $modval = mysql_fetch_assoc($modres);
+            $nick[$matr[$counter]] = $modval["AUTORE"];
+          }
+          if($counter>0){
+             echo ", ";
+          }
+          echo '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";
+        }
+        echo '</td></tr>';
+      $totmsg = $totmsg + $sezval['THR_NUM'] + $sezval['REPLY_NUM'];
+    }
+
+  // esistono sottoforum ?
+  if(mysql_num_rows($sez))
+   {    
+echo "<tr> 
+          <td class='darkrow2' colspan=6>&nbsp;</td>
+        </tr></table>";
+}
+
+// end sottoforum
+
+
+?>
+
+
 <tr>
  <td>
 <?PHP
 $SEZID=$_REQUEST['SEZID'];
 $SNAME=$_ENV['sesname'];
 
+// se >= 9000 è un forum di categoria e non può contenere messaggi
+if($SEZ_DATA['ORDINE'] < 9000)
+{
 echo "<a href=\"searcher.php?MODO=1&SEZ=".$SEZID."&ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
 $query="SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;";
@@ -158,14 +254,15 @@ while ($riga = mysql_fetch_assoc($risultato)) {
   <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</b></small></tD>
 </tr>\n";
 }
-?>
-</table>
-</div>
 
-<? PageSelect(); ?>
 
- </td>
-</tr>
-<?PHP
+echo "</table></div>";
+ echo "</td></tr>";
+
+PageSelect(); 
+
+
+} // FI - Forum di categoria
+
 include ("end.php");
 ?>
