@@ -53,19 +53,16 @@ echo "
       }else{
          $msg=$MSG['TITLE'];
       }
-      if($sezval['ORDINE']>=9000){
-        $notfirst=0;
-        $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval['ID']." ORDER BY ID;";
-        $subsez = mysql_query($querysubs) or die($lang['inv_query'] . mysql_error());
-        while ($subsezval = mysql_fetch_assoc($subsez)) {
-          if($notfirst)
-           $subsections=$subsections.", <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
-          else
-           $subsections=" ".$lang['subforums']." <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
-          $notfirst=1;
-        }
-      }else{
-        $subsections="";
+      $notfirst=0;
+      $subsections="";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval['ID']." ORDER BY ID;";
+      $subsez = mysql_query($querysubs) or die($lang['inv_query'] . mysql_error());
+      while ($subsezval = mysql_fetch_assoc($subsez)) {
+        if($notfirst)
+          $subsections=$subsections.", <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
+        else
+          $subsections=" ".$lang['subforums']." <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
+        $notfirst=1;
       }
       echo '
       <tr>
