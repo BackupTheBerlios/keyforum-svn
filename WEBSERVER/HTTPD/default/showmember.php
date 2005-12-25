@@ -1,8 +1,10 @@
 <?PHP
+$whereiam='showmember';
+
 include ("testa.php");
 include_once("lib/bbcode_parser.php");
 $lang = $std->load_lang('lang_showmember', $blanguage );
-$whereiam='showmember';
+
 
 //ACQUISIZIONE DATI
 $SNAME=$_ENV['sesname'];
@@ -32,30 +34,49 @@ if(!$totmsg)
 	FROM {$SNAME}_sez WHERE 1;";
 	list($totmsg) = mysql_fetch_row(mysql_query($query));
 }
-//2 - max dei messaggi totali personali gruppati per sezione //TO DO _ Da correggere :)  per tenere presente i messaggi invisibili
+//2 - max dei messaggi totali personali gruppati per sezione 
 $query = "
-SELECT    count(ID) as num_reply
-	, {$SNAME}_sez.id
-	, SEZ_NAME
-FROM {$SNAME}_sez 
-join {$SNAME}_newmsg on {$SNAME}_newmsg.sez 	= {$SNAME}_sez.id
-left outer join {$SNAME}_reply on {$SNAME}_reply.rep_of 	= {$SNAME}_newmsg.hash 
-where ({$SNAME}_newmsg.autore = '$hash' or {$SNAME}_reply.autore = '$hash') and ({$SNAME}_reply.visibile='1' and {$SNAME}_newmsg.visibile='1')
-group by sez_name
-order by num_reply desc
-LIMIT 1";
+SELECT count( sez ) AS num, {$SNAME}_sez.sez_name, {$SNAME}_newmsg.sez
+FROM {$SNAME}_reply
+JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.hash = {$SNAME}_reply.rep_of
+JOIN {$SNAME}_sez ON {$SNAME}_sez.id = {$SNAME}_newmsg.sez
+WHERE {$SNAME}_reply.autore = '$hash'
+AND {$SNAME}_newmsg.visibile = '1'
+AND {$SNAME}_reply.visibile = '1'
+GROUP BY sez
+UNION SELECT count( sez ) AS num, {$SNAME}_sez.sez_name, {$SNAME}_newmsg.sez
+FROM {$SNAME}_newmsg
+JOIN {$SNAME}_sez ON {$SNAME}_sez.id = {$SNAME}_newmsg.sez
+WHERE {$SNAME}_newmsg.autore = '$hash'
+AND {$SNAME}_newmsg.visibile = '1'
+GROUP BY sez";
 $result = mysql_query($query) or die(mysql_error().$query);
-$sez_data=mysql_fetch_array($result);
+while($row=mysql_fetch_array($result))
+{
+	list($tmp,$sez_name,$sez_id) = $row;
+	$sez_data[$sez_id]['num_reply'] += $tmp;
+	$sez_data[$sez_id]['SEZ_NAME'] = $sez_name;
+	$sez_data[$sez_id]['sez_id'] = $sez_id;
+}
+rsort($sez_data);
+$sez_data = $sez_data[0];
 
-//last action //TO DO _ Da correggere :) solo ultimo reply e non anche ultimo 3d aperto
+
+//last action 
 $query = "
-SELECT {$SNAME}_newmsg.title, {$SNAME}_reply.date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.hash FROM {$SNAME}_reply
-join {$SNAME}_newmsg on {$SNAME}_reply.rep_of = {$SNAME}_newmsg. hash
-where {$SNAME}_reply.autore='$hash' or {$SNAME}_newmsg.autore='$hash'
-ORDER BY {$SNAME}_reply.date desc
+(SELECT {$SNAME}_reply.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.hash,{$SNAME}_newmsg.title
+FROM {$SNAME}_reply
+JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.hash = {$SNAME}_reply.rep_of
+WHERE {$SNAME}_reply.autore = '$hash')
+UNION 
+(SELECT {$SNAME}_newmsg.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.hash, {$SNAME}_newmsg.title
+FROM {$SNAME}_newmsg
+WHERE {$SNAME}_newmsg.autore = '$hash')
+ORDER BY date DESC 
 Limit 1";
 $result = mysql_query($query) or die(mysql_error().$query);
 $last_data=mysql_fetch_array($result);
+
 /*
 Struct User:
 	NULL 	may be filled a day.............
@@ -64,7 +85,7 @@ Struct User:
 $user = Array(
 	  'id' 		=>$_GET['MEM_ID']
 	, 'nick'	=>$pdata['AUTORE']
-	, 'surnick'	=>NULL
+	, 'surnick'	=>''
 	, 'reg_date'	=>$pdata['reg_date']
 	, 'group'	=>array('text' => $pdata['title'],'image' =>NULL)
 	, 'msg_num'	=>array('tot' => $pdata['msg_num'],'daily' =>'','perc'=> '' )
@@ -74,8 +95,8 @@ $user = Array(
 	, 'sign'	=>$pdata['firma']
 	, 'icq'		=>NULL
 	, 'msn'		=>NULL
-	, 'location'	=>NULL
-	, 'compleanno'	=>NULL
+	, 'location'	=>''
+	, 'compleanno'	=>''
 	, 'online'	=>array('text' => '','image' =>'') //IMPOSSIBLE TO DO
 	, 'last_action'	=>array('title' => $last_data['title'],'data' => $last_data['date'],'sez' => $last_data['sez'], 'reply_id' =>$last_data['hash'])
 	);
@@ -84,24 +105,35 @@ unset($sez_data);
 unset($last_data);
 
 //PREPROCESSING DATA
+
+//Securing data
+$user['nick'] = secure_v($user['nick']);
+$user['avatar'] = secure_v($user['avatar']);
+$user['sign'] = secure_v($user['sign']);
+$user['home'] = secure_v($user['home']);
+$user['location'] = secure_v($user['location']);
+$user['msg_sez']['sez_name'] = secure_v($user['msg_sez']['sez_name']);
+$user['last_action']['title'] = secure_v($user['last_action']['title']);
+
 //Default data
 $user['group']['text'] = ($user['group']['text'] ? $user['group']['text'] : 'membri');
 $user['avatar'] = ($user['avatar'] ? "<div><img src='{$user['avatar']}' border='0' alt='avatar' /></div>" : ''); //Default avatar?::NULL
+
+
+//Formatting data
+$user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
+$user['last_action']['data'] = strftime("%d/%m/%y - %H:%M:%S",$user['last_action']['data']);
+$user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
+
+//Converting data
+$user['sign']  = convert($user['sign']);
+list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['reply_id']);
 
 //statistiche messaggi
 $tmp = (time() - $user['reg_date'])/(60*60*24); //86400 seconds in a day
 $user['msg_num']['daily'] = number_format($user['msg_num']['tot']/$tmp,2);
 if($totmsg)$user['msg_num']['perc'] = number_format($user['msg_num']['tot']*100/$totmsg,1); //to avoid division by 0
 if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_sez']['tot']*100/$user['msg_num']['tot'],1); //to avoid division by 0
-
-
-//Formatting data
-$user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
-//$user['last_action']['data'] = strftime("%d/%m/%y",$user['last_action']['data']);
-$user['last_action']['data'] = strftime("%d/%m/%y",$user['last_action']['data']);
-//Converting data
-$user['sign']  = convert($user['sign']);
-list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['reply_id']);
 
 //OUTPUT
 ?>
