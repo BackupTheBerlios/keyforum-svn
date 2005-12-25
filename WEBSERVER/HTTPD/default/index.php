@@ -16,7 +16,7 @@ echo "
 <div class='borderwrap'>
   <div class='maintitle'>
     <p class='expand'></p>
-    <p>{$mainsezval['SEZ_NAME']}</p>
+    <p><a href='sezioni.php?SEZID={$mainsezval['ID']}'>{$mainsezval['SEZ_NAME']}</a></p>
   </div>";
 
   echo "

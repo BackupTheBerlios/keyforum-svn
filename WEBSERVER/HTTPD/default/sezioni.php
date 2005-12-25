@@ -75,7 +75,7 @@ function PageSelect() {
    <div class='borderwrap'>
      <div class='maintitle'>
        <p class='expand'></p>
-       <p>{$SEZ_DATA['SEZ_NAME']}</p>
+       <p><a href='sezioni.php?SEZID={$SEZ_DATA['ID']}'>{$SEZ_DATA['SEZ_NAME']}</a></p>
      </div>";
 
      echo "
@@ -176,7 +176,7 @@ PageSelect();
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p>".$SEZ_DATA['SEZ_NAME']."</p>";
+	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA['ID']."'>".$SEZ_DATA['SEZ_NAME']."</p>";
     ?>
   </div>
   <table cellspacing="1">
