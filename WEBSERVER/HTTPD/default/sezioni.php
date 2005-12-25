@@ -5,6 +5,7 @@ $lang = $std->load_lang('lang_sezioni', $blanguage );
 
 function PageSelect() {
 ?>
+<tr><td>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
   <tbody>
   <tr>
@@ -15,7 +16,7 @@ function PageSelect() {
   global $CurrPag;
   global $Section;
   global $lang;
-  $link = "sezioni.php?SEZID=".$_REQUEST["SEZID"]."&pag=";
+  $link = "sezioni.php?SEZID=".$_REQUEST["SEZID"]."&amp;pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['pages']."</span>&nbsp;";
     if ($CurrPag>0) { # Pagina precedente
@@ -47,7 +48,7 @@ function PageSelect() {
     ?>
     
       <td align=right>
-        <a href='writenewmsg.php?SEZID=<? echo $_REQUEST["SEZID"]; ?>'> <? echo "  <img src='img/buttons/".$blanguage."/t_new.gif' border=0></a>"; ?>
+        <a href='writenewmsg.php?SEZID=<? echo $_REQUEST["SEZID"]; ?>'> <? echo "  <img src='img/buttons/".$blanguage."/t_new.gif' border='0' alt=''></a>"; ?>
       </td>
     </tr>
   </tbody>
@@ -112,11 +113,11 @@ function PageSelect() {
       }
       echo '
       <tr>
-        <td class="row4" align="center"><img src="img/bf_new.gif"></td>
+        <td class="row4" align="center"><img src="img/bf_new.gif" alt=""></td>
         <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval['ID'].'">'.secure_v($sezval['SEZ_NAME']).'</a></b><br /><span class="desc">'.secure_v($sezval['SEZ_DESC']).'<br /><br /></span></td>
         <td class="row2" align="center">'.$sezval['THR_NUM'].'</td>
         <td class="row2" align="center">'.$sezval['REPLY_NUM'].'</td>
-        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&THR_ID='.$hash['alfa'].'&pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
+        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
         <td class="row2" align="center">';
         $matr=explode("%",$sezval['MOD']);
         for($counter=0; $counter<(strlen($sezval['MOD'])/33); $counter++){
@@ -157,7 +158,7 @@ $SNAME=$_ENV['sesname'];
 // se >= 9000 è un forum di categoria e non può contenere messaggi
 if($SEZ_DATA['ORDINE'] < 9000)
 {
-echo "<a href=\"searcher.php?MODO=1&SEZ=".$SEZID."&ORDER=DESC\">".$lang['req_last']."</a><br><br>";
+echo "<a href=\"searcher.php?MODO=1&amp;SEZ=".$SEZID."&amp;ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
 $query="SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;";
 $risultato=mysql_query($query);
@@ -230,10 +231,10 @@ while ($riga = mysql_fetch_assoc($risultato)) {
   if($rep>$PostXPage){
      while($rep>0){
         if($i<=$Section){
-           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag={$i}'>".++$i."</a></span></td>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag={$i}'>".++$i."</a></span></td>";
            $rep=$rep-$PostXPage;
         }else{
-           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag=last#end_page'>&raquo;</a></span></td>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page'>&raquo;</a></span></td>";
            $rep=0;
         }
      }
@@ -244,14 +245,14 @@ while ($riga = mysql_fetch_assoc($risultato)) {
      $title=$riga["title"];
   }
   echo "
-<tr height='35'>
-  <td align='center' class='row2'><img src='img/$PostStatImage.gif'></td>
+<tr>
+  <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
   <td align=center class='row4'><u><small><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></small></u></td>
   <td align=center class='row4'>".$riga['read_num']."</td>
-  <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&THR_ID=".$iden['hex']."&pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</b></small></tD>
+  <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</a></b></small></tD>
 </tr>\n";
 }
 

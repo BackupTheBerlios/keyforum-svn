@@ -18,7 +18,7 @@ function PageSelect($pos) {
   global $Section;
   global $blanguage;
   global $lang;
-  $link = "showmsg.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["THR_ID"]."&pag=";
+  $link = "showmsg.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['shmsg_pages']."</span>&nbsp;";
     if ($CurrPag>0) { # Pagina precedente
@@ -51,7 +51,7 @@ function PageSelect($pos) {
     ?>
     </td>
     <td align="right" width="80%">
-      <a href="reply.php?SEZID=<?php echo $_REQUEST["SEZID"]; ?>&THR_ID=<?php echo $_REQUEST["THR_ID"];?>"> <?php echo " <img src='img/buttons/".$blanguage."/t_reply.gif' border='0' alt='Rispondi' /></a>"; ?>
+      <a href="reply.php?SEZID=<?php echo $_REQUEST["SEZID"]; ?>&amp;THR_ID=<?php echo $_REQUEST["THR_ID"];?>"> <?php echo " <img src='img/buttons/".$blanguage."/t_reply.gif' border='0' alt='Rispondi' /></a>"; ?>
     </td>
     <td align="right" width="80%">
       <a href="writenewmsg.php?SEZID=<?php echo $_REQUEST[SEZID]; ?>" class="normalname"> <?php echo " <img src='img/buttons/".$blanguage."/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>"; ?>
@@ -88,9 +88,9 @@ function PageSelect($pos) {
 	if($sess_auth){
 	  $logged="javascript:show_hide('FastReply')";
 	}else{
-	  $logged="login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["THR_ID"]."&pag=".$_REQUEST["pag"];
+	  $logged="login.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;pag=".$_REQUEST["pag"];
 	}
-  	echo "</td><td align='right' width='80%' class='normalname'><a href=\"$logged\"><img src='img/buttons/".$blanguage."/t_qr.gif' border='0' alt='FastReply' /></a></td><td align='right' width='80%'><a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&THR_ID={$_REQUEST['THR_ID']}\"><img src=\"img/buttons/".$blanguage."/t_reply.gif\" border=\"0\" alt=\"Rispondi\" /></a></td><td align='right' width='80%'><a href=\"writenewmsg.php?SEZID={$_REQUEST['SEZID']}\" class=\"normalname\"><img src=\"img/buttons/".$blanguage."/t_new.gif\" border=\"0\" alt=\"Apri Nuovo Topic\" /></a></td></tr>\n";
+  	echo "</td><td align='right' width='80%' class='normalname'><a href=\"$logged\"><img src='img/buttons/".$blanguage."/t_qr.gif' border='0' alt='FastReply' /></a></td><td align='right' width='80%'><a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&amp;THR_ID={$_REQUEST['THR_ID']}\"><img src=\"img/buttons/".$blanguage."/t_reply.gif\" border=\"0\" alt=\"Rispondi\" /></a></td><td align='right' width='80%'><a href=\"writenewmsg.php?SEZID={$_REQUEST['SEZID']}\" class=\"normalname\"><img src=\"img/buttons/".$blanguage."/t_new.gif\" border=\"0\" alt=\"Apri Nuovo Topic\" /></a></td></tr>\n";
 
   }
   echo "</tbody>\n</table>\n";
@@ -215,7 +215,7 @@ mysql_query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$
 mysql_query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
 
 ?>
-<a href="searcher.pm?MODO=2&REP_OF=<?php print urlencode($MSGID);?>">
+<a href="searcher.pm?MODO=2&amp;REP_OF=<?php print urlencode($MSGID);?>">
 <?php echo "".$lang['shmsg_findnewmsg']."</a><br />"; ?>
 
 <?php

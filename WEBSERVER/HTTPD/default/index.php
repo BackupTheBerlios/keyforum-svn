@@ -55,11 +55,11 @@ echo "
       }
       echo '
       <tr>
-        <td class="row4" align="center"><img src="img/bf_new.gif"></td>
+        <td class="row4" align="center"><img src="img/bf_new.gif" alt=""></td>
         <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval['ID'].'">'.secure_v($sezval['SEZ_NAME']).'</a></b><br /><span class="desc">'.secure_v($sezval['SEZ_DESC']).'<br /><br /></span></td>
         <td class="row2" align="center">'.$sezval['THR_NUM'].'</td>
         <td class="row2" align="center">'.$sezval['REPLY_NUM'].'</td>
-        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&THR_ID='.$hash['alfa'].'&pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
+        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
         <td class="row2" align="center">';
         $matr=explode("%",$sezval['MOD']);
         for($counter=0; $counter<(strlen($sezval['MOD'])/33); $counter++){

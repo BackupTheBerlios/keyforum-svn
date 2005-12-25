@@ -2,8 +2,10 @@
 require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
-<head>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
 <title><?php
 
 
@@ -46,11 +48,10 @@ $lang = $std->load_lang('lang_testa', $blanguage );
   }
   echo $BNAME;
 ?> Forum</title>
-<link type="text/css" rel="stylesheet" href="style_page.css" />
-<link rel="shortcut icon" href="favicon.ico" />
-</head>
+<link type="text/css" rel="stylesheet" href="style_page.css">
+<link rel="shortcut icon" href="favicon.ico">
+</HEAD>
 <body>
-
 <script type="text/javascript" language="JavaScript">
 <!--
 var pname = "<?php echo md5($BNAME.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]); ?>";
@@ -108,7 +109,7 @@ function mklastselected() {
 
 <div class="borderwrap">
   <div id="logostrip">
-    <a href="index.php"><div id="logographic"></div></a>
+    <div id="logographic"><a href="index.php"></a></div>
   </div>
   <div id="submenu">
     <p class="home">
@@ -133,10 +134,10 @@ function mklastselected() {
    }
 ?>
     </p>
-      <form method="POST" name="boardlinkform">
+      <form method="post" name="boardlinkform" action="">
        <p>
         <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>|
-        <select class="forminput" name="boardlink" size="1" onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
+        <select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
    <?php
       $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
@@ -174,18 +175,18 @@ function mklastselected() {
 </div>
 <div id="userlinks">
   <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><?php echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
+  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
    <?php
       if ($sess_auth)
-        echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
+        echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
       else
-        echo $lang['userlink_guest'].' <a href="login.php?SEZID='.$_REQUEST["SEZID"].'&THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_login'].'</a> <a href="register.php">'.$lang['userlink_signup'].'</a>';
+        echo $lang['userlink_guest'].' <a href="login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_login'].'</a> <a href="register.php">'.$lang['userlink_signup'].'</a>';
     ?>
    </p>
 </div>
 
 
-<form name="reloader" style="display:inline;float:right;">
+<form name="reloader" style="display:inline;float:right;" action="">
 <select class="forminput" name="reload_value" size="1" onchange='setc(reload_cname,this.value);runit(reload_cname);'>
   <option value="null" selected="selected"><?php echo $lang['reload_no']; ?></option>
   <option value="60"><?php echo $lang['reload_60s']; ?></option>

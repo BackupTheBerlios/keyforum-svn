@@ -19,7 +19,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	</th>
        </tr>
        <tr>
-	<td class="formsubtitle" colspan="2"><img src='img/connect.gif'>&nbsp;
+	<td class="formsubtitle" colspan="2"><img src='img/connect.gif' alt=''>&nbsp;
         <?PHP
            $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
            $idrisultato = mysql_query($idquery) or Muori ($lang['inv_query'] . mysql_error());
@@ -61,7 +61,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<img src="img/stat_time.gif">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
+	    echo '<img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
 	 ?>
 	</td>
        </tr>
@@ -78,7 +78,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<img src="img/stat_time.gif">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
+	    echo '<img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
 	 ?>
 	</td>
        </tr>
@@ -87,7 +87,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
    <?
      };
    ?>
-<? $newurl="chlang.php?".$_SERVER['QUERY_STRING']."&script=".$_SERVER['PHP_SELF']."&lang="; 
+<? $newurl="chlang.php?".$_SERVER['QUERY_STRING']."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang="; 
    
    $seleng["$blanguage"]="selected";
 
@@ -96,7 +96,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
  <table cellpadding='2' width='100%' bgcolor='#8394B2'>
   <tr>
    <td>
-    <form method='POST' name='langform'>
+    <form method='POST' name='langform' action=''>
      <select name='langjump' class='content' size='1' onchange='location.href=document.langform.langjump.options[document.langform.langjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>
       <optgroup label='".$lang['language_selection']."'> 			
        <option ".$seleng["eng"]." value='".$newurl."eng'>English</option>

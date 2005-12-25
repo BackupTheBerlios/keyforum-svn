@@ -11,7 +11,7 @@ function printmsg($MSG) {
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['date']);
   $hash=unpack("H32hex",$MSG['hash']);
   if (eregi("http:\/\/", secure_v($MSG['avatar'])))
-    $avatar="<img src='".$MSG['avatar']."'><br />";
+    $avatar="<img src='".$MSG['avatar']."'alt=''><br />";
   if ($MSG['regdate'])
     $register_date=strftime("%d/%m/%y",$MSG['regdate']);
   if ($MSG['gruppo'])
@@ -23,7 +23,7 @@ function printmsg($MSG) {
     if ($MSG['is_auth'])
       $auth="<b>YES</b>";
     else
-      $auth="<a href='admin.pl?action=AuthMem&HASH=".$tmp['hash']."'>NO</a>";
+      $auth="<a href='admin.pl?action=AuthMem&amp;HASH=".$tmp['hash']."'>NO</a>";
   }
   else {
     $autore=secure_v($MSG['autore']);
@@ -38,11 +38,11 @@ function printmsg($MSG) {
     $edit_width=' width="35" ';
   if ($MSG['repof']) {
     $tmp=unpack("H32repof/H32mshash", $MSG['repof'].$MSG['hash']);
-    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&EDIT_OF=".$tmp['mshash']."&SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
+    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
   }
   elseif ($MSG[SEZ]) {
     $tmp=unpack("H32mshash", $MSG['edit_of']);
-    $EDITER="<a href='ednewmsg.php?EDIT_OF=$tmp[mshash]&SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
+    $EDITER="<a href='ednewmsg.php?EDIT_OF=$tmp[mshash]&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
   }
   if($MSG['edit_of']!=$MSG['hash']){
      $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG['real_autore'])."' LIMIT 1;";
@@ -63,9 +63,9 @@ function printmsg($MSG) {
   if($userdata['HIDESIG']) { $MSG['firma']=""; } else { $MSG['firma'] = secure_v($MSG['firma']);}
   
   echo<<<EOF
-<table width=100% border='0' cellspacing='1' cellpadding='3'>
+<table width='100%' border='0' cellspacing='1' cellpadding='3'>
 <tr>
- <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></a></span>
+ <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></span>
    <a name={$postid}></a>
  </td>
  <td class='row4' valign='top' width='99%'>
@@ -93,7 +93,7 @@ function printmsg($MSG) {
   <img src='img/spacer.gif' alt='' width='160' height='1' /><br />
  </td>
  <td width='100%' valign='top' class='post2'>
-  <table border=1 bordercolor='#DEDEFF' cellspacing=0 cellpadding=0 width=100%>
+  <table border='1' bordercolor='#DEDEFF' cellspacing='0' cellpadding='0' width='100%'>
    <tr>
     <td bordercolor='#F0F0FF' class='postdetails'><b>{$lang['shmsg_title']}
 
@@ -117,13 +117,13 @@ EOF;
  <td class='darkrow3' nowrap='nowrap' align='left'>
    <!-- PM / EMAIL / WWW / MSGR / UP -->
    <div align='left' class='darkrow3' style='float:left;width:auto'>
-     <a href='javascript:scroll(0,0);'><img src=\"img/12.gif\" border=\"0\"></a>
+     <a href='javascript:scroll(0,0);'><img src=\"img/12.gif\" border=\"0\" alt=''></a>
    </div>
 
    <!-- REPORT / UP -->
    <div align='right'>
    $EDITER
-   <a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["THR_ID"]."&quote=$tmp[mshash]\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>
+   <a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;quote=$tmp[mshash]\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>
    </div>
  </td>
 </tr>
