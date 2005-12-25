@@ -9,7 +9,7 @@ $lang['col_moderators']  = "Moderatori";
 $lang['last_in']  = "In: ";
 $lang['last_data']  = "Data: ";
 $lang['last_from']  = "Da: ";
-
+$lang['subforums']  = "All'interno:";
 
 
 ?>

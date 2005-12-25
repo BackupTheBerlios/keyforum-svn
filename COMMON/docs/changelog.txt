@@ -1,6 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2005-12-25
+Luftw@ffer:		[ADD] Aggiunta la lista dei sottoforums nella descrizione
 Luftw@ffer:		[FIX] Fix sul layout delle sottosezioni
 Luftw@ffer:		[MOD] Modificata la navbar per permettere la navigazione nelle sottosezioni
 Luftw@ffer:		[FIX] Fix vari

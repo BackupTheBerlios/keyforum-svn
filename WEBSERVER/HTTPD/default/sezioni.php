@@ -111,10 +111,24 @@ function PageSelect() {
       }else{
          $msg=$MSG['TITLE'];
       }
+      if($sezval['ORDINE']>=9000){
+        $notfirst=0;
+        $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval['ID']." ORDER BY ID;";
+        $subsez = mysql_query($querysubs) or die($lang['inv_query'] . mysql_error());
+        while ($subsezval = mysql_fetch_assoc($subsez)) {
+          if($notfirst)
+           $subsections=$subsections.", <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
+          else
+           $subsections=" ".$lang['subforums']." <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
+          $notfirst=1;
+        }
+      }else{
+        $subsections="";
+      }
       echo '
       <tr>
-        <td class="row4" align="center"><img src="img/bf_new.gif" alt=""></td>
-        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval['ID'].'">'.secure_v($sezval['SEZ_NAME']).'</a></b><br /><span class="desc">'.secure_v($sezval['SEZ_DESC']).'<br /><br /></span></td>
+        <td class="row4" width="5%" align="center"><img src="img/bf_new.gif" alt=""></td>
+        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval['ID'].'">'.secure_v($sezval['SEZ_NAME']).'</a></b><br /><span class="desc">'.secure_v($sezval['SEZ_DESC']).$subsections.'<br /><br /></span></td>
         <td class="row2" align="center">'.$sezval['THR_NUM'].'</td>
         <td class="row2" align="center">'.$sezval['REPLY_NUM'].'</td>
         <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>

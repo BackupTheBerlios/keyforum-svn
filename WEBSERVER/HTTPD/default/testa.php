@@ -209,7 +209,7 @@ if ($SEZ_DATA['ID']) {
     $risultatosez=mysql_query($querysez) or Muori ($lang['inv_query'] . mysql_error());
     $notlast=mysql_fetch_assoc($risultatosez);
     $notlastid=$notlast['ID'];
-    $sezvet[$seznum]="<img src='img/3.gif' alt=''> <a href='sezioni.php?SEZID=".$notlastid."'>".$notlast['SEZ_NAME']."</a>\n";
+    $sezvet[$seznum]="<img src='img/3.gif' alt=''> <a href='sezioni.php?SEZID=".$notlastid."'>".secure_v($notlast['SEZ_NAME'])."</a>\n";
     $notlastid=$notlast['FIGLIO'];
     $seznum++;
   }
