@@ -250,7 +250,7 @@ while ($riga = mysql_fetch_assoc($risultato)) {
   <td align='center' class='row2'>&nbsp;</td>
   <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
-  <td align=center class='row4'><u><small><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></small></u></td>
+  <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></u></small></td>
   <td align=center class='row4'>".$riga['read_num']."</td>
   <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</a></b></small></tD>
 </tr>\n";
