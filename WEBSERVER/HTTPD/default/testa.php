@@ -109,7 +109,7 @@ function mklastselected() {
 
 <div class="borderwrap">
   <div id="logostrip">
-    <div id="logographic"><a href="index.php"></a></div>
+    <a href="index.php"><div id="logographic"></div></a>
   </div>
   <div id="submenu">
     <p class="home">
