@@ -201,7 +201,21 @@ function mklastselected() {
 <?php
 
 if ($SEZ_DATA['ID']) {
-  echo "  <img src=\"img/3.gif\" alt=\"\" /> <a href=\"sezioni.php?SEZID=".$SEZ_DATA['ID']."\">".$SEZ_DATA['SEZ_NAME']."</a>\n";
+  $notlastid=$SEZ_DATA['ID'];
+  $seznum=1;
+  while($notlastid){
+    $querysez="SELECT ID, SEZ_NAME, FIGLIO FROM {$SNAME}_sez WHERE ID=".$notlastid.";";
+    $risultatosez=mysql_query($querysez) or Muori ($lang['inv_query'] . mysql_error());
+    $notlast=mysql_fetch_assoc($risultatosez);
+    $notlastid=$notlast['ID'];
+    $sezvet[$seznum]="<img src='img/3.gif' alt=''> <a href='sezioni.php?SEZID=".$notlastid."'>".$notlast['SEZ_NAME']."</a>\n";
+    $notlastid=$notlast['FIGLIO'];
+    $seznum++;
+  }
+  while($seznum){
+    echo $sezvet[$seznum];
+    $seznum--;
+  }
 }
 if ($title) {
   if($title1["subtitle"]) $title=$title.", ".$title1["subtitle"];
