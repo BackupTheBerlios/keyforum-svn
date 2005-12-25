@@ -176,7 +176,7 @@ PageSelect();
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA['ID']."'>".$SEZ_DATA['SEZ_NAME']."</p>";
+	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA['ID']."'>".$SEZ_DATA['SEZ_NAME']."</a></p>";
     ?>
   </div>
   <table cellspacing="1">
