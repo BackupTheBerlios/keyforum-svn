@@ -2,6 +2,7 @@
 
 include("testa.php");
 
+
 $MODO=$_REQUEST['MODO'];
 $SEZ=$_REQUEST['SEZ'];
 $ORDER=$_REQUEST['ORDER'];
@@ -29,7 +30,11 @@ else {
     else {
         $resp=$coreconn->Read();
         if ( !$resp ) die("Errore nella ricezione dati dal core!\n");
-        else print "<br>Richiesta inviata a " . $resp['HASHREQ'][$forumid] . " nodi.\n";
+        else 
+        {
+        $std->Redirect("Hash request",$_SERVER['HTTP_REFERER'],"Hash request","Request sent to " . $resp['HASHREQ'][$forumid] . " nodes");
+	}
+
     }
 }
 ?>    
