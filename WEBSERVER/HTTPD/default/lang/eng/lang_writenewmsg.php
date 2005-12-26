@@ -10,5 +10,6 @@ $lang['wreply_submit']  = "Submit";
 $lang['wreply_privkey']  = "Forum private key:";
 $lang['wreply_info1']  = "*If you put a value to avatar or signature, both of them are changed in DataBase.";
 $lang['wreply_info2']  = "if you want to change signature but not avatar, rewite both of them.";
+$lang['emo_showallemo'] = "Show all";
 
 ?>

@@ -24,4 +24,4 @@
     }	
     
 ?>
-    <tr><td colspan="4" align="center"><a href='javascript:emopopup()'>Mostra tutte</a></td></tr>
+    <tr><td colspan="4" align="center"><a href='javascript:emopopup()'><? echo $lang['emo_showallemo']; ?></a></td></tr>

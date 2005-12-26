@@ -15,5 +15,6 @@ $lang['shmsg_submit']  = "Submit";
 $lang['shmsg_hidefp'] = "Hide FastReply";
 $lang['shmsg_msgnotfound'] = "Message not found ";
 $lang['shmsg_findnewmsg'] = "Find new reply in this thread";
+$lang['emo_showallemo'] = "Show all";
 
 ?>

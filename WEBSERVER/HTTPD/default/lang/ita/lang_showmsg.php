@@ -15,5 +15,6 @@ $lang['shmsg_submit']  = "Posta";
 $lang['shmsg_hidefp'] = "Nascondi FastReply";
 $lang['shmsg_msgnotfound'] = "messaggio non trovato";
 $lang['shmsg_findnewmsg'] = "Cerca le nuove risposte per questo messaggio";
+$lang['emo_showallemo'] = "Mostra tutte";
 
 ?>
