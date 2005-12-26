@@ -76,7 +76,7 @@ function PageSelect() {
 $SNAME=$_ENV['sesname'];
 
 $timelimit=$userdata['LASTREAD']-GMT_TIME;
-
+if($timelimit < 1) {$timelimit=1130511594;}
 
 $query="SELECT count(msghe.HASH) as 'HASH'
 FROM {$SNAME}_msghe AS msghe,
