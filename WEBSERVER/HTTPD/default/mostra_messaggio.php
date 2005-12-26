@@ -70,7 +70,7 @@ function printmsg($MSG) {
  </td>
  <td class='row4' valign='top' width='99%'>
   <div align='left' class='row4' style='float:left;padding-top:4px;padding-bottom:4px'>
-   <span class='postdetails'><b>{$lang['shmsg_sendon']}</b>{$write_date}</span>
+   <span class='postdetails'><b>{$lang['shmsg_sendon']}</b>{$write_date}</span></b>
   </div>
   <div align='right'>
   </div>
@@ -93,21 +93,19 @@ function printmsg($MSG) {
   <img src='img/spacer.gif' alt='' width='160' height='1' /><br />
  </td>
  <td width='100%' valign='top' class='post2'>
-  <table border='1' bordercolor='#DEDEFF' cellspacing='0' cellpadding='0' width='100%'>
-   <tr>
-    <td bordercolor='#F0F0FF' class='postdetails'><b>{$lang['shmsg_title']}
-
-</b>
 EOF;
+ 
  $title=$MSG['title'];
  if($MSG['subtitle']){
     $title=$title.", ".$MSG['subtitle'];
  }
-
- echo secure_v($title)."</td>
-   </tr>
-  </table><br />
-  <div class='postcolor'> ".convert($MSG['body'])."</div>
+ 
+ if($title) {
+ echo "<table border='1' bordercolor='#DEDEFF' cellspacing='0' cellpadding='0' width='100%'><tr><td bordercolor='#F0F0FF' class='postdetails'><b>{$lang['shmsg_title']}</b> ";
+ echo secure_v($title)."</td></tr></table><br />";
+ }
+ 
+ echo "<div class='postcolor'> ".convert($MSG['body'])."</div>
   <br /><br />--------------------<br />
   <div class='signature'>".convert($MSG['firma'])."</div>
  </td>

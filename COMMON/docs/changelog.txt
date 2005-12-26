@@ -1,5 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2005-12-26:	
+mmorselli:		[FIX] titolo messaggio mostrato solo se presente
+
 2005-12-25
 Luftw@ffer:		[ADD] Aggiunta la lista dei sottoforums nella descrizione
 Luftw@ffer:		[FIX] Fix sul layout delle sottosezioni
