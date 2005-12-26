@@ -1,3 +1,11 @@
+<script type="text/javascript">
+<!--
+ function emopopup()
+ {
+   window.open('emopopup.php','Emoticons','width=770,height=500,resizable=yes,scrollbars=yes'); 
+ }
+-->
+</script>
 <?
  $SNAME=$_ENV['sesname'];
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons WHERE enabled AND clickable";
@@ -16,4 +24,4 @@
     }	
     
 ?>
-    <tr><td colspan="4" align="center"><a href='javascript:' onclick='emopopup()'>Mostra tutte</a></td></tr>
+    <tr><td colspan="4" align="center"><a href='javascript:emopopup()'>Mostra tutte</a></td></tr>

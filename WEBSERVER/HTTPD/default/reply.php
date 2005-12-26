@@ -76,11 +76,6 @@ echo<<<EOF
     document.getElementById('FastReply').style.height = altokok + 'px';
   }
   
-function emopopup()
-{
-  window.open('emopopup.php','Emoticons','width=770,height=500,resizable=yes,scrollbars=yes'); 
-}
-  
 //-->
 </script>
 
