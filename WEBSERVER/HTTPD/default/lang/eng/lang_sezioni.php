@@ -19,5 +19,6 @@ $lang['col_moderators']  = "Moderators";
 $lang['last_in']  = "In: ";
 $lang['last_data']  = "Date: ";
 $lang['last_from']  = "From: ";
+$lang['subforums']  = "Subforums:";
 
 ?>

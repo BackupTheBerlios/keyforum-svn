@@ -61,7 +61,7 @@ echo "
         if($notfirst)
           $subsections=$subsections.", <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
         else
-          $subsections=" ".$lang['subforums']." <b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
+          $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID=".$subsezval['ID']."'>".secure_v($subsezval['SEZ_NAME'])."</a></b>";
         $notfirst=1;
       }
       echo '
