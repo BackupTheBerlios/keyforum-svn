@@ -1,6 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2005-12-26:	
+mmorselli:		[FIX] bbcode SIZE
 mmorselli:		[FIX] titolo messaggio mostrato solo se presente
 Luftw@ffer:		[FIX] Fixato popup delle emoticons con FireFox
 

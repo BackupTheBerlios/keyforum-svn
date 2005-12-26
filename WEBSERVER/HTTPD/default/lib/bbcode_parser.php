@@ -45,7 +45,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = preg_replace("#\[color\s*=([^\]]+)\](.+?)\[/color\]#ies", "convert_style('color','\\1','\\2')", $text);
   $text = preg_replace("#\[bgcolor\s*=([^\]]+)\](.+?)\[/bgcolor\]#ies", "convert_style('bgcolor','\\1','\\2')", $text);
   $text = preg_replace("#\[font\s*=([^\]]+)\](.+?)\[/font\]#ies", "convert_style('font','\\1','\\2')", $text);
-  $text = preg_replace("#\[size\s*=(\d)\](.+?)\[/size\]#ies", "convert_style('size','\\1','\\2')", $text);
+  $text = preg_replace("#\[size=([^\]]+)\](.+?)\[/size\]#ies", "convert_style('size','\\1','\\2')", $text);
 
     // Link
   $text = preg_replace("#(^|\s|<br \/>)([\w]{1,6}://(\|)*[\w]+[^\s]+)#ie"               , "convert_link('\\2','\\2','\\1',1)", $text);
