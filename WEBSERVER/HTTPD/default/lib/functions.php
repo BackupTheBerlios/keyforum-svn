@@ -177,7 +177,14 @@ class FUNC {
 // Redirector
 // *******************************
 
-function Redirect($pagetitle,$url,$msgtitle,$msg,$clickinvite) {
+function Redirect($pagetitle,$url,$msgtitle,$msg,$clickinvite="") {
+
+global $std,$blanguage;
+if(!$blanguage) {$blanguage="eng";}
+
+$lang = $std->load_lang('lang_functions', $blanguage );
+
+if(!$clickinvite) {$clickinvite=$lang['redirect_invite'];}
 
 $html="
 <html>
@@ -193,7 +200,7 @@ $html="
    <p>
    $msg
    </p>
-   <p class=\"redirectfoot\">(<a href=\"$url\">$clickinvite</a>)
+   <p class=\"redirectfoot\">{$lang['redirect_wait']}<br>(<a href=\"$url\">$clickinvite</a>)
    </p>
   </div>
  </body>
