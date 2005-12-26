@@ -1,3 +1,8 @@
+2005-12-26
+mmorselli:		[ADD] visualizza nuovi messaggi
+
+alter table *_localmember add column  `LASTREAD` int(10) NOT NULL default '0';
+
 2005-12-16:	
 mmorselli:		[ADD] aggiunte tabelle *_emoticons
 

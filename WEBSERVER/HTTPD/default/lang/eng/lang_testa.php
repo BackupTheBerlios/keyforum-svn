@@ -21,6 +21,8 @@ $lang['reload_120s']  = "Refresh every 2 minutes";
 $lang['reload_180s']  = "Refresh every 3 minutes";
 $lang['reload_300s']  = "Refresh every 5 minutes";
 $lang['reload_600s']  = "Refresh every 10 minutes";
+$lang['shownewmsg']  = "Show new messages";
+
 
 
 ?>

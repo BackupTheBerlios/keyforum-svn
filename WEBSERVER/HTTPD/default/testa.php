@@ -175,7 +175,7 @@ function mklastselected() {
 </div>
 <div id="userlinks">
   <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><?php echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
+  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <a href="shownewmsg.php"><?php echo $lang['shownewmsg']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
    <?php
       if ($sess_auth)
         echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
