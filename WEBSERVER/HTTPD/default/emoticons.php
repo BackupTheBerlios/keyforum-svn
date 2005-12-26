@@ -10,7 +10,7 @@
      {
       if (!$colcont) { echo "<tr>"; }
       if ($row['internal']) {$emoadr="showemo.php?id={$row['id']}";} else {$emoadr="img/emoticons/{$row['image']}";}
-    echo "<td><img src='$emoadr' border='0' valign='absmiddle' style='cursor:hand;cursor:pointer;' onclick='javascript:emot(\"{$row['typed']}\")' alt='{$row['typed']}'></td>";
+    echo "<td><img src='$emoadr' border='0' valign='absmiddle' style='cursor:pointer;' onclick='javascript:emot(\"{$row['typed']}\")' alt='{$row['typed']}'></td>";
     $colcont++;
     if ($colcont == $emocol) {echo "</tr>";$colcont=0;}
     }	

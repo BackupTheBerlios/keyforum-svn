@@ -8,7 +8,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
    <?PHP
        if ((!$SEZ_DATA['ID'])AND(!$whereiam)){
    ?>
-   <div class="borderwrap" style="display:show" id="fo_stat">
+   <div class="borderwrap" id="fo_stat">
      <div class="maintitle">
        <p class="expand"></p>
        <p><? echo $lang['mtitle_stat']; ?></p>
@@ -70,7 +70,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
    <?
      }else{
    ?>
-   <div class="borderwrap" style="display:show" id="fo_stat">
+   <div class="borderwrap" id="fo_stat">
      <table cellspacing="1">
        <tr>
 	<td align="left" class="row5">

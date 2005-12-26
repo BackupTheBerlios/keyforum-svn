@@ -1,4 +1,3 @@
-<style type='text/css'>
 html { overflow-x: auto; }
 
 form { display:inline; }
@@ -605,7 +604,8 @@ input.button{
 }
 
 .content{
-        font:10 Verdana;
+        font-family: Verdana;
+        font-size: 10px;
 }
 
 /* Spoiler (in attesa di uniformarlo) */
@@ -617,7 +617,7 @@ input.button{
   padding-left: 5px;
   font-size: 8pt;
   font-weight: bold;
-  cursor: hand;
+  cursor: pointer;
   background: #C0FFC0;
   border-top: 1px dotted #000066;
   border-left: 1px dotted #000066;
