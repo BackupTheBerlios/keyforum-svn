@@ -7,6 +7,8 @@ include ("testa.php");
 // carico la lingua per la index
 $lang = $std->load_lang('lang_index', $blanguage );
 
+$whereiam="index";
+
 echo "<tr><td>";
 
 $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ID;";

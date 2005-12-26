@@ -6,7 +6,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
   <td>
    <br><br>  
    <?PHP
-       if ((!$SEZ_DATA['ID'])AND(!$whereiam)){
+       if ((!$SEZ_DATA['ID'])AND($whereiam=="index")){
    ?>
    <div class="borderwrap" id="fo_stat">
      <div class="maintitle">
