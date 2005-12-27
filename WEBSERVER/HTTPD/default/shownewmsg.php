@@ -108,11 +108,10 @@ PageSelect();
    <tr>
     <th align="center" width="1%">&nbsp;</th>
     <th align="center" width="1%">&nbsp;</th>
-    <th align="left" width="40%" class='titlemedium'><?PHP echo $lang['topic_title'] ?></th>
+    <th align="left" width="47%" class='titlemedium'><?PHP echo $lang['topic_title'] ?></th>
     <th align="center" width="17%" class='titlemedium'><?PHP echo $lang['forum'] ?></th>    
     <th align="center" width="6%" class='titlemedium'><?PHP echo $lang['topic_replies'] ?></th>
     <th align="center" width="10%" class='titlemedium'><?PHP echo $lang['topic_starter'] ?></th>
-    <th align="center" width="7%" class='titlemedium'><?PHP echo $lang['toppic_views'] ?></th>
     <th align="center" width="18%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
    </tr>
 <?PHP
@@ -125,7 +124,7 @@ while ($riga = mysql_fetch_assoc($risultato)) {
 }
 
 $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
-  ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, read_num,newmsg.SUBTITLE as 'subtitle',newmsg.SEZ AS 'sez' "
+  ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, newmsg.SUBTITLE as 'subtitle',newmsg.SEZ AS 'sez' "
   ." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri,{$SNAME}_membri AS repau "
   ." WHERE newmsg.EDIT_OF=msghe.HASH"
   ." AND newmsg.visibile='1'"
@@ -188,7 +187,6 @@ while ($riga = mysql_fetch_assoc($risultato)) {
   <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga['sez']."'>".$sezname[$riga['sez']]."</td>
   <td align=center class='row4'>".$riga["reply_num"]."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></u></small></td>
-  <td align=center class='row4'>".$riga['read_num']."</td>
   <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID=".$riga['sez']."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</a></b></small></tD>
 </tr>\n";
 }
