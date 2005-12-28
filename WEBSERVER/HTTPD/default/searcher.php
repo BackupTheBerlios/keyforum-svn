@@ -1,6 +1,6 @@
 <?php
 
-include("testa.php");
+include("lib/lib.php");
 
 
 $MODO=$_REQUEST['MODO'];

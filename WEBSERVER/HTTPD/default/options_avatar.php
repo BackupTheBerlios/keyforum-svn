@@ -1,5 +1,5 @@
 <?php
-$whereiam='options_user.php';
+$whereiam='options_avatar.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");

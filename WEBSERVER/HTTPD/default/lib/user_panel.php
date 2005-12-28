@@ -31,7 +31,61 @@ function get_avatar($mem_id)
 
 function show_menu()
 {
-	global $mem_id;
+	global $mem_id,$whereiam;
+	//Modifica qui il menu
+	
+	/*$menu['Messenger'] = Array(
+		 'pm_new.php' => 'Invia nuovo PVT'
+		,'pm_inbox.php' => 'Messaggi Ricevuti'
+		,'pm_sent.php' => 'Messaggi Inviati'
+		);*/
+		
+	$menu['Profilo Personale'] = Array(
+		'options_profile.php'	=> 'Modifica Profilo'
+		,'options_sign.php' => 'Modifica Firma'
+		,'options_avatar.php' => 'Modifica Avatar'
+		);
+			
+	$menu['Opzioni'] = Array(
+		'options_forum.php' => 'Impostazioni Forum'
+			);
+	
+	$return ='
+		<div class="borderwrap">
+			<div class="maintitle">Menu</div>
+			<!-- Messenger Links -->
+			<table cellspacing="1" width="100%">';
+	foreach($menu as $title=>$submenu)
+	{
+		$return .="
+		<!-- Start $title -->
+		<tr>
+			<td>
+				<div class='formsubtitle'>$title</div>
+				<p>";
+		foreach($submenu as $url=>$label)
+		{
+			if($whereiam==$url)
+			{
+				$return .="
+				<img src='img/nav_m_dark.gif' border='0'  alt='.' />
+				<b>$label</b><br />\n";
+			}
+			else
+			{
+				$return .="
+				<img src='img/nav_m_dark.gif' border='0'  alt='.' />
+				<a href='$url?MEM_ID=$mem_id'>$label</a><br />\n";
+			}
+		}
+		$return .="
+			<!-- End $title -->
+				</p></td></tr>\n";
+	}
+	$return .="</table></div>";
+	return $return;
+	
+
 	return '
 	<div class="borderwrap">
 			<div class="maintitle">Menu</div>
@@ -66,7 +120,7 @@ function show_menu()
 			  <td><div class="formsubtitle">Profilo Personale</div>
 			<p>
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="options_user.php?MEM_ID='.$mem_id.'">Modifica Profilo</a><br />
+				<a href="">Modifica Profilo</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="options_sign.php?MEM_ID='.$mem_id.'">Modifica Firma</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." />
@@ -86,9 +140,9 @@ function show_menu()
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="">Gestisci Utenti Bloccati</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Impostazioni Email</a><br />
+				<a href="">Impostazioni Email</a><br />-->
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Impostazioni Forum</a><br />
+				<a href="options_user.php?MEM_ID='.$mem_id.'">Impostazioni Forum</a><br /><!--
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="">Cambia Indirizzo Email</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 

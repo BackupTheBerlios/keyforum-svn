@@ -209,7 +209,7 @@ function mklastselected() {
 
 		echo "
 			| <a href='shownewmsg.php'>{$lang['shownewmsg']}</a>
-			| <a href='options_user.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
+			| <a href='options_profile.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
 			";
 	}
 	?>	

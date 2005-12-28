@@ -1,9 +1,9 @@
 <?php
-$whereiam='options_user.php';
+$whereiam='options_profile.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
-$lang = $std->load_lang('lang_optionsuser', $blanguage );
+$lang = $std->load_lang('lang_optionsforum', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -43,35 +43,15 @@ if($_POST['MEM_ID'])
 	else
 	{
 		//Aquisizione dati
-		$new_lang = $_POST['lang'];
-		$new_tpp = $_POST['tpp'];
-		$new_ppp = $_POST['ppp'];
-		$new_hidesig =$_POST['hidesig'];
 		//Controllo dati
 		//todo
-		
-		$query = "UPDATE {$SNAME}_localmember 
-		SET LANG = '$new_lang'
-			,TPP = '$new_tpp' 
-			,PPP = '$new_ppp'
-			,HIDESIG ='$new_hidesig'
-		WHERE HASH = '{$userdata['HASH']}'  LIMIT 1 ";
-		$result = mysql_query($query) or die(mysql_error());
-		if($result)
-		{
-			echo "".$lang['optusr_msg']."";
-			$is_post_back= 0;
-		}
-		else
-		{
-			die(''.$lang['optusr_errmsg'].'');
-		}
+		echo "modifiche forse effettuate";
 	}
 }
 
 
 $query = "
-	Select LANG, TPP, PPP, HIDESIG 
+	Select * 
 	FROM {$SNAME}_localmember
 	WHERE hash = '{$userdata['HASH']}'
 	LIMIT 1;
@@ -97,40 +77,32 @@ if(!$is_post_back && $verify)
 <? echo "				<div class=\"maintitle\">".$lang['optusr_welcome']."</div>"; ?>
 	<form action="" method="post" name="REPLIER">
 	<input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
-<? echo "	<div class=\"formsubtitle\">".$lang['optusr_intopt']."</div>"; ?>
+<div class="formsubtitle">Il tuo profilo personale</div>
 	<table cellspacing="0" align="center" width="100%">
 	<tr>
-<? echo "			<td class=\"pformleft\" >".$lang['optusr_lang']."</td>"; ?>
-		<td class="pformright">   
-			<?=select_language('lang',$current['LANG'])?>
-    </td>
-	<tr>
-<? echo "			<td class=\"pformleft\" >".$lang['optusr_time']."</td>"; ?>
+		<td class="pformleft" >Data di nascita</td>
 		<td class="pformright">
-			asd
+			<?=select_number('giorno',$current['giorno'],31);?>
+			<?=select_number('mese',$current['mese'],12);?>
+			<?=select_number('anno',$current['anno'],date('Y')*-1);?>
 	    </td>
-	</tr>
-</table>
-<? echo "<div class=\"formsubtitle\">".$lang['optusr_bopt']."</div>"; ?>
-<table cellspacing="0" align="center" width="100%">
 	<tr>
-<? echo "		<td class=\"pformleft\" >".$lang['optusr_ppp']."</td>"; ?>
-		<td class="pformright">
-			<input type="text" size="10" name="ppp" value="<?=$current['PPP']?>" /> 
-		</td>
+		<td class="pformleft" >Home Page</td>
+		<td class="pformright">   
+			<input type="text" name="homepage" value="<?=$current['homepage']?>" size="40"/>
+    	</td>
 	</tr>
 	<tr>
-<? echo "		<td class=\"pformleft\" >".$lang['optusr_tpp']."</td>"; ?>
-		<td class="pformright">
-			<input type="text" size="10" name="tpp" value="<?=$current['TPP']?>"/> 
-		</td>
+		<td class="pformleft" >ICQ UIN</td>
+		<td class="pformright">   
+			<input type="text" name="icq" value="<?=$current['icq']?>"  size="11"/>
+    	</td>
 	</tr>
 	<tr>
-<? echo "		<td class=\"pformleft\" >".$lang['optusr_showsign']."</td>"; ?>
-		<td class="pformright">
-			<? $checked = ($current['HIDESIG'] ? 'checked' : '');?>
-			<input type="checkbox" name="hidesig" value='1' <?=$checked?> /> 
-		</td>
+		<td class="pformleft" >Provenienza</td>
+		<td class="pformright">   
+			<input type="text" name="location" value="<?=$current['location']?>" />
+    	</td>
 	</tr>
 	<tr>
 		<td class="formbuttonrow" colspan="2">
@@ -138,6 +110,7 @@ if(!$is_post_back && $verify)
 		</td>
 	</tr>
 
+</table>
 </form>
 </div>
 		</td>
@@ -159,28 +132,34 @@ include('end.php');?>
 
 
 <?
-function select_language($name,$default)
+function select_number($name,$default,$number)
 {
 	global $std,$blanguage;
 	$lang = $std->load_lang('lang_register', $blanguage );
+
+	$return .="
+		<select name='$name'>
+		<option value=''>--</option>
+		";
 	
-	$dir_open = @ opendir('lang');
-	if (! $dir_open)
-		return 'Error to opern lang dir';
-	
-	$return .="<select name='$name'>";
-	
-	while (($file = readdir($dir_open)) !== false) 
+	if($number > 0)
 	{
-		if(strpos($file,".") === FALSE)
+		for($i=1;$i<=$number;$i++)
 		{
-			$selected = ($default == $file ? 'selected' : "");
-			$return.= "<option value='$file' $selected >$file</option>\n";
-			//$return.= "<option value='$file' $selected>{$lang[$file]}</option>\n";
+			$selected = ($default == $i ? 'selected' : "");
+			$return.= "<option value='$i' $selected >$i</option>\n";
+		}
+	}
+	else
+	{
+		$number *= -1;
+		for($i=$number,$number-=100;$i>=$number;$i--)
+		{
+			$selected = ($default == $i ? 'selected' : "");
+			$return.= "<option value='$i' $selected >$i</option>\n";
 		}
 	}
 	$return .="</select>";
-	closedir($dir_open);
 	return $return;
 }
 
