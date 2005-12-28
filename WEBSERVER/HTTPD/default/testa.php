@@ -175,14 +175,52 @@ function mklastselected() {
 </div>
 <div id="userlinks">
   <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><?php echo $lang['userlink_close']; ?></a></b></p>
-  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> | <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> | <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> | <a href="shownewmsg.php"><?php echo $lang['shownewmsg']; ?></a> | <?php echo $lang['userlink_wlcm']; ?>
+  <?php
+  $userlinks =array(
+  	 'index.php' 		=> $lang['userlink_home']
+	,'gestip.php' 		=> $lang['userlink_ipman']
+	,'userlist.php?validati=1&amp;nonvalidati=1' 	=> $lang['userlink_usrlst']
+	,'boardlist.php'	=> $lang['userlink_brdlst']
+	);
+	if ($sess_auth)
+	{
+		list($user_hash,$user_id) = get_my_info();
+		$userlinks['options_user.php?MEM_ID='.$user_id]	= $lang['user_panel'];
+		$userlinks['shownewmsg.php']	= $lang['shownewmsg'];
+		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$sess_nick.'</b>';
+		$userlinks['logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_logout'];
+	}
+	else
+	{
+		$userlinks[] = $lang['userlink_wlcm'].' '.$lang['userlink_guest'];
+		$userlinks['login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_login'];
+		$userlinks['register.php'] = $lang['userlink_signup'];
+	}
+	 
+	//echo "<p>".userlinks($userlinks) ?>
+	
+  <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> 
+	| <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> 
+	| <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> 
+	| <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> 
+	<?	
+	if($sess_auth)
+	{
+
+		echo "
+			| <a href='shownewmsg.php'>{$lang['shownewmsg']}</a>
+			| <a href='options_user.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
+			";
+	}
+	?>	
+	| <?php echo $lang['userlink_wlcm']; ?> 
    <?php
       if ($sess_auth)
         echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
       else
-        echo $lang['userlink_guest'].' <a href="login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_login'].'</a> <a href="register.php">'.$lang['userlink_signup'].'</a>';
-    ?>
-   </p>
+        echo $lang['userlink_guest'].' <a href="login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_login'].'</a> <a href="register.php">'.$lang['userlink_signup'].'</a>'; 
+    ?> 
+	</p>
 </div>
 
 
@@ -225,3 +263,23 @@ if ($title) {
 ?>
 </div>
 <table border="0" cellspacing="0" cellpadding="0" align="center" width="100%">
+
+
+<?
+//FUNZIONI
+function userlinks($array)
+{
+	global $whereiam;
+	foreach($array as $url=>$label)
+	{
+		if($whereiam == $url or $whereiam == substr($url,0,-4))
+		{
+			$return .="| <b>$label</b>";
+		}
+		else
+		{
+			$return .="| <a href='$url'>$label</a> ";
+		}
+	}
+	return $return;
+}

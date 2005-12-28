@@ -147,6 +147,26 @@ function secure_v($val) {
   return $val;
 }
 
+function get_my_info()
+{
+	/* RETURN: Array( hash - id ) */
+	global $std,$SNAME,$userdata;
+	if(!$GLOBALS['sess_nick']) return "";
+	if(!$userdata) return "";
+	$KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'])); // = password per decriptare la chiave privata in localmember (16byte)
+	$privkey=base64_decode($userdata['PASSWORD']);
+	$PKEY=$std->getpkey($SNAME);
+	$req[FUNC][Base642Dec]=$PKEY;
+	$req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
+	$req[FUNC][BlowDump2var][Data]=$privkey;
+	$core=new CoreSock;
+	if (!$core->Send($req)) die($lang['reply_core']);
+	if (!$risp=$core->Read()) die ($lang['reply_timeout']);
+	$return[0]=$risp[FUNC]["BlowDump2var"]["hash"]; 	//dell'utente loggato in questo momento
+	list($asd,$return[1]) = unpack('H*',$return[0]);
+	return ($return);
+}
+
 
 //--------------------------------
 // Classe per funzioni globali
