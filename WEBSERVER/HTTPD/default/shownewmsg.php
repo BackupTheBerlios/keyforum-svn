@@ -78,6 +78,17 @@ $SNAME=$_ENV['sesname'];
 $timelimit=$userdata['LASTREAD']-GMT_TIME;
 if($timelimit < 1) {$timelimit=1130511594;}
 
+$last24=$timelimit-86400;
+$last7g=$timelimit-604800;
+$last30g=$timelimit-2592000;
+
+
+$tst=$_REQUEST['tst'];
+if($tst){
+$timelimit=$_REQUEST['tst'];
+$sel[$tst]="selected";
+} else {$sel['from']="selected";}
+
 $query="SELECT count(msghe.HASH) as 'HASH'
 FROM {$SNAME}_msghe AS msghe,
 {$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri,{$SNAME}_membri AS repau 
@@ -101,7 +112,22 @@ PageSelect();
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p>ultimi messaggi dal ".date("d/m/Y H:i:s",$timelimit)."</p>";
+    
+    $dform="<form method=\"POST\" name=\"dform\">
+       <select class=content name=\"quicklink\" size=\"1\" 
+       onchange=\"dform.target='_BLANK';location.href=document.dform.quicklink.options[document.dform.quicklink.selectedIndex].value\" 
+       style=\"font-family: Verdana; font-size: 8pt\" >";
+       
+    $dform .="<option {$sel['from']} value=\"shownewmsg.php\">".date("d/m/Y H:i:s",$timelimit)."</option>";
+    $dform .="<option {$sel[$last24]} value=\"shownewmsg.php?tst=$last24\">ultime 24 ore</option>";
+    $dform .="<option {$sel[$last7g]} value=\"shownewmsg.php?tst=$last7g\">ultimi 7 giorni</option>";
+    $dform .="<option {$sel[$last30g]} value=\"shownewmsg.php?tst=$last30g\">ultimi 30 giorni</option>";
+
+    
+    $dform .="</select></form>";
+    
+    
+	echo "<p>ultimi messaggi dal $dform</p>";
     ?>
   </div>
   <table cellspacing="1">
