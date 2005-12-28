@@ -38,7 +38,7 @@ option.sub { font-weight:bold;color:#555 }
 #phototitle { font-size:24px; border-bottom:1px solid black }
 #photoimg   { text-align:center; margin-top:15px }
 
-#ucpmenu    { line-height:150%;width:22%; border:1px solid #345487;background-color: #F5F9FD }
+#ucpmenu    { line-height:150%; border:1px solid #345487;background-color: #F5F9FD } /*width:22%;*/
 #ucpmenu p  { padding:2px 5px 6px 9px;margin:0px; }
 #ucpcontent { background-color: #F5F9FD; border:1px solid #345487;line-height:150%; width:auto }
 #ucpcontent p  { padding:10px;margin:0px; }
