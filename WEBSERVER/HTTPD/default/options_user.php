@@ -3,6 +3,7 @@ $whereiam='options_user.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
+$lang = $std->load_lang('lang_optionsuser', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -35,7 +36,7 @@ if($_POST['MEM_ID'])
 		<!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>'.
+			<div class="maintitle">'.$lang['optusr_welcome'].'</div>'.
 			show_private_form($_POST).
 		'</div></td></tr></table>';
 	}
@@ -58,12 +59,12 @@ if($_POST['MEM_ID'])
 		$result = mysql_query($query) or die(mysql_error());
 		if($result)
 		{
-			echo "modifiche avvenute con successo (magari)";
+			echo "".$lang['optusr_msg']."";
 			$is_post_back= 0;
 		}
 		else
 		{
-			die('Errore imprevisto');
+			die(''.$lang['optusr_errmsg'].'');
 		}
 	}
 }
@@ -93,39 +94,39 @@ if(!$is_post_back && $verify)
 <!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-				<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>
+<? echo "				<div class=\"maintitle\">".$lang['optusr_welcome']."</div>"; ?>
 	<form action="" method="post" name="REPLIER">
 	<input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
-	<div class="formsubtitle">Impostazioni Internazionali</div>
+<? echo "	<div class=\"formsubtitle\">".$lang['optusr_intopt']."</div>"; ?>
 	<table cellspacing="0" align="center" width="100%">
 	<tr>
-		<td class="pformleft" >Lingua</td>
+<? echo "			<td class=\"pformleft\" >".$lang['optusr_lang']."</td>"; ?>
 		<td class="pformright">   
 			<?=select_language('lang',$current['LANG'])?>
     </td>
 	<tr>
-		<td class="pformleft" >Ora del server</td>
+<? echo "			<td class=\"pformleft\" >".$lang['optusr_time']."</td>"; ?>
 		<td class="pformright">
 			asd
 	    </td>
 	</tr>
 </table>
-<div class="formsubtitle">Impostazioni Forum</div>
+<? echo "<div class=\"formsubtitle\">".$lang['optusr_bopt']."</div>"; ?>
 <table cellspacing="0" align="center" width="100%">
 	<tr>
-		<td class="pformleft" >Numero di reply per pagina</td>
+<? echo "		<td class=\"pformleft\" >".$lang['optusr_ppp']."</td>"; ?>
 		<td class="pformright">
 			<input type="text" size="10" name="ppp" value="<?=$current['PPP']?>" /> 
 		</td>
 	</tr>
 	<tr>
-		<td class="pformleft" >Numero di discussioni per pagina</td>
+<? echo "		<td class=\"pformleft\" >".$lang['optusr_tpp']."</td>"; ?>
 		<td class="pformright">
 			<input type="text" size="10" name="tpp" value="<?=$current['TPP']?>"/> 
 		</td>
 	</tr>
 	<tr>
-		<td class="pformleft" >Mostra la firma del client</td>
+<? echo "		<td class=\"pformleft\" >".$lang['optusr_showsign']."</td>"; ?>
 		<td class="pformright">
 			<? $checked = ($current['HIDESIG'] ? 'checked' : '');?>
 			<input type="checkbox" name="hidesig" value='1' <?=$checked?> /> 
@@ -133,7 +134,7 @@ if(!$is_post_back && $verify)
 	</tr>
 	<tr>
 		<td class="formbuttonrow" colspan="2">
-			<input type="submit" value="Aggiorna" class="button"/>
+<? echo "			<input type=\"submit\" value=\"".$lang['optusr_update']."\" class=\"button\"/>"; ?>
 		</td>
 	</tr>
 
