@@ -11,12 +11,13 @@ if($_REQUEST['allread'])
  die();
  }
 
-
+$tst=$_REQUEST['tst'];
 
 include ("testa.php");
 $lang = $std->load_lang('lang_sezioni', $blanguage );
 
 function PageSelect() {
+global $tst;
 ?>
 <tr><td>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
@@ -29,7 +30,7 @@ function PageSelect() {
   global $CurrPag;
   global $Section;
   global $lang;
-  $link = "shownewmsg.php?pag=";
+  $link = "shownewmsg.php?tst=$tst&pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['pages']."</span>&nbsp;";
     if ($CurrPag>0) { # Pagina precedente
@@ -83,7 +84,7 @@ $last7g=$timelimit-604800;
 $last30g=$timelimit-2592000;
 
 
-$tst=$_REQUEST['tst'];
+
 if($tst){
 $timelimit=$_REQUEST['tst'];
 $sel[$tst]="selected";
