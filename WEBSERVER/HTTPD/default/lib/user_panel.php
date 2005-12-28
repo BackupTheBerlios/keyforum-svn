@@ -33,10 +33,12 @@ function show_menu()
 {
 	global $mem_id;
 	return '
-	<div id="ucpmenu">
+	<div class="borderwrap">
 			<div class="maintitle">Menu</div>
 			<!-- Messenger Links -->
-			<div class="formsubtitle">Messenger</div>
+			<table cellspacing="1" width="100%">
+			 <tr>
+			  <td><div class="formsubtitle">Messenger</div>
 			<!--<p>
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=04"><b>Invia nuovo PVT</b></a><br />
 				&nbsp;&nbsp; <img src="img/msg_folder.gif" border="0"  alt="-" />&nbsp;<a href="index.php?act=Msg&amp;CODE=01&amp;VID=in">Inbox (13)</a><br />&nbsp;&nbsp; <img src="img/msg_folder.gif" border="0"  alt="-" />&nbsp;<a href="index.php?act=Msg&amp;CODE=01&amp;VID=sent">Sent Items</a><br />
@@ -48,14 +50,20 @@ function show_menu()
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=30">Traccia Messaggi</a><br />
 			</p> -->
 	 	<!-- End Messenger -->
+                          </td>
+                         </tr>
 		<!-- Topic Tracker -->
-			<div class="formsubtitle">Sottoscrizioni</div>
+                         <tr>
+			  <td><div class="formsubtitle">Sottoscrizioni</div>
 		<!--<p>
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=UserCP&amp;CODE=26">Iscrizioni Discussioni</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=UserCP&amp;CODE=50">Iscrizioni Forum</a><br />
 			</p>-->
+                          </td>
+                         </tr>
 		<!-- Profile -->
-			<div class="formsubtitle">Profilo Personale</div>
+                         <tr>
+			  <td><div class="formsubtitle">Profilo Personale</div>
 			<p>
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="options_user.php?MEM_ID='.$mem_id.'">Modifica Profilo</a><br />
@@ -66,8 +74,11 @@ function show_menu()
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="">Cambia Foto Personale</a><br />
 			</p>
+                          </td>
+                         </tr>
 		<!-- Options -->
-			<div class="formsubtitle">Opzioni</div>
+                         <tr>
+			  <td><div class="formsubtitle">Opzioni</div>
 			<p>
 				<!--IBF.OPTION_LINKS
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
@@ -82,7 +93,10 @@ function show_menu()
 				<a href="">Cambia Indirizzo Email</a><br />
 				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
 				<a href="">Cambia Password</a> -->
-			</p>		
+			</p>
+                          </td>
+                         </tr>
+                        </table>
 		</div>';
 }
 
