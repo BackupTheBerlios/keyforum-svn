@@ -75,6 +75,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = preg_replace("#\[left\](.+?)\[/left\]#is", "<div align=\"left\">\\1</div>", $text);
   $text = preg_replace("#\[center\](.+?)\[/center\]#is", "<div align=\"center\">\\1</div>", $text);
   $text = preg_replace("#\[right\](.+?)\[/right\]#is", "<div align=\"right\">\\1</div>", $text);
+  $text = preg_replace( "#\[justify\](.*?)\[\/justify\]#is", "<div style=\"width=80%\" align=\"justify\">\\1</div>", $text );
 
   // Linea colorata non implementata
   $text = str_replace("[hr]", "<hr />", $text);
