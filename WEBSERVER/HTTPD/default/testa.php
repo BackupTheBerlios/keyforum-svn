@@ -202,14 +202,13 @@ function mklastselected() {
   <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> 
 	| <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> 
 	| <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> 
-	| <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a> 
+	| <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a>
+	| <a href='shownewmsg.php'><?php echo $lang['shownewmsg']; ?></a>
 	<?	
 	if($sess_auth)
 	{
 
-		echo "
-			| <a href='shownewmsg.php'>{$lang['shownewmsg']}</a>
-			| <a href='options_profile.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
+		echo "| <a href='options_profile.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
 			";
 	}
 	?>	
