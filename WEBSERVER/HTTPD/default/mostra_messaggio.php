@@ -41,7 +41,7 @@ if(($userdata['LEVEL'])  OR ($MSG['autore']==$mio_nick))
   }
   elseif ($MSG[SEZ]) {
     $tmp=unpack("H32mshash", $MSG['edit_of']);
-    $EDITER="<a href='ednewmsg.php?EDIT_OF=$tmp[mshash]&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
+    $EDITER="<a href='ednewmsg.php?EDIT_OF=".$tmp['mshash']."&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
 }  
   
@@ -106,6 +106,7 @@ EOF;
  echo secure_v($title)."</td></tr></table><br />";
  }
  
+ $tmp=unpack("H32mshash", $MSG['edit_of']);
  echo "<div class='postcolor'> ".convert($MSG['body'])."</div>
   <br /><br />--------------------<br />
   <div class='signature'>".convert($MSG['firma'])."</div>
@@ -122,7 +123,7 @@ EOF;
    <!-- REPORT / UP -->
    <div align='right'>
    $EDITER
-   <a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;quote=$tmp[mshash]\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>
+   <a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;quote=".$tmp['mshash']."\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>
    </div>
  </td>
 </tr>
