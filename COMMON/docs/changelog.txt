@@ -1,6 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2005-12-30:	
+mmorselli:			[FIX] i guest usano la lingua del browser e non più l'inglese
 mmorselli:			[ADD] menù level
 
 2005-12-26:	
@@ -58,9 +59,9 @@ mmorselli:			[FIX] gestione porte non standard in MySQL
 mmorselli:			[ADD] Autoconfigurazione
 mmorselli:			[FIX] l'installatore funziona anche se ci sono spazi nel path
 mmorselli:			[ADD] Port Check all'avvio
-Luftw@ffe	r:	[ADD] Aggiunto l'ordinamento nella userlist
-Luftw@ffe	r:	[MOD] gestip.php non utilizza più le $_ENV
-Luftw@ffe	r:	[MOD] Taglia il titolo se > 100 in sezioni.php
+Luftw@ffer:		[ADD] Aggiunto l'ordinamento nella userlist
+Luftw@ffer:		[MOD] gestip.php non utilizza più le $_ENV
+Luftw@ffer:		[MOD] Taglia il titolo se > 100 in sezioni.php
 
 2005-11-18
 Luftw@ffer:		[MOD] boardlist.php utilizza i socket
@@ -89,7 +90,7 @@ Gulp:			[MOD] Aggiornate le pagine del forum per il multilanguage
 Gulp:			[ADD] Aggiunti i files delle traduzioni
 
 2005-11-09
-Luftw@ffe	r:	[FIX] Corretto un bug nell'identificazione dell'autore della modifica (aggiunto un escape)
+Luftw@ffer:		[FIX] Corretto un bug nell'identificazione dell'autore della modifica (aggiunto un escape)
 DanieleG:		[ADD] Viene fatto un controllo dell'anti-flood sugli utenti autorizzati
 DanieleG:		[MOD] Le sezione con il campo ORDINE>9000 vengono sono solo categorie non usabili
 DanieleG:		[ADD] Viene fatto un autflush degli utenti non validati più vecchi di XX ore 
