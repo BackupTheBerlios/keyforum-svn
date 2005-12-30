@@ -49,6 +49,7 @@ if($_POST['MEM_ID'])
 		$new_hidesig =$_POST['hidesig'];
 		$new_hideavatar =$_POST['hideavatar'];
 		$new_hideimg =$_POST['hideimg'];
+		$new_level =$_POST['level'];
 		//Controllo dati
 		//todo
 		
@@ -57,6 +58,7 @@ if($_POST['MEM_ID'])
 			,TPP = '$new_tpp' 
 			,PPP = '$new_ppp'
 			,HIDESIG ='$new_hidesig'
+			,LEVEL ='$new_level'
 		WHERE HASH = '{$userdata['HASH']}'  LIMIT 1 ";
 		$result = mysql_query($query) or die(mysql_error());
 		if($result)
@@ -77,7 +79,7 @@ if($_POST['MEM_ID'])
 
 
 $query = "
-	Select LANG, TPP, PPP, HIDESIG 
+	Select LANG, TPP, PPP, HIDESIG , LEVEL
 	FROM {$SNAME}_localmember
 	WHERE hash = '{$userdata['HASH']}'
 	LIMIT 1;
@@ -151,6 +153,12 @@ if(!$is_post_back && $verify)
 		</td>
 	</tr>
 	<tr>
+		<td width="70%">Livello di comandi amministrativi da visualizzare</td>
+		<td>
+			<?=select_admin_controls('level',$current['LEVEL'],0)?>
+		</td>
+	</tr>
+	<tr>
 		<td class="formbuttonrow" colspan="2">
 <? echo "			<input type=\"submit\" value=\"".$lang['optusr_update']."\" class=\"button\"/>"; ?>
 		</td>
@@ -177,6 +185,27 @@ include('end.php');?>
 
 
 <?
+function select_admin_controls($name,$current,$default)
+{
+	$level[0] = 'Utente';
+	$level[1] = 'Moderatore';
+	/*...*/
+	$level[9] = 'Validatore';
+	$level[10] = 'Admin';
+
+	$return .="<select name='$name'>";
+	foreach($level as $value=>$label)
+	{
+		$selected = ($current == $value ? 'selected' : '');
+		$return.= "<option value='$value' $selected >$label</option>\n";
+	}
+	$selected = ($current == $default ? 'selected' : '');
+	$return .="<option value='$default' $selected >Usa Default Forum</option>";
+	$return .="</select>";
+	return $return;
+}
+
+
 function select_num_step($name,$current,$default,$min=5,$max=50,$step=5)
 {
 	$return .="<select name='$name'>";

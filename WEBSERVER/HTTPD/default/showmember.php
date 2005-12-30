@@ -58,7 +58,7 @@ while($row=mysql_fetch_array($result))
 	$sez_data[$sez_id]['SEZ_NAME'] = $sez_name;
 	$sez_data[$sez_id]['sez_id'] = $sez_id;
 }
-rsort($sez_data);
+@rsort($sez_data);
 $sez_data = $sez_data[0];
 
 
@@ -118,7 +118,10 @@ $user['last_action']['title'] = secure_v($user['last_action']['title']);
 //Default data
 $user['group']['text'] = ($user['group']['text'] ? $user['group']['text'] : 'membri');
 $user['avatar'] = ($user['avatar'] ? "<div><img src='{$user['avatar']}' border='0' alt='avatar' /></div>" : ''); //Default avatar?::NULL
-
+if(!$user['last_action']['date'])
+{
+	$user['last_action']['date'] = 'Mai';
+}
 
 //Formatting data
 $user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
@@ -199,6 +202,7 @@ if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_s
 						/ <?=$user['msg_num']['perc']?>% <? echo" ".$lang['shmbr_ofall']." "; ?> )
 					</td>
 				</tr>
+<?php if($sez_data){?>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_activity']." "; ?></b></td>
 					<td class="row1">
@@ -215,6 +219,7 @@ if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_s
 						<a href='showmsg.php?SEZID=<?=$user['last_action']['sez']?>=&THR_ID=<?=$user['last_action']['reply_id']?>&pag=last#end_page'><?=$user['last_action']['title']?></a> 
 					</td>
 				</tr>
+<?php } //END SEZ DATA?>
 				<tr>
 					<td class="row2" valign="top"><b><? echo" ".$lang['shmbr_status']." "; ?></b></td>
 					<td class="row1">
