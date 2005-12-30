@@ -32,18 +32,19 @@ function printmsg($MSG) {
     else
       $auth="NO";
   }
-  if ($MSG['autore']==$mio_nick)
-    $edit_width="";
-  else
-    $edit_width=' width="35" ';
+
+if(($userdata['LEVEL'])  OR ($MSG['autore']==$mio_nick))
+{
   if ($MSG['repof']) {
     $tmp=unpack("H32repof/H32mshash", $MSG['repof'].$MSG['hash']);
-    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
+    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
   elseif ($MSG[SEZ]) {
     $tmp=unpack("H32mshash", $MSG['edit_of']);
-    $EDITER="<a href='ednewmsg.php?EDIT_OF=$tmp[mshash]&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" $edit_width></a>";
+    $EDITER="<a href='ednewmsg.php?EDIT_OF=$tmp[mshash]&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
+}  
+  
   if($MSG['edit_of']!=$MSG['hash']){
      $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG['real_autore'])."' LIMIT 1;";
      $risultatoaut=mysql_query($queryaut) or Muori ($lang['inv_query'] . mysql_error());
