@@ -28,7 +28,32 @@ $BNAME=$valueacbd['SUBKEY'];
 
 if($userdata['LANG']) {
 $blanguage=$userdata['LANG']; // Lingua di visualizzazione
-} else {$blanguage="eng";}
+} else {
+
+switch (substr(trim($HTTP_ACCEPT_LANGUAGE),0,2)) 
+	{
+    case "it":
+        $blanguage="ita";
+        break;
+    case "en-us":
+        $blanguage="eng";
+        break;
+    case "en":
+        $blanguage="eng";
+        break;
+    case "fr":
+        $blanguage="eng";
+        break;
+    case "de":
+        $blanguage="eng";
+        break;
+    case "es":
+        $blanguage="eng";
+        break;
+    default:
+        $blanguage="eng";
+	} 
+}
 
 // carico la lingua per la testa
 $lang = $std->load_lang('lang_testa', $blanguage );
