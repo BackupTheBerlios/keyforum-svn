@@ -22,7 +22,7 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
 if (!$GLOBALS['sess_auth']) die ($lang['reply_login']);
 
 $IDENTIFICATORE=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
-$KEY_DECRYPT=md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'],TRUE);// = password per decriptare la chiave privata in localmember (16byte)
+$KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
   $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
   $risultato = mysql_query($query) or die ($lang['inv_query'] . mysql_error());
 $riga = mysql_fetch_assoc($risultato) or die($lang['reply_user']);
@@ -49,7 +49,7 @@ if ( $banned[0] ) die($lang['reply_ban']);
 
 $mreq['FORUM']['ADDMSG'];
 $mreq['FORUM']['ADDMSG']['SEZ']=$_REQUEST['sezid'];
-$mreq['FORUM']['ADDMSG']['FDEST']=sha1($PKEY,TRUE);
+$mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
 $mreq['FORUM']['ADDMSG']['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
 $mreq['FORUM']['ADDMSG']['AVATAR']=$_REQUEST['avatar'];
 $mreq['FORUM']['ADDMSG']['FIRMA']=$_REQUEST['firma'];
@@ -59,8 +59,8 @@ $mreq['FORUM']['ADDMSG']['TITLE']=$_REQUEST['subject'];
 $mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
 $mreq['FORUM']['ADDMSG']['SUBTITLE']=$_REQUEST['desc'];
 
-$MD5_MSG=md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
-        .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar'],TRUE);
+$MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
+        .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar']));
 if ( $edit_val )
     $mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
 else $mreq['FORUM']['ADDMSG']['EDIT_OF']=$MD5_MSG;

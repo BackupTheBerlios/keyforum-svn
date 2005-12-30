@@ -23,8 +23,8 @@ class CoreSock {
 	function Connect($ip='127.0.0.1',$porta=40565) {
 		if ($this->prov) return false;
 		$this->prov=1;
-		$this->coresock=socket_create ( AF_INET, SOCK_STREAM,getprotobyname('tcp'));
-		if (!socket_connect($this->coresock, $ip, $porta)) 
+		$this->coresock=@socket_create ( AF_INET, SOCK_STREAM,getprotobyname('tcp'));
+		if (!@socket_connect($this->coresock, $ip, $porta)) 
 			return($this->save_error('Impossibile connettersi al core:'.socket_strerror(socket_last_error()),1));
 		$this->connesso=1;
 		return 1;

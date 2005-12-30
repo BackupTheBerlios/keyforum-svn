@@ -160,8 +160,8 @@ function get_my_info()
 	$req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 	$req[FUNC][BlowDump2var][Data]=$privkey;
 	$core=new CoreSock;
-	if (!$core->Send($req)) die($lang['reply_core']);
-	if (!$risp=$core->Read()) die ($lang['reply_timeout']);
+	if (!$core->Send($req)) return NULL; //die($lang['reply_core']);
+	if (!$risp=$core->Read()) return NULL; // die ($lang['reply_timeout']);
 	$return[0]=$risp[FUNC]["BlowDump2var"]["hash"]; 	//dell'utente loggato in questo momento
 	list($asd,$return[1]) = unpack('H*',$return[0]);
 	return ($return);
