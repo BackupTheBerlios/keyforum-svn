@@ -87,7 +87,9 @@ $lang = $std->load_lang('lang_end', $blanguage );
    <?
      };
    ?>
-<? $newurl="chlang.php?".$_SERVER['QUERY_STRING']."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang="; 
+<? 
+$newurl = str_replace('&','&amp;',$_SERVER['QUERY_STRING']);
+$newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang="; 
    
    $seleng["$blanguage"]="selected";
 

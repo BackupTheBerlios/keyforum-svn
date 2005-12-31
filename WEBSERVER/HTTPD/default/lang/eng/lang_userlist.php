@@ -21,5 +21,9 @@ $lang['usrlist_orderby'] = "Order by";
 $lang['usrlist_order_des'] = "Descending";
 $lang['usrlist_order_asc'] = "Ascending";
 $lang['usrlist_action'] = "Action";
+$lang['usrlist_doit']  = "Do it!";
+$lang['usrlist_selall'] = "Check All";
+$lang['usrlist_selnone'] = "Uncheck All";
+$lang['usrlist_invsel'] = "Invert Selected";
 
 ?>

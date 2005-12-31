@@ -6,7 +6,9 @@ $lang = $std->load_lang('lang_userlist', $blanguage );
 
 $SNAME=$_ENV['sesname'];
 $whereiam="userlist";
-
+?>
+<tr><td>
+<?
 function PageSelect() {
 ?>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
@@ -20,22 +22,22 @@ function PageSelect() {
   global $Section;
   if($_REQUEST['validati']){
      if($_REQUEST['nonvalidati']){
-        $link="userlist.php?validati='1'&nonvalidati='1'&";
+        $link="userlist.php?validati='1'&amp;nonvalidati='1'&amp;";
      }else{
-        $link="userlist.php?validati='1'&";
+        $link="userlist.php?validati='1'&amp;";
      }
   }else{
      if($_REQUEST['nonvalidati']){
-        $link="userlist.php?nonvalidati='1'&";
+        $link="userlist.php?nonvalidati='1'&amp;";
      }else{
         $link="userlist.php?";
      }
   }
   if($_REQUEST['order_by']){
-     $link=$link."order_by=".$_REQUEST['order_by']."&";
+     $link=$link."order_by=".$_REQUEST['order_by']."&amp;";
   }
   if($_REQUEST['order']){
-     $link=$link."order=".$_REQUEST['order']."&";
+     $link=$link."order=".$_REQUEST['order']."&amp;";
   }
   $link = $link."pag=";
   if ($NumPag > 0) {
@@ -73,8 +75,78 @@ function PageSelect() {
 <?
 }
 ?>
-<tr>
- <td>
+<script type="text/javascript"><!--
+
+var formblock;
+var forminputs;
+
+function prepare() {
+formblock= document.getElementById('user_form');
+forminputs = formblock.getElementsByTagName('input');
+value = '1';
+}
+
+function select_all(name) 
+{
+	for (i = 0; i < forminputs.length; i++) 
+	{
+	// regex here to check name attribute
+		var regex = new RegExp(name, "i");
+		if (regex.test(forminputs[i].getAttribute('name'))) 
+		{
+			if (value == '1') 
+			{
+				forminputs[i].checked = true;
+			} 
+			else 
+			{
+				forminputs[i].checked = false;
+			}
+		}
+	}
+	if (value == '1') 
+	{
+		value = '0';
+		return '<?=$lang['usrlist_selnone']?>';
+	}
+	else
+	{
+		value = '1';
+		return '<?=$lang['usrlist_selall']?>';
+	}
+}
+
+function invert_all(name) 
+{
+	for (i = 0; i < forminputs.length; i++) 
+	{
+		// regex here to check name attribute
+		var regex = new RegExp(name, "i");
+		if (regex.test(forminputs[i].getAttribute('name'))) 
+		{
+			if (forminputs[i].checked == true) 
+			{
+				forminputs[i].checked = false;
+			} 
+			else 
+			{
+				forminputs[i].checked = true;
+			}
+		}
+	}
+}
+
+if (window.addEventListener) {
+window.addEventListener("load", prepare, false);
+} else if (window.attachEvent) {
+window.attachEvent("onload", prepare)
+} else if (document.getElementById) {
+window.onload = prepare;
+}
+
+//--></script>
+
+
   <form method='get' action='userlist.php'>
     <fieldset class='row3'>
      <? echo "<legend>".$lang['usrlist_show']."</legend>"; ?>
@@ -137,12 +209,13 @@ if(!$_REQUEST['order']){
    $order=" ".$_REQUEST['order'];
 }
 ?>
+<form method="POST" action="authusers.php" id="user_form">
 <div class="borderwrap">
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP echo "<p>".$lang['usrlist_userlist']."</p>";?>
   </div>
-  <form method="POST" action="authusers.php">
+  
   <table cellspacing="1">
   <?PHP echo"
     <tr>
@@ -207,12 +280,23 @@ while($ris=mysql_fetch_assoc($risultato)) {
   </table>
 </div>
 
-<table width=100%>
+<table width='100%'>
 	<tr><td> <? PageSelect(); ?> </td>
-		<td align='right'><?PHP if ($displaysubmit)
-							echo "<input type='submit' value='Do it!' name='doauth' class='button'></td>";?>
+		<td align='right'>
+<?PHP if ($displaysubmit)
+{
+	echo "
+	<input type='button' value='{$lang['usrlist_selall']}' onclick=\"this.value=select_all('toauth');\" class='button' />
+	<input type='button' value='{$lang['usrlist_invsel']}' onclick=\"invert_all('toauth');\"class='button' />
+	<input type='submit' value='{$lang['usrlist_doit']}' name='doauth' class='button'>
+	</td>";
+}
+?>
+	
 	</tr>
 </table>
+</form>
+</td></tr>
 
 <?PHP
 include ("end.php");
