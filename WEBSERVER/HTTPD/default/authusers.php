@@ -4,11 +4,23 @@ include "testa.php";
 
 ?>
 
+<script language="JavaScript">
+<!--
+function  KeyRingPopUp(retform,retfield) {
+      
+      msgWindow=open('pkeyring.php?rm='+retform+'&rf='+retfield,'KeyRing','toolbar=no,location=no,scrollbars=yes,directories=no,status=yes,menubar=no,resizeable=yes,width=300,height=200');
+      if (msgWindow.opener == null) msgWindow.opener = self;
+}
+
+//-->
+</script>
+
+
 <?php
 $whereiam = "authusers";
 
 if ( empty($_REQUEST['privkey']) ) {	// show hash list to auth
-	echo "<form method=\"POST\" action=\"authusers.php\">";
+	echo "<form method=\"POST\" name=\"main\" action=\"authusers.php\">";
 	echo "<table cellspacing=\"1\" align='center'>\n";
 	echo "<tr><th class='darkrow2' align='center'>ID</th><th class='darkrow2' align='center'>Hash</th></tr>";
 	while (list ($key, $userhash) = each ($_REQUEST['toauth'])) {
@@ -16,7 +28,8 @@ if ( empty($_REQUEST['privkey']) ) {	// show hash list to auth
 		echo "<tr><td class='row1' align='center'>$key</td><td class='row1' align='center'>$userhash</td></tr>\n";
 		echo "<input type='hidden' name='toauth[$key]' value='$userhash'>";
 	}
-	echo "<tr><td class='row2'>Private Key</td><td><textarea cols=35 rows=5 name=\"privkey\"></textarea></td></tr>\n";
+	echo "<tr><td class='row2'>Private Key<p align=\"center\"><a href=\"javascript:KeyRingPopUp('main','privkey')\">
+  <img border=\"0\" src=\"img/keyring.gif\" width=\"32\" height=\"32\"></a></p></td><td><textarea cols=35 rows=5 name=\"privkey\"></textarea></td></tr>\n";
 	echo "<tr><td class='row1'></td><td class='row1' align='center'><input type=submit class='button' name='submit'></td></tr>\n";
 	echo "</table>";
 	echo "</form>";

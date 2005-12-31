@@ -1,5 +1,17 @@
 2005-12-30
 
+mmorselli:		[ADD] local keyring
+
+CREATE TABLE `*_localkey` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `kname` varchar(30) collate latin1_general_ci NOT NULL,
+  `kvalue` text collate latin1_general_ci NOT NULL,
+  `ktype` tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) 
+
+2005-12-30
+
 mmorselli:		[ADD] menù level
 
 alter table *_localmember add column  `LEVEL` tinyint(2) unsigned NOT NULL default '0'
