@@ -1,14 +1,19 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2005-12-31:	
+mmorselli:			[ADD] link utenti in lista membri
+mmorselli:			[MOD] solo validatori e admin vedono i controlli per validare gli utenti in lista membri
+
+
 2005-12-30:	
-mmorselli:			[FIX] i guest usano la lingua del browser e non più l'inglese
+mmorselli:			[ADD] i guest usano la lingua del browser e non più l'inglese
 mmorselli:			[ADD] menù level
 
 2005-12-26:	
 mmorselli:			[ADD] visualizza nuovi messaggi
 Luftw@ffer		[FIX] Fixato tooltip delle emoticons con FireFox
 mmorselli:			[FIX] bbcode SIZE
-mmorselli:			[FIX] titolo messaggio mostrato solo se presente
+mmorselli:			[MOD] titolo messaggio mostrato solo se presente
 Luftw@ffer:		[FIX] Fixato popup delle emoticons con FireFox
 
 2005-12-25

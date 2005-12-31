@@ -177,18 +177,28 @@ while($ris=mysql_fetch_assoc($risultato)) {
 	echo "
     <tr>
 	<td class='row1' align='right'>".++$i."</td>
-	<td class='row2' align='left'>&nbsp;".secure_v($ris['AUTORE'])."</td>
+	<td class='row2' align='left'>&nbsp;<a href='showmember.php?MEM_ID={$userhash['hex']}'>".secure_v($ris['AUTORE'])."</a></td>
 	<td class='row2' align='center'>".$userhash['hex']."</td>
 	<td class='row1' align='center'>".strftime("%d/%m/%y  - %H:%M:%S",$ris['DATE'])."</td>
 	<td class='row1' align='right'>".$ris['msg_num']."</td>
 	<td class='row2' align='center'>";
+	
 	if($ris['is_auth']){
 	  echo $lang['usrlist_member'] . "</td>\n<td class='row2'>";
 	} else {
 		echo $lang['usrlist_validated'];
-		echo "</td>\n\t<td class='row2'><input type=\"checkbox\" name=\"toauth[$i]\" value=\"$userhash[hex]\" />Auth";
+	
+		// Validator or Admin only
+		if ($userdata['LEVEL'] >8)
+		{
+	        echo "</td>\n\t<td class='row2'><input type=\"checkbox\" name=\"toauth[$i]\" value=\"$userhash[hex]\" />Auth";
 		$displaysubmit=1;
+		} else { echo "</td>\n<td class='row2'>";}
+	
+	
+
 	};
+	
 	echo "</td>\n</tr>";
 };
 
