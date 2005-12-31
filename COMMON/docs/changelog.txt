@@ -1,6 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2005-12-31:	
+Luftw@ffer:		[FIX] Fixato il "quote"
 mmorselli:			[ADD] link utenti in lista membri
 mmorselli:			[MOD] solo validatori e admin vedono i controlli per validare gli utenti in lista membri
 
