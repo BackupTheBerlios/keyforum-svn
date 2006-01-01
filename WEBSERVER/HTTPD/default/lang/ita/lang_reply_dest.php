@@ -14,7 +14,7 @@ $lang['reply_nowait']  = "Oppure clicca qui se non vuoi aspettare";
 $lang['reply_error']  = "Errore";
 $lang['reply_ok']  = "Risposta aggiunta correttamente";
 $lang['reply_error2']  = "Forum inesistente";
-$lang['reply_error3']  = "Errore sconosciuto: messaggio non accettato dal core";
+$lang['reply_error3']  = "Errore sconosciuto: messaggio non accettato dal core <b>(forse il tuo utente non è ancora stato validato ?)</b>";
 $lang['reply_nowait2']  = "Clicca qui per tornare al thread";
 $lang['reply_ban'] = "L'utente è bannato da questo forum";
 ?>

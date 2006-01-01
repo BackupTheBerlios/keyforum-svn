@@ -76,51 +76,26 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 $core->Send($mreq);
 $risp=$core->Read();
 $THR_ID=bin2hex($MD5_MSG);
-?>
 
-<html>
- <head>
-  <link rel="shortcut icon" href="favicon.ico">
-  <title><?
-         if($risp['FORUM']['ADDMSG']==1){
-           echo $lang['reply_wait'];
-         }else{
-           echo $lang['reply_error'];
-         }
-       ?></title>
-  <? if($risp['FORUM']['ADDMSG']==1){ ?>
-   <meta http-equiv='refresh' content='2; url=showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $THR_ID; ?>&pag=last#end_page'>
-  <? } ?>
-  <link type="text/css" rel="stylesheet" href="style_page_redirect.css">
- </head>
- <body>
-  <div id="redirectwrap">
-   <h4><?
-         if($risp['FORUM']['ADDMSG']==1){
-           echo $lang['reply_thanks'];
-         }else{
-           echo "<font color='red'>".$lang['reply_error']."</font>";
-         }
-       ?></h4>
-   <p>
-    <?
-      if($risp['FORUM']['ADDMSG']==1){
-        echo $lang['reply_ok']."<br>".$lang['reply_wait2'];
-      }elseif($risp['FORUM']['ADDMSG']==-2){
-        echo "<b>".$lang['reply_error2']."</b><br>";
-      }elseif($risp['FORUM']['ADDMSG']==-1){
-        echo "<b>".$lang['reply_error3']."</b><br>";
-      }
-    ?><br><br>
-   </p>
-   <p class="redirectfoot">(<a href="showmsg.php?SEZID=<? echo $_REQUEST['sezid']; ?>&THR_ID=<? echo $THR_ID; ?>&pag=last#end_page"><?
-      if($risp['FORUM']['ADDMSG']==1){
-         echo $lang['reply_nowait'];
-      }else{
-         echo $lang['reply_nowait2'];
-      }
-    ?></a>)
-   </p>
-  </div>
- </body>
-</html>
+
+
+switch ($risp['FORUM']['ADDMSG']) {
+    case 1:
+        // ok, redirect
+        $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$THR_ID."&pag=last#end_page";
+        $std->Redirect($lang['reply_thanks'],$rurl,$lang['reply_ok'],$lang['reply_ok']);
+        break;
+    case -2:
+        // error: board not forun
+        $std->Error($lang['reply_error2'],$_REQUEST['body']);
+        break;
+    case -1:
+        // error: Unknown error
+        $std->Error($lang['reply_error3'],$_REQUEST['body']);
+        break;
+    default:
+        // error: Unknown error
+        $std->Error($lang['reply_error3'],$_REQUEST['body']);
+} 
+
+?>

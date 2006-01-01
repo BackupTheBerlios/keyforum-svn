@@ -1,5 +1,9 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-01:	
+mmorselli:			[ADD] gestione errori
+
+
 2005-12-31:	
 mmorselli:			[ADD] local keyring
 Luftw@ffer:		[FIX] Fixato il "quote"

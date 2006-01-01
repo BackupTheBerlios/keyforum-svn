@@ -14,7 +14,7 @@ $lang['reply_nowait']  = "(Or click here if you do not wish to wait)";
 $lang['reply_error']  = "Error";
 $lang['reply_ok']  = "Reply successfully inserted";
 $lang['reply_error2']  = "Board not found";
-$lang['reply_error3']  = "Unknown error: core cannot process message";
+$lang['reply_error3']  = "Unknown error: core cannot process message  <b>(maybe your user is not jet validated ?)</b>";
 $lang['reply_nowait2']  = "Click here to go back";
 $lang['reply_ban'] = "User is banned from this forum";
 ?>

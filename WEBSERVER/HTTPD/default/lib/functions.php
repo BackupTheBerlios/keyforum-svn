@@ -225,6 +225,60 @@ function GetUserColor($hash) {
   return $usercolor;
 }
 
+
+//***********************************
+// Gestione errori
+//***********************************
+
+function Error($ermsg,$txtsave="")
+{
+
+global $std,$blanguage;
+if(!$blanguage) {$blanguage="eng";}
+
+$lang = $std->load_lang('lang_functions', $blanguage );
+
+include ("testa.php");
+
+// errore
+echo"
+<div id=\"keywrapper\">
+<div class=\"borderwrap\">
+	<h3><img src='style_images/1/nav_m.gif' border='0'  alt='&gt;' width='8' height='8' />&nbsp;Messaggio Forum</h3><p>E' stato riscontrato un errore.</p>
+	<div class=\"errorwrap\">
+		<h4>L'errore riscontrato &#232;:</h4><p>$ermsg</p>
+	</div>";
+	
+// testo salvato
+if($txtsave)
+{
+echo "<h4>Informazioni messaggio salvate!</h4>
+<p>Le informazioni del messaggio sono state salvate. In alcuni casi, premere il tasto 'indietro' sul vostro browser significa anche la perdità di tutti i dati non salvati. Ti consigliamo di selezionare e salvare quello che non vuoi perdere.</p>
+<div class=\"fieldwrap\">
+	<h4>Informazioni messaggio salvate!</h4>
+	<form name=\"mehform\">
+		<textarea cols=\"70\" rows=\"5\" name=\"saved\" tabindex=\"2\">$txtsave</textarea>
+	</form>
+	<p class=\"formbuttonrow1\"><input class=\"button\" type=\"button\" tabindex=\"1\" value=\"Seleziona tutto\" onclick=\"document.mehform.saved.select()\" /></p>
+</div>";
+}
+
+// link utili
+echo "<h4>Link utili</h4>
+	<ul>
+		<li><a href=\"http://www.keyforum.net/\">Il sito di supporto ufficiale</a></li>
+		<li><a href=\"http://www.keyforum.net/forum/\">Il forum di supporto ufficiale</a></li>
+	</ul>
+	<p class=\"formbuttonrow\"><b><a href=\"javascript:history.go(-1)\">Torna indietro</a></b></p>
+</div>
+</div>";
+
+include ("end.php");
+
+}
+
+
+
 }
 
 ?>
