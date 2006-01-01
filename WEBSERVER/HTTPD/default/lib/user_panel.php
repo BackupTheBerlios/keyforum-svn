@@ -34,7 +34,7 @@ function show_menu()
 	global $mem_id,$whereiam,$std,$blanguage;
 	
 	//PER TRADUZIONI
-	//$lang = $std->load_lang('lang_optionsforum', $blanguage );
+	$lang = $std->load_lang('lang_userpanel', $blanguage );
 	
 	//Modifica qui il menu
 	
@@ -44,14 +44,14 @@ function show_menu()
 		,'pm_sent.php' => 'Messaggi Inviati'
 		);*/
 		
-	$menu['Profilo Personale'] = Array(
-		'options_profile.php'	=> 'Modifica Profilo(Non funzia)'
-		,'options_sign.php' => 'Modifica Firma(Non funzia)'
-		,'options_avatar.php' => 'Modifica Avatar(Non funzia)'
+	$menu[$lang['usrpnl_pnlprofile']] = Array(
+		'options_profile.php'	=> $lang['usrpnl_profilemod']
+		,'options_sign.php' => $lang['usrpnl_signaturemod']
+		,'options_avatar.php' => $lang['usrpnl_avatarmod'] 
 		);
 			
-	$menu['Opzioni'] = Array(
-		'options_forum.php' => 'Impostazioni Forum'
+	$menu[$lang['usrpnl_options']] = Array(
+		'options_forum.php' => $lang['usrpnl_forumopt']
 			);
 	
 	$return ='
