@@ -3,6 +3,7 @@ $whereiam='options_avatar.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
+$lang = $std->load_lang('lang_optionsavatar', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -34,13 +35,13 @@ if($_POST['MEM_ID'])
 		<!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>'.
+			<div class="maintitle">'.$lang['optavt_welcome'].'</div>'.
 			show_private_form($_POST).
 		'</div></td></tr></table>';
 	}
 	else
 	{
-		echo "modifiche avvenute con successo (magari)";
+		echo "".$lang['optavt_modsucc']."";
 		$is_post_back= 0;
 	}
 }
@@ -63,7 +64,7 @@ if(!$is_post_back)
 <!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>
+			<? echo " <div class=\"maintitle\">".$lang['optavt_welcome']."</div>"; ?>
 			<script type="text/javascript">
 <!--
 var url_input      = "<?=$current_avatar?>";
@@ -95,7 +96,7 @@ var remove_pressed = 0;
 		}
 	
 		else{
-			fcheck = confirm("Rimuovere il tuo Avatar?");
+		<? echo"	fcheck = confirm(".$lang['optavt_removeavatar'].");"; ?>
 			if ( fcheck == true ){
 				return true;
 			}
@@ -106,22 +107,22 @@ var remove_pressed = 0;
 	}
 -->
 </script>
-<div class="formsubtitle">Impostazioni Avatar</div>
-	<p>L'Avatar non deve essere pi&#249; grosso di 90 pixel per 90 pixel. Gli avatar caricati dal tuo computer non possono essere pi&#249; grossi di 50 KB.<br />Tipi di file permessi: <strong>gif,jpg,jpeg,png</strong></p>
-<div class="formsubtitle">Avatar Corrente</div>
-<div class="tablepad" align="center"><img src='<?=$current_avatar?>' border='0' width='90' height='90' alt='' /><br />Inserisci l'URL di un Avatar online 90x90</div>
-<div class="formsubtitle">Avatar preinstallati</div>
+<? echo " <div class=\"formsubtitle\">".$lang['optavt_avataropt']."</div>"; ?>
+	<? echo" ".$lang['optavt_info1'].""; ?>
+<? echo" <div class=\"formsubtitle\">".$lang['optavt_current']."</div>"; ?>
+<div class=\"tablepad\" align=\"center\"><img src='<?=$current_avatar?>' border='0' width='90' height='90' alt='' /><br /><? echo"".$lang['optavt_info2']."</div>"; ?>
+<? echo" <div class=\"formsubtitle\">".$lang['optavt_preext']."</div>"; ?>
 <form action="http://www.keyforum.net/forum/index.php?act=UserCP&amp;CODE=getgallery" method="post">
 	<table cellspacing="0" width="100%">
 		<tr>
-			<td class="pformleft">Scegli un avatar da una delle nostre Gallerie</td>
+			<? echo "<td class=\"pformleft\">".$lang['optavt_selectavt']."</td>"; ?>
 			<td class="pformright">
 				<select name='av_cat' class='forminput'>
-					<option value='root'>Galleria Base</option>
+					<? echo"<option value='root'>".$lang['optavt_base']."</option>"; ?>
 					<option value='IPB_Community_Pack'>IPB Community Pack</option>
 					<option value='Smiley_Avatars'>Smiley Avatars</option>
 				</select>&nbsp;&nbsp;
-				<input type="submit" value="Vai!" name="submit" />
+				<? echo "<input type=\"submit\" value=\"".$lang['optavt_submit']."\" name=\"submit\" />"; ?>
 			</td>
 		</tr>
 	</table>
@@ -129,31 +130,31 @@ var remove_pressed = 0;
 <form action="" method="post"  enctype='multipart/form-data' name="creator" onsubmit="return checkform();">
 <input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
 <input type='hidden' name='MAX_FILE_SIZE' value='9000000' />
-<div class="formsubtitle">Avatar Personalizzato</div>
+<? echo "<div class=\"formsubtitle\">".$lang['optavt_avtprsnl']."</div>"; ?>
 <table cellspacing="0"  width="100%">
 	<tr>
-		<td class="pformleft" >URL</td>
+		<? echo "<td class=\"pformleft\" >".$lang['optavt_url']."</td>"; ?>
 		<td class="pformright">
 			<input type="text" size="50" maxlength="90" name="url_avatar" value="<?=$current_avatar?>" onfocus="select_url()" />
-			&nbsp;&nbsp;(<a href="javascript:restore_it()">Ripristina</a>)
+			&nbsp;&nbsp;(<a href="javascript:restore_it()"> <? echo"".$lang['optavt_rep'].""; ?></a>)
 		</td>
 	</tr>
 </table>
 <table cellspacing="0" width="100%">
 	<tr>
-		<td class="pformleft"><strong>Oppure</strong> carica una nuova immagine dal tuo computer</td>
+		<? echo"<td class=\"pformleft\">".$lang['optavt_loadimg']."</td>"; ?>
 		<td class="pformright"><input type="file" size="30" name="upload_avatar" onfocus="select_upload()" onclick="select_upload()" /></td>
 	</tr>
 </table>
 <table cellspacing="0" width="100%">
 	<tr>
 		<td class="pformleft">&nbsp;</td>
-		<td class="pformright"><b>Ridimensionamento Automatico Attivo</b><br />(Questo ridimensioner&agrave; l'immagine se &#232; troppo grossa rispetto ai parametri prefediniti)</td>
+		<? echo "<td class=\"pformright\">".$lang['optavt_rid']."</td>"; ?>
 	</tr>
 </table>
 	<div align="center" class="formsubtitle">
-		<input type="submit" name="submit" value="Aggiorna Avatar" />
-		&nbsp;&nbsp;&nbsp;<input type="submit" name="remove" onclick="remove_pressed=1;" value="Rimuovi Avatar" />
+		<? echo "<input type=\"submit\" name=\"submit\" value=\"".$lang['optavt_update']."\" />"; ?>
+		&nbsp;&nbsp;&nbsp;<input type="submit" name="remove" onclick="remove_pressed=1;" <? echo"value=\"".$lang['optavt_remove']."\" />"; ?>
 	</div>
 </form></div>
 		</td>
