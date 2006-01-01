@@ -158,7 +158,6 @@ if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_s
 			</td>
 			<td width="30%" align="center" nowrap="nowrap"  valign="top" class="row1">
 				<fieldset>
-					<legend><b></b></legend>
 					<table cellspacing="0">
 						<tr>
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
