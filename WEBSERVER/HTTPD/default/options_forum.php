@@ -64,7 +64,7 @@ if($_POST['MEM_ID'])
 			,PPP = '$new_ppp'
 			,HIDESIG ='$new_hidesig'
 			,LEVEL ='$new_level'
-		WHERE HASH = '{$userdata['HASH']}'  LIMIT 1 ";
+		WHERE HASH = '{$userdata->HASH}'  LIMIT 1 ";
 		$result = mysql_query($query) or die(mysql_error());
 		if($result)
 		{
@@ -87,11 +87,10 @@ if($_POST['MEM_ID'])
 $query = "
 	Select LANG, TPP, PPP, HIDESIG , LEVEL
 	FROM {$SNAME}_localmember
-	WHERE hash = '{$userdata['HASH']}'
+	WHERE hash = '{$userdata->HASH}'
 	LIMIT 1;
 	";
-$result = mysql_query($query);
-$current = mysql_fetch_array($result);
+$current = $db->get_row($query);
 
 
 
@@ -115,7 +114,7 @@ if(!$is_post_back && $verify)
 	<tr>
 		<td class="pformleft" ><?=$lang['optusr_lang']?></td>
 		<td class="pformright">   
-			<?=select_language('lang',$current['LANG'])?>
+			<?=select_language('lang',$current->LANG)?>
     	</td>
 <!--<tr>
 		<td class=\"pformleft\" >".$lang['optusr_time']."</td>"; ?>
@@ -129,38 +128,38 @@ if(!$is_post_back && $verify)
 	<tr>
 		<td width="70%"><?=$lang['optusr_showsign']?></td>
 		<td>
-			<?=select_yn('hidesig',$current['HIDESIG'])?>
+			<?=select_yn('hidesig',$current->HIDESIG)?>
 		</td>
 	</tr>
 	<tr>
 		<? echo"<td width=\"70%\">".$lang['optusr_showimg']."</td>"; ?>
 		<td>
-			<?=select_yn('hideimg',$current['HIDEIMG'])?>
+			<?=select_yn('hideimg',$current->HIDEIMG)?>
 		</td>
 	</tr>
 	<tr>
 		<? echo "<td width=\"70%\">".$lang['optusr_showavatar']."</td>"; ?>
 		<td>
-			<?=select_yn('hideavatar',$current['HIDEAVATAR'])?>
+			<?=select_yn('hideavatar',$current->HIDEAVATAR)?>
 		</td>
 	</tr>
 
 	<tr>
 	<td width="70%"><?=$lang['optusr_ppp']?></td>
 		<td>
-			<?=select_num_step('ppp',$current['PPP'],10,5,40,5)?>
+			<?=select_num_step('ppp',$current->PPP,10,5,40,5)?>
 		</td>
 	</tr>
 	<tr>
 		<td width="70%"><?=$lang['optusr_tpp']?></td>
 		<td>
-			<?=select_num_step('tpp',$current['TPP'],20,5,40,5)?>
+			<?=select_num_step('tpp',$current->TPP,20,5,40,5)?>
 		</td>
 	</tr>
 	<tr>
-		<? echo "<td width=\"70%\">".$lang['optusr_admrights']."</td>"; ?>
+		<td width="70%"><?=$lang['optusr_admrights']?></td>
 		<td>
-			<?=select_admin_controls('level',$current['LEVEL'],0)?>
+			<?=select_admin_controls('level',$current->LEVEL,0)?>
 		</td>
 	</tr>
 	<tr>
@@ -189,12 +188,7 @@ include('end.php');?>
 <?
 function select_admin_controls($name,$current,$default)
 {
-	$level[0] = 'Utente';
-	$level[1] = 'Moderatore';
-	/*...*/
-	$level[9] = 'Validatore';
-	$level[10] = 'Admin';
-
+	$level = get_level_list();
 	$return .="<select name='$name'>";
 	foreach($level as $value=>$label)
 	{
@@ -240,26 +234,14 @@ function select_yn($name,$current)
 }
 function select_language($name,$default)
 {
-	global $std,$blanguage;
-	$lang = $std->load_lang('lang_language', $blanguage );
-	
-	$dir_open = @ opendir('lang');
-	if (! $dir_open)
-		return 'Error to opern lang dir';
-	
 	$return .="<select name='$name'>";
-	
-	while (($file = readdir($dir_open)) !== false) 
+	$lang = get_language_list();
+	foreach($lang as $short=>$string)
 	{
-		if(strpos($file,".") === FALSE)
-		{
-			$selected = ($default == $file ? 'selected' : "");
-			//$return.= "<option value='$file' $selected >$file</option>\n";
-			$return.= "<option value='$file' $selected>{$lang[$file]}</option>\n";
-		}
+		$selected = ($default == $short ? 'selected' : "");
+		$return.= "<option value='$short' $selected>$string</option>\n";
 	}
 	$return .="</select>";
-	closedir($dir_open);
 	return $return;
 }
 

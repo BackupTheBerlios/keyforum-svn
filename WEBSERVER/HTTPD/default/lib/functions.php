@@ -121,12 +121,13 @@ class FUNC {
     // PKEY della sessione, in Base64
     /*-------------------------------------------------------------------------*/
 
-        function getpkey($sesname) {
-                $query = "SELECT value FROM config WHERE subkey='" . $sesname . "' AND fkey='PKEY'";
-                $risultato = mysql_query($query) or die("Query non valida: " . mysql_error());
-                $riga = mysql_fetch_assoc($risultato);
-                if ( !$riga['value'] ) die("pkey vuota!\n");
-                return($riga['value']);
+        function getpkey($sesname) 
+		{
+			global $db;
+			$query = "SELECT value FROM config WHERE subkey='$sesname' AND fkey='PKEY'";
+			$pkey = $db->get_var($query);
+			if(!$pkey) die("pkey vuota!\n");
+			return($pkey);
         }
         
  // ********************************************************************* 
@@ -136,28 +137,26 @@ class FUNC {
 // Personal User Data
 // *********************************
 
-	function GetUserData($sess_name,$sess_nick,$sess_password) {
-	 
-	 $userdata = array();
-	 
-	 if(!$sess_nick) { return $userdata; }
-	 
-	 // hex id
-	 $hash=md5($sess_password.$sess_nick);
-	 
-	 
-	 // all user data
-	 $query = "SELECT * FROM {$sess_name}_localmember  WHERE HASH='$hash'";
-	 $result = mysql_query($query) or die("error on query: " . mysql_error());
-	 $userdata = mysql_fetch_assoc($result);
-	 return $userdata;
-	 
+	function GetUserData($sess_name,$sess_nick,$sess_password) 
+	{
+		global $db;
+		$userdata = array();
+		
+		if(!$sess_nick) { return $userdata; }
+		
+		// hex id
+		$hash=md5($sess_password.$sess_nick);
+				
+		// all user data
+		$query = "SELECT * FROM {$sess_name}_localmember  WHERE HASH='$hash'";
+		$userdata = $db->get_row($query);
+		return $userdata;
 	 }
 
 
 	function UpdateUserData($sess_name,$userdata) {
 	
-	if(!$userdata['HASH']){ return 0; }
+	if(!$userdata->HASH){ return 0; }
 	
 	
 	while (list ($chiave, $valore) = each ($userdata)) {
@@ -165,7 +164,7 @@ class FUNC {
 	}
 
 	$queryset = substr($queryset,0,-1);
-	$query="update {$sess_name}_localmember set $queryset where HASH='{$userdata['HASH']}'"; 
+	$query="update {$sess_name}_localmember set $queryset where HASH='{$userdata->HASH}'"; 
 	$result = mysql_query($query) or die("error on query: " . mysql_error());
 	
 	return 1;

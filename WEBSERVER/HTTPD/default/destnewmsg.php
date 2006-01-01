@@ -23,13 +23,14 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
   }
 
   $query="SELECT PKEY,ORDINE FROM `".mysql_real_escape_string($_ENV["sesname"])."_sez` WHERE `ID`=".mysql_escape_string($_REQUEST["SEZID"]).";";
-  $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-  if !($SECTION_DATA = mysql_fetch_assoc($risultato)) {
-    echo "Errore: Sezione non trovata\n";
+  $SECTION_DATA = $db->get_row($query);
+  if (!$SECTION_DATA) 
+  {
+  	$std->Error('Sezione non trovata');
     include ("end.php");
     exit(0);
   }
-  if ($SECTION_DATA["ORDINE"]>9000)
+  if ($SECTION_DATA->ORDINE>9000)
     echo "Errore: Sezione non valida\n";
     include ("end.php");
     exit(0);

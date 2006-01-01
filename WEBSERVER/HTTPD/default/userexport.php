@@ -84,10 +84,10 @@ $xmlcont="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
   <USERDATA>
   <NICK>{$_REQUEST['nick']}</NICK>
   <PWD>$userpwd</PWD>
-  <KEY>{$userdata['PASSWORD']}</KEY>
-  <LANG>{$userdata['LANG']}</LANG>
-  <TPP>{$userdata['TPP']}</TPP>
-  <PPP>{$userdata['PPP']}</PPP>
+  <KEY>{$userdata->PASSWORD}</KEY>
+  <LANG>{$userdata->LANG}</LANG>
+  <TPP>{$userdata->TPP}</TPP>
+  <PPP>{$userdata->PPP}</PPP>
   </USERDATA>";
 
 header("Content-type: text/xml");

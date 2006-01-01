@@ -5,6 +5,7 @@
   $Timer1 = $Timer1[0] + $Timer1[1];
 
 session_start();
+require_once('ez_sql.php');
 
 //classe PEAR per file config (XML)
 require_once "Config.php";
@@ -27,25 +28,28 @@ $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
 
 
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
+$db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['sql_host'].":".$_ENV['sql_dbport']);
 
-$SQL = mysql_pconnect($_ENV['sql_host'].":".$_ENV['sql_dbport'],$_ENV['sql_user'],$_ENV['sql_passwd']);
+/*$SQL = mysql_pconnect($_ENV['sql_host'].":".$_ENV['sql_dbport'],$_ENV['sql_user'],$_ENV['sql_passwd']);
 if (!$SQL) die ("Non riesco a connettermi al server MySQL");
-if ( !mysql_select_db($_ENV['sql_dbname']) ) die("Impossibile aprire il DataBase MySQL:".mysql_error()."</br>");
+if ( !mysql_select_db($_ENV['sql_dbname']) ) die("Impossibile aprire il DataBase MySQL:".mysql_error()."</br>");*/
 define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
 define ("GMT_TIME", 3600*1);
 
     $porta=$_SERVER['SERVER_PORT'] ;
-    $query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
-    $risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
-    $riga2 = mysql_fetch_assoc($risultato2);
-    $query="SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='".$riga2['subkey']."'";
-    $risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
-    $riga = mysql_fetch_assoc($risultato);
-    if($riga['value']){
-         $_ENV['sesname']=$riga['value'];
+    //$query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
+    //$risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
+    //$riga2 = mysql_fetch_assoc($risultato2);
+	$subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
+    //$query="SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='".$riga2['subkey']."'";
+    //$risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
+    //$riga = mysql_fetch_assoc($risultato);
+	$riga = $db->get_var("SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='$subkey'");
+    if($riga){
+         $_ENV['sesname']=$riga;
     } else {
-          $_ENV['sesname']=$riga2['subkey'];
+          $_ENV['sesname']=$subkey;
       }
 
 if (!$_ENV['sesname']) {
@@ -67,11 +71,11 @@ $GLOBALS['sess_auth'] = &$sess_auth;
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 
 function CheckSession() {
-  $query="SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
-  $risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
-  if ($riga = mysql_fetch_assoc($risultato)) {
-      $GLOBALS['sess_nick'] = $riga["NICK"];
-      $GLOBALS['sess_password'] = $riga["PASSWORD"];
+	global $db;
+	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+   if ($result ) {
+      $GLOBALS['sess_nick'] = $result->NICK;
+      $GLOBALS['sess_password'] = $result->PASSWORD;
       $GLOBALS['sess_auth'] = 1;
   } else {
       
@@ -117,9 +121,11 @@ function Num2Ip ($ip) {
 
 mysql_query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
 if (rand(0,10)<1) mysql_query("DELETE FROM `session` WHERE `DATE`<'".(time()-3600)."';");
-if ($_REQUEST['SEZID']) {
-  $risultato=mysql_query("SELECT * FROM ".$_ENV['sesname']."_sez WHERE ID='".mysql_escape_string($_GET['SEZID'])."';");
-  if($ris=mysql_fetch_assoc($risultato)) {
+if ($_REQUEST['SEZID']) 
+{
+	$tmp = mysql_escape_string($_GET['SEZID']);
+	$ris = $db->get_row("SELECT * FROM {$_ENV['sesname']}_sez WHERE ID='$tmp)';");
+  if($ris) {
     $GLOBALS['SEZ_DATA']=$ris;
   }
 }
@@ -154,7 +160,7 @@ function get_my_info()
 	if(!$GLOBALS['sess_nick']) return "";
 	if(!$userdata) return "";
 	$KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'])); // = password per decriptare la chiave privata in localmember (16byte)
-	$privkey=base64_decode($userdata['PASSWORD']);
+	$privkey=base64_decode($userdata->PASSWORD);
 	$PKEY=$std->getpkey($SNAME);
 	$req[FUNC][Base642Dec]=$PKEY;
 	$req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;

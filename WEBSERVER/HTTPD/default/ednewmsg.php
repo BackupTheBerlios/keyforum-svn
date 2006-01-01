@@ -16,11 +16,12 @@ $lang = $std->load_lang('lang_ednewmsg', $blanguage );
 
   $EDITID = mysql_real_escape_string(pack("H*",$_REQUEST["EDIT_OF"]));
   $query="SELECT title,subtitle,body from {$SNAME}_newmsg as msg where EDIT_OF='$EDITID' and visibile='1';";
-  $risultato=mysql_query($query);
-  if ($riga = mysql_fetch_assoc($risultato)) {
-    $Testo = htmlspecialchars(stripslashes($riga["body"]));
-    $Titolo = secure_v($riga["title"]);
-    $SubTitolo = secure_v($riga["subtitle"]);
+  $riga = $db->get_row($query);
+  if ($riga)
+   {
+    $Testo = htmlspecialchars(stripslashes($riga->body));
+    $Titolo = secure_v($riga->title);
+    $SubTitolo = secure_v($riga->subtitle);
   }
   else {
     $Testo = "";

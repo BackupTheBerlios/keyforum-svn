@@ -76,7 +76,7 @@ function PageSelect() {
    <div class='borderwrap'>
      <div class='maintitle'>
        <p class='expand'></p>
-       <p><a href='sezioni.php?SEZID={$SEZ_DATA['ID']}'>{$SEZ_DATA['SEZ_NAME']}</a></p>
+       <p><a href='sezioni.php?SEZID={$SEZ_DATA->ID}'>{$SEZ_DATA->SEZ_NAME}</a></p>
      </div>";
 
      echo "
@@ -167,15 +167,11 @@ $SEZID=$_REQUEST['SEZID'];
 $SNAME=$_ENV['sesname'];
 
 // se >= 9000 è un forum di categoria e non può contenere messaggi
-if($SEZ_DATA['ORDINE'] < 9000)
+if($SEZ_DATA->ORDINE < 9000)
 {
 echo "<a href=\"searcher.php?MODO=1&amp;SEZ=".$SEZID."&amp;ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
-$query="SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;";
-$risultato=mysql_query($query);
-$riga = mysql_fetch_assoc($risultato);
-
-$Num3d = $riga["THR_NUM"];
+$Num3d = $Num3d = $db->get_var("SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;");
 $NumPag = intval(($Num3d-1) / $ThreadXPage);
 $CurrPag = $_REQUEST["pag"];
 if (! is_numeric($CurrPag))
@@ -188,7 +184,7 @@ PageSelect();
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA['ID']."'>".$SEZ_DATA['SEZ_NAME']."</a></p>";
+	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA->ID."'>".$SEZ_DATA->SEZ_NAME."</a></p>";
     ?>
   </div>
   <table cellspacing="1">

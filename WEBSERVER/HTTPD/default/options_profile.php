@@ -53,11 +53,12 @@ if($_POST['MEM_ID'])
 $query = "
 	Select * 
 	FROM {$SNAME}_localmember
-	WHERE hash = '{$userdata['HASH']}'
+	WHERE hash = '{$userdata->HASH}'
 	LIMIT 1;
 	";
-$result = mysql_query($query);
-$current = mysql_fetch_array($result);
+$current = $db->get_row($query);
+
+//TO DO
 
 
 
@@ -82,9 +83,9 @@ if(!$is_post_back && $verify)
 	<tr>
 		<? echo " <td class=\"pformleft\" >".$lang['optprf_birthdate']."</td>"; ?>
 		<td class="pformright">
-			<?=select_number('giorno',$current['giorno'],31);?>
-			<?=select_number('mese',$current['mese'],12);?>
-			<?=select_number('anno',$current['anno'],date('Y')*-1);?>
+			<?=select_number('giorno',$current->giorno,31);?>
+			<?=select_number('mese',$current->mese,12);?>
+			<?=select_number('anno',$current->anno,date('Y')*-1);?>
 	    </td>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_homepage']."</td>"; ?>
@@ -101,7 +102,7 @@ if(!$is_post_back && $verify)
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_msn']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="msn" value="<?=$current['msn']?>"  size="11"/>
+			<input type="text" name="msn" value="<?=$current->msn]?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>

@@ -9,6 +9,7 @@ $lang['stat_dbmesslh2']  = " messages to database in the last hour";
 $lang['stat_reguser1']  = "We have ";
 $lang['stat_reguser2']  = " registered users";
 $lang['stat_extime']  = "Execution time: ";
+$lang['stat_numquery']  = "Queries executed: ";
 $lang['perl_noderror1'] = "Id Board not found ";
 $lang['perl_noderror2'] = "Board not found from registered";
 $lang['perl_noderror3'] = "Nobody connected to this board!";

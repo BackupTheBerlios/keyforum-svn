@@ -7,8 +7,8 @@ CheckSession();
 <?
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
 
-if($userdata['LANG']) {
-$blanguage=$userdata['LANG']; // Lingua di visualizzazione
+if($userdata->LANG) {
+$blanguage=$userdata->LANG; // Lingua di visualizzazione
 } else {$blanguage="eng";}
 
 $lang = $std->load_lang('lang_reply_dest', $blanguage );

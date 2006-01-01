@@ -63,7 +63,7 @@ $lang = $std->load_lang('lang_writenewmsg', $blanguage );
           <td><textarea name="body" rows="15" cols="70" wrap="virtual"></textarea></tD>
         </tr>
 <?PHP
-if ($SEZ_DATA[PKEY]) {
+if ($SEZ_DATA->PKEY) {
     print "
         <tr>
           <td>".$lang['wreply_privkey']."</tD>

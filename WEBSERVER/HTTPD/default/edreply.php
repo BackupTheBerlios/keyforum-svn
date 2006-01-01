@@ -14,7 +14,6 @@ $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." AND {$SNAME}_newmsg.EDIT_OF='".$MSGID."'"
   ." AND {$SNAME}_newmsg.visibile='1'"
   ." AND {$SNAME}_membri.HASH={$SNAME}_msghe.AUTORE";
-  $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
 
   echo "<tr><td>";
   if (!$sess_auth) {
@@ -24,19 +23,21 @@ $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
     include ("end.php");
     exit(0);
   }
-if ($riga = mysql_fetch_assoc($risultato)) {
-  echo "".$lang['edrep_info1']."<b>$riga[autore]</b>".$lang['edrep_info2']."\"$riga[title]\":<br>";
-} else {
-  echo "".$lang['edrep_notfound']."<bR>\n";
-  exit();
+if ($riga = $db->get_row($query)) 
+{
+	echo "{$lang['edrep_info1']}<b>$riga->autore</b>{$lang['edrep_info2']}\"$riga->title\":<br>";
+} 
+else
+{
+	$std-Error($lang['edrep_notfound']);
+	exit();
 }
   $EDITID = mysql_real_escape_string(pack("H*",$_REQUEST["EDIT_OF"]));
   $query="SELECT title,body from {$SNAME}_reply as reply where EDIT_OF='$EDITID' and visibile='1';";
 
-  $risultato=mysql_query($query);
-  if ($riga = mysql_fetch_assoc($risultato)) {
-    $Testo = htmlspecialchars(stripslashes($riga["body"]));
-    $Titolo = secure_v($riga["title"]);
+  if ($riga = $db->get_row($query)) {
+    $Testo = htmlspecialchars(stripslashes($riga->body));
+    $Titolo = secure_v($riga->title);
   }
   else {
     $Testo = "";

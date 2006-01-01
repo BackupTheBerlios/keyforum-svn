@@ -5,7 +5,7 @@ if($_REQUEST['allread'])
  {
  include "lib/lib.php";
  $mytime=time();
- $userdata['LASTREAD']=$mytime;
+ $userdata->LASTREAD=$mytime;
  $std->UpdateUserData($_ENV["sesname"],$userdata);
  $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$mytime));
  die();
@@ -76,7 +76,7 @@ global $tst;
 <?PHP
 $SNAME=$_ENV['sesname'];
 
-$timelimit=$userdata['LASTREAD']-GMT_TIME;
+$timelimit=$userdata->LASTREAD - GMT_TIME;
 if($timelimit < 1) {$timelimit=1130511594;}
 
 $last24=$timelimit-86400;

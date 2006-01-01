@@ -6,7 +6,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
   <td>
    <br><br>  
    <?PHP
-       if ((!$SEZ_DATA['ID'])AND($whereiam=="index")){
+       if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
    ?>
    <div class="borderwrap" id="fo_stat">
      <div class="maintitle">
@@ -22,9 +22,8 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	<td class="formsubtitle" colspan="2"><img src='img/connect.gif' alt=''>&nbsp;
         <?PHP
            $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
-           $idrisultato = mysql_query($idquery) or Muori ($lang['inv_query'] . mysql_error());
-           $idriga = mysql_fetch_assoc($idrisultato);
-           $req_nod[INFO][FORUM][0]=pack("H*", $idriga['value']);
+           $idriga = $db->get_var($idquery);
+           $req_nod[INFO][FORUM][0]=pack("H*", $idriga);
            $core   = new CoreSock;
            if ( !(@$core->Connect()) ) echo "Core offline!";
            else {
@@ -43,26 +42,32 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	 <? if ($totmsg) {print $lang['stat_dbmess1']."<b>$totmsg</b>".$lang['stat_dbmess2']."<br>";} ?>
 	 <div class="thin">
          <?
-           $risp=mysql_query("SELECT count(*) AS NUM FROM ".$_ENV['sesname']."_congi WHERE INSTIME>'".(time()-3600)."' AND (TYPE='1' OR TYPE='2');");
-	   if($ris=mysql_fetch_assoc($risp))
-	     echo $lang['stat_dbmesslh1']."<b>".$ris['NUM']."</b>".$lang['stat_dbmesslh2'];
+           $num_msg_inserted=$db->get_var("SELECT count(1) FROM {$SNAME}_congi WHERE INSTIME>'".(time()-3600)."' AND (TYPE='1' OR TYPE='2');");
+	   if($num_msg_inserted)
+	     echo "{$lang['stat_dbmesslh1']}<b>$num_msg_inserted</b>{$lang['stat_dbmesslh2']}";
 	 ?>
 	 </div>
 	 <?
-	    $risultato=mysql_query("SELECT COUNT(AUTORE) AS c FROM ".$_ENV['sesname']."_membri;");
-	    if($ris2=mysql_fetch_assoc($risultato))
-              echo $lang['stat_reguser1']."<b>".$ris2['c']."</b>".$lang['stat_reguser2'];
+	    $reg_users=$db->get_var("SELECT COUNT(AUTORE) FROM {$SNAME}_membri;");
+	    if($reg_users)
+              echo "{$lang['stat_reguser1']}<b>$reg_users</b>{$lang['stat_reguser2']}";
 	 ?>
 	</td>
        </tr>
        <tr>
 	<td class="row1" colspan="2">
+	<table width="100%"><tr>
 	 <?PHP
+	 
+	 	//TIME
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
+	    echo '<td><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
+		//Query
+		echo '<td align="right"><img src="img/stat_sql.gif" alt="">&nbsp;'.$lang['stat_numquery'].'<b>'.$db->num_queries.'</b></td>';
 	 ?>
+	 </tr></table>
 	</td>
        </tr>
      </table>
@@ -73,13 +78,17 @@ $lang = $std->load_lang('lang_end', $blanguage );
    <div class="borderwrap" id="fo_stat">
      <table cellspacing="1">
        <tr>
-	<td align="left" class="row5">
+	<td align="left" class="row5"><table width="100%"><tr>
 	 <?PHP
+	 	//TIME
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec';
-	 ?>
+	    echo '<td><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
+		//QUERY
+	    echo "<td align='right'><img src='img/stat_sql.gif' alt=''>&nbsp;<b>$db->num_queries</b> queries</td>";
+		
+	 ?> </tr></table>
 	</td>
        </tr>
      </table>

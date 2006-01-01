@@ -9,11 +9,11 @@ require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 <title><?php
 
 
-if($userdata['TPP']) {
-$ThreadXPage=$userdata['TPP']; // N° di thread per pagina
+if($userdata->TPP) {
+$ThreadXPage=$userdata->TPP; // N° di thread per pagina
 } else {$ThreadXPage = 20;}
-if($userdata['PPP']) {
-$PostXPage=$userdata['PPP']; // N° di post per pagina
+if($userdata->PPP) {
+$PostXPage=$userdata->PPP; // N° di post per pagina
 } else {$PostXPage = 10;}
 $UserXPage = 100;
 $BoardXPage = 20;
@@ -26,8 +26,8 @@ $responseacbd=mysql_query($queryacbd) or Muori ($lang['inv_query'] . mysql_error
 $valueacbd=mysql_fetch_assoc($responseacbd);
 $BNAME=$valueacbd['SUBKEY'];
 
-if($userdata['LANG']) {
-$blanguage=$userdata['LANG']; // Lingua di visualizzazione
+if($userdata->LANG) {
+$blanguage=$userdata->LANG; // Lingua di visualizzazione
 } else {
 
 switch (substr(trim($HTTP_ACCEPT_LANGUAGE),0,2)) 
@@ -68,8 +68,8 @@ $lang = $std->load_lang('lang_testa', $blanguage );
     $title=secure_v($title);
     echo $title." - ";
   }else{
-    if ($SEZ_DATA['ID'])
-      echo $SEZ_DATA['SEZ_NAME']." - ";
+    if ($SEZ_DATA->ID)
+      echo $SEZ_DATA->SEZ_NAME." - ";
   }
   echo $BNAME;
 ?> Forum</title>
@@ -261,8 +261,8 @@ function mklastselected() {
   <img src="img/3.gif" alt="" /> <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
 <?php
 
-if ($SEZ_DATA['ID']) {
-  $notlastid=$SEZ_DATA['ID'];
+if ($SEZ_DATA->ID) {
+  $notlastid=$SEZ_DATA->ID;
   $seznum=1;
   while($notlastid){
     $querysez="SELECT ID, SEZ_NAME, FIGLIO FROM {$SNAME}_sez WHERE ID=".$notlastid.";";

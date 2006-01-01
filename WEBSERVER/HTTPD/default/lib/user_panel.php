@@ -1,30 +1,58 @@
 <?php
+function get_language_list()
+{
+	global $std,$blanguage;
+	$lang = $std->load_lang('lang_language', $blanguage );
+	
+	$dir_open = @ opendir('lang');
+	if (! $dir_open)
+		return 'Error to opern lang dir';
+	while (($file = readdir($dir_open)) !== false) 
+	{
+		if(strpos($file,".") === FALSE)
+		{
+			$return[$file] = $lang[$file];
+		}
+	}
+	closedir($dir_open);
+	return $return;
+}
+
+function get_level_list()
+{
+	global $std,$blanguage;
+	
+	$level[0] = 'Utente';
+	$level[1] = 'Moderatore';
+	/*...*/
+	$level[9] = 'Validatore';
+	$level[10] = 'Admin';
+	return $level;
+}
 
 function get_sign($mem_id)
 {
-	global $SNAME;
+	global $SNAME,$db;
 	$user_hash = @pack("H*",$mem_id);
 	$user_hash = mysql_real_escape_string($user_hash);
 	
 	$query = "SELECT firma
 		FROM {$SNAME}_membri where hash = '$user_hash'
 		LIMIT 1";
-	$result = mysql_query($query) or die(mysql_error() . "<br>$query");
-	list($firma) = mysql_fetch_array($result);
+	$firma = $db->get_var($query);
 	return $firma;
 }
 
 function get_avatar($mem_id)
 {
-	global $SNAME;
+	global $SNAME,$db;
 	$user_hash = @pack("H*",$mem_id);
 	$user_hash = mysql_real_escape_string($user_hash);
 	
 	$query = "SELECT avatar
 		FROM {$SNAME}_membri where hash = '$user_hash'
 		LIMIT 1";
-	$result = mysql_query($query) or die(mysql_error() . "<br>$query");
-	list($avatar) = mysql_fetch_array($result);
+	$avatar = $db->get_var($query);
 	return $avatar;
 }
 

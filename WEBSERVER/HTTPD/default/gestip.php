@@ -6,19 +6,18 @@ include ("testa.php");
 $lang = $std->load_lang('lang_gestip', $blanguage );
 
 $whereiam="gestip";
-$idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
-$idrisultato = mysql_query($idquery) or Muori ($lang['inv_query'] . mysql_error());
-$idriga = mysql_fetch_assoc($idrisultato);
+$idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='$SNAME' AND FKEY='ID';";
+$idriga =$db->get_var($idquery);
 ?>
 <tr>
 	<td>
 <?PHP
 if ($_POST[action]=="update") {
     if($_POST[delete]) {
-		mysql_query("DELETE FROM iplist WHERE BOARD='".$idriga['value']."' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
+		mysql_query("DELETE FROM iplist WHERE BOARD='$idriga' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
 	} else {
 		if ($_POST['STATIC']) $stat=1; else $stat=0; 
-		mysql_query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='".$idriga['value']."';") or print ($lang['inv_query'] . mysql_error());
+		mysql_query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='$idriga';") or print ($lang['inv_query'] . mysql_error());
 	}
 	
 } elseif ($_POST[action]=="nuovo") {
@@ -55,29 +54,29 @@ if ($_POST[action]=="update") {
 		</tR>";
 		  ?>
 <?PHP
-$risultato=mysql_query("SELECT * FROM iplist WHERE BOARD='".$idriga['value']."';");
+$risultato = $db->get_results("SELECT * FROM iplist WHERE BOARD='$idriga';");
 # 2 Scambio nodi
 # 1 passivo
 # 3 manuale
-while($ris=mysql_fetch_assoc($risultato)) {
+foreach($risultato as $ris) {
 	echo "\t<tr>
-	<td class=row2>".Num2Ip($ris[IP])."</td>
-	<td class=row1>$ris[TCP_PORT]</td>
-	<td class=row2>$ris[CLIENT_NAME]</td>
-	<td class=row1>$ris[CLIENT_VER]</td>
-	<td class=row2>".secure_v($ris["DESC"])."</td>
-	<tD class=row1>$ris[FALLIMENTI]</tD>\n";
-	if ($ris['STATIC']) $chec="checked"; else $chec="";
-	if ($ris[TROVATO]==1) $how=$lang['gestip_passive'];
-		elseif ($ris[TROVATO]==2) $how=$lang['gestip_nodeexc'];
-		elseif ($ris[TROVATO]==3) $how=$lang['gestip_usrsource'];
-		elseif ($ris[TROVATO]==4) $how=$lang['gestip_httpsource'];
-		else $how=$ris[TROVATO];
+	<td class=row2>".Num2Ip($ris->IP)."</td>
+	<td class=row1>$ris->TCP_PORT</td>
+	<td class=row2>$ris->CLIENT_NAME</td>
+	<td class=row1>$ris->CLIENT_VER</td>
+	<td class=row2>".secure_v($ris->DESC)."</td>
+	<tD class=row1>$ris->FALLIMENTI</tD>\n";
+	if ($ris->STATIC) $chec="checked"; else $chec="";
+	if ($ris->TROVATO==1) $how=$lang['gestip_passive'];
+		elseif ($ris->TROVATO==2) $how=$lang['gestip_nodeexc'];
+		elseif ($ris->TROVATO==3) $how=$lang['gestip_usrsource'];
+		elseif ($ris->TROVATO==4) $how=$lang['gestip_httpsource'];
+		else $how=$ris->TROVATO;
 	echo "\t<tD class=row2>$how</td>\n\t<td class=row1>";
 	echo "<form method=post action=gestip.php><input type=hidden name=action value=update>"
 			."<INPUT type=CHECKBOX name=STATIC value='1' $chec></td>\n";
 	echo "\t<tD class=row2><INPUT type=CHECKBOX name=delete value='1'></td>\n"
-	."\t<td class=row1><input type=hidden name=ip value='$ris[IP]'><input type=submit value=update></form></td></tR>\n";
+	."\t<td class=row1><input type=hidden name=ip value='$ris->IP'><input type=submit value=update></form></td></tR>\n";
 }
 ?>
 	</table></div><br><br>

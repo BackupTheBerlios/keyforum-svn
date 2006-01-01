@@ -29,13 +29,13 @@
 <?
 
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons WHERE enabled";
-  $res=mysql_query($query) or die(mysql_error());
+  $res = $db->get_results($query);
   
 
 
     $emocol=3; // numero colonne emoticon
 
-    $totemo = mysql_num_rows($res);
+    $totemo = $db->num_rows;
     $scarto=($totemo * 2) % $emocol;
     
 
@@ -50,14 +50,15 @@
     
     $colcont=0;	
     $coltot=0;
-    while ($row = mysql_fetch_assoc($res))
+    foreach($res  as $row)
     {
     if (!$colcont) { echo "<tr>"; }
+    $emoadr = ($row->internal ? "showemo.php?id={$row->id}" : "img/emoticons/{$row->image}");
     
-      if ($row['internal']) {$emoadr="showemo.php?id={$row['id']}";} else {$emoadr="img/emoticons/{$row['image']}";}
-    
-    echo "<td align='center' class='row1' valign='middle'><a href='javascript:emot(\"{$row['typed']}\")'>{$row['typed']}</a>";
-    echo "<td align='center' class='row2' valign='middle'><img src='$emoadr' border='0' valign='absmiddle' style='cursor:pointer;' onclick='javascript:emot(\"{$row['typed']}\")' alt='{$row['typed']}' title='{$row['typed']}'></td>";
+    echo "<td align='center' class='row1' valign='middle'>
+		<a href='javascript:emot(\"{$row->typed}\")'>{$row->typed}</a></td>";
+    echo "<td align='center' class='row2' valign='middle'>
+		<img src='$emoadr' border='0' valign='absmiddle' style='cursor:pointer;' onclick='javascript:emot(\"{$row->typed}\")' alt='{$row->typed}' title='{$row->typed}'></td>";
     $colcont++;
     if ($colcont == $emocol) {echo "</tr>";$colcont=0;}
     }	
@@ -69,7 +70,7 @@
    }
 
     
-    echo "</table";
+    echo "</table>";
 
 ?>
    </body>

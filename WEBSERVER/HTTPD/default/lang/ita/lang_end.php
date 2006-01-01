@@ -9,6 +9,7 @@ $lang['stat_dbmesslh2']  = " msg nel database nell'ultima ora";
 $lang['stat_reguser1']  = "Abbiamo ";
 $lang['stat_reguser2']  = " utenti registrati";
 $lang['stat_extime']  = "Tempo di esecuzione: ";
+$lang['stat_numquery']  = "Numero di query: ";
 $lang['perl_noderror1'] = "Id Board non trovata ";
 $lang['perl_noderror2'] = "Board Non trovata tra quelle iscritte";
 $lang['perl_noderror3'] = "Nessun utente è connesso alla board!";
