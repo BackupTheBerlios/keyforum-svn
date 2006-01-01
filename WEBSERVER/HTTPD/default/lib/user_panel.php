@@ -31,7 +31,11 @@ function get_avatar($mem_id)
 
 function show_menu()
 {
-	global $mem_id,$whereiam;
+	global $mem_id,$whereiam,$std,$blanguage;
+	
+	//PER TRADUZIONI
+	//$lang = $std->load_lang('lang_optionsforum', $blanguage );
+	
 	//Modifica qui il menu
 	
 	/*$menu['Messenger'] = Array(
