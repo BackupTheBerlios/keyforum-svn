@@ -1,9 +1,9 @@
 <?php
 $whereiam='options_profile.php';
-$title = "Il tuo pannello di controllo";
+$title = "Your Control Panel";
 
 include("testa.php");
-$lang = $std->load_lang('lang_optionsforum', $blanguage );
+$lang = $std->load_lang('lang_optionsprofile', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -36,7 +36,7 @@ if($_POST['MEM_ID'])
 		<!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">'.$lang['optusr_welcome'].'</div>'.
+			<div class="maintitle">'.$lang['optprf_welcome'].'</div>'.
 			show_private_form($_POST).
 		'</div></td></tr></table>';
 	}
@@ -45,7 +45,7 @@ if($_POST['MEM_ID'])
 		//Aquisizione dati
 		//Controllo dati
 		//todo
-		echo "modifiche forse effettuate";
+		echo "".$lang['optprf_reply']."";
 	}
 }
 
@@ -74,39 +74,57 @@ if(!$is_post_back && $verify)
 <!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-<? echo "				<div class=\"maintitle\">".$lang['optusr_welcome']."</div>"; ?>
+<? echo "				<div class=\"maintitle\">".$lang['optprf_welcome']."</div>"; ?>
 	<form action="" method="post" name="REPLIER">
 	<input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
-<div class="formsubtitle">Il tuo profilo personale</div>
+<? echo "<div class=\"formsubtitle\">".$lang['optprf_prsnlprf']."</div>";?>
 	<table cellspacing="0" align="center" width="100%">
 	<tr>
-		<td class="pformleft" >Data di nascita</td>
+		<? echo " <td class=\"pformleft\" >".$lang['optprf_birthdate']."</td>"; ?>
 		<td class="pformright">
 			<?=select_number('giorno',$current['giorno'],31);?>
 			<?=select_number('mese',$current['mese'],12);?>
 			<?=select_number('anno',$current['anno'],date('Y')*-1);?>
 	    </td>
 	<tr>
-		<td class="pformleft" >Home Page</td>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_homepage']."</td>"; ?>
 		<td class="pformright">   
 			<input type="text" name="homepage" value="<?=$current['homepage']?>" size="40"/>
     	</td>
 	</tr>
 	<tr>
-		<td class="pformleft" >ICQ UIN</td>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_icq']."</td>"; ?>
 		<td class="pformright">   
 			<input type="text" name="icq" value="<?=$current['icq']?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>
-		<td class="pformleft" >Provenienza</td>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_msn']."</td>"; ?>
+		<td class="pformright">   
+			<input type="text" name="msn" value="<?=$current['msn']?>"  size="11"/>
+    	</td>
+	</tr>
+	<tr>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_yahoo']."</td>"; ?>
+		<td class="pformright">   
+			<input type="text" name="yahoo" value="<?=$current['yahoo']?>"  size="11"/>
+    	</td>
+	</tr>
+	<tr>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_aol']."</td>"; ?>
+		<td class="pformright">   
+			<input type="text" name="aol" value="<?=$current['aol']?>"  size="11"/>
+    	</td>
+	</tr>
+	<tr>
+		<? echo "<td class=\"pformleft\" >".$lang['optprf_location']."</td>"; ?>
 		<td class="pformright">   
 			<input type="text" name="location" value="<?=$current['location']?>" />
     	</td>
 	</tr>
 	<tr>
 		<td class="formbuttonrow" colspan="2">
-<? echo "			<input type=\"submit\" value=\"".$lang['optusr_update']."\" class=\"button\"/>"; ?>
+<? echo "			<input type=\"submit\" value=\"".$lang['optprf_update']."\" class=\"button\"/>"; ?>
 		</td>
 	</tr>
 
