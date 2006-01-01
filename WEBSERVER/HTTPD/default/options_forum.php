@@ -17,9 +17,14 @@ if (!$sess_auth) {
 
 //AQUISIZIONE DATI
 $SNAME=$_ENV['sesname'];
-$mem_id = $_GET['MEM_ID']; 			//dell'utente da modificare
+$mem_id = $_GET['MEM_ID'];
 $mem_hash = pack('H*',$mem_id); 
 list($user_hash,$user_id) = get_my_info($SNAME);
+if(!$mem_id)
+{
+	$mem_id = $user_id;
+}
+
 $verify = ($user_id == $mem_id ? 1 : 0);
 
 //POSTBACK PAGE
@@ -72,6 +77,7 @@ if($_POST['MEM_ID'])
 		}
 		else
 		{
+			$std->Error($lang['optusr_errmsg']);
 			die(''.$lang['optusr_errmsg'].'');
 		}
 	}
@@ -96,30 +102,29 @@ if(!$is_post_back && $verify)
 ?><tr><td>
 <table cellspacing="0" width="100%">
 	<tr>
-		<td valign="top" class="nopad" width="24%"><?=show_menu();?>
-		</td>
-		<td class="nopad" width="1%"><!-- --></td>
+		<td valign="top" class="nopad" width="24%"><?=show_menu();?></td>
+		<td class="nopad" width="1%"><!-- Riga vuota --></td>
 <!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-<? echo "				<div class=\"maintitle\">".$lang['optusr_welcome']."</div>"; ?>
+	<div class="maintitle"><?=$lang['optusr_welcome']?></div>
 	<form action="" method="post" name="REPLIER">
 	<input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
-<? echo "	<div class=\"formsubtitle\">".$lang['optusr_intopt']."</div>"; ?>
+	<div class="formsubtitle"><?=$lang['optusr_intopt']?></div>
 	<table cellspacing="0" align="center" width="100%">
 	<tr>
-<? echo "			<td class=\"pformleft\" >".$lang['optusr_lang']."</td>"; ?>
+		<td class="pformleft" ><?=$lang['optusr_lang']?></td>
 		<td class="pformright">   
 			<?=select_language('lang',$current['LANG'])?>
-    </td>
-<!--	<tr>
-<? echo "			<td class=\"pformleft\" >".$lang['optusr_time']."</td>"; ?>
+    	</td>
+<!--<tr>
+		<td class=\"pformleft\" >".$lang['optusr_time']."</td>"; ?>
 		<td class="pformright">
 			asd
 	    </td>
-	</tr>-->
-</table>
-<? echo "<div class=\"formsubtitle\">".$lang['optusr_bopt']."</div>"; ?>
+	</tr> -->
+	</table>
+<div class="formsubtitle"><?=$lang['optusr_bopt']?></div>
 <table cellspacing="0" align="center" width="100%">
 	<tr>
 		<td width="70%"><?=$lang['optusr_showsign']?></td>
@@ -160,25 +165,22 @@ if(!$is_post_back && $verify)
 	</tr>
 	<tr>
 		<td class="formbuttonrow" colspan="2">
-<? echo "			<input type=\"submit\" value=\"".$lang['optusr_update']."\" class=\"button\"/>"; ?>
+		<input type="submit" value="<?=$lang['optusr_update']?>" class="button"/>
 		</td>
 	</tr>
-
+</table>
 </form>
 </div>
-		</td>
-	</tr>
-</table>
-			</div>
-		</td>
-	</tr>
-</table>
 	<!-- end main CP area -->
+</td></tr></table>
 
-	</tr></td>
+
+
+</td></tr>
 
 <?php 
 } //end postback
+
 
 include('end.php');?>
 

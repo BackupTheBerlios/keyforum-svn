@@ -41,9 +41,9 @@ function show_menu()
 		);*/
 		
 	$menu['Profilo Personale'] = Array(
-		'options_profile.php'	=> 'Modifica Profilo'
-		,'options_sign.php' => 'Modifica Firma'
-		,'options_avatar.php' => 'Modifica Avatar'
+		'options_profile.php'	=> 'Modifica Profilo(Non funzia)'
+		,'options_sign.php' => 'Modifica Firma(Non funzia)'
+		,'options_avatar.php' => 'Modifica Avatar(Non funzia)'
 		);
 			
 	$menu['Opzioni'] = Array(
@@ -84,74 +84,6 @@ function show_menu()
 	}
 	$return .="</table></div>";
 	return $return;
-	
-
-	return '
-	<div class="borderwrap">
-			<div class="maintitle">Menu</div>
-			<!-- Messenger Links -->
-			<table cellspacing="1" width="100%">
-			 <tr>
-			  <td><div class="formsubtitle">Messenger</div>
-			<!--<p>
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=04"><b>Invia nuovo PVT</b></a><br />
-				&nbsp;&nbsp; <img src="img/msg_folder.gif" border="0"  alt="-" />&nbsp;<a href="index.php?act=Msg&amp;CODE=01&amp;VID=in">Inbox (13)</a><br />&nbsp;&nbsp; <img src="img/msg_folder.gif" border="0"  alt="-" />&nbsp;<a href="index.php?act=Msg&amp;CODE=01&amp;VID=sent">Sent Items</a><br />
-				&nbsp;&nbsp; <img src="img/msg_folder.gif" border="0"  alt="-" />&nbsp;<a href="index.php?act=Msg&amp;CODE=20">PVT Salvati (Non-Spediti)</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=delete">Svuota Cartelle PVT</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=07">Modifica Cartelle Archivio</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=02">Rubrica Personale</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=14">Archivio Messaggi</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=Msg&amp;CODE=30">Traccia Messaggi</a><br />
-			</p> -->
-	 	<!-- End Messenger -->
-                          </td>
-                         </tr>
-		<!-- Topic Tracker -->
-                         <tr>
-			  <td><div class="formsubtitle">Sottoscrizioni</div>
-		<!--<p>
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=UserCP&amp;CODE=26">Iscrizioni Discussioni</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> <a href="index.php?act=UserCP&amp;CODE=50">Iscrizioni Forum</a><br />
-			</p>-->
-                          </td>
-                         </tr>
-		<!-- Profile -->
-                         <tr>
-			  <td><div class="formsubtitle">Profilo Personale</div>
-			<p>
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Modifica Profilo</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="options_sign.php?MEM_ID='.$mem_id.'">Modifica Firma</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." />
-				<a href="options_avatar.php?MEM_ID='.$mem_id.'">Modifica Avatar</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Cambia Foto Personale</a><br />
-			</p>
-                          </td>
-                         </tr>
-		<!-- Options -->
-                         <tr>
-			  <td><div class="formsubtitle">Opzioni</div>
-			<p>
-				<!--IBF.OPTION_LINKS
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Gestione Allegati</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Gestisci Utenti Bloccati</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Impostazioni Email</a><br />-->
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="options_user.php?MEM_ID='.$mem_id.'">Impostazioni Forum</a><br /><!--
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Cambia Indirizzo Email</a><br />
-				<img src="img/nav_m_dark.gif" border="0"  alt="." /> 
-				<a href="">Cambia Password</a> -->
-			</p>
-                          </td>
-                         </tr>
-                        </table>
-		</div>';
 }
 
 function show_private_form($data)

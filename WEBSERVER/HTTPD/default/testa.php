@@ -209,8 +209,7 @@ function mklastselected() {
 	);
 	if ($sess_auth)
 	{
-		list($user_hash,$user_id) = get_my_info();
-		$userlinks['options_user.php?MEM_ID='.$user_id]	= $lang['user_panel'];
+		$userlinks['options_forum.php'] = $lang['user_panel'];
 		$userlinks['shownewmsg.php']	= $lang['shownewmsg'];
 		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$sess_nick.'</b>';
 		$userlinks['logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_logout'];
@@ -233,8 +232,7 @@ function mklastselected() {
 	if($sess_auth)
 	{
 
-		echo "| <a href='options_profile.php?MEM_ID=$user_id'>{$lang['user_panel']}</a>
-			";
+		echo "| <a href='options_forum.php'>{$lang['user_panel']}</a>";
 	}
 	?>	
 	| <?php echo $lang['userlink_wlcm']; ?> 

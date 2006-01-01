@@ -202,7 +202,7 @@ if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_s
 						/ <?=$user['msg_num']['perc']?>% <? echo" ".$lang['shmbr_ofall']." "; ?> )
 					</td>
 				</tr>
-<?php if($sez_data){?>
+<?php if($user['last_action']['title']){?>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_activity']." "; ?></b></td>
 					<td class="row1">
