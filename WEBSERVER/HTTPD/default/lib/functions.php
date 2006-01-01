@@ -238,7 +238,7 @@ if(!$blanguage) {$blanguage="eng";}
 
 $lang = $std->load_lang('lang_functions', $blanguage );
 
-include ("testa.php");
+include_once("testa.php");
 
 // errore
 echo"
@@ -257,7 +257,7 @@ echo "<h4>Informazioni messaggio salvate!</h4>
 <div class=\"fieldwrap\">
 	<h4>Informazioni messaggio salvate!</h4>
 	<form name=\"mehform\">
-		<textarea cols=\"70\" rows=\"5\" name=\"saved\" tabindex=\"2\">$txtsave</textarea>
+		<textarea cols=\"70\" rows=\"5\" name=\"saved\" tabindex=\"2\">".stripslashes($txtsave)."</textarea>
 	</form>
 	<p class=\"formbuttonrow1\"><input class=\"button\" type=\"button\" tabindex=\"1\" value=\"Seleziona tutto\" onclick=\"document.mehform.saved.select()\" /></p>
 </div>";
@@ -273,7 +273,8 @@ echo "<h4>Link utili</h4>
 </div>
 </div>";
 
-include ("end.php");
+include_once("end.php");
+die();
 
 }
 
