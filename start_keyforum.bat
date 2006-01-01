@@ -1,5 +1,32 @@
 @echo off
 
+rem controllo che il batch sia uscito in maniera pulita
+rem l'ultima volta che è stato eseguito
+if not exist WEBSERVER\Apache\logs\httpd.pid GOTO clean
+
+ECHO KeyForum e' stato interrotto in maniera anomala l'ultima volta
+ECHO che e' stato eseguito. Ricorda che se interrompi il programma
+ECHO premendo CTRL+C devi poi rispondere NO alla domanda
+ECHO "Terminare il processo batch (S/N)?"
+ECHO;
+ECHO Il metodo corretto per uscire da KeyForum e' fare click sul
+ECHO link "chiudi" in alto a sinistra della pagina web del forum
+ECHO;
+PAUSE
+
+rem STOP APACHE
+echo STOPPING APACHE...
+WEBSERVER\Apache\bin\pv -f -k apache.exe -q
+if not exist WEBSERVER\Apache\logs\httpd.pid GOTO exitapache
+del WEBSERVER\Apache\logs\httpd.pid
+:exitapache
+
+rem STOP MYSQL
+echo STOPPING MYSQL...
+COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf  shutdown --user=root --password= 
+
+:clean
+
 rem controllo la directory
 CALL COMMON\script\chkdir.bat
 
@@ -41,7 +68,7 @@ echo STOPPING MYSQL...
 COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf  shutdown --user=root --password= 
 echo KEYFORUM STOPPED !
 echo;
-pause
+REM pause
 GOTO end
 
 :exitall

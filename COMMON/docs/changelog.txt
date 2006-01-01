@@ -1,6 +1,7 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2006-01-01:	
+mmorselli:			[FIX] keyforum riparte anche se si interrompe con CTRL+C e si risponde S alla domanda "Terminare il processo batch (S/N)?"
 mmorselli:			[ADD] gestione errori
 
 
