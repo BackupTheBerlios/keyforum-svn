@@ -133,13 +133,13 @@ if(!$is_post_back && $verify)
 		</td>
 	</tr>
 	<tr>
-		<td width="70%">Visualizzare le immagini che gli altri utenti inseriscono nei loro messaggi?</td>
+		<? echo"<td width=\"70%\">".$lang['optusr_showimg']."</td>"; ?>
 		<td>
 			<?=select_yn('hideimg',$current['HIDEIMG'])?>
 		</td>
 	</tr>
 	<tr>
-		<td width="70%">Visualizzare gli avatar degli altri utenti quando leggi i messaggi del forum?</td>
+		<? echo "<td width=\"70%\">".$lang['optusr_showavatar']."</td>"; ?>
 		<td>
 			<?=select_yn('hideavatar',$current['HIDEAVATAR'])?>
 		</td>
@@ -158,7 +158,7 @@ if(!$is_post_back && $verify)
 		</td>
 	</tr>
 	<tr>
-		<td width="70%">Livello di comandi amministrativi da visualizzare</td>
+		<? echo "<td width=\"70%\">".$lang['optusr_admrights']."</td>"; ?>
 		<td>
 			<?=select_admin_controls('level',$current['LEVEL'],0)?>
 		</td>
