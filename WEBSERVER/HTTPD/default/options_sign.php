@@ -3,6 +3,7 @@ $whereiam='options_sign.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
+$lang = $std->load_lang('lang_optionssign', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -34,13 +35,13 @@ if($_POST['MEM_ID'])
 		<!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>'.
+			<div class="maintitle">'.$lang['optsign_welcome'].'</div>'.
 			show_private_form($_POST).
 		'</div></td></tr></table>';
 	}
 	else
 	{
-		echo "INSERIRE QUI IL CODICE PER MODIFICARE LA FIRMA:<br>Messaggi tipo 5";
+		echo "".$lang['optsign_info1']."";
 		$is_post_back= 0;
 	}
 }
@@ -62,7 +63,7 @@ if(!$is_post_back)
 		<!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<div class="maintitle">Benvenuto nel Pannelo di Controllo</div>
+			<? echo "<div class=\"maintitle\">".$lang['optsign_welcome']."</div>"; ?>
 			<script type="text/javascript">
 			<!--
 			var MessageMax  = "10000";
@@ -71,12 +72,12 @@ if(!$is_post_back)
 				MessageLength  = document.REPLIER.body.value.length;
 				message  = "";
 					if (MessageMax > 0){
-						message = "Lunghezza massima " + MessageMax + " caratteri.";
+						message =<? echo"\"".$lang['optsign_maxl']."\" + MessageMax + \"".$lang['optsign_char']."\"";?>;
 					}
 					else{
 					message = "";
 					}
-				alert(message + " Hai usato " + MessageLength + " caratteri.");
+				alert(message +<? echo"\"".$lang['optsign_used']."\" + MessageLength + \"".$lang['optsign_char']."\")"; ?>;
 			}
 	
 			function ValidateForm(){
@@ -84,7 +85,7 @@ if(!$is_post_back)
 				errors = "";
 					if (MessageMax !=0){
 						if (MessageLength > MessageMax){
-							errors = "Lunghezza massima " + MessageMax + " caratteri. Caratteri utilizzati: " + MessageLength;
+							errors =<? echo"\"".$lang['optsign_maxl']."\" + MessageMax + \"".$lang['optsign_rem']."\" + MessageLength"; ?>;
 						}
 					}
 					if (errors != "" && Override == ""){
@@ -101,9 +102,9 @@ if(!$is_post_back)
 </script>
 <form action="" method="post" name="REPLIER">
 <input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
-<div class="formsubtitle">Firma Attuale</div>
+<? echo"<div class=\"formsubtitle\">".$lang['optsign_currsign']."</div>"; ?>
 <div class="signature" style="padding: 5px;"><?=$current_sign_nobb?></div>
-<div class="formsubtitle">Modifica Firma</div>
+<? echo"<div class=\"formsubtitle\">".$lang['optsign_modsign']."</div>"; ?>
 <table cellspacing="0" align="center">
 	<tr>
 		<td align="center">
@@ -116,11 +117,11 @@ if(!$is_post_back)
 	<tr>
 		<td class="pformleft" align="center">
 			<textarea cols="60" rows="12" name="body" class="textinput"><?=$current_sign?></textarea><br />
-			(<a href="javascript:CheckLength()">Controlla Lunghezza</a>)
+			(<a href="javascript:CheckLength()"><? echo"".$lang['optsign_ctrllength']."";?></a>)
 		</td>
 	</tr>
 	<tr>
-		<td class="formbuttonrow"><input type="button" value="Aggiorna Firma"  onclick="ValidateForm()" class="button"/></td>
+		<? echo" <td class=\"formbuttonrow\"><input type=\"button\" value=\"".$lang['optsign_update']."\"  onclick=\"ValidateForm()\" class=\"button\"/></td>"; ?>
 	</tr>
 </table>
 </form>
