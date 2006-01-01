@@ -14,16 +14,7 @@ $lang['optusr_update']  = "Update";
 $lang['optusr_showimg']  = "Do you wish to view images in posts, such as smilies and posted images?";
 $lang['optusr_showavatar']  = "Do you wish to view members avatars when reading topics?";
 $lang['optusr_admrights']  = "Level of Admin rights to display";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
+$lang['optusr_yes']  = "Yes";
+$lang['optusr_no']  = "No";
 
 ?>

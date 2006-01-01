@@ -14,16 +14,8 @@ $lang['optusr_update']  = "Aggiorna";
 $lang['optusr_showimg']  = "Visualizzare le immagini che gli altri utenti inseriscono nei loro messaggi?";
 $lang['optusr_showavatar']  = "Visualizzare gli avatar degli altri utenti quando leggi i messaggi del forum?";
 $lang['optusr_admrights']  = "Livello di comandi amministrativi da visualizzare";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
-$lang['optusr_']  = "";
+$lang['optusr_yes']  = "Si";
+$lang['optusr_no']  = "No";
+
 
 ?>
