@@ -12,7 +12,6 @@ $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." AND {$SNAME}_newmsg.EDIT_OF='".$MSGID."'"
   ." AND {$SNAME}_newmsg.visibile='1'"
   ." AND {$SNAME}_membri.HASH={$SNAME}_msghe.AUTORE";
-  echo $query;
 $riga=$db->get_row($query);
 
 
@@ -43,7 +42,7 @@ else {
 $riga=$db->get_row($query);
 
 if ($riga) {
-  $quote_date = strftime("%d/%m/%y  - %H:%M:%S",$riga["data"]);
+  $quote_date = strftime("%d/%m/%y  - %H:%M:%S",$riga->data);
   $box_text = "[quote=".secure_v($riga->autore)." @ $quote_date]".htmlspecialchars(stripslashes($riga->body))."[/quote]";
 }
 else {
