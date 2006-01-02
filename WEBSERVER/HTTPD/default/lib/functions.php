@@ -278,6 +278,53 @@ die();
 
 }
 
+function ForumJumper($forumid=0)
+{
+global $db;
+
+include "TreeClass.php";
+
+$tree=new Tree;
+
+$tree->AddNode(" 0","root");
+
+$result = $db->get_results("select id,sez_name,figlio,ordine from keyfo_sez order by figlio,ordine");
+
+foreach ( $result as $row )
+{
+$tree->AddNode(" ".$row->id," ".$row->figlio);
+$forum[$row->id+0]=$row->sez_name;
+}
+
+/* Draw tree */
+
+$ris=$tree->drawTree();
+
+$output .= "<form method='POST' name='jumpform' action=''>";
+$output .= "<select name='forumjump' class='content' size='1' onchange='location.href=document.jumpform.forumjump.options[document.jumpform.forumjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>";
+$output .= "<optgroup label='Salta a un forum'>"; 			
+
+
+while (list ($key, $value) = each ($ris)) {
+  $l=$value['lev']-4;  
+  if ($l >=0) 
+    {
+    $fid=trim($value['id'])+0;
+    if ($fid == $forumid) {$selected="selected";} else {$selected="";}	
+    $output .= "<option  $selected value='sezioni.php?SEZID=$fid'>";
+    if ($l >0) { $output .= "|"; }
+    $output .= str_repeat("-",$l).$forum[$fid]."<br>";  
+    $output .= "</option>";
+    }  
+}
+
+$output .= "</optgroup></select></form>";
+
+
+return $output;
+
+}
+
 
 
 }

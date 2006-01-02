@@ -116,6 +116,12 @@ $newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang=";
      </select>
     </form>
    </td>
+   <td align=right>";
+   
+  // forum jumper
+  echo $std->ForumJumper($_REQUEST['SEZID']);
+   
+   echo "</td>
   </tr>
  </table>";
  ?> 
