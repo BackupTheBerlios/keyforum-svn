@@ -12,12 +12,7 @@
 	//  and what your using it for!! Cheers. [ justin@visunet.ie ]
 	//
 	// ==================================================================
-	// User Settings -- CHANGE HERE
 
-	define("EZSQL_DB_USER", "");			// <-- mysql db user
-	define("EZSQL_DB_PASSWORD", "");		// <-- mysql db password
-	define("EZSQL_DB_NAME", "mysql");		// <-- mysql db pname
-	define("EZSQL_DB_HOST", "localhost");	// <-- mysql server host
 
 	// ==================================================================
 	//	ezSQL Constants

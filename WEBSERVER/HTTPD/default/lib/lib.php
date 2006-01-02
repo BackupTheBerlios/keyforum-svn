@@ -5,11 +5,12 @@
   $Timer1 = $Timer1[0] + $Timer1[1];
 
 session_start();
-require_once('ez_sql.php');
+
 
 //classe PEAR per file config (XML)
 require_once "Config.php";
 $xmldata = new Config;
+
 
 $root =& $xmldata->parseConfig('http://'.$_SERVER['HTTP_HOST'].'/config/config.xml', 'XML');
 if (PEAR::isError($root)) {
@@ -25,6 +26,13 @@ $_ENV['sql_passwd']=$settings['root']['conf']['DB']['dbpassword'];
 $_ENV['sql_dbname']=$settings['root']['conf']['DB']['dbname'];
 $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
 
+
+define("EZSQL_DB_USER", $_ENV['sql_user']);			
+define("EZSQL_DB_PASSWORD", $_ENV['sql_passwd']);		
+define("EZSQL_DB_NAME", $_ENV['sql_dbname']);		
+define("EZSQL_DB_HOST", "{$_ENV['sql_host']}:{$_ENV['sql_dbport']}");
+
+require_once('ez_sql.php');
 
 
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
@@ -185,5 +193,6 @@ CheckSession();
 
 // *** DATI UTENTE ****
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
+
 
 ?>
