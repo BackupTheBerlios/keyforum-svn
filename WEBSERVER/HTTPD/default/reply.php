@@ -12,7 +12,9 @@ $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." AND {$SNAME}_newmsg.EDIT_OF='".$MSGID."'"
   ." AND {$SNAME}_newmsg.visibile='1'"
   ." AND {$SNAME}_membri.HASH={$SNAME}_msghe.AUTORE";
-$risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
+  echo $query;
+$riga=$db->get_row($query);
+
 
 if (!$sess_auth) {
   $url = "login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["THR_ID"]."&pag=".$_REQUEST["pag"];
@@ -21,12 +23,13 @@ if (!$sess_auth) {
   include "end.php";
   exit;
 }
-if ($riga = mysql_fetch_assoc($risultato)) {
-  echo "<tr><td>".$lang['reply_info1']."<b>$riga[autore]</b> ".$lang['reply_info2']." \"".secure_v($riga['title'])."\":<br />";
+if ($riga) {
+  echo "<tr><td>".$lang['reply_info1']."<b>$riga->autore</b> ".$lang['reply_info2']." \"".secure_v($riga->title)."\":<br />";
 }
 else {
-  echo "<tr><td>".$lang['reply_notfound']."</td></tr>\n";
-  include "end.php";
+	$std->Error($lang['reply_notfound']);
+ /* echo "<tr><td>".$lang['reply_notfound']."</td></tr>\n";
+  include "end.php";*/
   exit;
 }
 
@@ -37,11 +40,11 @@ if ($Quote == $MSGID) {
 else {
   $query="SELECT body,(reply.`date`+".GMT_TIME.") as data,membri.autore from {$SNAME}_reply as reply,{$SNAME}_membri as membri where reply.autore=membri.hash and reply.EDIT_OF='$Quote' and visibile='1';";
 }
-$risultato=mysql_query($query);
+$riga=$db->get_row($query);
 
-if ($riga = mysql_fetch_assoc($risultato)) {
+if ($riga) {
   $quote_date = strftime("%d/%m/%y  - %H:%M:%S",$riga["data"]);
-  $box_text = "[quote=".secure_v($riga["autore"])." @ $quote_date]".htmlspecialchars(stripslashes($riga["body"]))."[/quote]";
+  $box_text = "[quote=".secure_v($riga->autore)." @ $quote_date]".htmlspecialchars(stripslashes($riga->body))."[/quote]";
 }
 else {
   $box_text = "";

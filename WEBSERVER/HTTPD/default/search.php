@@ -44,8 +44,8 @@ else {
   $SQLQuery = "select sum(num) as num from (($SQLQuery1) UNION ($SQLQuery2)) as result_num";
 
   $risultato=mysql_query($SQLQuery) or Muori ("Query non valida: " . mysql_error());
-  if ($riga = mysql_fetch_assoc($risultato))
-    $num = $riga["num"];
+  if ($riga = $db->get_var($SQLQuery))
+    $num = $riga;
   else
     $num = 0;
 

@@ -21,9 +21,8 @@ Select    AUTORE
 	, msg_num
 from {$SNAME}_membri
 WHERE HASH = '$hash' LIMIT 1";//not used AUTH, TYPE, SIGN ,is_auth ,ban, present, edit_firma, edit_adminset
-$result = mysql_query($query) or die(mysql_error().$query);
-if(!mysql_num_rows($result)) Muori("ShowMember: user does NOT exist");
-$pdata = mysql_fetch_array($result);
+$pdata = $db->get_row($query);
+if(!pdata){	$std->Error("ShowMember: user does NOT exist"); } 
 
 //statistiche messaggi
 //1 - Messaggi totali board se non già calcolati
@@ -32,7 +31,7 @@ if(!$totmsg)
 	$query = "
 	SELECT    sum(THR_NUM) + sum(REPLY_NUM) as totmsg
 	FROM {$SNAME}_sez WHERE 1;";
-	list($totmsg) = mysql_fetch_row(mysql_query($query));
+	$totmsg = $db->get_var($query);
 }
 //2 - max dei messaggi totali personali gruppati per sezione 
 $query = "
@@ -74,8 +73,7 @@ FROM {$SNAME}_newmsg
 WHERE {$SNAME}_newmsg.autore = '$hash')
 ORDER BY date DESC 
 Limit 1";
-$result = mysql_query($query) or die(mysql_error().$query);
-$last_data=mysql_fetch_array($result);
+$last_data=$db->get_row($query);
 
 /*
 Struct User:
@@ -84,21 +82,21 @@ Struct User:
 */
 $user = Array(
 	  'id' 		=>$_GET['MEM_ID']
-	, 'nick'	=>$pdata['AUTORE']
+	, 'nick'	=>$pdata->AUTORE
 	, 'surnick'	=>''
-	, 'reg_date'	=>$pdata['reg_date']
-	, 'group'	=>array('text' => $pdata['title'],'image' =>NULL)
-	, 'msg_num'	=>array('tot' => $pdata['msg_num'],'daily' =>'','perc'=> '' )
+	, 'reg_date'	=>$pdata->reg_date
+	, 'group'	=>array('text' => $pdata->title,'image' =>NULL)
+	, 'msg_num'	=>array('tot' => $pdata->msg_num,'daily' =>'','perc'=> '' )
 	, 'msg_sez'	=>array('tot' => $sez_data['num_reply'],'perc'=> '','sez_id' => $sez_data['id'],'sez_name' => $sez_data['SEZ_NAME'])
 	, 'home'	=>''
-	, 'avatar'	=>$pdata['avatar']
-	, 'sign'	=>$pdata['firma']
+	, 'avatar'	=>$pdata->avatar
+	, 'sign'	=>$pdata->firma
 	, 'icq'		=>NULL
 	, 'msn'		=>NULL
 	, 'location'	=>''
 	, 'compleanno'	=>''
 	, 'online'	=>array('text' => '','image' =>'') //IMPOSSIBLE TO DO
-	, 'last_action'	=>array('title' => $last_data['title'],'data' => $last_data['date'],'sez' => $last_data['sez'], 'reply_id' =>$last_data['hash'])
+	, 'last_action'	=>array('title' => $last_data->title,'data' => $last_data->date,'sez' => $last_data->sez, 'reply_id' =>$last_data->hash)
 	);
 unset($pdata);
 unset($sez_data);

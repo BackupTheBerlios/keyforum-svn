@@ -4,10 +4,9 @@ require_once("lib/lib.php");
 $id=$_GET['id'];
 $SNAME=$_ENV['sesname'];
 $query = "Select binimage,binimagetype FROM `{$SNAME}_emoticons` where id=$id";
-$result = @mysql_query($query);
-list($image,$extn) = @mysql_fetch_row($result);
+$emo = $db->get_row($query);
 
-show_db_image($image,$extn);
+show_db_image($emo->binimage,$emo->binimagetype);
 
 
 function show_db_image($image, $extn)

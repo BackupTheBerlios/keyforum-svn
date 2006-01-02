@@ -13,14 +13,14 @@
 $SNAME=$_ENV['sesname'];
 
 $query="select * from {$SNAME}_localkey";
-$result = mysql_query($query) or die(mysql_error().$query);
+$result = $db->get_results($query);
 
-while($row=mysql_fetch_array($result))
+foreach($result as $row)
 {
 $keycount++;
-$key['id'][$keycount]=$row['id'];
-$key['name'][$keycount]=$row['kname'];
-$key['value'][$keycount]=$row['kvalue'];
+$key['id'][$keycount]=$row->id;
+$key['name'][$keycount]=$row->kname;
+$key['value'][$keycount]=$row->kvalue;
 }
 
 ?>

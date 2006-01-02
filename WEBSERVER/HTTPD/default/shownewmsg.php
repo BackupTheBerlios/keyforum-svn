@@ -96,10 +96,7 @@ FROM {$SNAME}_msghe AS msghe,
 WHERE newmsg.EDIT_OF=msghe.HASH AND newmsg.visibile='1' AND membri.HASH=msghe.AUTORE 
 AND repau.HASH=msghe.last_reply_author  AND last_reply_time > $timelimit";
 
-$risultato=mysql_query($query);
-$riga = mysql_fetch_assoc($risultato);
-
-$Num3d = $riga["HASH"];
+$Num3d = $db->get_var($query);
 $NumPag = intval(($Num3d-1) / $ThreadXPage);
 $CurrPag = $_REQUEST["pag"];
 if (! is_numeric($CurrPag))
@@ -145,9 +142,9 @@ PageSelect();
 
 // ricavo la lista delle sezioni e la metto in un array
 $query="SELECT ID,SEZ_NAME from {$SNAME}_sez";
-$risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-while ($riga = mysql_fetch_assoc($risultato)) {
- $sezname[$riga['ID']]=$riga['SEZ_NAME'];
+$sez = $db->get_results($query);
+foreach ($sez as $riga) {
+ $sezname[$riga->ID]=$riga->SEZ_NAME;
 }
 
 $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"

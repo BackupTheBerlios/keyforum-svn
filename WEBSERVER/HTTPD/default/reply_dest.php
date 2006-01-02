@@ -26,10 +26,8 @@ if (!$GLOBALS['sess_auth']) die ($lang['reply_login']);
 
 $IDENTIFICATORE=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
 $KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
-  $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
-  $risultato = mysql_query($query) or die ($lang['inv_query'] . mysql_error());
-$riga = mysql_fetch_assoc($risultato) or die($lang['reply_user']);
-$privkey=base64_decode($riga[PASSWORD]);
+$query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
+$privkey=base64_decode($db->get_var($query));
 
 $PKEY=$std->getpkey($SNAME);
 $req[FUNC][Base642Dec]=$PKEY;

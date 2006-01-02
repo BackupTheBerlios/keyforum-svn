@@ -1,11 +1,12 @@
 <?PHP
 // v. 0.14
+$SNAME=$_ENV['sesname'];
+$whereiam="userlist";
 include ("testa.php");
 // carico la lingua per le sezioni
 $lang = $std->load_lang('lang_userlist', $blanguage );
 
-$SNAME=$_ENV['sesname'];
-$whereiam="userlist";
+
 ?>
 <tr><td>
 <?
@@ -176,20 +177,18 @@ window.onload = prepare;
 <?
 if($_REQUEST['validati']){
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT count(HASH) AS c FROM {$SNAME}_membri;");
+      $query="SELECT count(HASH) AS c FROM {$SNAME}_membri;";
    }else{
-      $risultato=mysql_query("SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='1';");
+      $query="SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='1';";
    }
 }else{
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='0';");
+      $query="SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='0';";
    }else{
-      $risultato=mysql_query("SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='2';");
+      $query="SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='2';";
    }
 }
-$ris=mysql_query($risultato);
-$riga = mysql_fetch_assoc($risultato);
-$Num3d = $riga['c'];
+$Num3d = $db->get_var($risultato);
 $NumPag = intval(($Num3d-1) / $UserXPage);
 $CurrPag = $_REQUEST['pag'];
 if (! is_numeric($CurrPag))
@@ -262,7 +261,7 @@ while($ris=mysql_fetch_assoc($risultato)) {
 		echo $lang['usrlist_validated'];
 	
 		// Validator or Admin only
-		if ($userdata['LEVEL'] >8)
+		if ($userdata->LEVEL >8)
 		{
 	        echo "</td>\n\t<td class='row2'><input type=\"checkbox\" name=\"toauth[$i]\" value=\"$userhash[hex]\" />Auth";
 		$displaysubmit=1;

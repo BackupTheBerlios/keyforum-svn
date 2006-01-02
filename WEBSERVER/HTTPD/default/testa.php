@@ -22,9 +22,7 @@ $Section = 3; # Numero di pagine da visualizzare a sn e a ds dell'attuale (es. .
 $SNAME=$_ENV["sesname"];
 
 $queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
-$responseacbd=mysql_query($queryacbd) or Muori ($lang['inv_query'] . mysql_error());
-$valueacbd=mysql_fetch_assoc($responseacbd);
-$BNAME=$valueacbd['SUBKEY'];
+$BNAME=$db->get_var($queryacbd);
 
 if($userdata->LANG) {
 $blanguage=$userdata->LANG; // Lingua di visualizzazione
@@ -62,9 +60,8 @@ $lang = $std->load_lang('lang_testa', $blanguage );
   if (pack("H*",$_REQUEST[THR_ID])){
     $MSGID=mysql_escape_string(pack("H*",$_REQUEST[THR_ID]));
     $query="SELECT title, subtitle FROM {$SNAME}_newmsg WHERE EDIT_OF='$MSGID' ORDER BY DATE DESC LIMIT 1;";
-    $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-    $title1=mysql_fetch_assoc($risultato);
-    $title=$title1["title"];
+    $result=$db->get_row($query);
+    $title=$result->title;
     $title=secure_v($title);
     echo $title." - ";
   }else{
@@ -141,14 +138,14 @@ function mklastselected() {
 <?php
 
    $querysetup="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='SETUP' OR SUBKEY='".$BNAME."';";
-   $responsetup=mysql_query($querysetup) or Muori ($lang['inv_query'] . mysql_error());
-   while($valuesetup=mysql_fetch_assoc($responsetup)){
-      if(($valuesetup['FKEY']=="BIND")AND($valuesetup['SUBKEY']=="SETUP")){
-         $bindsetup=$valuesetup['VALUE'];
-      }elseif(($valuesetup['FKEY']=="PORTA")AND($valuesetup['SUBKEY']=="SETUP")){
-         $portsetup=$valuesetup['VALUE'];
-      }elseif($valuesetup['FKEY']=="BIND"){
-         $bindboard=$valuesetup['VALUE'];
+   $responsetup=$db->get_results($querysetup);
+   foreach($responsetup as $valuesetup){
+      if(($valuesetup->FKEY=="BIND")AND($valuesetup->SUBKEY=="SETUP")){
+         $bindsetup=$valuesetup->VALUE;
+      }elseif(($valuesetup->FKEY=="PORTA")AND($valuesetup->SUBKEY=="SETUP")){
+         $portsetup=$valuesetup->VALUE;
+      }elseif($valuesetup->FKEY=="BIND"){
+         $bindboard=$valuesetup->VALUE;
       }
    }
    if($portsetup){
@@ -166,27 +163,27 @@ function mklastselected() {
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
    <?php
       $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
-      $responsewse=mysql_query($querywse) or Muori ("Query non valida: " . mysql_error());
-      while($valuewse=mysql_fetch_assoc($responsewse)){
-       if($valuewse['SUBKEY']!=$SNAME){
-         $queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='".$valuewse['SUBKEY']."';";
-         $responsews=mysql_query($queryws) or Muori ("Query non valida: " . mysql_error());
-         while($valuews=mysql_fetch_assoc($responsews)){
-            $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='".$valuews['SUBKEY']."' OR SUBKEY='".$BNAME."';";
-            $responsewsl=mysql_query($querywsl) or Muori ($lang['inv_query'] . mysql_error());
-            while($valuewsl=mysql_fetch_assoc($responsewsl)){
-               if(($valuewsl['FKEY']=="BIND")AND($valuewsl['SUBKEY']==$valuews['SUBKEY'])){
-                  $bindwsl=$valuewsl['VALUE'];
-               }elseif(($valuewsl['FKEY']=="PORTA")AND($valuewsl['SUBKEY']==$valuews['SUBKEY'])){
-                  $portwsl=$valuewsl['VALUE'];
-               }elseif($valuewsl['FKEY']=="BIND"){
-                  $bindboard=$valuewsl['VALUE'];
+      $responsewse=$db->get_results($querywse);
+      foreach($responsewse as $valuewse){
+       if($valuewse->SUBKEY!=$SNAME){
+         $queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='$valuewse->SUBKEY';";
+         $responsews=$db->get_results($queryws);
+         foreach($responsews as $valuews){
+            $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='$valuews->SUBKEY' OR SUBKEY='$BNAME';";
+            $responsewsl=$db->get_results($querywsl);
+            foreach($responsewsl as $valuewsl){
+               if(($valuewsl->FKEY=="BIND")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
+                  $bindwsl=$valuewsl->VALUE;
+               }elseif(($valuewsl->FKEY=="PORTA")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
+                  $portwsl=$valuewsl->VALUE;
+               }elseif($valuewsl->FKEY=="BIND"){
+                  $bindboard=$valuewsl->VALUE;
                }
             }
             if($portwsl){
                if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
                   $addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
-                  echo '<option value="http://'.$addrwsl.':'.$portwsl.'/">'.$valuews['SUBKEY'].'</option>';
+                  echo '<option value="http://'.$addrwsl.':'.$portwsl.'/">'.$valuews->SUBKEY.'</option>';
                }
             }
          }
@@ -265,12 +262,11 @@ if ($SEZ_DATA->ID) {
   $notlastid=$SEZ_DATA->ID;
   $seznum=1;
   while($notlastid){
-    $querysez="SELECT ID, SEZ_NAME, FIGLIO FROM {$SNAME}_sez WHERE ID=".$notlastid.";";
-    $risultatosez=mysql_query($querysez) or Muori ($lang['inv_query'] . mysql_error());
-    $notlast=mysql_fetch_assoc($risultatosez);
-    $notlastid=$notlast['ID'];
-    $sezvet[$seznum]="<img src='img/3.gif' alt=''> <a href='sezioni.php?SEZID=".$notlastid."'>".secure_v($notlast['SEZ_NAME'])."</a>\n";
-    $notlastid=$notlast['FIGLIO'];
+    $querysez="SELECT ID, SEZ_NAME, FIGLIO FROM {$SNAME}_sez WHERE ID='$notlastid';";
+    $notlast=$db->get_row($querysez);
+    $notlastid=$notlast->ID;
+    $sezvet[$seznum]="<img src='img/3.gif' alt=''> <a href='sezioni.php?SEZID=".$notlastid."'>".secure_v($notlast->SEZ_NAME)."</a>\n";
+    $notlastid=$notlast->FIGLIO;
     $seznum++;
   }
   while($seznum){
@@ -279,7 +275,7 @@ if ($SEZ_DATA->ID) {
   }
 }
 if ($title) {
-  if($title1["subtitle"]) $title=$title.", ".$title1["subtitle"];
+  if($title1->subtitle) $title=$title.", ".$title1->subtitle;
   echo "  <img src=\"img/3.gif\" alt=\"\" /> ".secure_v($title)."\n";
 }
 ?>
