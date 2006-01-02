@@ -51,7 +51,7 @@ $lang = $std->load_lang('lang_ednewmsg', $blanguage );
 //-->
 </script>
 <div id="FastReply" class='post2'>
-<form method=post action="destnewmsg.pl">
+<form method=post action="destnewmsg2.php">
 <input type="hidden" name="edit_of" value="<?PHP echo $_REQUEST["EDIT_OF"];?>">
   <div id="colo-sx" class='post2' align=center>
     <table width="100" border="0" cellspacing="0" cellpadding="3">
