@@ -51,12 +51,10 @@ function PageSelect($pos) {
     ?>
     </td>
     <td align="right" width="80%">
-      <a href="reply.php?SEZID=<?=$_REQUEST["SEZID"]?>&amp;THR_ID=<?=$_REQUEST["THR_ID"]?>">
-	  	<img src='img/buttons/<?=$blanguage?>/t_reply.gif' border='0' alt='Rispondi' />
-	  </a>
+      <a href="reply.php?SEZID=<?=$_REQUEST["SEZID"]?>&amp;THR_ID=<?=$_REQUEST["THR_ID"]?>"><img src='img/buttons/<?=$blanguage?>/t_reply.gif' border='0' alt='Rispondi' /></a>
     </td>
     <td align="right" width="80%">
-      <a href="writenewmsg.php?SEZID=<?php echo $_REQUEST[SEZID]; ?>" class="normalname"> <?php echo " <img src='img/buttons/".$blanguage."/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>"; ?>
+      <a href="writenewmsg.php?SEZID=<?=$_REQUEST[SEZID]?>" class="normalname"><img src='img/buttons/<?=$blanguage?>/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>
     </td>
     </tr>
     <?php

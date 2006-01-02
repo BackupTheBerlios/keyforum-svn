@@ -160,30 +160,21 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   
  //die($query);
   
-$risultato=$db->get_results($query) or Muori ($lang['inv_query'] . mysql_error());
-
+$risultato=$db->get_results($query);
 if($risultato) foreach($risultato as $riga ) {
   $iden=unpack("H32hex",$riga->HASH);
   $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->last_reply_time);
   $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->write_date);
-  $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
-  if ($tmp) {
-    $num = $tmp;
-    if ($num<$riga->reply_num)
-      $PostStatImage = "f_norm";
-    else
-      $PostStatImage = "f_norm_no";
-    if ($riga->nickhash)
-      $nickhash=unpack("H32alfa",$riga->nickhash);
-    else 
-      $nickhash['alfa']=''; 
-    if ($riga->dnickhash)
-      $dnickhash=unpack("H32alfa",$riga->dnickhash);
-    else 
-      $dnickhash['alfa']=''; 
+  $num = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
+  //Default data
+  if ($num) 
+  {
+	$PostStatImage = ($num < $riga->reply_num ? "f_norm" : "f_norm_no");
+    $nickhash =($riga->nickhash ? unpack("H32alfa",$riga->nickhash) : '');
+    $dnickhash=($riga->dnickhash ? unpack("H32alfa",$riga->dnickhash) : '');
   }
   else
-    $PostStatImage = "f_norm";
+  $PostStatImage = "f_norm";
   $rep=$riga->reply_num;
   $i=0;
   $Pages="";
