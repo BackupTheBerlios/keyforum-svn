@@ -37,11 +37,11 @@ if(($userdata->LEVEL)  OR ($MSG['autore']==$mio_nick))
 {
   if ($MSG['repof']) {
     $tmp=unpack("H32repof/H32mshash", $MSG['repof'].$MSG['hash']);
-    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
+    $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/buttons/".$blanguage."/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
   elseif ($MSG[SEZ]) {
     $tmp=unpack("H32mshash", $MSG['edit_of']);
-    $EDITER="<a href='ednewmsg.php?EDIT_OF=".$tmp['mshash']."&amp;SEZID=$MSG[SEZ]'><img src=\"img/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
+    $EDITER="<a href='ednewmsg.php?EDIT_OF=".$tmp['mshash']."&amp;SEZID=$MSG[SEZ]'><img src=\"img/buttons/".$blanguage."/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
 }  
   
@@ -117,7 +117,7 @@ EOF;
  <td class='darkrow3' nowrap='nowrap' align='left'>
    <!-- PM / EMAIL / WWW / MSGR / UP -->
    <div align='left' class='darkrow3' style='float:left;width:auto'>
-     <a href='javascript:scroll(0,0);'><img src=\"img/12.gif\" border=\"0\" alt=''></a>
+     <a href='javascript:scroll(0,0);'><img src=\"img/buttons/".$blanguage."/p_up.gif\" border=\"0\" alt=''></a>
    </div>
 
    <!-- REPORT / UP -->
