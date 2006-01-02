@@ -31,19 +31,14 @@ $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['
 /*$SQL = mysql_pconnect($_ENV['sql_host'].":".$_ENV['sql_dbport'],$_ENV['sql_user'],$_ENV['sql_passwd']);
 if (!$SQL) die ("Non riesco a connettermi al server MySQL");
 if ( !mysql_select_db($_ENV['sql_dbname']) ) die("Impossibile aprire il DataBase MySQL:".mysql_error()."</br>");*/
+
 define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
 define ("GMT_TIME", 3600*1);
 
     $porta=$_SERVER['SERVER_PORT'] ;
-    //$query2="SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1";
-    //$risultato2 = mysql_query($query2) or Muori ("Query non valida: " . mysql_error());
-    //$riga2 = mysql_fetch_assoc($risultato2);
-	$subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
-    //$query="SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='".$riga2['subkey']."'";
-    //$risultato = mysql_query($query) or Muori ("Query non valida: " . mysql_error());
-    //$riga = mysql_fetch_assoc($risultato);
-	$riga = $db->get_var("SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='$subkey'");
+    $subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
+    $riga = $db->get_var("SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='$subkey'");
     if($riga){
          $_ENV['sesname']=$riga;
     } else {
@@ -84,10 +79,13 @@ function CheckSession() {
 
 }
 
-function DestroySession() {
-
-$query="DELETE FROM `session` WHERE `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';";
-mysql_query($query) or Muori ("Query non valida: " . mysql_error());
+function DestroySession() 
+{
+	$sess_id = session_id();
+	$my_ip = $_SERVER['REMOTE_ADDR'];
+	$SNAME = $_ENV['sesname'];
+	$query="DELETE FROM session WHERE SESSID='$sess_id' AND IP=md5('$my_ip') AND FORUM='$SNAME' ";
+	$db->query($query);
 }
 
 function Muori($errore) {
@@ -95,6 +93,7 @@ function Muori($errore) {
   exit(0);
 }
 function GetLastMsg($sezid) {
+	global $db;
 	$query="SELECT (msghe.last_reply_time+".GMT_TIME.") AS 'time_action', newmsg.TITLE AS 'TITLE', membri.AUTORE AS 'nick', membri.HASH AS 'nickhash', newmsg.EDIT_OF AS 'hash',newmsg.SEZ AS 'SEZID'"
 	." FROM ".$_ENV['sesname']."_msghe AS msghe, ".$_ENV['sesname']."_membri AS membri,".$_ENV['sesname']."_newmsg AS newmsg"
 	." WHERE msghe.HASH=newmsg.EDIT_OF"
@@ -103,8 +102,8 @@ function GetLastMsg($sezid) {
 	." AND newmsg.SEZ='".$sezid."'"
 	." ORDER BY msghe.last_reply_time DESC"
 	." LIMIT 1;";
-	$risultato=mysql_query($query) or Muori ("Query non valida: " . mysql_error());
-	return(mysql_fetch_assoc($risultato));
+	$risultato=$db->get_row($query);
+	return($risultato);
 }
 function Ip2Num ($ip) {
 	$ip=explode('.',$ip);
@@ -117,8 +116,8 @@ function Num2Ip ($ip) {
 	return implode('.', unpack("C4",pack("I",$ip+0)));
 }
 
-mysql_query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
-if (rand(0,10)<1) mysql_query("DELETE FROM `session` WHERE `DATE`<'".(time()-3600)."';");
+$db->query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+if (rand(0,10)<1) $db->query("DELETE FROM `session` WHERE `DATE`<'".(time()-3600)."';");
 if ($_REQUEST['SEZID']) 
 {
 	$tmp = mysql_escape_string($_GET['SEZID']);
@@ -183,6 +182,33 @@ CheckSession();
 
 // *** DATI UTENTE ****
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
+if($userdata->LANG)
+{
+	$blanguage=$userdata->LANG; // Lingua di visualizzazione
+}
+else 
+{
+	switch (substr(trim($HTTP_ACCEPT_LANGUAGE),0,2)) 
+	{
+		case "it":
+			$blanguage="ita";
+		break;
+		case "fr":
+			$blanguage="eng";
+		break;
+		case "de":
+			$blanguage="eng";
+		break;
+		case "es":
+			$blanguage="eng";
+		break;
+		case "en-us":
+		case "en":
+		default:
+			$blanguage="eng";
+		break;
+	} 
+}
 
 
 ?>

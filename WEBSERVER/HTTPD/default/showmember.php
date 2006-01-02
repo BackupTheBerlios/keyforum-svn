@@ -49,13 +49,12 @@ JOIN {$SNAME}_sez ON {$SNAME}_sez.id = {$SNAME}_newmsg.sez
 WHERE {$SNAME}_newmsg.autore = '$hash'
 AND {$SNAME}_newmsg.visibile = '1'
 GROUP BY sez";
-$result = mysql_query($query) or die(mysql_error().$query);
-while($row=mysql_fetch_array($result))
+$result =$db->get_results($query);
+if($result) foreach($result as $row)
 {
-	list($tmp,$sez_name,$sez_id) = $row;
-	$sez_data[$sez_id]['num_reply'] += $tmp;
-	$sez_data[$sez_id]['SEZ_NAME'] = $sez_name;
-	$sez_data[$sez_id]['sez_id'] = $sez_id;
+	$sez_data[$sez_id]['num_reply'] += $row->num;
+	$sez_data[$sez_id]['SEZ_NAME'] = $row->sez_name;
+	$sez_data[$sez_id]['sez_id'] = $row->sez_id;
 }
 @rsort($sez_data);
 $sez_data = $sez_data[0];

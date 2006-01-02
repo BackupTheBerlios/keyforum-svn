@@ -39,7 +39,7 @@ if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the 
         $identif = md5( md5($password,TRUE) . $nick );
         $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
                         . $identif . "','" . mysql_real_escape_string($privkey) . "' $optvalue)";
-        if ( !mysql_query($sql_insert) ) die("".$lang['reg_usererr']."");
+        if ( !$db->query($sql_insert) ) die("".$lang['reg_usererr']."");
         else echo "".$lang['reg_importok']."";
         include ("end.php");
         exit;
@@ -88,9 +88,9 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	unset($coreresp,$corereq);
 	
 	echo "Adding user into the local members table... ";
-	$sqladd = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
+	$sqladd = "INSERT INTO {$SNAME}_localmember (hash, password $optfield) VALUES ('"
                     . $identif . "','" . mysql_real_escape_string($rsapriv) . "' $optvalue)";
-        if ( !mysql_query($sqladd) ) die("".$lang['reg_usererr']."");
+        if ( !$db->query($sqladd) ) die("".$lang['reg_usererr']."");
         else echo "Ok<br><br>";
 	
 	echo "<br>";
@@ -102,7 +102,7 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	$addreq['FORUM']['ADDMSG']['PKEY'] = $rsapub_bin;
 	$addreq['FORUM']['ADDMSG']['SIGN'] = $firma_rsa;
 	$addreq['FORUM']['ADDMSG']['TYPE'] = '4';
-	$addreq['FORUM']['ADDMSG']['FDEST'] = sha1($PKEY,TRUE);
+	$addreq['FORUM']['ADDMSG']['FDEST'] = pack('H*',sha1($PKEY));
 	
 	if ( !$coresk->Send($addreq) ) die("Error sending the request to the core!");
 	$coreresp = $coresk->Read();

@@ -2,14 +2,15 @@
 
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
-CheckSession();
+//Già appena fatto da lib.php
+/*CheckSession();
 ?>
 <?
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
 
 if($userdata->LANG) {
 $blanguage=$userdata->LANG; // Lingua di visualizzazione
-} else {$blanguage="eng";}
+} else {$blanguage="eng";}*/
 
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV["sesname"];
@@ -45,13 +46,12 @@ if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
 $userhash=mysql_real_escape_string($userhash);
 
 $banquery="SELECT ban FROM $SNAME" . "_membri WHERE HASH='$userhash';";
-$banresult=mysql_query($banquery);
-$banned=mysql_fetch_row($banresult);
-if ( $banned[0] ) die($lang['reply_ban']);
+$banned=$db->get_var($banquery);
+if ( $banned ) die($lang['reply_ban']);
 
-$querysql="SELECT count(*) FROM " . $SNAME . "_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
-$sqlresult=mysql_query($querysql);
-if (!mysql_num_rows($sqlresult)) die($lang['reply_mnf']);
+$querysql="SELECT count(1) FROM {$SNAME}_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
+$sqlresult=$db->get_var($querysql);
+if (!$sqlresult) die($lang['reply_mnf']);
 $mreq['FORUM']['ADDMSG'];
 $mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
 $mreq['FORUM']['ADDMSG']['REP_OF']=$MSG_HASH;

@@ -39,13 +39,13 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
   // ****** Devo prima reperire l'hash dell'utente
   $query="SELECT `PASSWORD` FROM `".mysql_real_escape_string($_ENV["sesname"])."_localmember` WHERE `HASH`=".???????.";";
   $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-  if !($SECTION_DATA = mysql_fetch_assoc($risultato)) {
+  if !($PASSWORD = $db->get_var($query)) {
     echo "Impossibile caricare la chiave privata.<br>\n";
     include ("end.php");
     exit(0);
   }
 
-  if (strlen($SECTION_DATA["PKEY"])>100) {
+  if (strlen($PASSWORD)>100) {
     $privForum=$_REQUEST["PrivKey"];
     $privForum or Muori("Per inserire messaggi in questa sezione occore possedere la chiave privata.<br>\n");
     ForumLib::Error("Chiave privata immessa non valida.<br>\n") unless eval {$privForum=ForumLib::ConvPrivateKey($privForum)};

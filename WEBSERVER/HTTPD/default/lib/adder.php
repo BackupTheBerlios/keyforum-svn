@@ -6,6 +6,7 @@ class ADDER {
 
       private $fname;
       private $magic_q;
+	  global $db;
       
       public function ADDER($sesname) 
       {
@@ -76,9 +77,9 @@ class ADDER {
       
       public function UpDateLastTime($date,$autore,$rep_of,$date)
       {
-          escape(array(&$date,&$autore,&$rep_of,&$date));
-          $sql = "UPDATE $fname" . "_msghe SET last_reply_time='$date',last_reply_author='$autore' WHERE HASH='$rep_of' AND last_reply_time<$date;";
-          if ( !(mysql_query($query)) ) die("Errore nella Query!\n");
+		escape(array(&$date,&$autore,&$rep_of,&$date));
+        $sql = "UPDATE {$fname}_msghe SET last_reply_time='$date',last_reply_author='$autore' WHERE HASH='$rep_of' AND last_reply_time<$date;";
+          if ( !($db->query($sql)) ) die($db->debug());
           return true;      
       }
 

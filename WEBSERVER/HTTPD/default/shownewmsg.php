@@ -160,15 +160,15 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   
  //die($query);
   
-$risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
+$risultato=$db->query($query) or Muori ($lang['inv_query'] . mysql_error());
 
 while ($riga = mysql_fetch_assoc($risultato)) {
   $iden=unpack("H32hex",$riga['HASH']);
   $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['last_reply_time']);
   $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['write_date']);
-  $ris2 = mysql_query("select valore from temp where chiave='".$iden['hex']."';");
-  if ($tmp = mysql_fetch_assoc($ris2)) {
-    $num = $tmp["valore"];
+  $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
+  if ($tmp) {
+    $num = $tmp;
     if ($num<$riga["reply_num"])
       $PostStatImage = "f_norm";
     else

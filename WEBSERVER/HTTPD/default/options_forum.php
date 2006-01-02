@@ -65,21 +65,13 @@ if($_POST['MEM_ID'])
 			,HIDESIG ='$new_hidesig'
 			,LEVEL ='$new_level'
 		WHERE HASH = '{$userdata->HASH}'  LIMIT 1 ";
-		$result = mysql_query($query) or die(mysql_error());
-		if($result)
-		{
-			echo "".$lang['optusr_msg']."";
-			$is_post_back= 0;
-			/*
-			$is_post_back= 1;
-			$std->Redirect('Modifica impostazioni forum',$_SERVER['HTTP_REFERER'],$lang['optusr_msg'],$lang['optusr_msg']);
-			exit();*/
-		}
-		else
-		{
-			$std->Error($lang['optusr_errmsg']);
-			die(''.$lang['optusr_errmsg'].'');
-		}
+		$result = $db->query($query);
+
+		$is_post_back= 0;
+		/*echo "</table>";
+		$is_post_back= 1;
+		$std->Redirect('Modifica impostazioni forum',$_SERVER['HTTP_REFERER'],$lang['optusr_msg'],$lang['optusr_msg']);
+		exit();*/
 	}
 }
 

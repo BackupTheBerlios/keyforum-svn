@@ -91,28 +91,17 @@ function PageSelect() {
        </tr>
     ";
    }
-  if($sez)
-  foreach($sez as $sezval) 
+  if($sez) foreach($sez as $sezval) 
   {
   
       $MSG=GetLastMsg($sezval->ID);
-      if ($MSG['time_action']) 
-        $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['time_action']);
-      else 
-        $write_date='';
-      if ($MSG['hash']) 
-        $hash=unpack("H32alfa",$MSG['hash']);
-      else 
-        $hash['alfa']='';
-      if ($MSG['nickhash'])
-        $nickhash=unpack("H32alfa",$MSG['nickhash']);
-      else 
-        $nickhash['alfa']='';
-      if(strlen($MSG['TITLE'])>50){
-         $msg=substr($MSG['TITLE'], 0, 50)."...";
-      }else{
-         $msg=$MSG['TITLE'];
-      }
+	  //Default data
+      $write_date= ($MSG->time_action ? strftime("%d/%m/%y  - %H:%M:%S",$MSG->time_action) : '');
+      $hash= ($MSG->hash ? unpack("H32alfa",$MSG->hash) : '');
+      $nickhash=($MSG->nickhash ? unpack("H32alfa",$MSG->nickhash) : '');
+	  $msg=(strlen($MSG->TITLE)>50 ? substr($MSG->TITLE, 0, 50)."..." : $MSG->TITLE);
+	  
+	  
       $notfirst=0;
       $subsections="";
       $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ID;";
@@ -130,7 +119,7 @@ function PageSelect() {
         <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval->ID.'">'.secure_v($sezval->SEZ_NAME).'</a></b><br /><span class="desc">'.secure_v($sezval->SEZ_DESC).$subsections.'<br /><br /></span></td>
         <td class="row2" align="center">'.$sezval->THR_NUM.'</td>
         <td class="row2" align="center">'.$sezva->REPLY_NUM.'</td>
-        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG['SEZID'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG['nick']).'</a></td>
+        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG->SEZID.'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG->nick).'</a></td>
         <td class="row2" align="center">';
         $matr=explode("%",$sezval->MOD);
         for($counter=0; $counter<(strlen($sezval->MOD)/33); $counter++){

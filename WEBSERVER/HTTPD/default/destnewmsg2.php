@@ -2,13 +2,12 @@
 
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
-CheckSession();
-
+//Già richiamato da lib.php e anche meglio ;)
+/*CheckSession();
 $userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
-
 if($userdata->LANG) {
 $blanguage=$userdata->LANG; // Lingua di visualizzazione
-} else {$blanguage="eng";}
+} else {$blanguage="eng";}*/
 
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV['sesname'];

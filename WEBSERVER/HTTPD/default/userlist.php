@@ -11,70 +11,56 @@ $lang = $std->load_lang('lang_userlist', $blanguage );
 <tr><td>
 <?
 function PageSelect() {
-?>
-<table border="0" cellpadding="5px" cellspacing="0" width="100%">
-  <tbody>
-  <tr>
-    <td align="left" nowrap="nowrap" width="20%">
-<?
 	global $lang;
-  global $NumPag;
-  global $CurrPag;
-  global $Section;
-  if($_REQUEST['validati']){
-     if($_REQUEST['nonvalidati']){
-        $link="userlist.php?validati='1'&amp;nonvalidati='1'&amp;";
-     }else{
-        $link="userlist.php?validati='1'&amp;";
-     }
-  }else{
-     if($_REQUEST['nonvalidati']){
-        $link="userlist.php?nonvalidati='1'&amp;";
-     }else{
-        $link="userlist.php?";
-     }
-  }
-  if($_REQUEST['order_by']){
-     $link=$link."order_by=".$_REQUEST['order_by']."&amp;";
-  }
-  if($_REQUEST['order']){
-     $link=$link."order=".$_REQUEST['order']."&amp;";
-  }
-  $link = $link."pag=";
-  if ($NumPag > 0) {
-    echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['usrlist_pages']."</span>&nbsp;";
-    if ($CurrPag>0) { # Pagina precedente
-      echo "<span class='pagelinklast'><a href=\"{$link}0\">&laquo;</a></span>&nbsp;";
-      echo "<span class='pagelink'><a href=\"{$link}".($CurrPag-1)."\">&lt;</a></span>&nbsp;";
-    }
+	global $NumPag;
+	global $CurrPag;
+	global $Section;
 
-    # Visualizzo i link solamente per un certo numero di pagine
-    if ($CurrPag > $Section) {print "<span class='pagelink'>..</span>&nbsp;";}
-      $StartPag = $CurrPag-$Section;
-    if ($StartPag < 0) {$StartPag = 0;}
-      $EndPag = $CurrPag+$Section;
-    if ($EndPag > $NumPag) {$EndPag = $NumPag;}
+	$link  = "?validati={$_REQUEST['validati']}&amp;nonvalidati={$_REQUEST['nonvalidati']}&amp;";
+	$link .= "?order_by={$_REQUEST['order_by']}&amp;order={$_REQUEST['order']}&amp;";
+	$link .= "pag=";
 
-    for ($i = $StartPag+1; $i <= $EndPag+1; $i++) {
-      if ($i-1 == $CurrPag)
-        echo "<span class='pagecurrent'>$i</span>&nbsp;";
-      else
-        echo "<span class='pagelink'><a href=\"{$link}".($i-1)."\">$i</a></span>&nbsp;";
-    }
-    if ($CurrPag < $NumPag - $Section) {print "<span class='pagelink'>..</span>&nbsp;";}
-
-    if ($CurrPag<$NumPag) { # Pagina successiva
-      echo "<span class='pagelink'><a href=\"{$link}".($CurrPag+1)."\">&gt;</a></span>";
-      echo "&nbsp;<span class='pagelinklast'><a href=\"{$link}{$NumPag}\">&raquo; ".($NumPag+1)."</a></span>";
-    }
-  }
-
-    ?>
-      </tr>
-  </tbody>
-</table>
-<?
-}
+	echo '
+	<table border="0" cellpadding="5px" cellspacing="0" width="100%">
+		<tbody>
+		<tr>
+			<td align="left" nowrap="nowrap" width="20%">';
+	
+	if($NumPag > 0) 
+	{
+		echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['usrlist_pages']."</span>&nbsp;";
+		if ($CurrPag>0) 
+		{
+			# Pagina precedente
+			echo "<span class='pagelinklast'><a href=\"{$link}0\">&laquo;</a></span>&nbsp;";
+			echo "<span class='pagelink'><a href=\"{$link}".($CurrPag-1)."\">&lt;</a></span>&nbsp;";
+		}
+		
+		# Visualizzo i link solamente per un certo numero di pagine
+		if ($CurrPag > $Section) {echo "<span class='pagelink'>..</span>&nbsp;";}
+		$StartPag = $CurrPag-$Section;
+		if ($StartPag < 0) {$StartPag = 0;}
+		$EndPag = $CurrPag+$Section;
+		if ($EndPag > $NumPag) {$EndPag = $NumPag;}
+		
+		for ($i = $StartPag+1; $i <= $EndPag+1; $i++) 
+		{
+			if ($i-1 == $CurrPag)
+				echo "<span class='pagecurrent'>$i</span>&nbsp;";
+			else
+				echo "<span class='pagelink'><a href=\"{$link}".($i-1)."\">$i</a></span>&nbsp;";
+		}
+		if ($CurrPag < $NumPag - $Section) {print "<span class='pagelink'>..</span>&nbsp;";}
+		
+		if ($CurrPag<$NumPag) 
+		{
+			# Pagina successiva
+			echo "<span class='pagelink'><a href=\"{$link}".($CurrPag+1)."\">&gt;</a></span>";
+			echo "&nbsp;<span class='pagelinklast'><a href=\"{$link}{$NumPag}\">&raquo; ".($NumPag+1)."</a></span>";
+		}
+	}
+	echo'</tr></tbody></table>';
+} //End Pageselect
 ?>
 <script type="text/javascript"><!--
 
@@ -188,7 +174,7 @@ if($_REQUEST['validati']){
       $query="SELECT count(HASH) AS c FROM {$SNAME}_membri WHERE is_auth='2';";
    }
 }
-$Num3d = $db->get_var($risultato);
+$Num3d = $db->get_var($query);
 $NumPag = intval(($Num3d-1) / $UserXPage);
 $CurrPag = $_REQUEST['pag'];
 if (! is_numeric($CurrPag))
@@ -229,33 +215,34 @@ if(!$_REQUEST['order']){
 <?PHP
 if($_REQUEST['validati']){
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }else{
    if($_REQUEST['nonvalidati']){
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=mysql_query("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }
 # 2 Scambio nodi
 # 1 passivo
 # 3 manuale
 $i=$CurrPag*$UserXPage;
-while($ris=mysql_fetch_assoc($risultato)) {
-	$userhash=unpack("H32hex",$ris['HASH']);
+if($risultato)foreach($risultato as $ris) 
+{
+	$userhash=unpack("H32hex",$ris->HASH);
 	echo "
     <tr>
 	<td class='row1' align='right'>".++$i."</td>
-	<td class='row2' align='left'>&nbsp;<a href='showmember.php?MEM_ID={$userhash['hex']}'>".secure_v($ris['AUTORE'])."</a></td>
+	<td class='row2' align='left'>&nbsp;<a href='showmember.php?MEM_ID={$userhash['hex']}'>".secure_v($ris->AUTORE)."</a></td>
 	<td class='row2' align='center'>".$userhash['hex']."</td>
-	<td class='row1' align='center'>".strftime("%d/%m/%y  - %H:%M:%S",$ris['DATE'])."</td>
-	<td class='row1' align='right'>".$ris['msg_num']."</td>
+	<td class='row1' align='center'>".strftime("%d/%m/%y  - %H:%M:%S",$ris->DATE)."</td>
+	<td class='row1' align='right'>".$ris->msg_num."</td>
 	<td class='row2' align='center'>";
 	
-	if($ris['is_auth']){
+	if($ris->is_auth){
 	  echo $lang['usrlist_member'] . "</td>\n<td class='row2'>";
 	} else {
 		echo $lang['usrlist_validated'];

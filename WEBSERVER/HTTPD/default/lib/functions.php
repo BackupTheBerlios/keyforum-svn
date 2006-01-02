@@ -154,21 +154,21 @@ class FUNC {
 	 }
 
 
-	function UpdateUserData($sess_name,$userdata) {
-	
-	if(!$userdata->HASH){ return 0; }
-	
-	
-	while (list ($chiave, $valore) = each ($userdata)) {
-	     if($chiave <>"HASH" AND $chiave<>"PASSWORD"){$queryset .= "$chiave='$valore',";};
-	}
-
-	$queryset = substr($queryset,0,-1);
-	$query="update {$sess_name}_localmember set $queryset where HASH='{$userdata->HASH}'"; 
-	$result = mysql_query($query) or die("error on query: " . mysql_error());
-	
-	return 1;
-	
+	function UpdateUserData($sess_name,$userdata) 
+	{
+		global $db;
+		if(!$userdata->HASH)
+		{
+			return FALSE; 
+		}
+		while (list ($chiave, $valore) = each ($userdata)) 
+		{
+			 if($chiave <>"HASH" AND $chiave<>"PASSWORD"){$queryset .= "$chiave='$valore',";};
+		}
+		$queryset = substr($queryset,0,-1);
+		
+		$db->query("update {$sess_name}_localmember set $queryset where HASH='{$userdata->HASH}'"); 
+		return TRUE;
 	}
 
 

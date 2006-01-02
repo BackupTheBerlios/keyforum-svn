@@ -13,7 +13,7 @@
 
 
 function convert($text) {
- global $_ENV;
+ global $_ENV,$db;
  
  $SNAME=$_ENV['sesname'];
 
@@ -84,23 +84,24 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   // EMOTICON
 
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons";
-  $res=mysql_query($query) or die(mysql_error());
+  $res=$db->get_results($query);
 
-  while ($row = mysql_fetch_assoc($res))
+  if($res) foreach($res as $row)
   {
-  $emo=$row['typed'];
-  $img=$row['image'];
-  $id=$row['id'];
-  $emoq = preg_quote($emo, "/");
-  
-  if ($row['internal'])
-   {
-   $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' title='emoticon ".$emo."' style='vertical-align:middle' border='0' src='showemo.php?id=".$id."' /><!--emoend-->", $text); 
-    } else {
-  $text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' title='emoticon ".$emo."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
-   }
+	$emo=$row->typed;
+	$img=$row->image;
+	$id=$row->id;
+	$emoq = preg_quote($emo, "/");
+	
+	if ($row->internal)
+	{
+		$text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' title='emoticon ".$emo."' style='vertical-align:middle' border='0' src='showemo.php?id=".$id."' /><!--emoend-->", $text); 
+	}
+	else
+	{
+		$text = preg_replace("!(?<=^|[^\w&;/])$emoq(?=.\W|\W.|\W$|$)!i", "<!--emostart=".$emo."--><img alt='emoticon ".$emo."' title='emoticon ".$emo."' style='vertical-align:middle' border='0' src='./img/emoticons/".$img."' /><!--emoend-->", $text);
+	}
   }
-   
   return $text;
 }
 

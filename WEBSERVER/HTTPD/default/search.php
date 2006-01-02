@@ -42,8 +42,7 @@ else {
   $SQLQuery1 = "SELECT count(msg.hash) as num FROM {$SNAME}_newmsg as msg $NickTable where visibile = '1' and $where";
   $SQLQuery2 = "SELECT count(msg.hash) as num FROM {$SNAME}_reply as msg $NickTable where visibile = '1' and $where";
   $SQLQuery = "select sum(num) as num from (($SQLQuery1) UNION ($SQLQuery2)) as result_num";
-
-  $risultato=mysql_query($SQLQuery) or Muori ("Query non valida: " . mysql_error());
+  
   if ($riga = $db->get_var($SQLQuery))
     $num = $riga;
   else
