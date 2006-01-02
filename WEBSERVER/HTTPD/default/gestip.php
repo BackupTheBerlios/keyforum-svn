@@ -14,23 +14,22 @@ $idriga =$db->get_var($idquery);
 <?PHP
 if ($_POST[action]=="update") {
     if($_POST[delete]) {
-		mysql_query("DELETE FROM iplist WHERE BOARD='$idriga' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
+		$db->query("DELETE FROM iplist WHERE BOARD='$idriga' AND IP='$_POST[ip]';") or print ($lang['inv_query'] . mysql_error());
 	} else {
 		if ($_POST['STATIC']) $stat=1; else $stat=0; 
-		mysql_query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='$idriga';") or print ($lang['inv_query'] . mysql_error());
+		$db->query("UPDATE iplist SET STATIC='$stat' WHERE IP='$_POST[ip]' AND BOARD='$idriga';") or print ($lang['inv_query'] . mysql_error());
 	}
 	
 } elseif ($_POST[action]=="nuovo") {
 	if ($_POST['STATIC']) $stat=1; else $stat=0; 
-	mysql_query("INSERT INTO iplist (BOARD,IP,TCP_PORT,TROVATO,STATIC) VALUES "
-	."('".$idriga['value']."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');") or print ($lang['inv_query'] . mysql_error());
+	$db->query("INSERT INTO iplist (BOARD,IP,TCP_PORT,TROVATO,STATIC) VALUES "
+	."('".$idriga['value']."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');") or print ($lang['inv_query'] );
 }
 ?>
 <?PHP
-	echo $lang['gestip_nodelist'];
-	print $idriga['value'];?>.<bR>
-	<?PHP echo $lang['gestip_info'];?>.<br><br>
-	<?PHP echo "<a href=\"gestip.php\">".$lang['gestip_refresh']."</a><br>";?>
+	echo "{$lang['gestip_nodelist']} $idriga <br>
+	{$lang['gestip_info']}<br><br>
+	<a href='gestip.php'>{$lang['gestip_refresh']}</a><br>";?>
 	<br><br>
 	<div class="borderwrap">
 	  <div class="maintitle">

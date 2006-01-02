@@ -6,12 +6,9 @@
 
 session_start();
 
-require_once('ez_sql.php');
-
 //classe PEAR per file config (XML)
 require_once "Config.php";
 $xmldata = new Config;
-
 
 $root =& $xmldata->parseConfig('http://'.$_SERVER['HTTP_HOST'].'/config/config.xml', 'XML');
 if (PEAR::isError($root)) {
@@ -21,6 +18,7 @@ if (PEAR::isError($root)) {
 $settings = $root->toArray();
 
 // dati del db
+require_once('ez_sql.php');
 $_ENV['sql_host']=$settings['root']['conf']['DB']['host'];
 $_ENV['sql_user']=$settings['root']['conf']['DB']['dbuser'];
 $_ENV['sql_passwd']=$settings['root']['conf']['DB']['dbpassword'];

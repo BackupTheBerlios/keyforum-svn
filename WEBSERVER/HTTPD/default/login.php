@@ -15,11 +15,11 @@ if ($sess_auth==1) {
   if ($_REQUEST["nick"]) {
     $rawpasswd=pack("H*",md5($_REQUEST["passwd"]));
     $identificatore=md5($rawpasswd.$_REQUEST["nick"]);
-    $query="SELECT count(*) as 'num' FROM `".mysql_real_escape_string($_ENV[sesname])."_localmember` WHERE `HASH`='".mysql_escape_string($identificatore)."';";
-    $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-    if ($riga = mysql_fetch_assoc($risultato)) {
-      if ($riga[num] == 0) Muori("".$lang['login_err']."\n<br>");
-      $query="INSERT INTO `session` (`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) ".
+    $query="SELECT count(1) as 'num' FROM `".mysql_real_escape_string($_ENV[sesname])."_localmember` WHERE `HASH`='".mysql_escape_string($identificatore)."';";
+    $risultato=$db->get_var($query);
+    if ($risultato==0) Muori("".$lang['login_err']."\n<br>");
+
+    $query="INSERT INTO `session` (`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) ".
               "VALUES('".session_id()."',md5('".$_SERVER['REMOTE_ADDR']."'),'".mysql_real_escape_string($_ENV[sesname])."','".mysql_real_escape_string($_POST["nick"])."','".time()."','".mysql_real_escape_string($rawpasswd)."');";
       echo $lang['login_succ'];
       $SEZ_ID=$_REQUEST["SEZID"];
@@ -31,9 +31,8 @@ if ($sess_auth==1) {
           $url="sezioni.php?SEZID=$SEZ_ID";
       }
       else $url="index.php";
+	  $db->query($query) or Muori ($lang['inv_query'] . $db-debug());
       echo "<br><center>".$lang['login_back']."</center><script language=\"javascript\">setTimeout('delayer()', 2000);\nfunction delayer(){ window.location='$url';}</script>";
-      mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
-    }
   }
   else {
     echo '
