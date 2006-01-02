@@ -504,6 +504,5 @@
 
 	}
 
-$db = new db(EZSQL_DB_USER, EZSQL_DB_PASSWORD, EZSQL_DB_NAME, EZSQL_DB_HOST);
 
 ?>

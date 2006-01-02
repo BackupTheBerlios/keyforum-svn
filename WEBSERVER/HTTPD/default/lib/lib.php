@@ -6,6 +6,7 @@
 
 session_start();
 
+require_once('ez_sql.php');
 
 //classe PEAR per file config (XML)
 require_once "Config.php";
@@ -25,15 +26,6 @@ $_ENV['sql_user']=$settings['root']['conf']['DB']['dbuser'];
 $_ENV['sql_passwd']=$settings['root']['conf']['DB']['dbpassword'];
 $_ENV['sql_dbname']=$settings['root']['conf']['DB']['dbname'];
 $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
-
-
-define("EZSQL_DB_USER", $_ENV['sql_user']);			
-define("EZSQL_DB_PASSWORD", $_ENV['sql_passwd']);		
-define("EZSQL_DB_NAME", $_ENV['sql_dbname']);		
-define("EZSQL_DB_HOST", "{$_ENV['sql_host']}:{$_ENV['sql_dbport']}");
-
-require_once('ez_sql.php');
-
 
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
 $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['sql_host'].":".$_ENV['sql_dbport']);
