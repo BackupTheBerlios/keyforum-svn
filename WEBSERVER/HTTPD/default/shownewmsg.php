@@ -160,58 +160,58 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   
  //die($query);
   
-$risultato=$db->query($query) or Muori ($lang['inv_query'] . mysql_error());
+$risultato=$db->get_results($query) or Muori ($lang['inv_query'] . mysql_error());
 
-while ($riga = mysql_fetch_assoc($risultato)) {
-  $iden=unpack("H32hex",$riga['HASH']);
-  $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['last_reply_time']);
-  $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['write_date']);
+if($risultato) foreach($risultato as $riga ) {
+  $iden=unpack("H32hex",$riga->HASH);
+  $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->last_reply_time);
+  $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->write_date);
   $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
   if ($tmp) {
     $num = $tmp;
-    if ($num<$riga["reply_num"])
+    if ($num<$riga->reply_num)
       $PostStatImage = "f_norm";
     else
       $PostStatImage = "f_norm_no";
-    if ($riga['nickhash'])
-      $nickhash=unpack("H32alfa",$riga['nickhash']);
+    if ($riga->nickhash)
+      $nickhash=unpack("H32alfa",$riga->nickhash);
     else 
       $nickhash['alfa']=''; 
-    if ($riga['dnickhash'])
-      $dnickhash=unpack("H32alfa",$riga['dnickhash']);
+    if ($riga->dnickhash)
+      $dnickhash=unpack("H32alfa",$riga->dnickhash);
     else 
       $dnickhash['alfa']=''; 
   }
   else
     $PostStatImage = "f_norm";
-  $rep=$riga["reply_num"];
+  $rep=$riga->reply_num;
   $i=0;
   $Pages="";
   if($rep>$PostXPage){
      while($rep>0){
         if($i<=$Section){
-           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'><a href='showmsg.php?SEZID=".$riga['sez']."&amp;THR_ID=".$iden['hex']."&amp;pag={$i}'>".++$i."</a></span></td>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'><a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."&amp;pag={$i}'>".++$i."</a></span></td>";
            $rep=$rep-$PostXPage;
         }else{
-           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID=".$riga['sez']."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page'>&raquo;</a></span></td>";
+           $Pages=$Pages."<td align='left' nowrap='nowrap'><span class='pagelink'>..</span>&nbsp;<span class='pagelink'><a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page'>&raquo;</a></span></td>";
            $rep=0;
         }
      }
   }
-  if(strlen($riga["title"])>100){
-     $title=substr($riga["title"], 0, 100)."...";
+  if(strlen($riga->title)>100){
+     $title=substr($riga->title, 0, 100)."...";
   }else{
-     $title=$riga["title"];
+     $title=$riga->title;
   }
   echo "
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID=".$riga['sez']."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
-  <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga['sez']."'>".$sezname[$riga['sez']]."</td>
-  <td align=center class='row4'>".$riga["reply_num"]."</td>
-  <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga["nick"])."</a></u></small></td>
-  <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID=".$riga['sez']."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga["dnick"])."</a></b></small></tD>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
+  <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga->sez."'>".$sezname[$riga->sez]."</td>
+  <td align=center class='row4'>".$riga->reply_num."</td>
+  <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
+  <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga->dnick)."</a></b></small></tD>
 </tr>\n";
 }
 
