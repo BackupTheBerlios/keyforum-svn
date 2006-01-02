@@ -91,7 +91,7 @@ function PageSelect() {
        </tr>
     ";
    }
-  
+  if($sez)
   foreach($sez as $sezval) 
   {
   
