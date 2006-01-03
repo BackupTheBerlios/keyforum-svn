@@ -291,7 +291,7 @@ function ForumJumper($forumid=0)
 {
 global $db,$_ENV;
 
-include "lib/TreeClass.php";
+include_once "lib/TreeClass.php";
 
 $tree=new Tree;
 
