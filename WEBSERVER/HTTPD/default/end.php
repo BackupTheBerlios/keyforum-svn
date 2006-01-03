@@ -28,10 +28,10 @@ $lang = $std->load_lang('lang_end', $blanguage );
     </tr>
  </table>";
   ?>
-    
    <?PHP
        if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
    ?>
+   <br>
    <div class="borderwrap" id="fo_stat">
      <div class="maintitle">
        <p class="expand"></p>
