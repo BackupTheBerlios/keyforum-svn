@@ -1,6 +1,9 @@
 <?
 // carico la lingua per la end
 $lang = $std->load_lang('lang_end', $blanguage );
+
+$today=date("F j, Y, g:i a");
+
 ?>
 <tr>
   <td>
@@ -102,7 +105,7 @@ $lang = $std->load_lang('lang_end', $blanguage );
      }else{
    ?>
    <div class="borderwrap" id="fo_stat">
-     <table cellspacing="1">
+     <table cellspacing="1"width="100%">
        <tr>
 	<td align="left" class="row5"><table width="100%"><tr>
 	 <?PHP
@@ -110,9 +113,11 @@ $lang = $std->load_lang('lang_end', $blanguage );
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<td><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
+	    echo '<td width="33%"><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
+	    
+	    echo "<td width=\"33%\" align=center>$today</td>";
 		//QUERY
-	    echo "<td align='right'><img src='img/stat_sql.gif' alt=''>&nbsp;<b>$db->num_queries</b> queries</td>";
+	    echo "<td width=\"33%\" align='right'><img src='img/stat_sql.gif' alt=''>&nbsp;<b>$db->num_queries</b> queries</td>";
 		
 	 ?> </tr></table>
 	</td>
