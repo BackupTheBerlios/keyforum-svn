@@ -4,6 +4,8 @@
   $Timer1 = explode(" ",$Timer1);
   $Timer1 = $Timer1[0] + $Timer1[1];
 
+$corecalls=0;
+
 session_start();
 
 //classe PEAR per file config (XML)

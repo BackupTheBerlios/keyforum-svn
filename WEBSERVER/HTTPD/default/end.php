@@ -102,7 +102,7 @@ $today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".dat
 	    // CURRENT DATE/TIME
 	    echo "<td width=\"33%\" align=center>$today</td>";	
 	     //Query
-	    echo '<td width=\"33%\" align="right"><img src="img/stat_sql.gif" alt="">&nbsp;'.$lang['stat_numquery'].'<b>'.$db->num_queries.'</b></td>';
+	    echo "<td width=\"33%\" align=\"right\"><img src=\"img/stat_sql.gif\" alt=\"\">&nbsp;".$lang['stat_numquery']."<b>$db->num_queries</b> / core calls: <b>$corecalls</b></td>";
 	 ?>
 	 </tr></table>
 	</td>
@@ -126,7 +126,7 @@ $today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".dat
 	    // CURRENT DATE/TIME
 	    echo "<td width=\"33%\" align=center>$today</td>";
 		//QUERY
-	    echo "<td width=\"33%\" align='right'><img src='img/stat_sql.gif' alt=''>&nbsp;<b>$db->num_queries</b> queries</td>";
+	    echo "<td width=\"33%\" align=\"right\"><img src=\"img/stat_sql.gif\" alt=\"\">&nbsp;".$lang['stat_numquery']."<b>$db->num_queries</b> / core calls: <b>$corecalls</b></td>";
 		
 	 ?> </tr></table>
 	</td>

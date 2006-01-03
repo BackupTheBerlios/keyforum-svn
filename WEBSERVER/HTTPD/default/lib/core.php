@@ -30,6 +30,9 @@ class CoreSock {
 		return 1;
 	}
 	function Send($var) {
+	 global $corecalls;
+	 
+	 $corecalls++;
 		if (!$this->connesso) {
 			$this->Connect();
 			if (!$this->connesso) return false;
