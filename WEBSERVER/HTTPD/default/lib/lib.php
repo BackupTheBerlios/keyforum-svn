@@ -83,6 +83,7 @@ function CheckSession() {
 
 function DestroySession() 
 {
+global $db;
 	$sess_id = session_id();
 	$my_ip = $_SERVER['REMOTE_ADDR'];
 	$SNAME = $_ENV['sesname'];
