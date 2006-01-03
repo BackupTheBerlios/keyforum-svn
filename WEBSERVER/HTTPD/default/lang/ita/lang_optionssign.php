@@ -1,6 +1,6 @@
 <?php
 
-$lang['optsign_welcome']  = "Benvenuto nel Pannelo di Controllo";
+$lang['optsign_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optsign_info1']  = "INSERIRE QUI IL CODICE PER MODIFICARE LA FIRMA:<br>Messaggi tipo 5";
 $lang['optsign_currsign']  = "Firma Attuale";
 $lang['optsign_modsign']  = "Modifica Firma";

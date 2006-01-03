@@ -1,6 +1,6 @@
 <?php
 
-$lang['optavt_welcome']  = "Benvenuto nel Pannelo di Controllo";
+$lang['optavt_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optavt_modsucc']  = "modifiche avvenute con successo (magari)";
 $lang['optavt_removeavatar']  = "Rimuovere il tuo Avatar?";
 $lang['optavt_avataropt']  = "Impostazioni Avatar";

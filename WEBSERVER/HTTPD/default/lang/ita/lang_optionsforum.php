@@ -1,6 +1,6 @@
 <?php
 
-$lang['optusr_welcome']  = "Benvenuto nel Pannelo di Controllo";
+$lang['optusr_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optusr_msg']  = "modifiche avvenute con successo";
 $lang['optusr_errmsg']  = "Errore imprevisto";
 $lang['optusr_intopt']  = "Impostazioni Internazionali";

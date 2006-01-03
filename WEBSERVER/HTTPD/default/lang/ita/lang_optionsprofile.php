@@ -1,6 +1,6 @@
 <?php
 
-$lang['optprf_welcome']  = "Benvenuto nel Pannelo di Controllo";
+$lang['optprf_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optprf_update']  = "Aggiorna";
 $lang['optprf_reply']  = "modifiche forse effettuate";
 $lang['optprf_prsnlprf']  = "Il tuo profilo personale";
