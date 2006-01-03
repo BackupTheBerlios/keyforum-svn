@@ -280,7 +280,7 @@ die();
 
 function ForumJumper($forumid=0)
 {
-global $db;
+global $db,$_ENV;
 
 include "lib/TreeClass.php";
 
@@ -288,7 +288,7 @@ $tree=new Tree;
 
 $tree->AddNode(" 0","root");
 
-$result = $db->get_results("select id,sez_name,figlio,ordine from keyfo_sez order by id,figlio,ordine ");
+$result = $db->get_results("select id,sez_name,figlio,ordine from {$_ENV['sesname']}_sez order by id,figlio,ordine ");
 
 foreach ( $result as $row )
 {
