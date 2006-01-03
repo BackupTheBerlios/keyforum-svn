@@ -4,7 +4,31 @@ $lang = $std->load_lang('lang_end', $blanguage );
 ?>
 <tr>
   <td>
-   <br><br>  
+  <?
+   echo "
+   <br>
+   <table cellpadding='2' width='100%' bgcolor='#8394B2'>
+    <tr>
+     <td>
+      <form method='POST' name='langform' action=''>
+       <select name='langjump' class='content' size='1' onchange='location.href=document.langform.langjump.options[document.langform.langjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>
+        <optgroup label='".$lang['language_selection']."'> 			
+         <option ".$seleng["eng"]." value='".$newurl."eng'>English</option>
+         <option ".$seleng["ita"]." value='".$newurl."ita' >Italiano</option>
+        </optgroup>
+       </select>
+      </form>
+     </td>
+     <td align=right>";
+     
+    // forum jumper
+    echo $std->ForumJumper($_REQUEST['SEZID']);
+     
+     echo "</td>
+    </tr>
+ </table>";
+  ?>
+    
    <?PHP
        if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
    ?>
@@ -56,6 +80,8 @@ $lang = $std->load_lang('lang_end', $blanguage );
        </tr>
        <tr>
 	<td class="row1" colspan="2">
+	
+	
 	<table width="100%"><tr>
 	 <?PHP
 	 
@@ -102,28 +128,7 @@ $newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang=";
    
    $seleng["$blanguage"]="selected";
 
- echo "
- <br>
- <table cellpadding='2' width='100%' bgcolor='#8394B2'>
-  <tr>
-   <td>
-    <form method='POST' name='langform' action=''>
-     <select name='langjump' class='content' size='1' onchange='location.href=document.langform.langjump.options[document.langform.langjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>
-      <optgroup label='".$lang['language_selection']."'> 			
-       <option ".$seleng["eng"]." value='".$newurl."eng'>English</option>
-       <option ".$seleng["ita"]." value='".$newurl."ita' >Italiano</option>
-      </optgroup>
-     </select>
-    </form>
-   </td>
-   <td align=right>";
-   
-  // forum jumper
-  echo $std->ForumJumper($_REQUEST['SEZID']);
-   
-   echo "</td>
-  </tr>
- </table>";
+
  ?> 
   </td>
 </tr>
@@ -133,5 +138,6 @@ $newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang=";
 </tr>
 </table>
 <a name="end_page"></a>
+
 </body>
 </html>
