@@ -17,5 +17,4 @@ $lang['optusr_admrights']  = "Livello di comandi amministrativi da visualizzare"
 $lang['optusr_yes']  = "Si";
 $lang['optusr_no']  = "No";
 
-
 ?>
