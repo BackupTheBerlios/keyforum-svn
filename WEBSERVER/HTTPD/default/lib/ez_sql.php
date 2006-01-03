@@ -162,6 +162,11 @@
 			$this->result = @mysql_query($query,$this->dbh);
 			$this->num_queries++;
 
+
+			// **** ADD FOR KEYFORUM ***
+			$this->querylog .= "<hr>".$query."<br>";
+			// **** ADD FOR KEYFORUM ***
+
 			// If there is an error then take note of it..
 			if ( mysql_error() )
 			{
@@ -313,6 +318,7 @@
 
 			// Log how the function was called
 			$this->func_call = "\$db->get_results(\"$query\", $output)";
+			
 
 			// If there is a query then perform it if not then use cached results..
 			if ( $query )

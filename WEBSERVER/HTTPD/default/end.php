@@ -1,4 +1,6 @@
 <?
+$querylog=0;
+
 // carico la lingua per la end
 $lang = $std->load_lang('lang_end', $blanguage );
 
@@ -145,6 +147,8 @@ $today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".dat
 </tr>
 </table>
 <a name="end_page"></a>
+
+<? if ($querylog) echo $db->querylog; ?>
 
 </body>
 </html>
