@@ -29,6 +29,15 @@ class FUNC {
   /*-------------------------------------------------------------------------*/
 
 	function load_lang($module, $lang_id) {
+
+	    // global
+	    require "lang/".$lang_id."/lang_global.php";
+
+		foreach ($lang as $key => $val) {
+			$lang_array[$key] = stripslashes($val);
+		}
+
+	    // page specific
 	    require "lang/".$lang_id."/".$module.".php";
 
 		foreach ($lang as $key => $val) {

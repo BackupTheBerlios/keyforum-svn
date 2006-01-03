@@ -2,7 +2,7 @@
 // carico la lingua per la end
 $lang = $std->load_lang('lang_end', $blanguage );
 
-$today=date("F j, Y, g:i a");
+$today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".date("Y")." - ".date("g:i a");
 
 ?>
 <tr>
@@ -92,9 +92,11 @@ $today=date("F j, Y, g:i a");
 	    $Timer2 = microtime();
 	    $Timer2 = explode(" ",$Timer2);
 	    $Timer2 = $Timer2[0] + $Timer2[1];
-	    echo '<td><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
-		//Query
-		echo '<td align="right"><img src="img/stat_sql.gif" alt="">&nbsp;'.$lang['stat_numquery'].'<b>'.$db->num_queries.'</b></td>';
+	    echo '<td width="33%"><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
+	    // CURRENT DATE/TIME
+	    echo "<td width=\"33%\" align=center>$today</td>";	
+	     //Query
+	    echo '<td width=\"33%\" align="right"><img src="img/stat_sql.gif" alt="">&nbsp;'.$lang['stat_numquery'].'<b>'.$db->num_queries.'</b></td>';
 	 ?>
 	 </tr></table>
 	</td>
@@ -115,6 +117,7 @@ $today=date("F j, Y, g:i a");
 	    $Timer2 = $Timer2[0] + $Timer2[1];
 	    echo '<td width="33%"><img src="img/stat_time.gif" alt="">&nbsp;'.$lang['stat_extime'].'<b>'.round(($Timer2 - $Timer1), 4).'</b> sec</td>';
 	    
+	    // CURRENT DATE/TIME
 	    echo "<td width=\"33%\" align=center>$today</td>";
 		//QUERY
 	    echo "<td width=\"33%\" align='right'><img src='img/stat_sql.gif' alt=''>&nbsp;<b>$db->num_queries</b> queries</td>";
