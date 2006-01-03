@@ -2,16 +2,6 @@
 
 include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
-//Già appena fatto da lib.php
-/*CheckSession();
-?>
-<?
-$userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
-
-if($userdata->LANG) {
-$blanguage=$userdata->LANG; // Lingua di visualizzazione
-} else {$blanguage="eng";}*/
-
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV["sesname"];
 $MSG_HASH=pack("H32",$_REQUEST['repof']);
@@ -36,9 +26,21 @@ $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
 $core=new CoreSock;
 if (!$core->Send($req)) die($lang['reply_core']);
-if (!$risp=$core->Read()) die ($lang['reply_timeout']);
+
+// timeout ?
+if (!$risp=$core->Read()) 
+{
+
+$std->Error($lang['reply_timeout'],$_REQUEST['body']);
+}
+
 $PKEY=$risp[FUNC][Base642Dec];
-if ( strlen($PKEY) < 120 ) die($lang['reply_admin']);
+
+if ( strlen($PKEY) < 120 ) 
+{
+$std->Error($lang['reply_admin'],$_REQUEST['body']);
+}
+
 if (strlen($risp[FUNC][BlowDump2var][hash])!=16) die ($lang['reply_pdata']);
 
 $userhash=$risp[FUNC][BlowDump2var][hash];
