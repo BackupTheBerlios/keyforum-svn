@@ -8,6 +8,12 @@ $today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".dat
 <tr>
   <td>
   <?
+  
+  $newurl = str_replace('&','&amp;',$_SERVER['QUERY_STRING']);
+  $newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang="; 
+     
+  $seleng["$blanguage"]="selected";
+  
    echo "
    <br>
    <table cellpadding='2' width='100%' bgcolor='#8394B2'>
@@ -130,14 +136,7 @@ $today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".dat
    <?
      };
    ?>
-<? 
-$newurl = str_replace('&','&amp;',$_SERVER['QUERY_STRING']);
-$newurl="chlang.php?".$newurl."&amp;script=".$_SERVER['PHP_SELF']."&amp;lang="; 
-   
-   $seleng["$blanguage"]="selected";
 
-
- ?> 
   </td>
 </tr>
 <tr>
