@@ -322,7 +322,7 @@ while (list ($key, $value) = each ($ris)) {
     if ($fid == $forumid) {$selected="selected";} else {$selected="";}	
     $output .= "<option  $selected value='sezioni.php?SEZID=$fid'>";
     if ($l >0) { $output .= "|"; }
-    $output .= str_repeat("-",$l).$forum[$fid]."<br>";  
+    $output .= str_repeat("-",$l).$forum[$fid]."\n";  
     $output .= "</option>";
     }  
 }

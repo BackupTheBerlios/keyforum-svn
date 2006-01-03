@@ -90,37 +90,37 @@ if(!$is_post_back && $verify)
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_homepage']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="homepage" value="<?=$current['homepage']?>" size="40"/>
+			<input type="text" name="homepage" value="<?=$current->homepage?>" size="40"/>
     	</td>
 	</tr>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_icq']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="icq" value="<?=$current['icq']?>"  size="11"/>
+			<input type="text" name="icq" value="<?=$current->icq?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_msn']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="msn" value="<?=$current->msn]?>"  size="11"/>
+			<input type="text" name="msn" value="<?=$current->msn?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_yahoo']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="yahoo" value="<?=$current['yahoo']?>"  size="11"/>
+			<input type="text" name="yahoo" value="<?=$current->yahoo?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_aol']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="aol" value="<?=$current['aol']?>"  size="11"/>
+			<input type="text" name="aol" value="<?=$current->aol?>"  size="11"/>
     	</td>
 	</tr>
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optprf_location']."</td>"; ?>
 		<td class="pformright">   
-			<input type="text" name="location" value="<?=$current['location']?>" />
+			<input type="text" name="location" value="<?=$current->location?>" />
     	</td>
 	</tr>
 	<tr>
@@ -128,20 +128,16 @@ if(!$is_post_back && $verify)
 <? echo "			<input type=\"submit\" value=\"".$lang['optprf_update']."\" class=\"button\"/>"; ?>
 		</td>
 	</tr>
-
 </table>
 </form>
 </div>
-		</td>
-	</tr>
-</table>
-			</div>
-		</td>
-	</tr>
-</table>
 	<!-- end main CP area -->
+		</td>
+	</tr>
+</table>
 
-	</tr></td>
+
+	</td></tr>
 
 <?php 
 } //end postback
