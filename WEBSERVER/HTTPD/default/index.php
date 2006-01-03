@@ -11,7 +11,7 @@ $whereiam="index";
 
 echo "<tr><td>";
 
-$query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ID;";
+$query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ordine;";
 $mainsez = $db->get_results($query);
 if($mainsez) foreach($mainsez as $mainsezval) {
 echo "
@@ -33,7 +33,7 @@ echo "
     ";
 
   $mainzedid=$mainsezval->ID;
-  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ID;";
+  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ordine;";
   $sez = $db->get_results($query);
  if($sez)foreach($sez as $sezval) {
   
@@ -49,7 +49,7 @@ echo "
       }
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=$sezval->ID ORDER BY ID;";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=$sezval->ID ORDER BY ordine;";
       $subsez = $db->get_results($querysubs);
       if($subsez) foreach ($subsez as $subsezval) {
         if($notfirst)
