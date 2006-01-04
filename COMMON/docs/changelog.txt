@@ -1,5 +1,9 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+
+2006-01-04:	
+mmorselli:			[ADD] mysql debugger
+
 2006-01-02:	
 mmorselli:			[ADD] forum jumper
 

@@ -137,6 +137,42 @@
 
 		}
 
+
+		// **** MOD FOR KEYFORUM START***
+
+		function querylog()
+		{
+		echo "<b>QUERY LOG</b><br>";
+		for ($i = 1; $i <= $this->num_queries; $i++) {
+		    echo "<hr>[$i] ".$this->sqltag($this->qlog[$i]['q'])." <b>(".$this->qlog[$i]['t']." sec.)</b><br>";
+		    $totaltime = $totaltime + $this->qlog[$i]['t'];
+		}
+
+			echo "<br><b>Total time for queries: $totaltime sec.";
+		
+		
+		}
+
+
+		function sqltag($sql="")
+		 {
+		 
+		 $sql = preg_replace( "#(=|\+|\-|&gt;|&lt;|~|==|\!=|LIKE|NOT LIKE|REGEXP)#i"            , "<span style='color:orange'>\\1</span>", $sql );
+		 $sql = preg_replace( "#(MAX|AVG|SUM|COUNT|MIN)\(#i"                                    , "<span style='color:blue'>\\1</span>("    , $sql );
+		 $sql = preg_replace( "!(&quot;|&#39;|&#039;)(.+?)(&quot;|&#39;|&#039;)!i"              , "<span style='color:red'>\\1\\2\\3</span>" , $sql );
+		 $sql = preg_replace( "#\s{1,}(AND|OR)\s{1,}#i"                                         , " <span style='color:blue'>\\1</span> "    , $sql );
+		 $sql = preg_replace( "#(LEFT|JOIN|WHERE|MODIFY|CHANGE|AS|DISTINCT|IN|ASC|DESC|ORDER BY)\s{1,}#i" , "<span style='color:green;font-weight:bold'>\\1</span> "   , $sql );
+		 $sql = preg_replace( "#LIMIT\s*(\d+)\s*,\s*(\d+)#i"                                    , "<span style='color:green;font-weight:bold'>LIMIT</span> <span style='color:orange'>\\1, \\2</span>" , $sql );
+		 $sql = preg_replace( "#(FROM|INTO)\s{1,}(\S+?)\s{1,}#i"                                , "<span style='color:green;font-weight:bold'>\\1</span> <span style='color:orange;font-weight:bold'>\\2</span> ", $sql );
+		 $sql = preg_replace( "#(SELECT|INSERT|UPDATE|DELETE|ALTER TABLE|DROP)#i"               , "<span style='color:blue;font-weight:bold'>\\1</span>" , $sql );
+
+		 return $sql;	 
+		 
+		 }
+
+		// **** MOD FOR KEYFORUM END***
+
+
 		// ==================================================================
 		//	Basic Query	- see docs for more detail
 
@@ -158,14 +194,31 @@
 			// Keep track of the last query for debug..
 			$this->last_query = $query;
 
+			
+			// **** MOD FOR KEYFORUM START***
+			
+			// benckmark start
+			$Timer1 = microtime();
+			$Timer1 = explode(" ",$Timer1);
+  			$Timer1 = $Timer1[0] + $Timer1[1];
+			
 			// Perform the query via std mysql_query function..
 			$this->result = @mysql_query($query,$this->dbh);
-			$this->num_queries++;
-
-
-			// **** ADD FOR KEYFORUM ***
-			$this->querylog .= "<hr>".$query."<br>";
-			// **** ADD FOR KEYFORUM ***
+			
+			// benckmark end
+			$Timer2 = microtime();
+			$Timer2 = explode(" ",$Timer2);
+			$Timer2 = $Timer2[0] + $Timer2[1];
+			
+			$tq=round(($Timer2 - $Timer1), 4);
+			
+			// query count
+			$this->num_queries++;
+			
+			$this->qlog[$this->num_queries]['q']=$query;
+			$this->qlog[$this->num_queries]['t']=$tq;
+			
+			// **** MOD FOR KEYFORUM END***
 
 			// If there is an error then take note of it..
 			if ( mysql_error() )
