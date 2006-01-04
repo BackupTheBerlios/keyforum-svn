@@ -6,7 +6,9 @@ require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 <html>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
-<title><?php
+
+<?
+echo "<title>";
 
 
 if($userdata->TPP) {
@@ -34,13 +36,14 @@ $lang = $std->load_lang('lang_testa', $blanguage );
     $result=$db->get_row($query);
     $title=$result->title;
     $title=secure_v($title);
-    echo $title." - ";
   }else{
     if ($SEZ_DATA->ID)
       echo $SEZ_DATA->SEZ_NAME." - ";
   }
   echo $BNAME;
-?> Forum</title>
+echo " Forum - $title</title>";
+
+?>
 <link type="text/css" rel="stylesheet" href="style_page.css">
 <link rel="shortcut icon" href="favicon.ico">
 </HEAD>

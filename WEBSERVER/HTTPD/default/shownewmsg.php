@@ -1,6 +1,8 @@
 <?PHP
 // v. 0.10
 
+
+
 if($_REQUEST['allread'])
  {
  include "lib/lib.php";
@@ -13,8 +15,15 @@ if($_REQUEST['allread'])
 
 $tst=$_REQUEST['tst'];
 
+// devo caricare la lingua per ricavare il titolo della pagina...
+require_once("lib/lib.php");
+$lang = $std->load_lang('lang_shownewmsg', $blanguage );
+$title=$lang['page_title'] ;
+
 include ("testa.php");
-$lang = $std->load_lang('lang_sezioni', $blanguage );
+
+// ...e la devo ricaricare perchè testa me la sovrascrive... (andrà sistemata questa cosa...)
+$lang = $std->load_lang('lang_shownewmsg', $blanguage );
 
 function PageSelect() {
 global $tst;
@@ -61,7 +70,7 @@ global $tst;
 
     ?>
     
-      <td align=right><a href="shownewmsg.php?allread=1">segna tutti come già letti e torna all'indice</a></td>
+      <td align=right><a href="shownewmsg.php?allread=1"><? echo $lang['mark_all_read']; ?></a></td>
     </tr>
   </tbody>
 </table>
@@ -125,7 +134,7 @@ PageSelect();
     $dform .="</select></form>";
     
     
-	echo "<p>ultimi messaggi dal $dform</p>";
+	echo "<p>{$lang['msg_last'] }$dform</p>";
     ?>
   </div>
   <table cellspacing="1">
