@@ -82,8 +82,8 @@ $this->fathers2[$key3]=$value3;
 }
 } 
 $arrpos=0;
-$d=reset($this->fathers1);
-$d=reset($this->fathers2);
+if ($this->fathers1) $d=reset($this->fathers1);
+if ($this->fathers2) $d=reset($this->fathers2);
 
 $flag=0;
 

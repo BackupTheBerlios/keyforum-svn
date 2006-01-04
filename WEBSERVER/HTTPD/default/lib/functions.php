@@ -299,7 +299,7 @@ $tree->AddNode(" 0","root");
 
 $result = $db->get_results("select id,sez_name,figlio,ordine from {$_ENV['sesname']}_sez order by figlio,ordine ");
 
-foreach ( $result as $row )
+if ($result) foreach ( $result as $row )
 {
 $tree->AddNode(" ".$row->id," ".$row->figlio);
 $forum[$row->id+0]=$row->sez_name;
