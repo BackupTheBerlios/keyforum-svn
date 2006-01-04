@@ -12,6 +12,8 @@ $blanguage=$userdata->LANG; // Lingua di visualizzazione
 $lang = $std->load_lang('lang_reply_dest', $blanguage );
 $SNAME=$_ENV['sesname'];
 
+$THR_ID=$_REQUEST['edit_of'];
+
 if ( strlen($_REQUEST['edit_of'])==32 ) {
     $EDIT_OF=pack("H32",$_REQUEST['edit_of']);
     if ( strlen($EDIT_OF) == 16 )
@@ -82,7 +84,7 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
 $core->Send($mreq);
 $risp=$core->Read();
-$THR_ID=bin2hex($MD5_MSG);
+
 
 
 

@@ -1,7 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 
-2006-01-04:	
+2006-01-04:
+mmorselli:			[FIX] dopo l'edit di un thread ritorna al thread correttamente
 mmorselli:			[ADD] mysql debugger
 
 2006-01-02:	
