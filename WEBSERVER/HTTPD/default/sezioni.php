@@ -201,8 +201,12 @@ $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
 
 while ($riga = mysql_fetch_assoc($risultato)) {
   $iden=unpack("H32hex",$riga['HASH']);
-  $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['last_reply_time']);
-  $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['write_date']);
+  
+
+  $reply_date=$std->RelativeDate($riga['last_reply_time'])." ".$std->k_date($lang['post_date'],$riga['last_reply_time'])." ".date($lang['post_time'],$riga['last_reply_time']);  
+  $write_date=$std->RelativeDate($riga['write_date'])." ".$std->k_date($lang['post_date'],$riga['write_date'])." ".date($lang['post_time'],$riga['write_date']);
+  
+  
   $ris2 = mysql_query("select valore from temp where chiave='".$iden['hex']."';");
   if ($tmp = mysql_fetch_assoc($ris2)) {
     $num = $tmp["valore"];

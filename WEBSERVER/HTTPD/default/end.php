@@ -2,8 +2,7 @@
 // carico la lingua per la end
 $lang = $std->load_lang('lang_end', $blanguage );
 
-$today=$lang['day'.date("w")]." ".date("j")." ".$lang['month'.date("n")]." ".date("Y")." - ".date("g:i a");
-
+$today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 
 ?>
 <tr>

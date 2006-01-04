@@ -334,6 +334,114 @@ return $output;
 
 }
 
+// k_date: date in selected language
+// Adapted from KronoClass, released on GPL license by Holosoft - Tommaso D'Argenio
+
+	/** Date like function. Using the same format functionality 
+	*  @access public
+	*  @return string The date according with format given
+	*  @param string format ->
+	*	+ valid format parameter:
+	*	+ %l (L lowercase): Day textual long
+	*	+ %d: Day of month, 2 digits with leading zeros
+	*	+ %F: Month textual Long
+	*	+ %Y: Year, 4 digits
+	*	+ %y: Year, 2 digits
+	*	+ %m: Month numeric, 2 digits with leading zeros
+	*	+ %D: Day textual short
+	*	+ %M: Month textual short
+	*	+ %n: Month numeric, without leading zeros
+	*	+ %j: Day of month, without leading zeros
+	*  @param timestamp $timestamp The time to transform
+	*/
+	function k_date($format="%l %d %F %Y",$timestamp=0)
+	{	
+		if($timestamp==0)
+			$timestamp=time();
+			
+
+		if(!preg_match('/\%l|\%F|\%D|\%M/',$format))
+		{
+			return date(str_replace('%','',$format),$timestamp);
+		}
+		else
+		{
+			$out=$format;
+			if(strstr($format,'%l'))
+			{
+				$this->abbr=false;
+				$out=str_replace('%l',$this->n_to_day(date('w',$timestamp)),$out);
+			}
+			if(strstr($format,'%F'))
+			{
+				$this->abbr=false;
+				$out=str_replace('%F',$this->n_to_month(date('n',$timestamp)),$out);
+			}
+			if(strstr($format,'%D'))
+			{
+				$this->abbr=true;
+				$out=str_replace('%D',$this->n_to_day(date('w',$timestamp)),$out);
+			}
+			if(strstr($format,'%M'))
+			{
+				$this->abbr=true;
+				$out=str_replace('%M',$this->n_to_month(date('n',$timestamp)),$out);
+			}			
+			if(strstr($format,'%Y'))
+				$out=str_replace('%Y',date('Y',$timestamp),$out);
+			if(strstr($format,'%y'))
+				$out=str_replace('%y',date('y',$timestamp),$out);
+			if(strstr($format,'%d'))
+				$out=str_replace('%d',date('d',$timestamp),$out);
+			if(strstr($format,'%m'))
+				$out=str_replace('%m',date('m',$timestamp),$out);
+			if(strstr($format,'%n'))
+				$out=str_replace('%n',date('n',$timestamp),$out);
+			if(strstr($format,'%j'))
+				$out=str_replace('%j',date('j',$timestamp),$out);
+
+			return $out;
+		}
+	}
+
+	function n_to_month($month)
+	{
+	global $lang;
+		if($month>12 || $month<1){ die('Month range not valid. Must be 1 to 12!');}
+
+		if($this->abbr===true)
+			return($lang['bmonth'.$month]);
+		elseif($this->abbr!=true)
+			return($lang['month'.$month]);
+	}
+
+	function n_to_day($day)
+	{
+	global $lang;
+		if($day>6 || $day<0){die('Day range not valid. Must be 0 to 6!');}
+		
+		if($this->abbr===true)
+			return($lang['bday'.$day]);
+		elseif($this->abbr!=true)
+			return($lang['day'.$day]);
+	}
+
+
+function RelativeDate($epoch) {
+global $lang;
+   $day    = date('j',$epoch);
+   $today  = date('j',time());
+   $yday  = date('j',strtotime("-1 day"));
+
+   //account for last month's day
+   switch($day) {
+       case $today:    return $lang['today'].",";                break;
+       case $yday:    return $lang['yesterday'].",";            break;
+       default: 
+        return "";
+           }
+ 	}
+
 
 
 }
