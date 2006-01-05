@@ -79,7 +79,7 @@ echo "
           if($counter>0 && $counter != $tmp-1){
              echo ", ";
           }
-          echo '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";
+         if($matr[$counter]){ echo '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";}
         }
         echo '</td></tr>';
       $totmsg = $totmsg + $sezval->THR_NUM + $sezval->REPLY_NUM;
