@@ -75,8 +75,7 @@ foreach($board_vis as $id=>$riga)
 				<td class='row2' align='center'>".$riga['bind']."</td>
 				<td class='row2' align='center'>".$riga['porta']."</td>
 			<td class='row2' align='center'>
-				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."
-				</textarea></td>\n</tr>";
+				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
 			}
 	}
 }
