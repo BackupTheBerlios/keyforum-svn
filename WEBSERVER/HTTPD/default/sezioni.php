@@ -199,14 +199,16 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   ." LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
 $risultato=$db->get_results($query);
 
-if($risultat) foreach($risultato as $riga)
+if($risultato) foreach($risultato as $riga)
 {
   $iden=unpack("H32hex",$riga->HASH);
   
   $reply_date=$std->PostDate($riga->last_reply_time);
   $write_date=$std->PostDate($riga->write_date);
   
-  $num = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
+  $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
+  if ($tmp) {
+    $num = $tmp["valore"];
     if ($num<$riga->reply_num)
       $PostStatImage = "f_norm";
     else
@@ -245,7 +247,7 @@ if($risultat) foreach($risultato as $riga)
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
   <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga["subtitle"])."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'>".$riga->reply_num."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
   <td align=center class='row4'>".$riga->read_num."</td>
