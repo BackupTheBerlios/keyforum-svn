@@ -112,6 +112,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
    <?
      }else{
    ?>
+   <br>
    <div class="borderwrap" id="fo_stat">
      <table cellspacing="1"width="100%">
        <tr>
