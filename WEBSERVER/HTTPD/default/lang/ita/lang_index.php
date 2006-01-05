@@ -7,8 +7,8 @@ $lang['col_replies']  = "Risposte";
 $lang['col_lastpost']  = "Ultimo Messaggio";
 $lang['col_moderators']  = "Moderatori";
 $lang['last_in']  = "In: ";
-$lang['last_data']  = "Data: ";
-$lang['last_from']  = "Da: ";
+$lang['last_data']  = "";
+$lang['last_from']  = "Di: ";
 $lang['subforums']  = "All'interno:";
 
 

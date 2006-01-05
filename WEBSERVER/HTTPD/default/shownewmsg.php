@@ -173,11 +173,10 @@ $risultato=$db->get_results($query);
 if($risultato) foreach($risultato as $riga ) {
   $iden=unpack("H32hex",$riga->HASH);
   
-  //$reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->last_reply_time);
-  //$write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga->write_date);
-  
-  $reply_date=$std->RelativeDate($riga->last_reply_time)." ".$std->k_date($lang['post_date'],$riga->last_reply_time)." ".date($lang['post_time'],$riga->last_reply_time);  
-  $write_date=$std->RelativeDate($riga->write_date)." ".$std->k_date($lang['post_date'],$riga->write_date)." ".date($lang['post_time'],$riga->write_date);
+
+  $reply_date=$std->PostDate($riga->last_reply_time);
+  $write_date=$std->PostDate($riga->write_date);
+    
   
   $num = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
   //Default data

@@ -443,6 +443,12 @@ global $lang;
  	}
 
 
+function PostDate($timestamp)
+ {
+ global $lang;
+ return $this->RelativeDate($timestamp)." ".$this->k_date($lang['post_date'],$timestamp)." ".date($lang['post_time'],$timestamp);
+ }
+
 
 }
 

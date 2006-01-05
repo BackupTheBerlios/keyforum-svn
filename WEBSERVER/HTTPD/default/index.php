@@ -39,7 +39,10 @@ echo "
   
       $MSG=GetLastMsg($sezval->ID);
 	  //Default value
-      $write_date=($MSG->time_action ? strftime("%d/%m/%y  - %H:%M:%S",$MSG->time_action) : '');
+      $write_date=($MSG->time_action ? $std->PostDate($MSG->time_action): '');
+      
+      
+      
       $hash= ($MSG->hash ? unpack("H32alfa",$MSG->hash) : '');
       $nickhash= ($MSG->nickhash ? unpack("H32alfa",$MSG->nickhash) : '');
       if(strlen($MSG->TITLE)>50){
