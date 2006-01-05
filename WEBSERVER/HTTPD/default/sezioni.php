@@ -1,7 +1,7 @@
 <?PHP
 // v. 0.10
 include ("testa.php");
-$lang = $std->load_lang('lang_sezioni', $blanguage );
+$lang += $std->load_lang('lang_sezioni', $blanguage );
 
 function PageSelect() {
 ?>

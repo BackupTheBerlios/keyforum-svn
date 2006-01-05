@@ -22,9 +22,6 @@ $title=$lang['page_title'] ;
 
 include ("testa.php");
 
-// ...e la devo ricaricare perchè testa me la sovrascrive... (andrà sistemata questa cosa...)
-$lang = $std->load_lang('lang_shownewmsg', $blanguage );
-
 function PageSelect() {
 global $tst;
 ?>

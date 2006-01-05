@@ -26,9 +26,11 @@ $SNAME=$_ENV["sesname"];
 $queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
 $BNAME=$db->get_var($queryacbd);
 
-// carico la lingua per la testa
-$lang = $std->load_lang('lang_testa', $blanguage );
+// carico le stringhe globali
+if(is_array($lang)) {$lang += $std->load_lang('lang_global', $blanguage );} else {$lang = $std->load_lang('lang_global', $blanguage);};
 
+// carico la lingua per la testa (accodandolo)
+$lang += $std->load_lang('lang_testa', $blanguage );
 
   if (pack("H*",$_REQUEST[THR_ID])){
     $MSGID=mysql_escape_string(pack("H*",$_REQUEST[THR_ID]));
