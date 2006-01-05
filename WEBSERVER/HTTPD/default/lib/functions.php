@@ -124,9 +124,10 @@ class FUNC {
 
         function getpkey($sesname) 
 		{
-			global $db;
-			$query = "SELECT value FROM config WHERE subkey='$sesname' AND fkey='PKEY'";
-			$pkey = $db->get_var($query);
+			global $db,$config;
+			/*$query = "SELECT value FROM config WHERE subkey='$sesname' AND fkey='PKEY'";
+			$pkey = $db->get_var($query);*/
+			$pkey = $config['SHARE'][$sesname]['PKEY'];
 			if(!$pkey) die("pkey vuota!\n");
 			return($pkey);
         }

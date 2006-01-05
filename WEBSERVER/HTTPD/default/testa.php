@@ -23,11 +23,18 @@ $Section = 3; # Numero di pagine da visualizzare a sn e a ds dell'attuale (es. .
 
 $SNAME=$_ENV["sesname"];
 
-$queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
-$BNAME=$db->get_var($queryacbd);
+/*$queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
+$BNAME=$db->get_var($queryacbd);*/
 
+<<<<<<< .mine
+$BNAME = $keyforum['nome'];
+
+// carico la lingua per la testa
+$lang = $std->load_lang('lang_testa', $blanguage );
+=======
 // carico le stringhe globali
 if(is_array($lang)) {$lang += $std->load_lang('lang_global', $blanguage );} else {$lang = $std->load_lang('lang_global', $blanguage);};
+>>>>>>> .r324
 
 // carico la lingua per la testa (accodandolo)
 $lang += $std->load_lang('lang_testa', $blanguage );
@@ -42,7 +49,7 @@ $lang += $std->load_lang('lang_testa', $blanguage );
     if ($SEZ_DATA->ID)
       echo $SEZ_DATA->SEZ_NAME." - ";
   }
-  echo $BNAME;
+  echo ucfirst($BNAME);
 echo " Forum - $title</title>";
 
 ?>
@@ -113,7 +120,7 @@ function mklastselected() {
     <p class="home">
 <?php
 
-   $querysetup="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='SETUP' OR SUBKEY='".$BNAME."';";
+  /* $querysetup="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='SETUP' OR SUBKEY='".$BNAME."';";
    $responsetup=$db->get_results($querysetup);
    foreach($responsetup as $valuesetup){
       if(($valuesetup->FKEY=="BIND")AND($valuesetup->SUBKEY=="SETUP")){
@@ -123,7 +130,11 @@ function mklastselected() {
       }elseif($valuesetup->FKEY=="BIND"){
          $bindboard=$valuesetup->VALUE;
       }
-   }
+   }*/
+   $bindsetup = $config['WEBSERVER']['SETUP']['BIND'];
+   $portsetup = $config['WEBSERVER']['SETUP']['PORTA'];
+   $bindboard = $config['WEBSERVER'][$BNAME]['PORTA'];
+   
    if($portsetup){
       if((!$bindsetup)OR($bindsetup==$_SERVER['REMOTE_ADDR'])OR($bindsetup==$bindboard)){
          $addrsetup=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
@@ -131,41 +142,41 @@ function mklastselected() {
       }
    }
 ?>
+
     </p>
       <form method="post" name="boardlinkform" action="">
        <p>
         <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>|
         <select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
-   <?php
-      $querywse="SELECT DISTINCT SUBKEY FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY';";
-      $responsewse=$db->get_results($querywse);
-      foreach($responsewse as $valuewse){
-       if($valuewse->SUBKEY!=$SNAME){
-         $queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='$valuewse->SUBKEY';";
-         $responsews=$db->get_results($queryws);
-         foreach($responsews as $valuews){
-            $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='$valuews->SUBKEY' OR SUBKEY='$BNAME';";
-            $responsewsl=$db->get_results($querywsl);
-            foreach($responsewsl as $valuewsl){
-               if(($valuewsl->FKEY=="BIND")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
-                  $bindwsl=$valuewsl->VALUE;
-               }elseif(($valuewsl->FKEY=="PORTA")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
-                  $portwsl=$valuewsl->VALUE;
-               }elseif($valuewsl->FKEY=="BIND"){
-                  $bindboard=$valuewsl->VALUE;
-               }
-            }
-            if($portwsl){
-               if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
-                  $addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
-                  echo '<option value="http://'.$addrwsl.':'.$portwsl.'/">'.$valuews->SUBKEY.'</option>';
-               }
-            }
-         }
-       }
-      }
-   ?>
+<?php
+foreach($config['SHARE'] as $nome_share=>$array_share)
+{
+	if($nome_share != $BNAME)
+	{
+		foreach($config['WEBSERVER'] as $nome_web=>$array_web)
+		{
+			if($nome_share == $nome_web)
+			{
+				$bindwsl = $array_web['BIND'];
+				$portwsl = $array_web['PORTA'];
+				if($portwsl)
+				{
+					if(	   (!$bindwsl)
+						OR ($bindwsl==$_SERVER['REMOTE_ADDR'])
+						OR ($bindwsl==$bindboard))
+					{
+						$addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
+						echo "<option value='http://$addrwsl:$portwsl/'>
+									$nome_share
+							</option>";
+					}
+				}
+			}
+		}
+	}	  	
+}
+?>
         </select>
        </p>
       </form>

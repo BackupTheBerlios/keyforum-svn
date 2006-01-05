@@ -34,18 +34,39 @@ $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['
 if (!$SQL) die ("Non riesco a connettermi al server MySQL");
 if ( !mysql_select_db($_ENV['sql_dbname']) ) die("Impossibile aprire il DataBase MySQL:".mysql_error()."</br>");*/
 
+$query = "SELECT * FROM config WHERE 1";
+$result = $db->get_results($query);
+foreach($result as $riga)
+{
+	$config[$riga->MAIN_GROUP][$riga->SUBKEY][$riga->FKEY] = $riga->VALUE;
+}
+//var_dump($config);
+
+
 define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
 define ("GMT_TIME", 3600*1);
 
     $porta=$_SERVER['SERVER_PORT'] ;
-    $subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
+	foreach($config['WEBSERVER'] as $nome=>$array)
+	{
+		if($array['PORTA'] == $porta)
+		{
+			$keyforum['porta'] = $porta;
+			$keyforum['sesname'] = $array['SesName'];
+			$keyforum['nome'] = $nome;
+			$_ENV['sesname']= $array['SesName'];
+			break;
+		}
+	}
+
+    /*$subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
     $riga = $db->get_var("SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='$subkey'");
     if($riga){
          $_ENV['sesname']=$riga;
     } else {
           $_ENV['sesname']=$subkey;
-      }
+      }*/
 
 if (!$_ENV['sesname']) {
 	print "Nessuna board assegnata a questo webserver.\n";

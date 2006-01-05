@@ -7,6 +7,132 @@ $whereiam="boardlist";
 // carico la lingua per la boardlist
 $lang += $std->load_lang('lang_boardlist', $blanguage );
 
+?>
+<tr>
+ <td>
+
+<?
+$Num3d = $db->get_var("SELECT count(SUBKEY) FROM config WHERE FKEY='PKEY';");
+$NumPag = intval(($Num3d-1) / $BoardXPage);
+$CurrPag = $_REQUEST['pag'];
+if (! is_numeric($CurrPag))
+  $CurrPag = 0;
+if ($CurrPag < 0) $CurrPag = 0;
+
+PageSelect();
+
+//acquisizione dati:
+
+$i = 0;
+foreach($config['SHARE'] as $nome_share=>$array)
+{
+	$board[$i] = Array('nome' =>$nome_share, 'pkey' => $array['PKEY']);
+	$i++;
+} //prendo tutte le board;
+
+$i=$CurrPag*$BoardXPage;
+$tot = $i + min(count($config['SHARE']) -$i ,$BoardXPage);
+for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
+{
+	$id = $board[$i]['nome'];
+	$board_vis[$id]['nome'] = $board[$i]['nome'];
+	$board_vis[$id]['pkey'] = $board[$i]['pkey'];
+	$board_vis[$id]['bind'] = $config['WEBSERVER'][$board[$i]['nome']]['BIND'];
+	$board_vis[$id]['porta'] = $config['WEBSERVER'][$board[$i]['nome']]['PORTA'];
+}
+
+//output
+?>
+<div class='borderwrap'>
+  <div class='maintitle'>
+    <p class='expand'></p>
+    <p><?=$lang['board_list']?></p>
+  </div>
+  <table cellspacing='1'>
+    <tr>
+      <th align='right'  width='1%' class='titlemedium'><?=$lang['board_num']?></th>
+      <th align='left'   width='10' class='titlemedium'>&nbsp;<?=$lang['board_name']?></th>
+      <th align='center' width='10%' class='titlemedium'><?=$lang['board_bind']?></th>
+      <th align='center' width='7%' class='titlemedium'><?=$lang['board_port']?></th>
+      <th align='center' width='72%' class='titlemedium'><?=$lang['board_pkey']?></th>
+    </tr>
+<?
+$i=$CurrPag*$BoardXPage;
+foreach($board_vis as $id=>$riga)
+{
+	if($riga['porta'])
+	{
+	 if((!$riga['bind'])OR($riga['bind']==$_SERVER['REMOTE_ADDR'])OR($riga['bind']==$bindboard)){
+			 $req_dec[FUNC][Base642Dec]=$riga['pkey'];
+			 $core   = new CoreSock;
+			 $core->Send($req_dec);
+			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
+		 echo "<tr>
+			<td class='row1' align='right'>".++$i."</td>
+			<td class='row2' align='left'>
+			&nbsp;<a href='http://{$riga['bind']}:{$riga['porta']}'>{$riga['nome']}</a>
+			</td>
+				<td class='row2' align='center'>".$riga['bind']."</td>
+				<td class='row2' align='center'>".$riga['porta']."</td>
+			<td class='row2' align='center'>
+				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."
+				</textarea></td>\n</tr>";
+			}
+	}
+}
+
+/*$querywse="SELECT DISTINCT SUBKEY, VALUE FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
+$valuewsea = $db->get_results($querywse);
+foreach($valuewsea as $valuewse)
+{
+	$queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='$valuewse->SUBKEY'";
+	$valuewsa=$db->get_results($queryws);
+	foreach($valuewsa as $valuews)
+	{
+	   $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='$valuews->SUBKEY' OR SUBKEY='$BNAME';";
+	   $valuewsla =$db->get_results($queryws1);
+	   foreach($valuewsla as $valuewsl)
+	   {
+		  if(($valuewsl->FKEY=="BIND")AND($valuewsl->SUBKEY==$valuews->SUBKEY))  {
+			 $bindwsl=$valuewsl->VALUE;
+		  }elseif(($valuewsl->FKEY=="PORTA")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
+			 $portwsl=$valuewsl->VALUE;
+		  }elseif($valuewsl->FKEY=="BIND"){
+			 $bindboard=$valuewsl->VALUE;
+		  }
+	   }
+	   if($portwsl){
+		  if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
+			 $req_dec[FUNC][Base642Dec]=$valuewse->VALUE;
+			 $core   = new CoreSock;
+			 $core->Send($req_dec);
+			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
+			 echo "<tr>
+			<td class='row1' align='right'>".++$i."</td>
+			<td class='row2' align='left'>&nbsp;<a href=\"http://$bindwsl:$portwsl\">$valuews->SUBKEY</a></td>
+				<td class='row2' align='center'>".$bindwsl."</td>
+				<td class='row2' align='center'>".$portwsl."</td>
+			<td class='row2' align='center'><textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
+		  }
+	   }
+}
+
+}*/
+?>
+  </table>
+</div>
+
+<? PageSelect(); ?>
+
+ </td>
+</tr>
+<?PHP
+include ("end.php");
+
+
+
+
+//FUNZIONI
 function PageSelect() {
 ?>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
@@ -51,83 +177,5 @@ function PageSelect() {
   </tbody>
 </table>
 <?
-}
-?>
-<tr>
- <td>
-<?
-$Num3d = $db->get_var("SELECT count(SUBKEY) FROM config WHERE FKEY='PKEY';");
-$NumPag = intval(($Num3d-1) / $BoardXPage);
-$CurrPag = $_REQUEST['pag'];
-if (! is_numeric($CurrPag))
-  $CurrPag = 0;
-if ($CurrPag < 0) $CurrPag = 0;
-
-PageSelect();
-?>
-<?
-  echo "
-<div class=\"borderwrap\">
-  <div class=\"maintitle\">
-    <p class=\"expand\"></p>
-    <p>".$lang['board_list']."</p>
-  </div>
-  <table cellspacing=\"1\">
-    <tr>
-      <th align=\"right\" width=\"1%\" class='titlemedium'>".$lang['board_num']."</th>
-      <th align=\"left\" width=\"10%\" class='titlemedium'>&nbsp;".$lang['board_name']."</th>
-      <th align=\"center\" width=\"10%\" class='titlemedium'>".$lang['board_bind']."</th>
-      <th align=\"center\" width=\"7%\" class='titlemedium'>".$lang['board_port']."</th>
-      <th align=\"center\" width=\"72%\" class='titlemedium'>".$lang['board_pkey']."</th>
-    </tr>";
-?>
-<?PHP
-$i=$CurrPag*$BoardXPage;
-$querywse="SELECT DISTINCT SUBKEY, VALUE FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
-$valuewsea = $db->get_results($querywse);
-foreach($valuewsea as $valuewse)
-{
-	$queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='$valuewse->SUBKEY'";
-	$valuewsa=$db->get_results($queryws);
-	foreach($valuewsa as $valuews)
-	{
-	   $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='$valuews->SUBKEY' OR SUBKEY='$BNAME';";
-	   $valuewsla =$db->get_results($queryws1);
-	   foreach($valuewsla as $valuewsl)
-	   {
-		  if(($valuewsl->FKEY=="BIND")AND($valuewsl->SUBKEY==$valuews->SUBKEY))  {
-			 $bindwsl=$valuewsl->VALUE;
-		  }elseif(($valuewsl->FKEY=="PORTA")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
-			 $portwsl=$valuewsl->VALUE;
-		  }elseif($valuewsl->FKEY=="BIND"){
-			 $bindboard=$valuewsl->VALUE;
-		  }
-	   }
-	   if($portwsl){
-		  if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
-			 $req_dec[FUNC][Base642Dec]=$valuewse->VALUE;
-			 $core   = new CoreSock;
-			 $core->Send($req_dec);
-			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
-			 echo "<tr>
-			<td class='row1' align='right'>".++$i."</td>
-			<td class='row2' align='left'>&nbsp;<a href=\"http://$bindwsl:$portwsl\">$valuews->SUBKEY</a></td>
-				<td class='row2' align='center'>".$bindwsl."</td>
-				<td class='row2' align='center'>".$portwsl."</td>
-			<td class='row2' align='center'><textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
-		  }
-	   }
-}
-
-}
-?>
-  </table>
-</div>
-
-<? PageSelect(); ?>
-
- </td>
-</tr>
-<?PHP
-include ("end.php");
+}//END PAGE SELECT FUNCTION
 ?>
