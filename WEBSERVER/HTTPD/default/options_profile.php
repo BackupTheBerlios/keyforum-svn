@@ -1,9 +1,12 @@
 <?php
 $whereiam='options_profile.php';
-$title = "Your Control Panel";
+
+include_once("lib/lib.php");
+if(is_array($lang)) { $lang += $std->load_lang('lang_optionsprofile', $blanguage );} else { $lang = $std->load_lang('lang_optionsprofile', $blanguage );}
+
+$title = $lang['optprf_title'];
 
 include("testa.php");
-$lang += $std->load_lang('lang_optionsprofile', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 

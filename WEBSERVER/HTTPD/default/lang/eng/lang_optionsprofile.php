@@ -1,5 +1,6 @@
 <?php
 
+$lang['optprf_title']  = "Your control pannel";
 $lang['optprf_welcome']  = "Welcome to your control panel";
 $lang['optprf_update']  = "Update";
 $lang['optprf_reply']  = "data updated successfully";

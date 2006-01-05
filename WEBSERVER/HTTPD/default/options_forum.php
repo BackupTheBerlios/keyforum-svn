@@ -1,9 +1,11 @@
 <?php
 $whereiam='options_forum.php';
-$title = "Il tuo pannello di controllo";
+include_once("lib/lib.php");
+if(is_array($lang)){$lang += $std->load_lang('lang_optionsforum', $blanguage );} else {$lang = $std->load_lang('lang_optionsforum', $blanguage );}
+
+$title = $lang['optfrm_title'];
 
 include("testa.php");
-$lang += $std->load_lang('lang_optionsforum', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 

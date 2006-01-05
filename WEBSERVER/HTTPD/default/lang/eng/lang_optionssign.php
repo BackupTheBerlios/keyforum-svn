@@ -1,5 +1,6 @@
 <?php
 
+$lang['optsign_title'] = "Your control pannel";
 $lang['optsign_welcome']  = "Welcome to your control panel";
 $lang['optsign_info1']  = "INSERT HERE YOUR PRIVATE KEY TO MODIFY YOUR SIGNATURE:<br>Message type 5";
 $lang['optsign_currsign']  = "Your current Signature";

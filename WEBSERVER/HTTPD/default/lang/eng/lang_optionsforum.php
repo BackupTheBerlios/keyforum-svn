@@ -1,5 +1,6 @@
 <?php
 
+$lang['optfrm_title']="Your control pannel";
 $lang['optusr_welcome']  = "Welcome to your control panel";
 $lang['optusr_msg']  = "update successful";
 $lang['optusr_errmsg']  = "Unknown error";

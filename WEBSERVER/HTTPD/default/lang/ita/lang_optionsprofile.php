@@ -1,5 +1,6 @@
 <?php
 
+$lang['optprf_title']  = "Il tuo pannello di controllo";
 $lang['optprf_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optprf_update']  = "Aggiorna";
 $lang['optprf_reply']  = "modifiche forse effettuate";

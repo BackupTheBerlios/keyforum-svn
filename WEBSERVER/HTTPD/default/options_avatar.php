@@ -1,6 +1,10 @@
 <?php
 $whereiam='options_avatar.php';
-$title = "Il tuo pannello di controllo";
+
+include_once("lib/lib.php");
+if(is_array($lang)) { $lang += $std->load_lang('lang_optionsavatar', $blanguage );} else { $lang = $std->load_lang('lang_optionsavatar', $blanguage );}
+
+$title = $lang['optavt_title'];
 
 include("testa.php");
 $lang += $std->load_lang('lang_optionsavatar', $blanguage );

@@ -1,5 +1,6 @@
 <?php
 
+$lang['optfrm_title']="Il tuo pannello di controllo";
 $lang['optusr_welcome']  = "Benvenuto nel Pannello di Controllo";
 $lang['optusr_msg']  = "modifiche avvenute con successo";
 $lang['optusr_errmsg']  = "Errore imprevisto";

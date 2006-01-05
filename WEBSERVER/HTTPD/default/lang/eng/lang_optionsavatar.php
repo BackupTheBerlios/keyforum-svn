@@ -1,5 +1,6 @@
 <?php
 
+$lang['optavt_title']  = "Your control pannel";
 $lang['optavt_welcome']  = "Welcome to your control panel";
 $lang['optavt_modsucc']  = "update successfully";
 $lang['optavt_removeavatar']  = "Do you wanto to remove your Avatar?";
