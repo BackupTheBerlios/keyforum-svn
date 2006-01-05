@@ -17,7 +17,7 @@ function PageSelect() {
 	global $Section;
 
 	$link  = "?validati={$_REQUEST['validati']}&amp;nonvalidati={$_REQUEST['nonvalidati']}&amp;";
-	$link .= "?order_by={$_REQUEST['order_by']}&amp;order={$_REQUEST['order']}&amp;";
+	$link .= "order_by={$_REQUEST['order_by']}&amp;order={$_REQUEST['order']}&amp;";
 	$link .= "pag=";
 
 	echo '
