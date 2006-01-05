@@ -26,15 +26,13 @@ $SNAME=$_ENV["sesname"];
 /*$queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
 $BNAME=$db->get_var($queryacbd);*/
 
-<<<<<<< .mine
 $BNAME = $keyforum['nome'];
 
 // carico la lingua per la testa
 $lang = $std->load_lang('lang_testa', $blanguage );
-=======
+
 // carico le stringhe globali
 if(is_array($lang)) {$lang += $std->load_lang('lang_global', $blanguage );} else {$lang = $std->load_lang('lang_global', $blanguage);};
->>>>>>> .r324
 
 // carico la lingua per la testa (accodandolo)
 $lang += $std->load_lang('lang_testa', $blanguage );
@@ -154,24 +152,18 @@ foreach($config['SHARE'] as $nome_share=>$array_share)
 {
 	if($nome_share != $BNAME)
 	{
-		foreach($config['WEBSERVER'] as $nome_web=>$array_web)
+		$bindwsl = $config['WEBSERVER'][$nome_share]['BIND'];
+		$portwsl = $config['WEBSERVER'][$nome_share]['PORTA'];
+		if($portwsl)
 		{
-			if($nome_share == $nome_web)
+			if(	   (!$bindwsl)
+				OR ($bindwsl==$_SERVER['REMOTE_ADDR'])
+				OR ($bindwsl==$bindboard))
 			{
-				$bindwsl = $array_web['BIND'];
-				$portwsl = $array_web['PORTA'];
-				if($portwsl)
-				{
-					if(	   (!$bindwsl)
-						OR ($bindwsl==$_SERVER['REMOTE_ADDR'])
-						OR ($bindwsl==$bindboard))
-					{
-						$addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
-						echo "<option value='http://$addrwsl:$portwsl/'>
-									$nome_share
-							</option>";
-					}
-				}
+				$addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
+				echo "<option value='http://$addrwsl:$portwsl/'>
+							$nome_share
+					</option>";
 			}
 		}
 	}	  	
