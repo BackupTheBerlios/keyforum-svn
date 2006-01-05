@@ -38,7 +38,6 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
   // ****** Devo prima reperire l'hash dell'utente
   $query="SELECT `PASSWORD` FROM `".mysql_real_escape_string($_ENV["sesname"])."_localmember` WHERE `HASH`=".???????.";";
-  $risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
   if !($PASSWORD = $db->get_var($query)) {
     echo "Impossibile caricare la chiave privata.<br>\n";
     include ("end.php");

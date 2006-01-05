@@ -184,9 +184,9 @@ $query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autor
 ." AND membri.HASH=msghe.AUTORE"
 .";"
 ;
-$risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
+$riga=$db->get_row($query);
 
-if (!($riga = mysql_fetch_assoc($risultato))) {
+if (!$riga) {
   echo "".$lang['shmsg_msgnotfound']."\n\t</td>\n</tR>\n";
   include ("end.php");
   exit(0);
@@ -196,7 +196,7 @@ if (!($riga = mysql_fetch_assoc($risultato))) {
 /*
   Preparo le variabili per la selezione delle pagine...
 */
-$Num3d = $riga["reply_num"];
+$Num3d = $riga->reply_num;
 $NumPag = intval(($Num3d-1) / $PostXPage);
 $CurrPag = $_REQUEST["pag"];
 if ($CurrPag=="last")
@@ -205,9 +205,9 @@ if (! is_numeric($CurrPag))
   $CurrPag = 0;
 if ($CurrPag < 0) $CurrPag = 0;
 
-mysql_query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$Num3d,".(time()+2592000).");");
+$db->query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$Num3d,".(time()+2592000).");");
 
-mysql_query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
+$db->query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
 
 ?>
 <a href="searcher.pm?MODO=2&amp;REP_OF=<?php print urlencode($MSGID);?>">
@@ -231,9 +231,9 @@ $query="SELECT edit.TITLE AS title, edit.BODY AS body, membri.AUTORE as autore,"
 ." AND edit.visibile='1'"
 ." ORDER BY origi.DATE"
 ." LIMIT ".($CurrPag*$PostXPage).",$PostXPage;";
-$risultato=mysql_query($query) or Muori ($lang['inv_query'] . mysql_error());
+$risultato=$db->get_results($query);
 
-  while ($riga = mysql_fetch_assoc($risultato)) printmsg($riga);
+  if($risultato)foreach($risultato as $riga) printmsg($riga);
 
   PageSelect(2);
   FastReply();

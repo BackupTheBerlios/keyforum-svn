@@ -6,61 +6,62 @@ function printmsg($MSG) {
   global $std;
   global $userdata;
   global $db;
-  $usercolor = $std->GetUserColor($MSG['memhash']);
-  $mio_nick = $GLOBALS['sess_nick'];
-  if ($MSG['date'])
-    $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG['date']);
-  $hash=unpack("H32hex",$MSG['hash']);
-  if (eregi("http:\/\/", secure_v($MSG['avatar'])))
-    $avatar="<img src='".$MSG['avatar']."'alt=''><br />";
-  if ($MSG['regdate'])
-    $register_date=strftime("%d/%m/%y",$MSG['regdate']);
-  if ($MSG['gruppo'])
-    $gruppo=$MSG['title']; else $gruppo="membri";
 
-  if ($MSG['memhash']) {
-    $tmp=unpack("H32hash",$MSG['memhash']);
-    $autore="<a href='showmember.php?MEM_ID=".$tmp['hash']."'>".secure_v($MSG['autore'])."</a>";
-    if ($MSG['is_auth'])
+  $usercolor = $std->GetUserColor($MSG->memhash);
+  $mio_nick = $GLOBALS['sess_nick'];
+  if ($MSG->date)
+    $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG->date);
+  $hash=unpack("H32hex",$MSG->hash);
+  if (eregi("http:\/\/", secure_v($MSG->avatar)))
+    $avatar="<img src='".$MSG->avatar."'alt=''><br />";
+  if ($MSG->regdate)
+    $register_date=strftime("%d/%m/%y",$MSG->regdate);
+  if ($MSG->gruppo)
+    $gruppo=$MSG->title; else $gruppo="membri";
+  if ($MSG->memhash) {
+    $tmp=unpack("H32hash",$MSG->memhash);
+    $autore="<a href='showmember.php?MEM_ID=".$tmp['hash']."'>".secure_v($MSG->autore)."</a>";
+    if ($MSG->is_auth)
       $auth="<b>YES</b>";
     else
       $auth="<a href='admin.pl?action=AuthMem&amp;HASH=".$tmp['hash']."'>NO</a>";
   }
   else {
-    $autore=secure_v($MSG['autore']);
-    if ($MSG['is_auth'])
+    $autore=secure_v($MSG->autore);
+    if ($MSG->is_auth)
       $auth="<b>YES</b>";
     else
       $auth="NO";
   }
 
-if(($userdata->LEVEL)  OR ($MSG['autore']==$mio_nick))
+if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
 {
-  if ($MSG['repof']) {
-    $tmp=unpack("H32repof/H32mshash", $MSG['repof'].$MSG['hash']);
+  if ($MSG->repof) {
+    $tmp=unpack("H32repof/H32mshash", $MSG->repof.$MSG->hash);
     $EDITER="<a href='edreply.php?REP_OF=".$tmp['repof']."&amp;EDIT_OF=".$tmp['mshash']."&amp;SEZID=".$_REQUEST["SEZID"]."'><img src=\"img/buttons/".$blanguage."/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
-  elseif ($MSG[SEZ]) {
-    $tmp=unpack("H32mshash", $MSG['edit_of']);
-    $EDITER="<a href='ednewmsg.php?EDIT_OF=".$tmp['mshash']."&amp;SEZID=$MSG[SEZ]'><img src=\"img/buttons/".$blanguage."/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
+  elseif ($MSG->SEZ) {
+    $tmp=unpack("H32mshash", $MSG->edit_of);
+    $EDITER="<a href='ednewmsg.php?EDIT_OF=".$tmp['mshash']."&amp;SEZID=$MSG->SEZ'><img src=\"img/buttons/".$blanguage."/p_edit.gif\" border=\"0\" alt=\"Edit\" ></a>";
   }
 }  
-  
-  if($MSG['edit_of']!=$MSG['hash']){
-     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG['real_autore'])."' LIMIT 1;";
+ 
+  if($MSG->edit_of!=$MSG->hash){
+     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
      $realautore=$db->get_var($queryaut);
-     $MSG['body'] = $MSG['body']."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG['real_date'])."[/COLOR][/SIZE]";
+     $MSG->body = $MSG->body."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG->real_date)."[/COLOR][/SIZE]";
   }
-  if(($MSG['real_hash'])AND($MSG['edit_of']!=$MSG['real_hash'])){
-     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG['real_autore'])."' LIMIT 1;";
+
+  if(($MSG->real_hash)AND($MSG->edit_of!=$MSG->real_hash)){
+     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
      $realautore=$db->get_var($queryaut);
-     $MSG['body'] = $MSG['body']."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG['real_date'])."[/COLOR][/SIZE]";
+     $MSG->body = $MSG->body."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG->real_date)."[/COLOR][/SIZE]";
   }
-  
-  $MSG['body'] = secure_v($MSG['body']);
+ 
+  $MSG->body = secure_v($MSG->body);
    
   // visualizzo le firme ?
-  if($userdata->HIDESIG) { $MSG['firma']=""; } else { $MSG['firma'] = secure_v($MSG['firma']);}
+  if($userdata->HIDESIG) { $MSG->firma=""; } else { $MSG->firma = secure_v($MSG['firma']);}
   
   echo<<<EOF
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
@@ -83,7 +84,7 @@ if(($userdata->LEVEL)  OR ($MSG['autore']==$mio_nick))
   {$lang['shmsg_mbrtype']}<br />
   {$lang['shmsg_adminauth']}{$auth}<br />
   {$lang['shmsg_group']}{$gruppo}<br />
-  {$lang['shmsg_messages']}{$MSG['msg_num']}<br />
+  {$lang['shmsg_messages']}{$MSG->msg_num}<br />
   {$lang['shmsg_joined']}{$register_date}<br /><br />
   </span><br />
   <div align="center"><span
@@ -95,9 +96,9 @@ if(($userdata->LEVEL)  OR ($MSG['autore']==$mio_nick))
  <td width='100%' valign='top' class='post2'>
 EOF;
  
- $title=$MSG['title'];
- if($MSG['subtitle']){
-    $title=$title.", ".$MSG['subtitle'];
+ $title=$MSG->title;
+ if($MSG->subtitle){
+    $title=$title.", ".$MSG->subtitle;
  }
  
  if($title) {
@@ -105,10 +106,10 @@ EOF;
  echo secure_v($title)."</td></tr></table><br />";
  }
  
- $tmp=unpack("H32mshash", $MSG['edit_of']);
- echo "<div class='postcolor'> ".convert($MSG['body'])."</div>
+ $tmp=unpack("H32mshash", $MSG->edit_of);
+ echo "<div class='postcolor'> ".convert($MSG->body)."</div>
   <br /><br />--------------------<br />
-  <div class='signature'>".convert($MSG['firma'])."</div>
+  <div class='signature'>".convert($MSG->firma)."</div>
  </td>
 </tr>
 <tr>
