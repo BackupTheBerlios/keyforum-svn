@@ -4,7 +4,7 @@ $SNAME=$_ENV['sesname'];
 $whereiam="userlist";
 include ("testa.php");
 // carico la lingua per le sezioni
-$lang = $std->load_lang('lang_userlist', $blanguage );
+$lang += $std->load_lang('lang_userlist', $blanguage );
 
 
 ?>

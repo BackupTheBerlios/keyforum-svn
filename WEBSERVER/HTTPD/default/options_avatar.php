@@ -3,7 +3,7 @@ $whereiam='options_avatar.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
-$lang = $std->load_lang('lang_optionsavatar', $blanguage );
+$lang += $std->load_lang('lang_optionsavatar', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
@@ -110,7 +110,7 @@ var remove_pressed = 0;
 <? echo " <div class=\"formsubtitle\">".$lang['optavt_avataropt']."</div>"; ?>
 	<? echo" ".$lang['optavt_info1'].""; ?>
 <? echo" <div class=\"formsubtitle\">".$lang['optavt_current']."</div>"; ?>
-<div class=\"tablepad\" align=\"center\"><img src='<?=$current_avatar?>' border='0' width='90' height='90' alt='' /><br /><? echo"".$lang['optavt_info2']."</div>"; ?>
+<div class=\"tablepad\" align=\"center\"><img src='<?=$current_avatar?>' border='0'  alt='' /><br /><? echo"".$lang['optavt_info2']."</div>"; ?>
 <? echo" <div class=\"formsubtitle\">".$lang['optavt_preext']."</div>"; ?>
 <form action="http://www.keyforum.net/forum/index.php?act=UserCP&amp;CODE=getgallery" method="post">
 	<table cellspacing="0" width="100%">

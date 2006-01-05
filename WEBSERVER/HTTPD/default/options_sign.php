@@ -3,7 +3,7 @@ $whereiam='options_sign.php';
 $title = "Il tuo pannello di controllo";
 
 include("testa.php");
-$lang = $std->load_lang('lang_optionssign', $blanguage );
+$lang += $std->load_lang('lang_optionssign', $blanguage );
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 

@@ -5,7 +5,7 @@ $SNAME=$_ENV['sesname'];
 $whereiam="boardlist";
 
 // carico la lingua per la boardlist
-$lang = $std->load_lang('lang_boardlist', $blanguage );
+$lang += $std->load_lang('lang_boardlist', $blanguage );
 
 function PageSelect() {
 ?>

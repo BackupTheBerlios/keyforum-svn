@@ -3,7 +3,7 @@
 include ("testa.php");
 
 // carico la lingua per la gestip
-$lang = $std->load_lang('lang_gestip', $blanguage );
+$lang += $std->load_lang('lang_gestip', $blanguage );
 
 $whereiam="gestip";
 $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='$SNAME' AND FKEY='ID';";

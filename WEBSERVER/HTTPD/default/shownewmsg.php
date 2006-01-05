@@ -17,7 +17,7 @@ $tst=$_REQUEST['tst'];
 
 // devo caricare la lingua per ricavare il titolo della pagina...
 require_once("lib/lib.php");
-$lang = $std->load_lang('lang_shownewmsg', $blanguage );
+if (is_array($lang)) {$lang += $std->load_lang('lang_shownewmsg', $blanguage );} else {$lang = $std->load_lang('lang_shownewmsg', $blanguage );}
 $title=$lang['page_title'] ;
 
 include ("testa.php");

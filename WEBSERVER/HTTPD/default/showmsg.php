@@ -1,7 +1,7 @@
 <?php
 include ("testa.php");
 include ("mostra_messaggio.php");
-$lang = $std->load_lang('lang_showmsg', $blanguage );
+$lang += $std->load_lang('lang_showmsg', $blanguage );
 
 // Parser
 include_once("lib/bbcode_parser.php");

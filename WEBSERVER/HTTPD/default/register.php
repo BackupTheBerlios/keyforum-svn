@@ -14,7 +14,7 @@ include ("testa.php");
 require 'HTTP/Upload.php';
 
 // carico la lingua per la registrazione
-$lang = $std->load_lang('lang_register', $blanguage );
+$lang += $std->load_lang('lang_register', $blanguage );
 
 $nick = $_REQUEST['nick'];
 $password = $_REQUEST['password'];

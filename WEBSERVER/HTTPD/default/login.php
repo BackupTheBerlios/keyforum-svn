@@ -3,7 +3,7 @@ $whereiam="login";
 include ("testa.php");
 
 // carico la lingua per il login
-$lang = $std->load_lang('lang_login', $blanguage );
+$lang += $std->load_lang('lang_login', $blanguage );
 
 ?>
 <tr>

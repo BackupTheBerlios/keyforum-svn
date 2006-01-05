@@ -3,7 +3,7 @@ $whereiam="logout";
 include ("testa.php");
 
 // carico la lingua per le sezioni
-$lang = $std->load_lang('lang_logout', $blanguage );
+$lang += $std->load_lang('lang_logout', $blanguage );
 
 ?>
 <tR>

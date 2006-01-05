@@ -1,6 +1,6 @@
 <?
 // carico la lingua per la end
-$lang = $std->load_lang('lang_end', $blanguage );
+$lang += $std->load_lang('lang_end', $blanguage );
 
 $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 
