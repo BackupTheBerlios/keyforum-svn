@@ -29,7 +29,7 @@ $BNAME=$db->get_var($queryacbd);*/
 $BNAME = $keyforum['nome'];
 
 // carico la lingua per la testa
-$lang = $std->load_lang('lang_testa', $blanguage );
+$lang += $std->load_lang('lang_testa', $blanguage );
 
 // carico le stringhe globali
 if(is_array($lang)) {$lang += $std->load_lang('lang_global', $blanguage );} else {$lang = $std->load_lang('lang_global', $blanguage);};
