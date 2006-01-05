@@ -61,7 +61,9 @@ if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
   $MSG->body = secure_v($MSG->body);
    
   // visualizzo le firme ?
-  if($userdata->HIDESIG) { $MSG->firma=""; } else { $MSG->firma = secure_v($MSG['firma']);}
+  if($userdata->HIDESIG) { $MSG->firma=""; } else { $MSG->firma = secure_v($MSG->firma);}
+  // visualizzo lgli avatar
+  if($userdata->HIDEAVATAR { $MSG->avatar=""; }
   
   echo<<<EOF
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
