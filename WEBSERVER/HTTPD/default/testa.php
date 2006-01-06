@@ -56,6 +56,10 @@ $lang += $std->load_lang('lang_testa', $blanguage );
 <link rel="shortcut icon" href="favicon.ico">
 </HEAD>
 <body>
+
+<script type="text/javascript" src='global.js'></script>
+
+
 <script type="text/javascript" language="JavaScript">
 <!--
 var pname = "<?php echo md5($BNAME.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]); ?>";
