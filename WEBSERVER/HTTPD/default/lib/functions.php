@@ -457,7 +457,7 @@ Function ListMod($modstring)
            if($counter>0 && $counter != $tmp-1){
               $modlist .= ", ";
            }
-          if($matr[$counter]){ $modlist .= '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";}
+          if($matr[$counter]){ $modlist .= '<a href="showmember.php?MEM_ID='.$matr[$counter].'"><font color="#808080">'.secure_v($nick[$matr[$counter]])."</font></a>";}
          }
 return $modlist; 
  }
