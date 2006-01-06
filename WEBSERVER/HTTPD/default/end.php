@@ -36,14 +36,40 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
      echo "</td>
     </tr>
  </table>";
-  ?>
-   <?PHP
+
+
        if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
-   ?>
-   <br>
-   <div class="borderwrap" id="fo_stat">
+      
+      // lo stato delle categorie salvato nel cookie
+      $hidesez=explode(",",$std->GetKFcookie("collapseprefs"));
+      
+      if (in_array("stat",$hidesez))
+       {
+          $divshow = 'none';
+          $divhide = 'show';
+      } else
+      {
+          $divshow = 'show';
+          $divhide = 'none';
+      }
+   
+      
+      
+      ?>
+<br>
+   
+   <div class="borderwrap" style="display:<? echo $divhide; ?>" id="divhide_stat">
+   	<div class="maintitle">
+   		<p class="expand"><a href="javascript:ShowHideSection('stat', 0);"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
+   		<p><? echo $lang['mtitle_stat']; ?></p>
+   	</div>
+   </div>
+   
+
+   
+   <div class="borderwrap" style="display:<? echo $divshow; ?>" id="divshow_stat">
      <div class="maintitle">
-       <p class="expand"></p>
+       <p class="expand"><a href="javascript:ShowHideSection('stat', 1);"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a></p>
        <p><? echo $lang['mtitle_stat']; ?></p>
      </div>
      <table cellspacing="1">
