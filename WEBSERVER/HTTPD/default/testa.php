@@ -43,12 +43,13 @@ $lang += $std->load_lang('lang_testa', $blanguage );
     $result=$db->get_row($query);
     $title=$result->title;
     $title=secure_v($title);
+    $title2=" - ".$title;
   }else{
     if ($SEZ_DATA->ID)
-      echo $SEZ_DATA->SEZ_NAME." - ";
+      $title2=secure_v(" - ".$SEZ_DATA->SEZ_NAME);
   }
   echo ucfirst($BNAME);
-echo " Forum - $title</title>";
+  echo " Forum $title2</title>";
 
 ?>
 <link type="text/css" rel="stylesheet" href="style_page.css">
