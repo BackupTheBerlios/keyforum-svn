@@ -110,22 +110,18 @@ function confirmThis(url) {
         <select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
 <?php
-foreach($config['SHARE'] as $nome_share=>$array_share)
+foreach($config['WEBSERVER'] as $nome_board=>$fkey)
 {
-	if($nome_share != $BNAME)
+	if(($nome_board != $BNAME)AND($nome_board!="SETUP"))
 	{
-		$bindwsl = $config['WEBSERVER'][$nome_share]['BIND'];
-		$portwsl = $config['WEBSERVER'][$nome_share]['PORTA'];
+		$bindwsl = $config['WEBSERVER'][$nome_board]['BIND'];
+		$portwsl = $config['WEBSERVER'][$nome_board]['PORTA'];
 		if($portwsl)
 		{
-			if(	   (!$bindwsl)
-				OR ($bindwsl==$_SERVER['REMOTE_ADDR'])
-				OR ($bindwsl==$bindboard))
+			if((!$bindwsl) OR ($bindwsl==$_SERVER['REMOTE_ADDR']) OR ($bindwsl==$bindboard))
 			{
 				$addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
-				echo "<option value='http://$addrwsl:$portwsl/'>
-							$nome_share
-					</option>";
+				echo "<option value='http://$addrwsl:$portwsl/'>$nome_board</option>";
 			}
 		}
 	}	  	
