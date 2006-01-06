@@ -24,10 +24,13 @@ PageSelect();
 //acquisizione dati:
 
 $i = 0;
-foreach($config['SHARE'] as $nome_share=>$array)
+
+foreach($config['WEBSERVER'] as $nome_board=>$array)
 {
-	$board[$i] = Array('nome' =>$nome_share, 'pkey' => $array['PKEY']);
-	$i++;
+	if($nome_board!="SETUP"){
+		$board[$i] = Array('nome' =>$nome_board, 'nome_ses' => $array['SesName'], 'pkey' => $config['SHARE'][$array['SesName']]['PKEY']);
+		$i++;
+	}
 } //prendo tutte le board;
 
 $i=$CurrPag*$BoardXPage;
@@ -70,7 +73,7 @@ foreach($board_vis as $id=>$riga)
 		 echo "<tr>
 			<td class='row1' align='right'>".++$i."</td>
 			<td class='row2' align='left'>
-			&nbsp;<a href='http://{$riga['bind']}:{$riga['porta']}'>{$riga['nome']}</a>
+			&nbsp;<a target='_blank' href='http://{$riga['bind']}:{$riga['porta']}'>{$riga['nome']}</a>
 			</td>
 				<td class='row2' align='center'>".$riga['bind']."</td>
 				<td class='row2' align='center'>".$riga['porta']."</td>
