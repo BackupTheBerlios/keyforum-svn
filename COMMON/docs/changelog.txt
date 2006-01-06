@@ -2,6 +2,7 @@
 
 
 2006-01-06:
+Luftw@ffer:			[FIX] Fixati i link alle board
 mmorselli:			[ADD] sezioni espandibili nella index
 
 2006-01-04:
