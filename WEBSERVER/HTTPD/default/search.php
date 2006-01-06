@@ -5,8 +5,8 @@ include ("testa.php");
 include ("mostra_messaggio.php");
 
 // carico la lingua per la ricerca
-$lang = $std->load_lang('lang_search', $blanguage );
-$lang_sez = $std->load_lang('lang_sezioni', $blanguage );
+$lang += $std->load_lang('lang_search', $blanguage );
+$lang += $std->load_lang('lang_sezioni', $blanguage );
 
 ?>
 
@@ -78,17 +78,19 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
    <tr>
     <th align="center" width="1%">&nbsp;</th>
     <th align="center" width="1%">&nbsp;</th>
-    <th align="left" width="57%" class='titlemedium'><?PHP echo $lang_sez['topic_title'] ?></th>
-    <th align="center" width="6%" class='titlemedium'><?PHP echo $lang_sez['topic_replies'] ?></th>
-    <th align="center" width="10%" class='titlemedium'><?PHP echo $lang_sez['topic_starter'] ?></th>
-    <th align="center" width="7%" class='titlemedium'><?PHP echo $lang_sez['toppic_views'] ?></th>
-    <th align="center" width="18%" class='titlemedium'><?PHP echo $lang_sez['topic_laction'] ?></th>
+    <th align="left" width="57%" class='titlemedium'><?PHP echo $lang['topic_title'] ?></th>
+    <th align="center" width="6%" class='titlemedium'><?PHP echo $lang['topic_replies'] ?></th>
+    <th align="center" width="10%" class='titlemedium'><?PHP echo $lang['topic_starter'] ?></th>
+    <th align="center" width="7%" class='titlemedium'><?PHP echo $lang['toppic_views'] ?></th>
+    <th align="center" width="18%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
    </tr>
 <?
   while ($riga = mysql_fetch_assoc($risultato)) {
-  $iden=unpack("H32hex",$riga['HASH']);
-  $reply_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['last_reply_time']);
-  $write_date=strftime("%d/%m/%y  - %H:%M:%S",$riga['write_date']);
+  $iden=unpack("H32hex",$riga['HASH']); 
+
+    $reply_date=$std->PostDate($riga['last_reply_time']);
+    $write_date=$std->PostDate($riga['write_date']);
+    
   $ris2 = mysql_query("select valore from temp where chiave='".$iden['hex']."';");
   if ($tmp = mysql_fetch_assoc($ris2)) {
     $num = $tmp["valore"];

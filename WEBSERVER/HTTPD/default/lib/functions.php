@@ -426,7 +426,9 @@ global $lang;
    $today  = date('j',time());
    $yday  = date('j',strtotime("-1 day"));
 
-   //account for last month's day
+   if (date('Y') != date('Y',$epoch)) return "";
+   if (date('m') != date('m',$epoch)) return "";
+
    switch($day) {
        case $today:    return $lang['today'].",";                break;
        case $yday:    return $lang['yesterday'].",";            break;
