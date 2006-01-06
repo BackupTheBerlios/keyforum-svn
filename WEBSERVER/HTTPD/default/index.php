@@ -24,11 +24,10 @@ echo "
   echo "
   <table cellspacing=\"1\">
     <tr>
-      <th align=\"left\" width=\"50%\" colspan=\"2\" class='titlemedium'>".$lang['col_forum']."</th>
+      <th align=\"left\" width=\"40%\" colspan=\"2\" class='titlemedium'>".$lang['col_forum']."</th>
       <th align=\"center\" width=\"1%\" class='titlemedium'>".$lang['col_topic']."</th>
       <th align=\"center\" width=\"1%\" class='titlemedium'>".$lang['col_replies']."</th>
-      <th align=\"left\" width=\"29%\" class='titlemedium'>".$lang['col_lastpost']."</th>
-      <th align=\"center\" width=\"15%\" class='titlemedium'>".$lang['col_moderators']."</th>
+      <th align=\"left\" width=\"39%\" class='titlemedium'>".$lang['col_lastpost']."</th>
     </tr>
     ";
 
@@ -61,27 +60,14 @@ echo "
           $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID=".$subsezval->ID."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         $notfirst=1;
       }
+      $moderators=$std->ListMod($sezval->MOD);
       echo '
       <tr>
         <td class="row4" width="5%" align="center"><img src="img/bf_new.gif" alt=""></td>
-        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval->ID.'">'.secure_v($sezval->SEZ_NAME).'</a></b><br /><span class="desc">'.secure_v($sezval->SEZ_DESC).$subsections.'<br /><br /></span></td>
+        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval->ID.'">'.secure_v($sezval->SEZ_NAME).'</a></b><br /><span class="desc">'.secure_v($sezval->SEZ_DESC).$subsections.'<br />'.$lang['col_moderators'].":".$moderators.'<br /></span></td>
         <td class="row2" align="center">'.$sezval->THR_NUM.'</td>
         <td class="row2" align="center">'.$sezval->REPLY_NUM.'</td>
-        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG->SEZID.'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG->nick).'</a></td>
-        <td class="row2" align="center">';
-        $matr=explode("%",$sezval->MOD);
-		for($counter=0,$tmp=count($matr);$counter<$tmp; $counter++){
-          if (!$nick[$matr[$counter]]) {
-            $modhash=mysql_escape_string(pack("H*",$matr[$counter]));
-            if($modhash){$modnick = $db->get_var("SELECT AUTORE FROM {$SNAME}_membri WHERE HASH='$modhash';");}
-            $nick[$matr[$counter]] = $modnick;
-          }
-          if($counter>0 && $counter != $tmp-1){
-             echo ", ";
-          }
-         if($matr[$counter]){ echo '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";}
-        }
-        echo '</td></tr>';
+        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG->SEZID.'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG->nick).'</a></td>';
       $totmsg = $totmsg + $sezval->THR_NUM + $sezval->REPLY_NUM;
     }
 echo "<tr> 
@@ -92,6 +78,8 @@ echo "<tr>
   
   }
   
+
+
 
 
 ?>

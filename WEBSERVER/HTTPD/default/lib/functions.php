@@ -442,6 +442,24 @@ function PostDate($timestamp)
  return $this->RelativeDate($timestamp)." ".$this->k_date($lang['post_date'],$timestamp)." ".date($lang['post_time'],$timestamp);
  }
 
+Function ListMod($modstring)
+ {
+ global $db,$SNAME;
+         $matr=explode("%",$modstring);
+ 		for($counter=0,$tmp=count($matr);$counter<$tmp; $counter++){
+           if (!$nick[$matr[$counter]]) {
+             $modhash=mysql_escape_string(pack("H*",$matr[$counter]));
+             if($modhash){$modnick = $db->get_var("SELECT AUTORE FROM {$SNAME}_membri WHERE HASH='$modhash';");}
+             $nick[$matr[$counter]] = $modnick;
+           }
+           if($counter>0 && $counter != $tmp-1){
+              $modlist .= ", ";
+           }
+          if($matr[$counter]){ $modlist .= '<a href="showmember.php?MEM_ID='.$matr[$counter].'">'.secure_v($nick[$matr[$counter]])."</a>";}
+         }
+return $modlist; 
+ }
+
 
 }
 
