@@ -451,7 +451,10 @@ Function ListMod($modstring)
  		for($counter=0,$tmp=count($matr);$counter<$tmp; $counter++){
            if (!$nick[$matr[$counter]]) {
              $modhash=mysql_escape_string(pack("H*",$matr[$counter]));
-             if($modhash){$modnick = $db->get_var("SELECT AUTORE FROM {$SNAME}_membri WHERE HASH='$modhash';");}
+             if($modhash)
+			 {
+			 	$modnick = $db->get_var("SELECT AUTORE FROM {$SNAME}_membri WHERE HASH='$modhash';");
+			 }
              $nick[$matr[$counter]] = $modnick;
            }
            if($counter>0 && $counter != $tmp-1){
