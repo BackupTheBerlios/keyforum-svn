@@ -2,7 +2,7 @@
 include "testa.php";
 
 // carico la lingua per le sezioni
-$lang = $std->load_lang('lang_reply', $blanguage );
+$lang += $std->load_lang('lang_reply', $blanguage );
 
 $SNAME=$_ENV["sesname"];
 $MSGID=mysql_real_escape_string(pack("H*",$_REQUEST["THR_ID"]));

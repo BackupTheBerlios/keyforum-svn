@@ -1,7 +1,7 @@
 <?php
 
 include("testa.php");
-$lang = $std->load_lang('lang_close', $blanguage );
+$lang += $std->load_lang('lang_close', $blanguage );
 
 $corereq = new CoreSock;
 

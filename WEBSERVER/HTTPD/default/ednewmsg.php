@@ -4,7 +4,7 @@ ob_start('ob_gzhandler');
 include ("testa.php");
 
 // carico la lingua per l'edit
-$lang = $std->load_lang('lang_ednewmsg', $blanguage );
+$lang += $std->load_lang('lang_ednewmsg', $blanguage );
 
   if (!$sess_auth) {
     $url = "login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["EDIT_OF"]."&pag=".$_REQUEST["pag"];

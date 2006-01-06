@@ -3,7 +3,7 @@
 include ("testa.php");
 
 // carico la lingua per la index
-$lang = $std->load_lang('lang_index', $blanguage );
+$lang += $std->load_lang('lang_index', $blanguage );
 
 $corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
 

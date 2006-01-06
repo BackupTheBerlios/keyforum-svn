@@ -5,7 +5,7 @@ ob_start('ob_gzhandler');
 include ("testa.php");
 
 // carico la lingua per writenewmsg
-$lang = $std->load_lang('lang_writenewmsg', $blanguage );
+$lang += $std->load_lang('lang_writenewmsg', $blanguage );
 ?>
 <tr><td>
 

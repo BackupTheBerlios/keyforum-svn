@@ -19,7 +19,7 @@ if($userdata)
 // dati inviati, ma utente non trovato
 $whereiam="userexport";
 include ("testa.php");
-$lang = $std->load_lang('lang_userexport', $blanguage );
+$lang += $std->load_lang('lang_userexport', $blanguage );
 ShowForm();
 echo "<center><b>user not found !!!</b></center>";
 include ("end.php");
@@ -28,7 +28,7 @@ include ("end.php");
 // dati non inviati, prima visualizzazione del form
 $whereiam="userexport";
 include ("testa.php");
-$lang = $std->load_lang('lang_userexport', $blanguage );
+$lang += $std->load_lang('lang_userexport', $blanguage );
 ShowForm();
 include ("end.php");
 }

@@ -3,7 +3,7 @@ $whereiam='showmember';
 
 include ("testa.php");
 include_once("lib/bbcode_parser.php");
-$lang = $std->load_lang('lang_showmember', $blanguage );
+if(is_array($lang)) { $lang += $std->load_lang('lang_showmember', $blanguage );} else { $lang = $std->load_lang('lang_showmember', $blanguage );}
 
 
 //ACQUISIZIONE DATI
