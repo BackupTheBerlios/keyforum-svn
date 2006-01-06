@@ -14,18 +14,32 @@ echo "<tr><td>";
 $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ordine;";
 $mainsez = $db->get_results($query);
 if($mainsez) foreach($mainsez as $mainsezval) {
+
+// lo stato delle categorie salvato nel cookie
+$hidesez=explode(",",$std->GetKFcookie("collapseprefs"));
+
+if (in_array($mainsezval->ID,$hidesez))
+ {
+    $divshow = 'none';
+    $divhide = 'show';
+} else
+{
+    $divshow = 'show';
+    $divhide = 'none';
+}
+
 echo "
 
-<div class=\"borderwrap\" style=\"display:none\" id=\"fc_{$mainsezval->ID}\">
+<div class=\"borderwrap\" style=\"display:$divhide\" id=\"divhide_{$mainsezval->ID}\">
 	<div class=\"maintitlecollapse\">
-		<p class=\"expand\"><a href=\"javascript:togglecategory({$mainsezval->ID}, 0);\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
+		<p class=\"expand\"><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 0);\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
 		<p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
 	</div>
 </div>
 
-<div class='borderwrap' style=\"display:show\" id=\"fo_{$mainsezval->ID}\">
+<div class='borderwrap' style=\"display:$divshow\" id=\"divshow_{$mainsezval->ID}\">
   <div class='maintitle' >
-    <p class='expand'><a href=\"javascript:togglecategory({$mainsezval->ID}, 1);\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
+    <p class='expand'><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 1);\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
     <p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
   </div>";
 

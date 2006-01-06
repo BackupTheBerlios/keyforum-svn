@@ -1,25 +1,17 @@
 //==========================================
-// Toggle category
+// Show/Hide section
 //==========================================
 
-function togglecategory( fid, add )
+function ShowHideSection( fid, add )
 {
 	saved = new Array();
 	clean = new Array();
-
-	//-----------------------------------
-	// Get any saved info
-	//-----------------------------------
 	
-	if ( tmp = getc('collapseprefs') )
+	if ( tmp = GetKFcookie('collapseprefs') )
 	{
 		saved = tmp.split(",");
+				
 	}
-
-
-	//-----------------------------------
-	// Remove bit if exists
-	//-----------------------------------
 	
 	for( i = 0 ; i < saved.length; i++ )
 	{
@@ -28,34 +20,80 @@ function togglecategory( fid, add )
 			clean[clean.length] = saved[i];
 		}
 	}
-	
-	//-----------------------------------
-	// Add?
-	//-----------------------------------
-	
+
 	if ( add )
 	{
 		clean[ clean.length ] = fid;
-		my_show_div( my_getbyid( 'fc_'+fid  ) );
-		my_hide_div( my_getbyid( 'fo_'+fid  ) );
+		show_div( GetElementById( 'divhide_'+fid  ) );
+		hide_div( GetElementById( 'divshow_'+fid  ) );
 	}
 	else
 	{
-		my_show_div( my_getbyid( 'fo_'+fid  ) );
-		my_hide_div( my_getbyid( 'fc_'+fid  ) );
+		show_div( GetElementById( 'divshow_'+fid  ) );
+		hide_div( GetElementById( 'divhide_'+fid  ) );
 	}
 	
-		setc( 'collapseprefs', clean.join(','), 1 );
-
+	SetKFcookie( 'collapseprefs', clean.join(','), 1 );
+	
 	
 }
+
+//==========================================
+// Set cookie
+//==========================================
+
+function SetKFcookie( name, value, sticky )
+{
+	expire = "";
+	domain = "";
+	path   = "/";
+	
+	if ( sticky )
+	{
+		expire = "; expires=Wed, 1 Jan 2020 00:00:00 GMT";
+	}
+	
+
+	document.cookie = "kf_" + name + "=" + value + "; path=" + path + expire + domain + ';';
+}
+
+
+//==========================================
+// Get cookie
+//==========================================
+
+function GetKFcookie( name )
+{
+
+    cname = "kf_" + name + '=';
+
+	cpos  = document.cookie.indexOf( cname );
+	
+	if ( cpos != -1 )
+	{
+		cstart = cpos + cname.length;
+		cend   = document.cookie.indexOf(";", cstart);
+		
+		if (cend == -1)
+		{
+			cend = document.cookie.length;
+		}
+		
+		return unescape( document.cookie.substring(cstart, cend) );
+	}
+
+	
+	return null;
+}
+
+
 
 
 //==========================================
 // Set DIV ID to hide
 //==========================================
 
-function my_hide_div(itm)
+function hide_div(itm)
 {
 	if ( ! itm ) return;
 	
@@ -66,7 +104,7 @@ function my_hide_div(itm)
 // Set DIV ID to show
 //==========================================
 
-function my_show_div(itm)
+function show_div(itm)
 {
 	if ( ! itm ) return;
 	
@@ -78,7 +116,7 @@ function my_show_div(itm)
 // Get element by id
 //==========================================
 
-function my_getbyid(id)
+function GetElementById(id)
 {
 	itm = null;
 	
@@ -138,7 +176,7 @@ function mklastselected() {
 }
 
 //==========================================
-// cookies
+// cookies (Oberon per reload)
 //==========================================
 function getc(name) {
   var rs = null;
@@ -155,5 +193,7 @@ function getc(name) {
 function setc(name,value) {
   document.cookie=name+"="+escape(value);
 }
+
+
 
 

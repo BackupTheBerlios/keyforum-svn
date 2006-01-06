@@ -1,6 +1,9 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 
+2006-01-06:
+mmorselli:			[ADD] sezioni espandibili nella index
+
 2006-01-04:
 mmorselli:			[ADD] gestione avanzata date: date relative (oggi, ieri) -  formati personalizzati per ogni lingua
 mmorselli:			[FIX] dopo l'edit di un thread ritorna al thread correttamente

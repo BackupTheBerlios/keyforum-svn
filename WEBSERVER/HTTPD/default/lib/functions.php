@@ -466,6 +466,24 @@ return $modlist;
  }
 
 
+
+function GetKFcookie($name)
+    {
+    	
+    	if (isset($_COOKIE["kf_".$name]))
+    	{
+    		return urldecode($_COOKIE["kf_".$name]);
+    	}
+    	else
+    	{
+    		return FALSE;
+    	}
+    	
+    }
+    
+
+
+
 }
 
 ?>
