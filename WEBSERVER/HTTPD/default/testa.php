@@ -110,7 +110,7 @@ function confirmThis(url) {
         <select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
 <?php
-foreach($config['WEBSERVER'] as $nome_board=>$fkey)
+foreach($config['WEBSERVER'] as $nome_board=>$array)
 {
 	if(($nome_board != $BNAME)AND($nome_board!="SETUP"))
 	{
