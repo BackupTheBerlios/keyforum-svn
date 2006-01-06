@@ -57,9 +57,6 @@ $lang += $std->load_lang('lang_testa', $blanguage );
 </HEAD>
 <body>
 
-<script type="text/javascript" src='global.js'></script>
-
-
 <script type="text/javascript" language="JavaScript">
 <!--
 var pname = "<?php echo md5($BNAME.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]); ?>";
@@ -70,50 +67,10 @@ function confirmThis(url) {
     window.location = url;
   }
 }
-// Spoiler
-function togglevis(id) {
-  var obj = "";
-
-  if(document.getElementById) obj = document.getElementById(id).style;
-  else if(document.all) obj = document.all[id];
-  else if(document.layers) obj = document.layers[id];
-  else return 1;
-
-  if(obj.visibility == "visible") obj.visibility = "hidden";
-  else if(obj.visibility != "hidden") obj.visibility = "hidden";
-  else obj.visibility = "visible";
-}
-// Reload
-var reload_cname = "kf_" + pname + "reload";
-function runit(reload_cname) {
-  if(getc(reload_cname)) {
-    if(getc(reload_cname)*1>0) setTimeout("document.location=document.location;",getc(reload_cname)*1000);
-  }
-}
-function getc(name) {
-  var rs = null;
-  var mc = " " + document.cookie + ";";
-  var sn = " " + name + "=";
-  var sc = mc.indexOf(sn);
-  var ec;
-  if (sc != -1) {
-    sc += sn.length;ec=mc.indexOf(";",sc);
-    rs = unescape(mc.substring(sc,ec));
-  }
-  return rs;
-}
-function setc(name,value) {
-  document.cookie=name+"="+escape(value);
-}
-window.onload=mklastselected;
-function mklastselected() {
-  if(getc(reload_cname)) {
-    document.reloader.reload_value.value=getc(reload_cname);
-  }
-  runit(reload_cname);
-}
 // -->
 </script>
+
+<script type="text/javascript" src='global.js'></script>
 
 <div class="borderwrap">
   <div id="logostrip">
