@@ -28,6 +28,8 @@ if (in_array($mainsezval->ID,$hidesez))
     $divhide = 'none';
 }
 
+$sezcollector .= $mainsezval->ID.",";
+
 echo "
 
 <div class=\"borderwrap\" style=\"display:$divhide\" id=\"divhide_{$mainsezval->ID}\">

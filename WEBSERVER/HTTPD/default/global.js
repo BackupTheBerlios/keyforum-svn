@@ -38,6 +38,36 @@ function ShowHideSection( fid, add )
 	
 }
 
+function ShowHideAll(sections,add)
+{
+	
+
+saved = sections.split(",");
+
+	if ( add )
+	{
+
+	for( ii = 0 ; ii < saved.length; ii++ )
+	{
+			show_div( GetElementById( 'divshow_'+saved[ii] ) );
+
+			hide_div( GetElementById( 'divhide_'+saved[ii] ) );
+		}
+	SetKFcookie( 'collapseprefs', '', 1 );
+	}
+	else
+	{
+	for( ii = 0 ; ii < saved.length; ii++ )
+	{
+			show_div( GetElementById( 'divhide_'+saved[ii] ) );
+			hide_div( GetElementById( 'divshow_'+saved[ii] ) );
+		}
+	SetKFcookie( 'collapseprefs', sections, 1 );
+	}
+
+}
+
+
 //==========================================
 // Set cookie
 //==========================================

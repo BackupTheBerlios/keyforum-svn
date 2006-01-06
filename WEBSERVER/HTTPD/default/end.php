@@ -166,6 +166,15 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 
   </td>
 </tr>
+<tr><? 
+if($whereiam=="index")
+{
+echo "<td align=right>";
+$sezcollector .= "stat";
+echo "<a href=\"javascript:ShowHideAll('$sezcollector', 0);\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector', 1);\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
+echo "</td></tr>";
+}
+?>
 <tr>
 <? $revision = file("revision.txt"); ?>
   <td align=center><br>KeyForum 0.43 <b>Alfa</b> rev. <? echo $revision[0]; ?></td>
