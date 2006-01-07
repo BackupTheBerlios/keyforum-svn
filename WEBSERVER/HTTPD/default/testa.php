@@ -225,7 +225,7 @@ if($userdata->LEVEL >=9)
 
 // utenti in coda di validazione
 if(!$db->get_var("SELECT is_auth FROM {$SNAME}_membri ORDER BY date DESC LIMIT 1"))
-{ echo "<font color=red><b>ci sono utenti da validare !!!!<b></font>";}
+{ echo "<font color=red><b>ci sono utenti da validare !!!!</b></font>";}
 
 }
 ?>
