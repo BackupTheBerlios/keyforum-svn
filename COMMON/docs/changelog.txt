@@ -1,201 +1,203 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-07:
+mmorselli:				[FIX] bbcode al punto del cursore e su selezione
 
 2006-01-06:
 Luftw@ffer:			[FIX] Fixati i link alle board
-mmorselli:			[ADD] sezioni espandibili nella index
+mmorselli:				[ADD] sezioni espandibili nella index
 
 2006-01-04:
-mmorselli:			[ADD] gestione avanzata date: date relative (oggi, ieri) -  formati personalizzati per ogni lingua
-mmorselli:			[FIX] dopo l'edit di un thread ritorna al thread correttamente
-mmorselli:			[ADD] mysql debugger
+mmorselli:				[ADD] gestione avanzata date: date relative (oggi, ieri) -  formati personalizzati per ogni lingua
+mmorselli:				[FIX] dopo l'edit di un thread ritorna al thread correttamente
+mmorselli:				[ADD] mysql debugger
 
 2006-01-02:	
-mmorselli:			[ADD] forum jumper
+mmorselli:				[ADD] forum jumper
 
 2006-01-01:	
-mmorselli:			[FIX] keyforum riparte anche se si interrompe con CTRL+C e si risponde S alla domanda "Terminare il processo batch (S/N)?"
-mmorselli:			[ADD] gestione errori
+mmorselli:				[FIX] keyforum riparte anche se si interrompe con CTRL+C e si risponde S alla domanda "Terminare il processo batch (S/N)?"
+mmorselli:				[ADD] gestione errori
 
 
 2005-12-31:	
-mmorselli:			[ADD] local keyring
-Luftw@ffer:		[FIX] Fixato il "quote"
-mmorselli:			[ADD] link utenti in lista membri
-mmorselli:			[MOD] solo validatori e admin vedono i controlli per validare gli utenti in lista membri
+mmorselli:				[ADD] local keyring
+Luftw@ffer:			[FIX] Fixato il "quote"
+mmorselli:				[ADD] link utenti in lista membri
+mmorselli:				[MOD] solo validatori e admin vedono i controlli per validare gli utenti in lista membri
 
 
 2005-12-30:	
-mmorselli:			[ADD] i guest usano la lingua del browser e non più l'inglese
-mmorselli:			[ADD] menù level
+mmorselli:				[ADD] i guest usano la lingua del browser e non più l'inglese
+mmorselli:				[ADD] menù level
 
 2005-12-26:	
-mmorselli:			[ADD] visualizza nuovi messaggi
-Luftw@ffer		[FIX] Fixato tooltip delle emoticons con FireFox
-mmorselli:			[FIX] bbcode SIZE
-mmorselli:			[MOD] titolo messaggio mostrato solo se presente
-Luftw@ffer:		[FIX] Fixato popup delle emoticons con FireFox
+mmorselli:				[ADD] visualizza nuovi messaggi
+Luftw@ffer			[FIX] Fixato tooltip delle emoticons con FireFox
+mmorselli:				[FIX] bbcode SIZE
+mmorselli:				[MOD] titolo messaggio mostrato solo se presente
+Luftw@ffer:			[FIX] Fixato popup delle emoticons con FireFox
 
 2005-12-25
-Luftw@ffer:		[ADD] Aggiunta la lista dei sottoforums nella descrizione
-Luftw@ffer:		[FIX] Fix sul layout delle sottosezioni
-Luftw@ffer:		[MOD] Modificata la navbar per permettere la navigazione nelle sottosezioni
-Luftw@ffer:		[FIX] Fix vari
+Luftw@ffer:			[ADD] Aggiunta la lista dei sottoforums nella descrizione
+Luftw@ffer:			[FIX] Fix sul layout delle sottosezioni
+Luftw@ffer:			[MOD] Modificata la navbar per permettere la navigazione nelle sottosezioni
+Luftw@ffer:			[FIX] Fix vari
 
 2005-12-24:	
-mmorselli:			[ADD] sottosezioni nei forum
+mmorselli:				[ADD] sottosezioni nei forum
 
 2005-12-19:	
-mmorselli:			[FIX] FORUM_URL bbcode
+mmorselli:				[FIX] FORUM_URL bbcode
 
 2005-12-18:	
-mmorselli:			[ADD] emoticon popup
+mmorselli:				[ADD] emoticon popup
 
 2005-12-16:	
-mmorselli:			[ADD] emoticon nel db
+mmorselli:				[ADD] emoticon nel db
 
 2005-12-15
-mmorselli:			[ADD] nascondi/visualizza firme
+mmorselli:				[ADD] nascondi/visualizza firme
 
 2005-12-04
-Hierro:			[MOD] Prima bozza di ricerca semi-funzionante
+Hierro:				[MOD] Prima bozza di ricerca semi-funzionante
 
 2005-12-01
-Hierro:			[MOD] Estratta la visualizzazione di un messaggio in un nuovo file
-Hierro:			[MOD] Abbassato il timeout da 1sec a 0.5sec nel controllo porte libere
+Hierro:				[MOD] Estratta la visualizzazione di un messaggio in un nuovo file
+Hierro:				[MOD] Abbassato il timeout da 1sec a 0.5sec nel controllo porte libere
 
 2005-11-27
-Luftw@ffer:		[ADD] Base per personalizzazione di Thread e Post per pagina
+Luftw@ffer:			[ADD] Base per personalizzazione di Thread e Post per pagina
 
 2005-11-26
-mmorselli:			[ADD] cambio lingua
-mmorselli:			[ADD] preferenze utente
+mmorselli:				[ADD] cambio lingua
+mmorselli:				[ADD] preferenze utente
 
 2005-11-25
-Oberon:			[ADD] Reload automatico pagine
-Oberon:			[ADD] Supporto BBCode per la firma
-Oberon:			[ADD] Anteprima per le risposte
+Oberon:				[ADD] Reload automatico pagine
+Oberon:				[ADD] Supporto BBCode per la firma
+Oberon:				[ADD] Anteprima per le risposte
 
 2005-11-20
-Luftw@ffer:		[ADD] Visualizza il sottotitolo, se presente, quando si visualizza un thread
+Luftw@ffer:			[ADD] Visualizza il sottotitolo, se presente, quando si visualizza un thread
 
 2005-11-19
-mmorselli:			[FIX] gestione porte non standard in MySQL
-mmorselli:			[ADD] Autoconfigurazione
-mmorselli:			[FIX] l'installatore funziona anche se ci sono spazi nel path
-mmorselli:			[ADD] Port Check all'avvio
-Luftw@ffer:		[ADD] Aggiunto l'ordinamento nella userlist
-Luftw@ffer:		[MOD] gestip.php non utilizza più le $_ENV
-Luftw@ffer:		[MOD] Taglia il titolo se > 100 in sezioni.php
+mmorselli:				[FIX] gestione porte non standard in MySQL
+mmorselli:				[ADD] Autoconfigurazione
+mmorselli:				[FIX] l'installatore funziona anche se ci sono spazi nel path
+mmorselli:				[ADD] Port Check all'avvio
+Luftw@ffer:			[ADD] Aggiunto l'ordinamento nella userlist
+Luftw@ffer:			[MOD] gestip.php non utilizza più le $_ENV
+Luftw@ffer:			[MOD] Taglia il titolo se > 100 in sezioni.php
 
 2005-11-18
-Luftw@ffer:		[MOD] boardlist.php utilizza i socket
-Luftw@ffer:		[MOD] end.php utilizza i socket
+Luftw@ffer:			[MOD] boardlist.php utilizza i socket
+Luftw@ffer:			[MOD] end.php utilizza i socket
 
 2005-11-17
-mmorselli:			[ADD] Modulo esportazione utente a video o su file XML
-Luftw@ffer:		[FIX] Corretto bug di visualizzazione (con IE) del fieldset nella userlist
-Luftw@ffer:		[FIX] Corretto bug di visualizzazione (con IE) delle celle con i numeri di pagina dei thread,nella pagina sezioni
+mmorselli:				[ADD] Modulo esportazione utente a video o su file XML
+Luftw@ffer:			[FIX] Corretto bug di visualizzazione (con IE) del fieldset nella userlist
+Luftw@ffer:			[FIX] Corretto bug di visualizzazione (con IE) delle celle con i numeri di pagina dei thread,nella pagina sezioni
 
 2005-11-14
-DanieleG			[MOD] Viene salvata una copia della chiave pubblica dell'utente nel DB per aumentare le prestazioni di keyforum quando vengono aggiunte risposte o nuovi thread.
-mmorselli			[MOD] Inportazione utente via XML
-mmorselli			[MOD] conversione configurazione in XML
+DanieleG				[MOD] Viene salvata una copia della chiave pubblica dell'utente nel DB per aumentare le prestazioni di keyforum quando vengono aggiunte risposte o nuovi thread.
+mmorselli				[MOD] Inportazione utente via XML
+mmorselli				[MOD] conversione configurazione in XML
 
 2005-11-11
-Hierro:			[FIX] Nella modifica di un post d'inizio thread ora viene ricaricata anche la descrizione
-DanieleG			[MOD] Modificato il codice iniziale (tolto il webserver incluso in keyforum)
-DanieleG			[ADD] Aggiunta una shell che permette alle pagine PHP di comunicare con il core
-mmorselli			[MOD] configurazione automatica di php.ini e keyforum.conf
+Hierro:				[FIX] Nella modifica di un post d'inizio thread ora viene ricaricata anche la descrizione
+DanieleG				[MOD] Modificato il codice iniziale (tolto il webserver incluso in keyforum)
+DanieleG				[ADD] Aggiunta una shell che permette alle pagine PHP di comunicare con il core
+mmorselli				[MOD] configurazione automatica di php.ini e keyforum.conf
 
 2005-11-10
-DanieleG:		[ADD] Aggiunto un nuovo protocollo di comunicazione per PERL
-DanieleG:		[ADD] Convertito il codice per il protocollo nuovo anche per PHP
-Gulp:			[MOD] Aggiornate le pagine del forum per il multilanguage
-Gulp:			[ADD] Aggiunti i files delle traduzioni
+DanieleG:			[ADD] Aggiunto un nuovo protocollo di comunicazione per PERL
+DanieleG:			[ADD] Convertito il codice per il protocollo nuovo anche per PHP
+Gulp:				[MOD] Aggiornate le pagine del forum per il multilanguage
+Gulp:				[ADD] Aggiunti i files delle traduzioni
 
 2005-11-09
-Luftw@ffer:		[FIX] Corretto un bug nell'identificazione dell'autore della modifica (aggiunto un escape)
-DanieleG:		[ADD] Viene fatto un controllo dell'anti-flood sugli utenti autorizzati
-DanieleG:		[MOD] Le sezione con il campo ORDINE>9000 vengono sono solo categorie non usabili
-DanieleG:		[ADD] Viene fatto un autflush degli utenti non validati più vecchi di XX ore 
+Luftw@ffer:			[FIX] Corretto un bug nell'identificazione dell'autore della modifica (aggiunto un escape)
+DanieleG:			[ADD] Viene fatto un controllo dell'anti-flood sugli utenti autorizzati
+DanieleG:			[MOD] Le sezione con il campo ORDINE>9000 vengono sono solo categorie non usabili
+DanieleG:			[ADD] Viene fatto un autflush degli utenti non validati più vecchi di XX ore 
 
 2005-11-08
-Hierro:			[MOD] Nella pagina di registrazione è stato aggiunto il campo per il recupero vecchio utente
-DanieleG:		[ADD] Aggiunti nuovo comando amministrativo (modifica della tabella conf)
+Hierro:				[MOD] Nella pagina di registrazione è stato aggiunto il campo per il recupero vecchio utente
+DanieleG:			[ADD] Aggiunti nuovo comando amministrativo (modifica della tabella conf)
 
 2005-11-07
-Leosirth:			[ADD] Aggiunto link per ogni board nella boardlist
-DanieleG:		[ADD] Ora l'admin piò dare un ordine e inserire categorie per le sezioni.
+Leosirth:				[ADD] Aggiunto link per ogni board nella boardlist
+DanieleG:			[ADD] Ora l'admin piò dare un ordine e inserire categorie per le sezioni.
 
 2005-11-06
-Hierro:			[MOD] Passaggio a MySQL 5.0.15
-Luftw@ffer:		[FIX] Fixato un bug sul link Setup
-Luftw@ffer:		[FIX] Fixato un bug sulla lista board
-DanieleG:		[FIX] Corretto il problema "IO::Socket::INET: Bad service 'ntp'"
-DanieleG:		[ADD] Aggiunto il debuger a livelli su MySQL
-DanieleG:		[ADD] Aggiunto il file debug.php che permette di leggere la tabella 'log'
+Hierro:				[MOD] Passaggio a MySQL 5.0.15
+Luftw@ffer:			[FIX] Fixato un bug sul link Setup
+Luftw@ffer:			[FIX] Fixato un bug sulla lista board
+DanieleG:			[FIX] Corretto il problema "IO::Socket::INET: Bad service 'ntp'"
+DanieleG:			[ADD] Aggiunto il debuger a livelli su MySQL
+DanieleG:			[ADD] Aggiunto il file debug.php che permette di leggere la tabella 'log'
 
 ================ KeyForum 0.42 Beta 1 ===========================
 
 2005-11-05
-Luftw@ffer:		[ADD] Aggiunta la data di modifica
-Hierro:			[ADD] Creata la maschera di ricerca
-Hierro:			[MOD] Aggiunto il link alla ricerca in testa.php
-Luftw@ffer:		[ADD] Aggiunta una stringa di notifica in fondo ai messagi modificati
-Luftw@ffer:		[MOD] Spostata la variabile di linguaggio in testa.php
-Luftw@ffer:		[ADD] Language system in end.php
-Luftw@ffer:		[ADD] Language system in testa.php
-Luftw@ffer:		[FIX] Il language system nella index traduce tutto
-Oberon:			[ADD] BBCode: gestione completa
-Oberon:			[ADD] Emoticons: gestione completa
-Oberon:			[FIX] Emoticon <_< non visualizzata correttamente
-Oberon:			[FIX] Tag [QUOTE] annidati non visualizzati correttamente
-Oberon:			[FIX] Faccine visualizzate sotto tag [CODE]
+Luftw@ffer:			[ADD] Aggiunta la data di modifica
+Hierro:				[ADD] Creata la maschera di ricerca
+Hierro:				[MOD] Aggiunto il link alla ricerca in testa.php
+Luftw@ffer:			[ADD] Aggiunta una stringa di notifica in fondo ai messagi modificati
+Luftw@ffer:			[MOD] Spostata la variabile di linguaggio in testa.php
+Luftw@ffer:			[ADD] Language system in end.php
+Luftw@ffer:			[ADD] Language system in testa.php
+Luftw@ffer:			[FIX] Il language system nella index traduce tutto
+Oberon:				[ADD] BBCode: gestione completa
+Oberon:				[ADD] Emoticons: gestione completa
+Oberon:				[FIX] Emoticon <_< non visualizzata correttamente
+Oberon:				[FIX] Tag [QUOTE] annidati non visualizzati correttamente
+Oberon:				[FIX] Faccine visualizzate sotto tag [CODE]
 
 2005-11-04
-mmorselli:			[ADD] Language system
-Luftw@ffer:		[FIX] Fixati altri notice
-Luftw@ffer:		[FIX] Fixato il link alla index sul logo
+mmorselli:				[ADD] Language system
+Luftw@ffer:			[FIX] Fixati altri notice
+Luftw@ffer:			[FIX] Fixato il link alla index sul logo
 Luftw@ffer+DanieleG:	[MOD] Restituisce la chiave decimale della board nella boardlist
-Luftw@ffer:		[FIX] Dopo aver aperto un'altra board dalla listbox, non succede niente cliccando su Altre board" (e utlizzo dei css sulla listbox)
+Luftw@ffer:			[FIX] Dopo aver aperto un'altra board dalla listbox, non succede niente cliccando su Altre board" (e utlizzo dei css sulla listbox)
 
 2005-11-03
-Luftw@ffer:		[MOD] Spostati i controlli di LinkXPage e Selection in testa.php
-Luftw@ffer:		[ADD] Aggiunti i link alle pagine dei thread (se disponibili) nella vista della sezione
-Luftw@ffer:		[MOD] Ordinata per data la lista utenti
-Hierro:			[MOD] Reply e citazione supportano il redirecting a login automatico
-Hierro:			[MOD] Il reply ora riporta il titolo del thread nel navigator
-Hierro:			[MOD] Modifica e citazione recuperano in modo più efficente il messaggio
+Luftw@ffer:			[MOD] Spostati i controlli di LinkXPage e Selection in testa.php
+Luftw@ffer:			[ADD] Aggiunti i link alle pagine dei thread (se disponibili) nella vista della sezione
+Luftw@ffer:			[MOD] Ordinata per data la lista utenti
+Hierro:				[MOD] Reply e citazione supportano il redirecting a login automatico
+Hierro:				[MOD] Il reply ora riporta il titolo del thread nel navigator
+Hierro:				[MOD] Modifica e citazione recuperano in modo più efficente il messaggio
 
 ================ KeyForum 0.41 Final ============================
 
 2005-11-03
-Luftw@ffer:		[ADD] Aggiunto filtro di visualizzaizone utenti validati/non validati
-Hierro:			[ADD] Aggiunto il file fixdb.php per modificare il DB all'ultima versione (da eseguire solo per chi proviene dalle vecchie patch e non dalla 0.41 Final)
-Hierro:			[MOD] Cambiate le query di creazione DB
-Luftw@ffer:		[ADD] Aggiunta la lista delle board registrate (su cui si hanno i permessi di visualizzazione) con relativa chiave pubblica
-LinuxMan:		[FIX] Aggiunto collegamento a index.php cliccando sulla topbar
-LinuxMan:		[FIX] Aggiunto file fixdb.php per aggiungere ONLY_AUTH nel database
-Luftw@ffer:		[FIX] Modificando un messaggio di inizio thread, viene mostrato il titolo aggiornato
-Hierro:			[FIX] Modificando un messaggio viene caricata l'ultima versione e non la prima
-Hierro:			[MOD] Il bottone edit per i messaggi non nostri viene mostrato più piccolo
+Luftw@ffer:			[ADD] Aggiunto filtro di visualizzaizone utenti validati/non validati
+Hierro:				[ADD] Aggiunto il file fixdb.php per modificare il DB all'ultima versione (da eseguire solo per chi proviene dalle vecchie patch e non dalla 0.41 Final)
+Hierro:				[MOD] Cambiate le query di creazione DB
+Luftw@ffer:			[ADD] Aggiunta la lista delle board registrate (su cui si hanno i permessi di visualizzazione) con relativa chiave pubblica
+LinuxMan:			[FIX] Aggiunto collegamento a index.php cliccando sulla topbar
+LinuxMan:			[FIX] Aggiunto file fixdb.php per aggiungere ONLY_AUTH nel database
+Luftw@ffer:			[FIX] Modificando un messaggio di inizio thread, viene mostrato il titolo aggiornato
+Hierro:				[FIX] Modificando un messaggio viene caricata l'ultima versione e non la prima
+Hierro:				[MOD] Il bottone edit per i messaggi non nostri viene mostrato più piccolo
 
 2005-11-02
-Hierro:			[MOD] Usando il fastreply da non loggati riporta al thread precedente dopo il login
-Luftw@ffer:		[ADD] Dopo il logout si viene riportati nella pagina precedente
-Luftw@ffer:		[FIX] Output sicuro anche nella citazione
-Luftw@ffer:		[FIX] Fixato il n° di messaggi nell'ultima ora, ora non conta i messaggi amministrativi
-Hierro:			[MOD] Velocizzato index.php inserendo una cache per i moderatori
+Hierro:				[MOD] Usando il fastreply da non loggati riporta al thread precedente dopo il login
+Luftw@ffer:			[ADD] Dopo il logout si viene riportati nella pagina precedente
+Luftw@ffer:			[FIX] Output sicuro anche nella citazione
+Luftw@ffer:			[FIX] Fixato il n° di messaggi nell'ultima ora, ora non conta i messaggi amministrativi
+Hierro:				[MOD] Velocizzato index.php inserendo una cache per i moderatori
 
 ================ KeyForum 0.41 RC3 ============================
 
 2005-11-02
-Luftw@ffer:		[MOD] Eliminato Type dalla userlist
-Hierro:			[FIX] Corretto il bug dei BBCode dopo le modifiche a testa.php
-Luftw@ffer:		[MOD] Inserito l'include("lib.php") in testa.php e rimosso da tutte le altre pagine
-Luftw@ffer:		[MOD] Ridotto il titolo dell'ultimo post nella index se supera i 50 chr
-Luftw@ffer:		[MOD] Output sicuro anche nella navbar
+Luftw@ffer:			[MOD] Eliminato Type dalla userlist
+Hierro:				[FIX] Corretto il bug dei BBCode dopo le modifiche a testa.php
+Luftw@ffer:			[MOD] Inserito l'include("lib.php") in testa.php e rimosso da tutte le altre pagine
+Luftw@ffer:			[MOD] Ridotto il titolo dell'ultimo post nella index se supera i 50 chr
+Luftw@ffer:			[MOD] Output sicuro anche nella navbar
 
 ================ KeyForum 0.41 RC2 ============================
 
@@ -206,56 +208,55 @@ Hierro:				[MOD] Cambiato il bottone di login
 Hierro:				[ADD] Dopo il login si viene riportati nella pagina precedente
 
 2005-11-01
-Luftw@ffer:	[MOD] Arrotondato il tempo di esecuzione
+Luftw@ffer:			[MOD] Arrotondato il tempo di esecuzione
 Hierro:				[MOD] Eliminate "il nuovo membero ha il SIGN valido." dall'output della consolle
-Hierro:         [MOD] Eliminate le richieste al web server dall'output della consolle
-Hierro:         [MOD] Aggiunto il numero di messaggi nell'elenco utenti
-Hierro:         [MOD] Output sicuro per tutte le pagine
-Hierro:         [MOD] Output sicuro per la index
-Hierro + mmorselli:
-                [ADD] [SECURITY] Rimozione codice HTML malevolo
-Luftw@ffer:	[MOD] Piccolo fix per i link sui nick nella index
-Luftw@ffer:	[ADD] Aggiunta la divisione per pagine nella lista utenti
+Hierro:         			[MOD] Eliminate le richieste al web server dall'output della consolle
+Hierro:         			[MOD] Aggiunto il numero di messaggi nell'elenco utenti
+Hierro:         			[MOD] Output sicuro per tutte le pagine
+Hierro:         			[MOD] Output sicuro per la index
+Hierro + mmorselli:		[ADD] [SECURITY] Rimozione codice HTML malevolo
+Luftw@ffer:			[MOD] Piccolo fix per i link sui nick nella index
+Luftw@ffer:			[ADD] Aggiunta la divisione per pagine nella lista utenti
 
 2005-10-31
-LinuxMan:	[MOD] Aggiunto showmember.php in index.php e sezioni.php
-Luftw@ffer:	[MOD] Sostituiti "Utenti" e "Amministratori" con "Da validare" e "Membri"
-LinuxMan:	[MOD] Nella index, Capo Famiglia sostituito con Moderatori
-Luftw@ffer:	[MOD] Mostra il nick invece che l'hex dei moderatori
-Hierro:         [MOD] Modifica inizio thread ora ha il campo chiave privata
-Luftw@ffer:	[MOD] Mostra solo il tempo di esecuzione in login, loguot e register
-Hierro:         [MOD] Cambiate le dimensioni dei campi nella scrittura nuovo messaggio
+LinuxMan:			[MOD] Aggiunto showmember.php in index.php e sezioni.php
+Luftw@ffer:			[MOD] Sostituiti "Utenti" e "Amministratori" con "Da validare" e "Membri"
+LinuxMan:			[MOD] Nella index, Capo Famiglia sostituito con Moderatori
+Luftw@ffer:			[MOD] Mostra il nick invece che l'hex dei moderatori
+Hierro:				[MOD] Modifica inizio thread ora ha il campo chiave privata
+Luftw@ffer:			[MOD] Mostra solo il tempo di esecuzione in login, loguot e register
+Hierro:				[MOD] Cambiate le dimensioni dei campi nella scrittura nuovo messaggio
 
 ================ KeyForum 0.41 RC1 ============================
 
 2005-10-31
 
 [MOD] Modifiche varie
-Luftw@ffer:	[ADD] Aggiunto il link "Setup" se si hanno i permessi
-Luftw@ffer:	[MOD] Fixati problemi di visualizzazione con IE
-Hierro:	        [ADD] Aggiunte la divisione in pagine nelle sezioni
-Hierro:	        [MOD] Dopo la modifica viene riportato l'ID della sezione
-Luftw@ffer:	[MOD] Modificata la visualizzazione delle statistiche
-Hierro:	        [MOD] Dopo un reply va all'ultima pagina
-Hierro:	        [ADD] bbcode nei reply
-mmorselli:	[ADD] Aggiunto il codice colore sotto i dati utente
-Luftw@ffer:	[ADD] Aggiunte le statistiche in fondo alla pagina
-mmorselli:	[ADD] Aggiunto l'hash nella lista utenti
-Luftw@ffer:	[MOD] Alcuni fix vari nella visualizzazione
-Luftw@ffer:	[ADD] Aggiunta la lista utenti
-mmorselli:	[MOD] Alcuni fix
-mmorselli:	[ADD] Aggiunto il conto dei messaggi in fondo alla pagina
-Luftw@ffer:	[MOD] Ordinate le sezioni per ID
-Luftw@ffer:	[ADD] Stampa il titolo del thread nell'head
-Hierro:	        [ADD] Quote del messaggio automatico tramite il bottone
-Luftw@ffer:	[ADD] Aggiunto il nome della sezione nell'head
-Hierro:	        [ADD] Il link dalla index porta all'ultima pagina
-Hierro:	        [ADD] Aggiunta la versione in fondo alla pagina
-Hierro:	        [ADD] Aggiunta la suddivisione in pagine
-Hierro:	        [ADD] Aggiunto il fastreply.
-mmorselli:	[ADD] Emoticons e bbcode
-Hierro:	        [MOD] Allineata l'ora al GMT+1
-Luftw@ffer:	[MOD] Cambio di stile della grafica. Utilizzo dei css
-Hierro:	        [MOD] Cambiamenti vari
-Hierro:	        [ADD] Aggiunte nuove immagini invision-style
-Hierro:	        [DEL] Eliminata phpsessid
+Luftw@ffer:			[ADD] Aggiunto il link "Setup" se si hanno i permessi
+Luftw@ffer:			[MOD] Fixati problemi di visualizzazione con IE
+Hierro:	        		[ADD] Aggiunte la divisione in pagine nelle sezioni
+Hierro:	        		[MOD] Dopo la modifica viene riportato l'ID della sezione
+Luftw@ffer:			[MOD] Modificata la visualizzazione delle statistiche
+Hierro:	        		[MOD] Dopo un reply va all'ultima pagina
+Hierro:	        		[ADD] bbcode nei reply
+mmorselli:				[ADD] Aggiunto il codice colore sotto i dati utente
+Luftw@ffer:			[ADD] Aggiunte le statistiche in fondo alla pagina
+mmorselli:				[ADD] Aggiunto l'hash nella lista utenti
+Luftw@ffer:			[MOD] Alcuni fix vari nella visualizzazione
+Luftw@ffer:			[ADD] Aggiunta la lista utenti
+mmorselli:				[MOD] Alcuni fix
+mmorselli:				[ADD] Aggiunto il conto dei messaggi in fondo alla pagina
+Luftw@ffer:			[MOD] Ordinate le sezioni per ID
+Luftw@ffer:			[ADD] Stampa il titolo del thread nell'head
+Hierro:				[ADD] Quote del messaggio automatico tramite il bottone
+Luftw@ffer:			[ADD] Aggiunto il nome della sezione nell'head
+Hierro:				[ADD] Il link dalla index porta all'ultima pagina
+Hierro:				[ADD] Aggiunta la versione in fondo alla pagina
+Hierro:				[ADD] Aggiunta la suddivisione in pagine
+Hierro:				[ADD] Aggiunto il fastreply.
+mmorselli:				[ADD] Emoticons e bbcode
+Hierro:			        [MOD] Allineata l'ora al GMT+1
+Luftw@ffer:			[MOD] Cambio di stile della grafica. Utilizzo dei css
+Hierro:				[MOD] Cambiamenti vari
+Hierro:				[ADD] Aggiunte nuove immagini invision-style
+Hierro:				[DEL] Eliminata phpsessid

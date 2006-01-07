@@ -119,7 +119,7 @@ echo<<<EOF
         </tr>
         <tr>
           <td>{$lang['reply_body']}</td>
-          <td><textarea name="body" rows="15" cols="70" wrap="virtual">{$box_text}</textarea></td>
+          <td><textarea name="body" rows="15" cols="70" wrap="virtual" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);"  >{$box_text}</textarea></td>
         </tr>
         <tr>
 	  <td>{$lang['reply_avatar']}</td>

@@ -147,7 +147,7 @@ function FastReply() {
 		 </tr>
 		 <tr>
 		  <td>
-			<textarea name=\"body\" rows=\"8\" cols=\"70\" wrap=\"virtual\"></textarea>
+			<textarea name=\"body\" rows=\"8\" cols=\"70\" wrap=\"virtual\" onselect=\"storeCaret(this);\" onclick=\"storeCaret(this);\" onkeyup=\"storeCaret(this);\"></textarea>
 			<br /><br />
 			<center>
 			<input type='submit' name='submit' value='".$lang['shmsg_submit']."' accesskey='s' />

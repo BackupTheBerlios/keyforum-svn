@@ -107,6 +107,7 @@ option.sub { font-weight:bold;color:#555 }
 .blue   { color:blue;font-weight:bold }
 .orange { color:#F90;font-weight:bold }
 
+.helpline { background-color: #DEE3E7; border-style: none; }
 
 /* ======================================== */
 /* BOARD HEADER STYLES */
