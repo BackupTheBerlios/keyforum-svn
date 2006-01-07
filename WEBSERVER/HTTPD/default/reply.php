@@ -79,12 +79,26 @@ echo<<<EOF
     document.getElementById('FastReply').style.height = altokok + 'px';
   }
   
+function Validator(theForm)
+{
+
+// allow only 255 characters maximum in the signature field
+if (theForm.firma.value.length > 255)
+   {
+alert("{$lang['signature_to_long']} "+theForm.firma.value.length);
+theForm.firma.focus();
+return (false);
+   }
+}  
+  
+  
+  
 //-->
 </script>
 
 <div id="FastReply" class='post2'>
 {$preview_text}
-<form name="reply" action="reply_dest.php" method="post">
+<form name="reply" action="reply_dest.php" method="post" onsubmit="return Validator(this)" >
   <input type="hidden" name="sezid" value='{$_REQUEST["SEZID"]}' />
   <input type="hidden" name="repof" value='{$_REQUEST["THR_ID"]}' />
   <input type="hidden" name="THR_ID" value='{$_REQUEST["THR_ID"]}' />
