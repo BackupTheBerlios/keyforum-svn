@@ -103,7 +103,11 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
          <?
            $num_msg_inserted=$db->get_var("SELECT count(1) FROM {$SNAME}_congi WHERE INSTIME>'".(time()-3600)."' AND (TYPE='1' OR TYPE='2');");
 	   if($num_msg_inserted)
+	   {
 	     echo "{$lang['stat_dbmesslh1']}<b>$num_msg_inserted</b>{$lang['stat_dbmesslh2']}";
+	  } else {
+	     echo $lang['stat_dbmesslh3'];
+	  }
 	 ?>
 	 </div>
 	 <?

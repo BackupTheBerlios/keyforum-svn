@@ -6,6 +6,7 @@ $lang['stat_dbmess1']  = "Ci sono ";
 $lang['stat_dbmess2']  = " messaggi nel database";
 $lang['stat_dbmesslh1']  = "Inseriti ";
 $lang['stat_dbmesslh2']  = " msg nel database nell'ultima ora";
+$lang['stat_dbmesslh3']  = " nessun messaggio inserito nell'ultima ora";
 $lang['stat_reguser1']  = "Abbiamo ";
 $lang['stat_reguser2']  = " utenti registrati";
 $lang['stat_extime']  = "Tempo di esecuzione: ";
