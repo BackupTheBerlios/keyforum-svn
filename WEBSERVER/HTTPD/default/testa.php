@@ -217,6 +217,20 @@ if ($title) {
 }
 ?>
 </div>
+
+<?
+// avvisi per l'admin
+if($userdata->LEVEL >=9)
+{
+
+// utenti in coda di validazione
+if(!$db->get_var("SELECT is_auth FROM {$SNAME}_membri ORDER BY date DESC LIMIT 1"))
+{ echo "<font color=red><b>ci sono utenti da validare !!!!<b></font>";}
+
+}
+?>
+
+
 <table border="0" cellspacing="0" cellpadding="0" align="center" width="100%">
 
 
@@ -238,3 +252,4 @@ function userlinks($array)
 	}
 	return $return;
 }
+?>
