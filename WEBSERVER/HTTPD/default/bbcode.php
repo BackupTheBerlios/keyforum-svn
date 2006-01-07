@@ -38,19 +38,13 @@ var is_moz = 0;
 var is_win = ((clientPC.indexOf("win")!=-1) || (clientPC.indexOf("16bit") != -1));
 var is_mac = (clientPC.indexOf("mac")!=-1);
 
-
-
-// Define the bbCode tags
-bbcode = new Array();
-bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]');
-imageTag = false;
-
 // Helpline messages
 x_help = "";
 b_help = "Grassetto: [b]testo[/b]  (alt+b)";
 i_help = "Corsivo: [i]testo[/i]  (alt+i)";
 u_help = "Sottolineato: [u]testo[/u]  (alt+u)";
 q_help = "Citazione: [quote]testo[/quote]  (alt+q)";
+n_help = "Citazione con nome: [quote=nome @ data]testo[/quote]  (alt+n)";
 c_help = "Codice: [code]codice[/code]  (alt+c)";
 p_help = "Inserisci immagine: [img]http://image_url[/img]  (alt+p)";
 w_help = "Inserisci URL: [url]http://url[/url] o [url=http://url]testo URL[/url]  (alt+w)";
@@ -59,8 +53,19 @@ e_help = "Indirizzo e-mail: [email]nome@indirizzo.com[/email] (alt+e)";
 t_help = "Miniatura immagine: [tmb]http://image_url[/tmb]  (alt+t)";
 
 // Define the bbCode tags
+
+<?
+if ($nquote)
+{
+echo "var nquote='$nquote';";
+} else {
+$quotedate=strftime("%d/%m/%y  - %H:%M:%S",time());
+echo "var nquote='[quote=nome @ $quotedate]';";
+}
+?>
+
 bbcode = new Array();
-bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]');
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]',nquote,'[/quote]');
 imageTag = false;
 
 // Shows the help messages in the helpline window

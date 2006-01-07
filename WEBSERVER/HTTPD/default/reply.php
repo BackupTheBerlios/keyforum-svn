@@ -43,7 +43,8 @@ $riga=$db->get_row($query);
 
 if ($riga) {
   $quote_date = strftime("%d/%m/%y  - %H:%M:%S",$riga->data);
-  $box_text = "[quote=".secure_v($riga->autore)." @ $quote_date]".htmlspecialchars(stripslashes($riga->body))."[/quote]";
+  $nquote = "[quote=".secure_v($riga->autore)." @ $quote_date]";
+  $box_text = $nquote.htmlspecialchars(stripslashes($riga->body))."[/quote]";
 }
 else {
   $box_text = "";
