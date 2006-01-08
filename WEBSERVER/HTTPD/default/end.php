@@ -41,7 +41,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
        if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
       
       // lo stato delle categorie salvato nel cookie
-      $hidesez=explode(",",$std->GetKFcookie("collapseprefs"));
+      $hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_ENV["sesname"]));
       
       if (in_array("stat",$hidesez))
        {
@@ -175,7 +175,7 @@ if($whereiam=="index")
 {
 echo "<td align=right>";
 $sezcollector .= "stat";
-echo "<a href=\"javascript:ShowHideAll('$sezcollector', 0);\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector', 1);\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
+echo "<a href=\"javascript:ShowHideAll('$sezcollector', 0,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector', 1,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
 echo "</td></tr>";
 }
 ?>

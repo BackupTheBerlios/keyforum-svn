@@ -16,7 +16,7 @@ $mainsez = $db->get_results($query);
 if($mainsez) foreach($mainsez as $mainsezval) {
 
 // lo stato delle categorie salvato nel cookie
-$hidesez=explode(",",$std->GetKFcookie("collapseprefs"));
+$hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_ENV["sesname"]));
 
 if (in_array($mainsezval->ID,$hidesez))
  {
@@ -34,14 +34,14 @@ echo "
 
 <div class=\"borderwrap\" style=\"display:$divhide\" id=\"divhide_{$mainsezval->ID}\">
 	<div class=\"maintitlecollapse\">
-		<p class=\"expand\"><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 0);\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
+		<p class=\"expand\"><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 0,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
 		<p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
 	</div>
 </div>
 
 <div class='borderwrap' style=\"display:$divshow\" id=\"divshow_{$mainsezval->ID}\">
   <div class='maintitle' >
-    <p class='expand'><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 1);\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
+    <p class='expand'><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 1,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
     <p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
   </div>";
 

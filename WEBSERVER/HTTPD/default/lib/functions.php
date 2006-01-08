@@ -467,12 +467,12 @@ return $modlist;
 
 
 
-function GetKFcookie($name)
+function GetKFcookie($name,$sname)
     {
     	
-    	if (isset($_COOKIE["kf_".$name]))
+    	if (isset($_COOKIE[$sname.$name]))
     	{
-    		return urldecode($_COOKIE["kf_".$name]);
+    		return urldecode($_COOKIE[$sname.$name]);
     	}
     	else
     	{

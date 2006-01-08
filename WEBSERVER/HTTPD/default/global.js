@@ -2,12 +2,12 @@
 // Show/Hide section
 //==========================================
 
-function ShowHideSection( fid, add )
+function ShowHideSection( fid, add,sname )
 {
 	saved = new Array();
 	clean = new Array();
 	
-	if ( tmp = GetKFcookie('collapseprefs') )
+	if ( tmp = GetKFcookie('collapseprefs',sname))
 	{
 		saved = tmp.split(",");
 				
@@ -33,12 +33,12 @@ function ShowHideSection( fid, add )
 		hide_div( GetElementById( 'divhide_'+fid  ) );
 	}
 	
-	SetKFcookie( 'collapseprefs', clean.join(','), 1 );
+	SetKFcookie( 'collapseprefs', clean.join(','), 1,sname );
 	
 	
 }
 
-function ShowHideAll(sections,add)
+function ShowHideAll(sections,add,sname)
 {
 	
 
@@ -53,7 +53,7 @@ saved = sections.split(",");
 
 			hide_div( GetElementById( 'divhide_'+saved[ii] ) );
 		}
-	SetKFcookie( 'collapseprefs', '', 1 );
+	SetKFcookie( 'collapseprefs', '', 1,sname );
 	}
 	else
 	{
@@ -62,7 +62,7 @@ saved = sections.split(",");
 			show_div( GetElementById( 'divhide_'+saved[ii] ) );
 			hide_div( GetElementById( 'divshow_'+saved[ii] ) );
 		}
-	SetKFcookie( 'collapseprefs', sections, 1 );
+	SetKFcookie( 'collapseprefs', sections, 1,sname );
 	}
 
 }
@@ -72,7 +72,7 @@ saved = sections.split(",");
 // Set cookie
 //==========================================
 
-function SetKFcookie( name, value, sticky )
+function SetKFcookie( name, value, sticky,sname )
 {
 	expire = "";
 	domain = "";
@@ -84,7 +84,7 @@ function SetKFcookie( name, value, sticky )
 	}
 	
 
-	document.cookie = "kf_" + name + "=" + value + "; path=" + path + expire + domain + ';';
+	document.cookie = sname + name + "=" + value + "; path=" + path + expire + domain + ';';
 }
 
 
@@ -92,10 +92,10 @@ function SetKFcookie( name, value, sticky )
 // Get cookie
 //==========================================
 
-function GetKFcookie( name )
+function GetKFcookie( name,sname )
 {
 
-    cname = "kf_" + name + '=';
+    cname = sname + name + '=';
 
 	cpos  = document.cookie.indexOf( cname );
 	
