@@ -27,7 +27,7 @@ $i = 0;
 
 foreach($config['WEBSERVER'] as $nome_board=>$array)
 {
-	if($nome_board!="SETUP"){
+	if($config['SHARE'][$array['SesName']]['PKEY']){
 		$board[$i] = Array('nome' =>$nome_board, 'nome_ses' => $array['SesName'], 'pkey' => $config['SHARE'][$array['SesName']]['PKEY']);
 		$i++;
 	}
