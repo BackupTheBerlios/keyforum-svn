@@ -112,7 +112,7 @@ function confirmThis(url) {
 <?php
 foreach($config['WEBSERVER'] as $nome_board=>$array)
 {
-	if(($nome_board != $BNAME)AND($nome_board!="SETUP"))
+	if(($nome_board != $BNAME)AND($config['SHARE'][$array['SesName']]['PKEY']))
 	{
 		$bindwsl = $config['WEBSERVER'][$nome_board]['BIND'];
 		$portwsl = $config['WEBSERVER'][$nome_board]['PORTA'];
