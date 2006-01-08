@@ -231,47 +231,47 @@ function GetUserColor($hash) {
 // Gestione errori
 //***********************************
 
-function Error($ermsg,$txtsave="")
+function Error($ermsg,$txtsave="",$info="")
 {
 
-global $std,$blanguage,$sess_auth, $sess_nick,$sess_password,$SEZ_DATA,$userdata,$_ENV,$db;
+global $lang,$std,$blanguage,$sess_auth, $sess_nick,$sess_password,$SEZ_DATA,$userdata,$_ENV,$db;
 
 if(!$blanguage) {$blanguage="eng";}
 
-$lang = $std->load_lang('lang_functions', $blanguage );
-
 include_once("testa.php");
+
+$lang += $std->load_lang('lang_error', $blanguage );
+
+
+// errore o informazione ?
+if(!$info){
+$info=$lang['err_info'];
+$errordiv ="<div class=\"errorwrap\"><h4>{$lang['err_is'] }</h4><p>$ermsg</p></div>";
+$usefull="<h4>{$lang['err_usefull']}</h4>{$lang['err_usefull_list']}";
+}	
 
 // errore
 echo"
 <div id=\"keywrapper\">
 <div class=\"borderwrap\">
-	<h3><img src='style_images/1/nav_m.gif' border='0'  alt='&gt;' width='8' height='8' />&nbsp;Messaggio Forum</h3><p>E' stato riscontrato un errore.</p>
-	<div class=\"errorwrap\">
-		<h4>L'errore riscontrato &#232;:</h4><p>$ermsg</p>
-	</div>";
+<h3><img src='img/nav_m.gif' border='0'  alt='&gt;' width='8' height='8' />&nbsp;{$lang['err_fmessage']}</h3><p>$info</p>$errordiv";
+	
 	
 // testo salvato
 if($txtsave)
 {
-echo "<h4>Informazioni messaggio salvate!</h4>
-<p>Le informazioni del messaggio sono state salvate. In alcuni casi, premere il tasto 'indietro' sul vostro browser significa anche la perdità di tutti i dati non salvati. Ti consigliamo di selezionare e salvare quello che non vuoi perdere.</p>
+echo "<h4>{$lang['err_saved_main']}</h4>
+<p>{$lang['err_saved_info']}</p>
 <div class=\"fieldwrap\">
-	<h4>Informazioni messaggio salvate!</h4>
-	<form name=\"mehform\">
-		<textarea cols=\"70\" rows=\"5\" name=\"saved\" tabindex=\"2\">".stripslashes($txtsave)."</textarea>
+	<h4>{$lang['err_saved_main']}</h4>
+	<form name=\"saveform\">
+		<textarea cols=\"70\" rows=\"5\" name=\"tsaved\" tabindex=\"2\">".stripslashes($txtsave)."</textarea>
 	</form>
-	<p class=\"formbuttonrow1\"><input class=\"button\" type=\"button\" tabindex=\"1\" value=\"Seleziona tutto\" onclick=\"document.mehform.saved.select()\" /></p>
-</div>";
+	<p class=\"formbuttonrow1\"><input class=\"button\" type=\"button\" tabindex=\"1\" value=\"{$lang['err_select_all']}\" onclick=\"document.saveform.tsaved.select()\" /></p>
+</div>$usefull";
 }
 
-// link utili
-echo "<h4>Link utili</h4>
-	<ul>
-		<li><a href=\"http://www.keyforum.net/\">Il sito di supporto ufficiale</a></li>
-		<li><a href=\"http://www.keyforum.net/forum/\">Il forum di supporto ufficiale</a></li>
-	</ul>
-	<p class=\"formbuttonrow\"><b><a href=\"javascript:history.go(-1)\">Torna indietro</a></b></p>
+echo "<p class=\"formbuttonrow\"><b><a href=\"javascript:history.go(-1)\">{$lang['err_back']}</a></b></p>
 </div>
 </div>";
 
