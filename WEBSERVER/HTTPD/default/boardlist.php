@@ -33,17 +33,6 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
 	}
 } //prendo tutte le board;
 
-$i=$CurrPag*$BoardXPage;
-$tot = $i + min(count($config['SHARE']) -$i ,$BoardXPage);
-for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
-{
-	$id = $board[$i]['nome'];
-	$board_vis[$id]['nome'] = $board[$i]['nome'];
-	$board_vis[$id]['pkey'] = $board[$i]['pkey'];
-	$board_vis[$id]['bind'] = $config['WEBSERVER'][$board[$i]['nome']]['BIND'];
-	$board_vis[$id]['porta'] = $config['WEBSERVER'][$board[$i]['nome']]['PORTA'];
-}
-
 //output
 ?>
 <div class='borderwrap'>
@@ -61,22 +50,23 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
     </tr>
 <?
 $i=$CurrPag*$BoardXPage;
-foreach($board_vis as $id=>$riga)
+$tot = $i + min(count($config['SHARE']) -$i ,$BoardXPage);
+for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 {
-	if($riga['porta'])
+	if($config['WEBSERVER'][$board[$i]['nome']]['PORTA'])
 	{
-	 if((!$riga['bind'])OR($riga['bind']==$_SERVER['REMOTE_ADDR'])OR($riga['bind']==$bindboard)){
-			 $req_dec[FUNC][Base642Dec]=$riga['pkey'];
+	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$bindboard)){
+			 $req_dec[FUNC][Base642Dec]=$board[$i]['pkey'];
 			 $core   = new CoreSock;
 			 $core->Send($req_dec);
 			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
 		 echo "<tr>
-			<td class='row1' align='right'>".++$i."</td>
+			<td class='row1' align='right'>".($i+1)."</td>
 			<td class='row2' align='left'>
-			&nbsp;<a target='_blank' href='http://{$riga['bind']}:{$riga['porta']}'>{$riga['nome']}</a>
+			&nbsp;<a target='_blank' href='http://{$config['WEBSERVER'][$board[$i]['nome']]['BIND']}:{$config['WEBSERVER'][$board[$i]['nome']]['PORTA']}'>{$board[$i]['nome']}</a>
 			</td>
-				<td class='row2' align='center'>".$riga['bind']."</td>
-				<td class='row2' align='center'>".$riga['porta']."</td>
+				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['BIND']."</td>
+				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['PORTA']."</td>
 			<td class='row2' align='center'>
 				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
 			}
