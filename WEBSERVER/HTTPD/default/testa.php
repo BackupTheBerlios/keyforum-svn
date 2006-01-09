@@ -213,7 +213,7 @@ if ($SEZ_DATA->ID) {
 }
 if ($title) {
   if($title1->subtitle) $title=$title.", ".$title1->subtitle;
-  echo "  <img src=\"img/3.gif\" alt=\"\" /> ".secure_v($title)."\n";
+  echo "  <img src=\"img/3.gif\" alt=\"\" /> ".$title."\n";
 }
 ?>
 </div>
