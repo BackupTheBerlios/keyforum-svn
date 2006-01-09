@@ -13,6 +13,8 @@ use Itami::TryConn;
 use Itami::Proto::DataProto;
 use Itami::Proto::CompProto;
 use Itami::Proto::compbase;
+use Itami::Proto::udpbase;
+use Itami::Proto::donkeyproto;
 sub new {
 	my ($class, %argv)=@_;
 	my $this={};
@@ -39,6 +41,8 @@ sub _Protocolli {
 	return Proto::DataProto->new() if $tipo eq "data";
 	return Proto::CompProto->new() if $tipo eq "compdata";
 	return Proto::compbase->new() if $tipo eq "compbase";
+	return Proto::udpbase->new() if $tipo eq "udpbase";
+	return Proto::DonkeyProto->new() if $tipo eq "donkeyproto";
 	return undef;
 }
 sub AddSock($$%) {
@@ -115,13 +119,14 @@ sub Select {
 	$this->{Return}={};
 	(keys(%$return)) ? (return $return) : (return undef);
 }
+# Controlla  l'ultima volta che è stato spedito un pacchetto da un altro nodo.
+# Il timeout è configurabile al momento di aggiungere lo socket all'oggetto ctcp
 sub CheckLastSend {
 	my $this=shift;
 	my $now=Time::HiRes::time();
 	foreach my $buf (values(%{$this->{Socket}})) {
 		next unless exists $buf->{MaxSleep};
 		next if $now-$buf->{LastRecv}<$buf->{MaxSleep};
-		#print "CTCP: ".$buf->{Sock}->peerhost." TIMEOUT. ".($now-$buf->{LastRecv})." secondi.\n";
 		$this->Remove($buf->{Sock});
 		_addItem($this->{Return}, 'Disconnessi', $buf->{Sock});
 	}
@@ -178,20 +183,18 @@ sub _addItems {
 }
 sub _recv {
 	my ($this,$objsock, $sock)=@_;
-	my $temp='';
-	recv($sock,$temp,15000,0);
-	#print "CTCP: recv\n";
+	my $ip=recv($sock,my $temp='',99999,0);
 	if ($temp ne '') {
-		_addItem($this->{Return}, 'CanRead', $sock) if $this->_bufferizza($objsock,$temp);
+		_addItem($this->{Return}, 'CanRead', $sock) if $this->_bufferizza($objsock,$temp,$ip);
 	} else {
 		_addItem($this->{Return}, 'Disconnessi', $sock);
 		$this->Remove($sock);
 	}
 }
 sub _bufferizza {
-	my ($this,$objsock, $temp)=@_;
+	my ($this,$objsock, $temp,$ip)=@_;
 	$objsock->{LastRecv}=Time::HiRes::time();
-	my $ret=$objsock->{Type}->_bufferizza($temp);
+	my $ret=$objsock->{Type}->_bufferizza($temp,$ip);
 	return 1 if $ret>0;
 	return 0 unless $ret;
 	print "$objsock rimosso perchè ha inviato un pacchetto errato.\n";
@@ -223,17 +226,10 @@ sub send {
 }
 
 sub recv {
-	my ($this, $sock)=@_;
-
+	my ($this, $sock,$varie)=@_;
 	$sock=fileno $sock;
 	return undef unless exists $this->{Socket}->{$sock};
-	return $this->{Socket}->{$sock}->{Type}->reader;
-#	if ($this->{Socket}->{$sock}->{Type} eq 'data') {
-#		return substr($this->{Socket}->{$sock}->{TmpRecvBuff},0,$lung || length($this->{Socket}->{$sock}->{TmpRecvBuff}),"");
-#	} elsif ($this->{Socket}->{$sock}->{Type} eq 'compdata') {
-#		return shift(@{$this->{Socket}->{$sock}->{RecvBuff}});
-	#}
-
+	return $this->{Socket}->{$sock}->{Type}->reader($varie);
 }
 
 sub Remove {
@@ -309,6 +305,7 @@ sub _RefilBuff {
 # Il terzo valore dei parametri (i dati) deve essere passato come reference ad uno scalare.
 sub _addtobuff {
 	my ($sock, $bandlimit, $dati)=@_;
+	return undef unless defined $sock;
 	my ($pacchetto,$spediti,$dimpacchetto,$resto)=(0,0,0,0);
 	$dimpacchetto=1400 if $bandlimit<0;
 	while (_canwrite($sock)) {
@@ -325,10 +322,7 @@ sub _addtobuff {
 	return ($resto, !length($$dati));
 }
 sub _canwrite {
-	my $sock=shift;
-	my $rin='';
-	return undef unless defined $sock;
-	vec($rin,fileno($sock),1) = 1;
+	vec(my $rin='',fileno(shift()),1) = 1;
 	return select(undef,$rin,undef,0);
 }
 
