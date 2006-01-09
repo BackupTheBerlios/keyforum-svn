@@ -482,6 +482,37 @@ function GetKFcookie($name,$sname)
     }
     
 
+function CollectMemberTitles()
+ {
+ global $db,$SNAME;
+ return $db->get_results("select id, title, pips, posts from {$SNAME}_titles  ORDER BY posts DESC"); 
+  }
+
+function MemberTitle($member_titles,$msgnum)
+{
+  // titolo utente 
+  
+  
+  foreach($member_titles as $val)
+  		{
+  			if ($msgnum >= $val->posts)
+  			{
+   			  $membertitle['title'] = $val->title;
+			  $pips = $val->pips;
+			  break;
+  			}
+  		}
+ // pips
+
+ for ($i = 1; $i <= $pips; ++$i)
+  	{
+  	$membertitle['pips'] .= "<img src='img/pip.gif'>";
+  	}
+
+return $membertitle;
+
+}
+
 
 
 }

@@ -1,5 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-09:
+mmorselli:				[ADD] titoli utente
+
 2006-01-07:
 mmorselli:				[ADD] controllo limite caratteri firma
 mmorselli:				[FIX] bbcode al punto del cursore e su selezione

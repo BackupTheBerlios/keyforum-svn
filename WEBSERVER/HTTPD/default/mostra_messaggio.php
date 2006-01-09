@@ -6,6 +6,7 @@ function printmsg($MSG) {
   global $std;
   global $userdata;
   global $db;
+  global $member_titles;
 
   $usercolor = $std->GetUserColor($MSG->memhash);
   $mio_nick = $GLOBALS['sess_nick'];
@@ -65,6 +66,10 @@ if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
   // visualizzo lgli avatar
   if($userdata->HIDEAVATAR) { $MSG->avatar="" ;}
   
+// titolo utente e pips
+$membertitle=$std->MemberTitle($member_titles,$MSG->msg_num);
+  
+  
   echo<<<EOF
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
 <tr>
@@ -83,7 +88,8 @@ if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
  <td valign='top' class='post2'>
   <span class='postdetails'><br />
   {$avatar}
-  {$lang['shmsg_mbrtype']}<br />
+  {$membertitle['title']}<br />
+  {$membertitle['pips']}<br />  
   {$lang['shmsg_adminauth']}{$auth}<br />
   {$lang['shmsg_group']}{$gruppo}<br />
   {$lang['shmsg_messages']}{$MSG->msg_num}<br />

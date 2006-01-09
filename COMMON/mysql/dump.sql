@@ -3,7 +3,7 @@ MySQL Backup
 Source Host:           localhost
 Source Server Version: 5.0.15
 Source Database:       keyforum_base
-Date:                  2006/01/03 20:18:33
+Date:                  2006/01/09 21:32:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -586,6 +586,33 @@ CREATE TABLE `intkf_sez` (
 #----------------------------
 
 #----------------------------
+# Table structure for intkf_titles
+#----------------------------
+CREATE TABLE `intkf_titles` (
+  `id` smallint(5) NOT NULL auto_increment,
+  `posts` int(10) default NULL,
+  `title` varchar(128) character set latin1 collate latin1_general_ci default NULL,
+  `pips` mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#----------------------------
+# Records for table intkf_titles
+#----------------------------
+
+
+insert  into intkf_titles values 
+(1, 0, 'Timido allievo', 1), 
+(2, 50, 'Pronto a postare', 2), 
+(3, 100, 'Frequentatore assiduo', 3), 
+(4, 200, 'Membro a pieno titolo', 3), 
+(5, 400, 'Spammatore di frodo', 4), 
+(6, 600, 'Scrivano assuefatto', 4), 
+(7, 900, 'Capitello del forum', 5), 
+(8, 1200, 'Colonna portante', 5), 
+(9, 1500, 'Veterano del forum', 6), 
+(10, 2000, 'Silver member', 6), 
+(11, 2500, 'Gold member', 7);
+#----------------------------
 # Table structure for iplist
 #----------------------------
 CREATE TABLE `iplist` (
@@ -1117,6 +1144,33 @@ CREATE TABLE `keyfo_sez` (
 # No records for table keyfo_sez
 #----------------------------
 
+#----------------------------
+# Table structure for keyfo_titles
+#----------------------------
+CREATE TABLE `keyfo_titles` (
+  `id` smallint(5) NOT NULL auto_increment,
+  `posts` int(10) default NULL,
+  `title` varchar(128) character set latin1 collate latin1_general_ci default NULL,
+  `pips` mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#----------------------------
+# Records for table keyfo_titles
+#----------------------------
+
+
+insert  into keyfo_titles values 
+(1, 0, 'Timido allievo', 1), 
+(2, 50, 'Pronto a postare', 2), 
+(3, 100, 'Frequentatore assiduo', 3), 
+(4, 200, 'Membro a pieno titolo', 3), 
+(5, 400, 'Spammatore di frodo', 4), 
+(6, 600, 'Scrivano assuefatto', 4), 
+(7, 900, 'Capitello del forum', 5), 
+(8, 1200, 'Colonna portante', 5), 
+(9, 1500, 'Veterano del forum', 6), 
+(10, 2000, 'Silver member', 6), 
+(11, 2500, 'Gold member', 7);
 #----------------------------
 # Table structure for log
 #----------------------------
@@ -1701,4 +1755,31 @@ CREATE TABLE `tstkf_sez` (
 # No records for table tstkf_sez
 #----------------------------
 
+#----------------------------
+# Table structure for tstkf_titles
+#----------------------------
+CREATE TABLE `tstkf_titles` (
+  `id` smallint(5) NOT NULL auto_increment,
+  `posts` int(10) default NULL,
+  `title` varchar(128) character set latin1 collate latin1_general_ci default NULL,
+  `pips` mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#----------------------------
+# Records for table tstkf_titles
+#----------------------------
+
+
+insert  into tstkf_titles values 
+(1, 0, 'Timido allievo', 1), 
+(2, 50, 'Pronto a postare', 2), 
+(3, 100, 'Frequentatore assiduo', 3), 
+(4, 200, 'Membro a pieno titolo', 3), 
+(5, 400, 'Spammatore di frodo', 4), 
+(6, 600, 'Scrivano assuefatto', 4), 
+(7, 900, 'Capitello del forum', 5), 
+(8, 1200, 'Colonna portante', 5), 
+(9, 1500, 'Veterano del forum', 6), 
+(10, 2000, 'Silver member', 6), 
+(11, 2500, 'Gold member', 7);
 

@@ -2,9 +2,14 @@
 include ("testa.php");
 include ("mostra_messaggio.php");
 $lang += $std->load_lang('lang_showmsg', $blanguage );
+$SNAME=$_ENV['sesname'];
 
 // Parser
 include_once("lib/bbcode_parser.php");
+
+// leggo i titoli utente
+$member_titles=$std->CollectMemberTitles();
+
 
 function PageSelect($pos) {
 ?>
@@ -170,7 +175,7 @@ function FastReply() {
 <td>
 <?php
 
-$SNAME=$_ENV['sesname'];
+
 $MSGID=pack("H*",$_REQUEST['THR_ID']);
 $query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autore, newmsg.SUBTITLE as subtitle,"
 ." newmsg.BODY as body, (msghe.DATE+".GMT_TIME.") as 'date', membri.avatar AS 'avatar', membri.firma AS 'firma',"

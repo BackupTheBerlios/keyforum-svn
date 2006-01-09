@@ -1,3 +1,38 @@
+2005-01-09
+
+mmorselli:		[ADD] titoli utente
+
+#----------------------------
+# Table structure for tstkf_titles
+#----------------------------
+CREATE TABLE `*_titles` (
+  `id` smallint(5) NOT NULL auto_increment,
+  `posts` int(10) default NULL,
+  `title` varchar(128) character set latin1 collate latin1_general_ci default NULL,
+  `pips` mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+#----------------------------
+# Records for table tstkf_titles
+#----------------------------
+
+
+insert  into *_titles values 
+(1, 0, 'Timido allievo', 1), 
+(2, 50, 'Pronto a postare', 2), 
+(3, 100, 'Frequentatore assiduo', 3), 
+(4, 200, 'Membro a pieno titolo', 3), 
+(5, 400, 'Spammatore di frodo', 4), 
+(6, 600, 'Scrivano assuefatto', 4), 
+(7, 900, 'Capitello del forum', 5), 
+(8, 1200, 'Colonna portante', 5), 
+(9, 1500, 'Veterano del forum', 6), 
+(10, 2000, 'Silver member', 6), 
+(11, 2500, 'Gold member', 7);
+
+
+
+
 2005-12-30
 
 mmorselli:		[ADD] local keyring
