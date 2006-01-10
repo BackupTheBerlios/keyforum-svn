@@ -120,20 +120,20 @@ if(!$user['last_action']['date'])
 	$user['last_action']['date'] = 'Mai';
 }
 
-//Formatting data
-$user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
-$user['last_action']['data'] = strftime("%d/%m/%y - %H:%M:%S",$user['last_action']['data']);
-$user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
-
 //Converting data
 $user['sign']  = convert($user['sign']);
 list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['reply_id']);
 
 //statistiche messaggi
-$tmp = (time() - $user['reg_date'])/(60*60*24); //86400 seconds in a day
+$tmp = ceil((time() - $user['reg_date'])/(60*60*24)); //86400 seconds in a day
 $user['msg_num']['daily'] = number_format($user['msg_num']['tot']/$tmp,2);
 if($totmsg)$user['msg_num']['perc'] = number_format($user['msg_num']['tot']*100/$totmsg,1); //to avoid division by 0
 if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_sez']['tot']*100/$user['msg_num']['tot'],1); //to avoid division by 0
+
+//Formatting data
+$user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
+$user['last_action']['data'] = strftime("%d/%m/%y - %H:%M:%S",$user['last_action']['data']);
+$user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 
 //OUTPUT
 ?>
