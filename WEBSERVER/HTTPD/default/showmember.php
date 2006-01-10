@@ -52,11 +52,12 @@ GROUP BY sez";
 $result =$db->get_results($query);
 if($result) foreach($result as $row)
 {
-	$sez_data[$sez_id]['num_reply'] += $row->num;
-	$sez_data[$sez_id]['SEZ_NAME'] = $row->sez_name;
-	$sez_data[$sez_id]['sez_id'] = $row->sez_id;
+	$sez_data[$row->sez]['num_reply'] += $row->num;
+	$sez_data[$row->sez]['SEZ_NAME'] = $row->sez_name;
+	$sez_data[$row->sez]['sez_id'] = $row->sez;
 }
 @rsort($sez_data);
+
 $sez_data = $sez_data[0];
 
 
@@ -86,7 +87,7 @@ $user = Array(
 	, 'reg_date'	=>$pdata->reg_date
 	, 'group'	=>array('text' => $pdata->title,'image' =>NULL)
 	, 'msg_num'	=>array('tot' => $pdata->msg_num,'daily' =>'','perc'=> '' )
-	, 'msg_sez'	=>array('tot' => $sez_data['num_reply'],'perc'=> '','sez_id' => $sez_data['id'],'sez_name' => $sez_data['SEZ_NAME'])
+	, 'msg_sez'	=>array('tot' => $sez_data['num_reply'],'perc'=> '','sez_id' => $sez_data['sez_id'],'sez_name' => $sez_data['SEZ_NAME'])
 	, 'home'	=>''
 	, 'avatar'	=>$pdata->avatar
 	, 'sign'	=>$pdata->firma

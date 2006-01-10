@@ -13,10 +13,10 @@ echo "<tr><td>";
 
 $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ordine;";
 $mainsez = $db->get_results($query);
-if($mainsez) foreach($mainsez as $mainsezval) {
-
 // lo stato delle categorie salvato nel cookie
 $hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_ENV["sesname"]));
+
+if($mainsez) foreach($mainsez as $mainsezval) {
 
 if (in_array($mainsezval->ID,$hidesez))
  {
