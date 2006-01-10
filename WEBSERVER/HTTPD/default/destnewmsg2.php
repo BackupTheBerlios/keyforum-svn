@@ -68,15 +68,26 @@ if ( $edit_val )
 else $mreq['FORUM']['ADDMSG']['EDIT_OF']=$MD5_MSG;
 $mreq['FORUM']['ADDMSG']['MD5']=$MD5_MSG;
 
+// message sign request with user private key
 $nreq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['priv_key']=$KEY_DECRYPT;
 $nreq['RSA']['FIRMA'][0]['priv_pwd']=$privkey;
 if (!$core->Send($nreq)) $std->Error($lang['reply_core']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
+
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
-$core->Send($mreq);
-$risp=$core->Read();
+// if a private key was supplied (passworded forum) use it to sign the message and add it in FOR_SIGN
+if ( !empty($_REQUEST['PrivKey']) ) {
+	$corereq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
+	$corereq['RSA']['FIRMA'][0]['priv_pwd']=base64_decode($_REQUEST['PrivKey']);
+	if (!$core->Send($corereq)) $std->Error($lang['reply_core']);
+	if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
+	$mreq['FORUM']['ADDMSG']['FOR_SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
+}
+
+if (!$core->Send($mreq)) $std->Error($lang['reply_core']);
+if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 
 if($_REQUEST['edit_of']) 
 {
