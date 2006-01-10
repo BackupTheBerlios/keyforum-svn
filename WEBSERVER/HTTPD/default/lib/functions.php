@@ -24,9 +24,9 @@ class FUNC {
 	}
 
 
-  /*-------------------------------------------------------------------------*/
-  // Carica l'array con la lingua specifica di un modulo
-  /*-------------------------------------------------------------------------*/
+//***********************************
+// Lingue
+//***********************************
 
 	function load_lang($module, $lang_id) {
 
@@ -180,10 +180,10 @@ class FUNC {
 
 function Redirect($pagetitle,$url,$msgtitle,$msg,$clickinvite="") {
 
-global $std,$blanguage;
+global $blanguage;
 if(!$blanguage) {$blanguage="eng";}
 
-$lang = $std->load_lang('lang_functions', $blanguage );
+$lang = $this->load_lang('lang_functions', $blanguage );
 
 if(!$clickinvite) {$clickinvite=$lang['redirect_invite'];}
 
@@ -280,6 +280,22 @@ die();
 
 }
 
+
+// Avvisi importanti
+
+function Notice($ntitle,$ncontent)
+{
+echo "<div class=\"errorwrap\"><h4>$ntitle</h4><p>$ncontent</p></div>";
+}
+
+
+
+
+//***********************************
+// Forum Jumper (albero forum)
+//***********************************
+
+
 function ForumJumper($forumid=0)
 {
 global $db,$_ENV;
@@ -326,6 +342,11 @@ $output .= "</optgroup></select></form>";
 return $output;
 
 }
+
+
+//***********************************
+// Funzioni relative alle date
+//***********************************
 
 // k_date: date in selected language
 // Adapted from KronoClass, released on GPL license by Holosoft - Tommaso D'Argenio
@@ -444,6 +465,11 @@ function PostDate($timestamp)
  return $this->RelativeDate($timestamp)." ".$this->k_date($lang['post_date'],$timestamp)." ".date($lang['post_time'],$timestamp);
  }
 
+
+//***********************************
+// Lista moderatori
+//***********************************
+
 Function ListMod($modstring)
  {
  global $db,$SNAME;
@@ -466,6 +492,9 @@ return $modlist;
  }
 
 
+//***********************************
+// Cookie (lettura)
+//***********************************
 
 function GetKFcookie($name,$sname)
     {
@@ -481,6 +510,11 @@ function GetKFcookie($name,$sname)
     	
     }
     
+
+//***********************************
+// Titoli utente
+//***********************************
+
 
 function CollectMemberTitles()
  {
