@@ -195,6 +195,23 @@ function get_my_info()
 }
 
 
+function WhoIsMe()
+ {
+	global $SNAME,$db;
+	list($user_hash,$user_id) = get_my_info($SNAME);
+
+	$user_hash = @pack("H*",$user_id);
+	$user_hash = mysql_real_escape_string($user_hash);
+		
+	$query = "SELECT *
+			FROM {$SNAME}_membri where hash = '$user_hash'
+			LIMIT 1";
+	$Iam = $db->get_row($query);
+	return $Iam;
+}
+
+
+
 //--------------------------------
 // Classe per funzioni globali
 //--------------------------------
@@ -204,8 +221,16 @@ $std   = new FUNC;
 
 CheckSession();
 
+// *** variabili usate ovunque ***
+$SNAME = $_ENV['sesname'];
+
+
+
+
 // *** DATI UTENTE ****
-$userdata=$std->GetUserData($_ENV["sesname"],$sess_nick,$sess_password);
+$userdata=$std->GetUserData($SNAME,$sess_nick,$sess_password);
+
+// *** LINGUA UTENTE **
 if($userdata->LANG)
 {
 	$blanguage=$userdata->LANG; // Lingua di visualizzazione
@@ -233,6 +258,7 @@ else
 		break;
 	} 
 }
+
 
 
 ?>

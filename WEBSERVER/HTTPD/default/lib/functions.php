@@ -174,6 +174,9 @@ class FUNC {
 	}
 
 
+
+
+
 // *******************************
 // Redirector
 // *******************************
@@ -283,8 +286,11 @@ die();
 
 // Avvisi importanti
 
-function Notice($ntitle,$ncontent)
+function Notice($ncontent,$ntitle="")
 {
+global $blanguage;
+$lang = $this->load_lang('lang_functions', $blanguage );
+if(!$ntitle){$ntitle="Avviso importante !";}
 echo "<div class=\"errorwrap\"><h4>$ntitle</h4><p>$ncontent</p></div>";
 }
 

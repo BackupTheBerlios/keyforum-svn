@@ -219,14 +219,32 @@ if ($title) {
 </div>
 
 <?
+// avvisi ai registrati
+if ($sess_auth)
+{
+//print_r($userdata);
+//echo $userdata->IS_AUTH;
+// avvisi ai non validati
+if(!$userdata->IS_AUTH)
+{
+$me=WhoIsMe();
+if($me->is_auth)
+{
+ $userdata->IS_AUTH=$me->is_auth;
+ $std->UpdateUserData($SNAME,$userdata);
+ } else {
+   $std->Notice("Il tuo utente è in attesa di essere validato dall'admin, al momento non puoi inserire nuovi messaggi");
+}
+}
+
+
 // avvisi per l'admin
 if($userdata->LEVEL >=9)
 {
-
 // utenti in coda di validazione
-if(!$db->get_var("SELECT is_auth FROM {$SNAME}_membri ORDER BY date DESC LIMIT 1"))
-{ echo "<font color=red><b>ci sono utenti da validare !!!!</b></font>";}
-
+if(!$db->get_var("SELECT is_auth FROM {$SNAME}_membri ORDER BY date DESC LIMIT 1")) 
+  {$std->Notice("ci sono utenti da validare");}
+}
 }
 ?>
 
