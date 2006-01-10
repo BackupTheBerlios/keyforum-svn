@@ -22,7 +22,7 @@ $title=$lang['page_title'] ;
 include ("testa.php");
 
 function PageSelect() {
-global $tst;
+global $tst,$sess_auth;
 ?>
 <tr><td>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
@@ -64,9 +64,11 @@ global $tst;
     }
   }
 
-    ?>
     
-      <td align=right><a href="shownewmsg.php?allread=1"><? echo $lang['mark_all_read']; ?></a></td>
+    
+     if ($sess_auth) { echo "<td align=right><a href=\"shownewmsg.php?allread=1\">{$lang['mark_all_read']}</a></td>";}
+      ?>
+      
     </tr>
   </tbody>
 </table>
@@ -79,10 +81,9 @@ global $tst;
 
 
 <?PHP
-$SNAME=$_ENV['sesname'];
 
 $timelimit=$userdata->LASTREAD - GMT_TIME;
-if($timelimit < 1) {$timelimit=1130511594;}
+if($timelimit < 1) {$timelimit=time()-2592000;}
 
 $last24=$timelimit-86400;
 $last7g=$timelimit-604800;
