@@ -84,13 +84,16 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
            $idriga = $db->get_var($idquery);
            $req_nod[INFO][FORUM][0]=pack("H*", $idriga);
            $core   = new CoreSock;
-           if ( !(@$core->Connect()) ) echo "Core offline!";
+           if ( !(@$core->Connect()) ) echo "<font color=red>Core offline!</font>";
            else {
                  $core->Send($req_nod);
-                 if (!($risposta=$core->Read())) $std->Error ($lang['timeout']);
+                 if (!($risposta=$core->Read())) {
+                   echo "<font color=red>".($lang['timeout']."</font><br>");
+                   } else {
                  if (!$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI])
                      echo $lang['perl_noderror3'];
                  else echo $lang['perl_node1'].$risposta[INFO][FORUM][$req_nod[INFO][FORUM][0]][NUM_NODI].$lang['perl_node2'];
+                   }
            }
         ?>
         </td>
