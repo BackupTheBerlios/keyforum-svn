@@ -289,7 +289,7 @@ sub DeCryptBlowFish {
 	$GLOBAL::SERVER{fileno($kfshell)}=\&kfshell::new;
 	$GLOBAL::ctcp->AddSock($kfshell,(type=>'server')) or errore("Errore non previsto nell'aggiunta del'oggetto server SHELL\n");
 }
-print "KFSHELL: KeyForum Shell avviato ed in ascolto sulla porta ".$GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA}.".\n";
+print scalar localtime(time())." KFSHELL: KeyForum Shell listening on ".$GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA}.".\n";
 sub errore {
 	my $errore=shift;
 	die("Errore nel modulo kfshell.pm : $errore\n");

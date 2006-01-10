@@ -1,5 +1,5 @@
 BEGIN {push(@INC, './addon','./addon/lib');}
-print "INDEX: Caricamento libreria dinamiche.\n";
+print scalar localtime(time())." INDEX: Loading dynamic library.\n";
 
 use strict;
 LoadLibrary("Itami::GloIni");
@@ -16,12 +16,12 @@ LoadLibrary("Digest::MD5");
 LoadLibrary("Digest::SHA1");
 LoadLibrary("File::Glob ':glob'");
 $GLOBAL::CycleFunc=[];
-print "INDEX: Connessione a MySQL server...\n";
+print scalar localtime(time())." INDEX: Connecting to MySQL server...\n";
 $GLOBAL::ctcp=cTcp->new();
 &Init; # Connessione al server MySQL e caricamento della tabella conf.
-print "INDEX: Caricamento AddOn\n";
+print scalar localtime(time())." INDEX: Loading AddOn\n";
 &LoadAddOn;  # Carico gli addon specificati con CONFIG
-print "INDEX: Tutti gli AddOn sono stati caricati.\nINDEX: Gestione Socket iniziata.\n";
+print scalar localtime(time())." INDEX: All AddOn Loaded.\n".scalar localtime(time())." INDEX: Socket management initialized.\n";
 my ($ref,$data,$ip);
 while (1) {
 	foreach my $buf (@{$GLOBAL::CycleFunc}) {
@@ -89,10 +89,10 @@ sub LoadAddOn {
 	return undef if ref($lista) ne "HASH";
 	while (my ($key, $value)=each(%$lista)) {
 		next if lc($value) ne 'load';
-		print "INDEX: Carico $key\n";
+		print scalar localtime(time())." INDEX: Loading $key\n";
 		eval "require \"".$key.".pm\";";
 		next unless $@;
-		print "Errore nel caricamento di un addon:\n$@\n";
+		print "Error loading AddOn:\n$@\n";
 		die(Error($@));
 	}
 }

@@ -51,7 +51,7 @@ sub tab_conf {
 	$this->{TabConf}=\%tab_conf;
 	$sth=$this->{DataBase}->prepare("SELECT ".($this->{TabConf}->{Identificatore}).",".($this->{TabConf}->{Type})." FROM ".($this->{TabConf}->{Table}));
 	$sth->execute() or return Error($this->{DataBase}->errstr."\n");
-	print "KEYFORUM: Creazione indice degli HASH.\n";
+	print scalar localtime(time())." KEYFORUM: Indexing HASHES.\n";
 	$this->{DBM}->{$md5_list->[0]}=$md5_list->[1] while $md5_list=$sth->fetchrow_arrayref;
 	$sth->finish;
 	my ($query, $type, $list);
@@ -250,7 +250,7 @@ sub OffertHashBrCa { # offre una lista di hash a tutti quegli iscritti
 		$this->{Sender}->($this->{TabConf}->{ShareName},"OFF_HASH", $tmp, $arrayref);
 		$sendto++;
 	}
-	print "SHARE DB: Offerti ".($#{$arrayref}+1)." HASH nuovi a $sendto persone\n";
+	print scalar localtime(time())." SHARE DB: ".($#{$arrayref}+1)." new HASH offers to $sendto persons\n";
 	return $sendto;
 }
 sub GenericRequest { # richiede/offre una lista di hash a tutti quegli iscritti

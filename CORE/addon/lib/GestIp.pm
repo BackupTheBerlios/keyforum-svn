@@ -100,9 +100,9 @@ sub iamlive {
 	return undef unless exists $this->{iamlive};
 	if ($this->{ConteggioIP}>6) {
 		my $response = $pager->request($this->{iamlive});
-		print "Update on server:".$response->content."\n";
+		print scalar localtime(time())." Update on server:".$response->content."\n";
 	} else {
-		print "Update on server: IP request\n";
+		print scalar localtime(time())." Update on server: IP request\n";
 		my ($ip,$porta);
 		my $response = $pager->request($this->{LoadIpHttp});
 		my $page=$response->content;
