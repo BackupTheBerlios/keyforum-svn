@@ -31,15 +31,15 @@ if($rppp) {$optfield .= ",ppp"; $optvalue .= ",'$rppp'";}
 
 
 if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the user
-        if ( strlen($nick) < 3 or strlen($nick) > 30 ) die("".$lang['reg_nicknotvalid']."");
-        if ( strlen($password) < 3 or strlen($password) > 30 ) die("".$lang['reg_passnotvalid']."");
+        if ( strlen($nick) < 3 or strlen($nick) > 30 ) $std->Error("".$lang['reg_nicknotvalid']."");
+        if ( strlen($password) < 3 or strlen($password) > 30 ) $std->Error("".$lang['reg_passnotvalid']."");
         // ?? Error("Non hai i permessi per registrare un utente su questa board\n<br>") unless ForumLib::PermessiRegistrazione($ENV{sesname});
         // ?? Error("L'Antiflood che controlla le registrazioni effettuate nel sistema ti impedisce di registrare al momento, riprova più tardi\n<br>") unless ForumLib::CanRegisterFlood($ENV{sesname}, time());
         
         $identif = md5( md5($password,TRUE) . $nick );
         $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
                         . $identif . "','" . mysql_real_escape_string($privkey) . "' $optvalue)";
-        if ( !$db->query($sql_insert) ) die("".$lang['reg_usererr']."");
+        if ( !$db->query($sql_insert) ) $std->Error("".$lang['reg_usererr']."");
         else echo "".$lang['reg_importok']."";
         include ("end.php");
         exit;
@@ -56,9 +56,9 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	// e l'hash del messaggio in ['hash'] così evito di fare richieste/conti dopo
 	
 	$coresk = new CoreSock;
-	if ( !$coresk->Send($corereq) ) die("Errore in send1!");
+	if ( !$coresk->Send($corereq) ) $std->Error("Error in send1!");
 	$coreresp = $coresk->Read(120);
-	if ( !$coreresp ) die("Errore in read1!");
+	if ( !$coreresp ) $std->Error("Error in read1!");
 	$rsapub = $coreresp['RSA']['GENKEY']['pub'];		// in decimale
 	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];		// in base64
 	$PKEY = $coreresp['RSA']['GENKEY']['pkeydec'];		//pkey del forum in decimale
@@ -66,11 +66,11 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	$hash = $coreresp['RSA']['GENKEY']['hash'];
 	
 	unset($coreresp,$corereq);
-	if ( strlen($PKEY) < 120 ) die("".$lang['reg_keynotvalid']."");
+	if ( strlen($PKEY) < 120 ) $std->Error("".$lang['reg_keynotvalid']."");
 	$corereq['FUNC']['Dec2Bin'] = $rsapub;			// converto la chiave pubblica in binario
-	if ( !$coresk->Send($corereq) ) die("Error sending a request to the core!");
+	if ( !$coresk->Send($corereq) ) $std->Error("Error sending a request to the core!");
 	$coreresp = $coresk->Read();
-	if ( !$coreresp ) die("Error receiving a response from the core!");
+	if ( !$coreresp ) $std->Error("Error receiving a response from the core!");
 	$rsapub_bin = $coreresp['FUNC']['Dec2Bin'];
 	unset($coreresp, $corereq);
 	
@@ -79,18 +79,18 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	$corereq['RSA']['FIRMA'][0]['priv_key'] = md5($nick . md5($password,TRUE),TRUE);
 	$corereq['RSA']['FIRMA'][0]['priv_pwd'] = base64_decode($rsapriv);
 	
-	if ( !$coresk->Send($corereq) ) die("Errore in send2!");
+	if ( !$coresk->Send($corereq) ) $std->Error("Error in send2!");
 	$coreresp = $coresk->Read();
-	if ( !$coreresp ) die("Errore in read2!");
+	if ( !$coreresp ) $std->Error("Error in read2!");
 	
-	if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) die($coreresp['RSA']['FIRMA']["ERR" . $hash]);
+	if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) $std->Error($coreresp['RSA']['FIRMA']["ERR" . $hash]);
 	$firma_rsa = $coreresp['RSA']['FIRMA'][$hash];
 	unset($coreresp,$corereq);
 	
 	echo "Adding user into the local members table... ";
 	$sqladd = "INSERT INTO {$SNAME}_localmember (hash, password $optfield) VALUES ('"
                     . $identif . "','" . mysql_real_escape_string($rsapriv) . "' $optvalue)";
-        if ( !$db->query($sqladd) ) die("".$lang['reg_usererr']."");
+        if ( !$db->query($sqladd) ) $std->Error("".$lang['reg_usererr']."");
         else echo "Ok<br><br>";
 	
 	echo "<br>";
@@ -104,12 +104,12 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	$addreq['FORUM']['ADDMSG']['TYPE'] = '4';
 	$addreq['FORUM']['ADDMSG']['FDEST'] = pack('H*',sha1($PKEY));
 	
-	if ( !$coresk->Send($addreq) ) die("Error sending the request to the core!");
+	if ( !$coresk->Send($addreq) ) $std->Error("Error sending the request to the core!");
 	$coreresp = $coresk->Read();
-	if ( !$coreresp ) die("Error receiving response form the core!");
-	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) die("Forum unknown, cannot register the user.");
-	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) die("The Core didn't accept the message, aborting.");
-	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) echo "Ok<br><br>";
+	if ( !$coreresp ) $std->Error("Error receiving response form the core!");
+	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) $std->Error("Forum unknown, cannot register the user.");
+	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) $std->Error("The Core didn't accept the message, aborting.");
+	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) $std->Error("","","Ok");
 	include("end.php");
 	exit(0);			
 }
@@ -120,14 +120,14 @@ if (isset($submit)) {
 $upload = new http_upload('it');
 $file = $upload->getFiles('userfile');
 if (PEAR::isError($file)) {
-	die ($file->getMessage());
+	$std->Error ($file->getMessage());
 }
 if ($file->isValid()) {
 	$file->setName('uniq');
 	$dest_dir = './uploads/';
 	$dest_name = $file->moveTo($dest_dir);
 	if (PEAR::isError($dest_name)) {
-		die ($dest_name->getMessage());
+		$std->Error ($dest_name->getMessage());
 	}
 	$real = $file->getProp('real');
 	// echo "Uploaded $real as $dest_name in $dest_dir\n";
@@ -144,7 +144,7 @@ if ($file->isValid()) {
 
 $root =& $xmldata->parseConfig('uploads/'.$file->getProp('name'), 'XML');
 if (PEAR::isError($root)) {
-    die('Error reading XML config file: ' . $root->getMessage());
+    $std->Error('Error reading XML config file: ' . $root->getMessage());
 }
 
 $userdata = $root->toArray();

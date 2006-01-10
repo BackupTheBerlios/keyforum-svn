@@ -10,14 +10,14 @@ $ORDER=$_REQUEST['ORDER'];
 $PKEY=$std->getpkey($_ENV['sesname']);
 
 if ( !$MODO || !$SEZ || !$ORDER || !$PKEY )
-    die("Errore nella richiesta!\n");
+    $std->Error("Error on request!\n");
 else {
     $coreconn=new CoreSock;
     
     $convreq['FUNC']['Base642Dec']=$PKEY;
-    if ( !$coreconn->Send($convreq) ) die("Errore nell'invio della richiesta al core!\n");
+    if ( !$coreconn->Send($convreq) ) $std->Error("Error sending request to core!\n");
     $pkeydec=$coreconn->Read();
-    if ( !$pkeydec ) die("Errore nella ricezione dati dal core!\n");
+    if ( !$pkeydec ) $std->Error("Error reciving core data!\n");
     $pkeysha1=sha1($pkeydec['FUNC']['Base642Dec']);
     $forumid=pack("H*",$pkeysha1);
     
@@ -26,10 +26,10 @@ else {
     $hashreq['HASHREQ'][$forumid]['SEZ']=$SEZ;
     $hashreq['HASHREQ'][$forumid]['ORDER']=$ORDER;
     
-    if ( !$coreconn->Send($hashreq) ) die("Errore nell'invio della richiesta al core!\n");
+    if ( !$coreconn->Send($hashreq) ) $std->Error("Error sending request to core!\n");
     else {
         $resp=$coreconn->Read();
-        if ( !$resp ) die("Errore nella ricezione dati dal core!\n");
+        if ( !$resp ) $std->Error("Error reciving core data!\n");
         else 
         {
         $std->Redirect("Hash request",$_SERVER['HTTP_REFERER'],"Hash request","Request sent to " . $resp['HASHREQ'][$forumid] . " nodes");

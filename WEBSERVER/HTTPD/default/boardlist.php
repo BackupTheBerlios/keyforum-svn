@@ -59,7 +59,7 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 			 $req_dec[FUNC][Base642Dec]=$board[$i]['pkey'];
 			 $core   = new CoreSock;
 			 $core->Send($req_dec);
-			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
+			 if (!($rep_dec=$core->Read())) $std->Error ($lang['timeout']);
 		 echo "<tr>
 			<td class='row1' align='right'>".($i+1)."</td>
 			<td class='row2' align='left'>
@@ -98,7 +98,7 @@ foreach($valuewsea as $valuewse)
 			 $req_dec[FUNC][Base642Dec]=$valuewse->VALUE;
 			 $core   = new CoreSock;
 			 $core->Send($req_dec);
-			 if (!($rep_dec=$core->Read())) die ($lang['timeout']);
+			 if (!($rep_dec=$core->Read())) $std->Error ($lang['timeout']);
 			 echo "<tr>
 			<td class='row1' align='right'>".++$i."</td>
 			<td class='row2' align='left'>&nbsp;<a href=\"http://$bindwsl:$portwsl\">$valuews->SUBKEY</a></td>

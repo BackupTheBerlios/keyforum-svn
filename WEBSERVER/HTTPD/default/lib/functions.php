@@ -128,7 +128,7 @@ class FUNC {
 			/*$query = "SELECT value FROM config WHERE subkey='$sesname' AND fkey='PKEY'";
 			$pkey = $db->get_var($query);*/
 			$pkey = $config['SHARE'][$sesname]['PKEY'];
-			if(!$pkey) die("pkey vuota!\n");
+			if(!$pkey) $this->Error("empty pkey!\n");
 			return($pkey);
         }
         
@@ -427,7 +427,7 @@ return $output;
 	function n_to_month($month)
 	{
 	global $lang;
-		if($month>12 || $month<1){ die('Month range not valid. Must be 1 to 12!');}
+		if($month>12 || $month<1){ $this->Error('Month range not valid. Must be 1 to 12!');}
 
 		if($this->abbr===true)
 			return($lang['bmonth'.$month]);
@@ -438,7 +438,7 @@ return $output;
 	function n_to_day($day)
 	{
 	global $lang;
-		if($day>6 || $day<0){die('Day range not valid. Must be 0 to 6!');}
+		if($day>6 || $day<0){$this->Error('Day range not valid. Must be 0 to 6!');}
 		
 		if($this->abbr===true)
 			return($lang['bday'.$day]);

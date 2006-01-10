@@ -8,13 +8,21 @@ $corecalls=0;
 
 session_start();
 
+//--------------------------------
+// Classe per funzioni globali
+//--------------------------------
+require "lib/functions.php";
+require "lib/core.php";
+$std   = new FUNC;
+
+
 //classe PEAR per file config (XML)
 require_once "Config.php";
 $xmldata = new Config;
 
 $root =& $xmldata->parseConfig('http://'.$_SERVER['HTTP_HOST'].'/config/config.xml', 'XML');
 if (PEAR::isError($root)) {
-    die('Error reading XML config file: ' . $root->getMessage());
+    $std->Error('Error reading XML config file: ' . $root->getMessage());
 }
 
 $settings = $root->toArray();
@@ -30,9 +38,6 @@ $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
 $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['sql_host'].":".$_ENV['sql_dbport']);
 
-/*$SQL = mysql_pconnect($_ENV['sql_host'].":".$_ENV['sql_dbport'],$_ENV['sql_user'],$_ENV['sql_passwd']);
-if (!$SQL) die ("Non riesco a connettermi al server MySQL");
-if ( !mysql_select_db($_ENV['sql_dbname']) ) die("Impossibile aprire il DataBase MySQL:".mysql_error()."</br>");*/
 
 $query = "SELECT * FROM config WHERE 1";
 $result = $db->get_results($query);
@@ -187,8 +192,8 @@ function get_my_info()
 	$req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 	$req[FUNC][BlowDump2var][Data]=$privkey;
 	$core=new CoreSock;
-	if (!$core->Send($req)) return NULL; //die($lang['reply_core']);
-	if (!$risp=$core->Read()) return NULL; // die ($lang['reply_timeout']);
+	if (!$core->Send($req)) return NULL; 
+	if (!$risp=$core->Read()) return NULL; 
 	$return[0]=$risp[FUNC]["BlowDump2var"]["hash"]; 	//dell'utente loggato in questo momento
 	list($asd,$return[1]) = unpack('H*',$return[0]);
 	return ($return);
@@ -212,12 +217,6 @@ function WhoIsMe()
 
 
 
-//--------------------------------
-// Classe per funzioni globali
-//--------------------------------
-require "lib/functions.php";
-require "lib/core.php";
-$std   = new FUNC;
 
 CheckSession();
 

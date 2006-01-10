@@ -13,7 +13,7 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
         $edit_val=1;
 }
 
-if (!$GLOBALS['sess_auth']) die ($lang['reply_login']);
+if (!$GLOBALS['sess_auth']) $std->Error ($lang['reply_login']);
 
 $IDENTIFICATORE=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
 $KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
@@ -22,7 +22,7 @@ $password = $db->get_var($query);
 if(!$password)
 {
 	$std->Error($lang['reply_user'],$_REQUEST['body']);
-	die();
+	
 }
 else
 {
@@ -35,11 +35,11 @@ $req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
 $core=new CoreSock;
-if (!$core->Send($req)) die($lang['reply_core']);
-if (!$risp=$core->Read()) die ($lang['reply_timeout']);
+if (!$core->Send($req)) $std->Error($lang['reply_core']);
+if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 $PKEY=$risp[FUNC][Base642Dec];
-if ( strlen($PKEY) < 120 ) die($lang['reply_admin']);
-if ( strlen($risp[FUNC][BlowDump2var][hash]) != 16 ) die ($lang['reply_pdata']);
+if ( strlen($PKEY) < 120 ) $std->Error($lang['reply_admin']);
+if ( strlen($risp[FUNC][BlowDump2var][hash]) != 16 ) $std->Error ($lang['reply_pdata']);
 
 $userhash=$risp[FUNC][BlowDump2var][hash];
 if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
@@ -71,8 +71,8 @@ $mreq['FORUM']['ADDMSG']['MD5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['priv_key']=$KEY_DECRYPT;
 $nreq['RSA']['FIRMA'][0]['priv_pwd']=$privkey;
-if (!$core->Send($nreq)) die($lang['reply_core']);
-if (!$risp=$core->Read()) die ($lang['reply_timeout']);
+if (!$core->Send($nreq)) $std->Error($lang['reply_core']);
+if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 
 $core->Send($mreq);

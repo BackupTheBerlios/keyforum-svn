@@ -10,7 +10,6 @@ if($_REQUEST['allread'])
  $userdata->LASTREAD=$mytime;
  $std->UpdateUserData($_ENV["sesname"],$userdata);
  $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$mytime));
- die();
  }
 
 $tst=$_REQUEST['tst'];
@@ -164,7 +163,7 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   ." ORDER BY msghe.last_reply_time DESC"
   ." LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
   
- //die($query);
+
   
 $risultato=$db->get_results($query);
 if($risultato) foreach($risultato as $riga ) {
