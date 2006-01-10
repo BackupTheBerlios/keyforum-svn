@@ -214,11 +214,11 @@ $db->query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$N
 
 $db->query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
 
-?>
-<a href="searcher.pm?MODO=2&amp;REP_OF=<?php print urlencode($MSGID);?>">
-<?php echo "".$lang['shmsg_findnewmsg']."</a><br />"; ?>
+// *** convertire searcher.pm prima di attivare questa funzione ***
+//echo "<a href=\"searcher.pm?MODO=2&amp;REP_OF=".urlencode($MSGID)."\">";
+//echo $lang['shmsg_findnewmsg']."</a><br />";
 
-<?php
+
   PageSelect(1);
 
   if ($CurrPag<1)
