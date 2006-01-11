@@ -164,7 +164,7 @@ function draw_forum($sez, $level,$indice)
 				$next_id = (int) $next_id['id'];
 
 				//ultima azione
-				if($forum[$next_id]['last_action']['date'] > $max)
+				if($forum[$next_id]['last_action']['date'] > $last_action_max)
 				{
 					$last_action_max = $forum[$next_id]['last_action']['date'];
 					$last_action_id  = $next_id;
