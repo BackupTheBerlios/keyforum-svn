@@ -38,7 +38,7 @@ $lang += $std->load_lang('lang_writenewmsg', $blanguage );
     <table width="100" border="0" cellspacing="0" cellpadding="3">
       <tr>
         <td height='31' colspan='4'>
-          <? echo "<div align='center'><p><strong>".$lang['wreply_smiles']."</strong></p></div>"; ?>
+          <div align='center'><p><strong><?=$lang['wreply_smiles']?></strong></p></div>
         </td>
       </tr>
       <? include "emoticons.php"; ?>
@@ -92,7 +92,7 @@ if ($SEZ_DATA->PKEY) {
 </form>
 </div>
 
-<script language='JavaScript'>
+<script language='JavaScript' type="text/javascript">
 <? include "bbcode.php"; ?>
 </script>
 

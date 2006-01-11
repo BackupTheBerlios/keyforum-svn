@@ -6,7 +6,6 @@
  }
 -->
 </script>
-<table>
 <?
  $SNAME=$_ENV['sesname'];
  global $db;
@@ -29,4 +28,4 @@
 	}	
     
 ?>
-    <tr><td colspan="<?=$emocol?>" align="center"><a href='javascript:emopopup()'><? echo $lang['emo_showallemo']; ?></a></td></tr></table>
+    <tr><td colspan="<?=$emocol?>" align="center"><a href='javascript:emopopup()'><? echo $lang['emo_showallemo']; ?></a></td></tr>

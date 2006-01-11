@@ -131,12 +131,8 @@ function FastReply() {
 		</div>
 		<div id='colo-sx' class='post2' align='center'><br />
 			<table border='0' cellspacing='0' cellpadding='3'>
-				<tr>
-					<td height='31' colspan='4'>
-					<div align='center'><p><strong>Smiles:</strong></p></div>
-					<? include("emoticons.php");?>
-	     			</td>
-	    		</tr>
+				<div align='center'><p><strong>Smiles:</strong></p></div>
+				<? include("emoticons.php");?>
 			</table>
    		</div>
    		<div id='colo-dx'></div>
