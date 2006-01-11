@@ -129,7 +129,7 @@ function PageSelect() {
   if($num_sottoforum)
    {    
 echo "<tr> 
-          <td class='darkrow2' colspan=6>&nbsp;</td>
+          <td class='darkrow2' colspan='5'>&nbsp;</td>
         </tr></table></div>";
 }
 
