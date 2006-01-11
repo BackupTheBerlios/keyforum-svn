@@ -11,12 +11,17 @@ function PageSelect() {
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
 <?
-	global $blanguage;
+  global $blanguage;
   global $NumPag;
   global $CurrPag;
   global $Section;
   global $lang;
-  $link = "sezioni.php?SEZID=".$_REQUEST["SEZID"]."&amp;pag=";
+  $link = '?';
+  foreach($_GET as $nome=>$valore)
+  {
+  	if($nome != 'pag') 	$link .= "$nome=$valore&amp;";
+  }
+  $link .= "pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['pages']."</span>&nbsp;";
     if ($CurrPag>0) { # Pagina precedente
@@ -175,7 +180,7 @@ PageSelect();
     <th align="center" width="18%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
    </tr>
 <?PHP
-$query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
+/*$query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
   ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, read_num,newmsg.SUBTITLE as 'subtitle' "
   ." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri,{$SNAME}_membri AS repau "
   ." WHERE newmsg.EDIT_OF=msghe.HASH"
@@ -184,7 +189,27 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   ." AND membri.HASH=msghe.AUTORE "
   ." AND repau.HASH=msghe.last_reply_author"
   ." ORDER BY msghe.last_reply_time DESC"
-  ." LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
+  ." LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";*/
+  $query="
+	SELECT keyfo_msghe.hash 	as HASH
+		, keyfo_newmsg.title 	as title
+		, keyfo_newmsg.subtitle
+ 		, keyfo_msghe.pinned	as pinned
+		, keyfo_msghe.autore	as dnickhash 
+		, autore.AUTORE as dnick
+		, keyfo_msghe.last_reply_author as nickhash
+		, lastreply.AUTORE 		as nick
+		,(keyfo_msghe.DATE+".GMT_TIME.") 				AS open_date
+		,(keyfo_msghe.last_reply_time+".GMT_TIME.") 	AS last_reply_time
+		, keyfo_msghe.reply_num
+		, keyfo_msghe.read_num
+   FROM {$SNAME}_msghe
+   JOIN keyfo_membri as autore on autore.hash = keyfo_msghe.autore
+   JOIN keyfo_membri as lastreply on lastreply.hash = keyfo_msghe.last_reply_author
+   JOIN keyfo_newmsg on keyfo_newmsg.edit_of = keyfo_msghe.hash
+   WHERE keyfo_newmsg.SEZ='$SEZID' AND {$SNAME}_newmsg.visibile='1'
+   ORDER BY keyfo_msghe.pinned desc, keyfo_msghe.last_reply_time DESC
+   LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
 $risultato=$db->get_results($query);
 
 if($risultato) foreach($risultato as $riga)
@@ -201,17 +226,16 @@ if($risultato) foreach($risultato as $riga)
       $PostStatImage = "f_norm";
     else
       $PostStatImage = "f_norm_no";
-    if ($riga->nickhash)
-      $nickhash=unpack("H32alfa",$riga->nickhash);
-    else 
-      $nickhash['alfa']=''; 
-    if ($riga->dnickhash)
-      $dnickhash=unpack("H32alfa",$riga->dnickhash);
-    else 
-      $dnickhash['alfa']=''; 
-  }
+	}
   else
     $PostStatImage = "f_norm";
+	
+    $nickhash=@unpack("H32alfa",$riga->nickhash);
+    $dnickhash=@unpack("H32alfa",$riga->dnickhash);
+	
+	$pinned_img = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
+	$pinned_str = ($riga->pinned ?  "Pinned: " : '');
+		 
   $rep=$riga->reply_num;
   $i=0;
   $Pages="";
@@ -234,8 +258,8 @@ if($risultato) foreach($risultato as $riga)
   echo "
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
-  <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
+  <td align='center' class='row2'>$pinned_img</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'>".$riga->reply_num."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
   <td align=center class='row4'>".$riga->read_num."</td>
