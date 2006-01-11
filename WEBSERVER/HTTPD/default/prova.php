@@ -19,17 +19,17 @@ $hidesez=explode(",",$std->GetKFcookie("collapseprefs",$SNAME));
 $query_last= "
 select * from (
 	SELECT 
-		  keyfo_msghe.hash
-		, (keyfo_msghe.last_reply_time + ".GMT_TIME.") as last_reply_time
-		, keyfo_msghe.last_reply_author
-		, keyfo_newmsg.sez
-		, keyfo_newmsg.title
-		,keyfo_membri.autore 
-	FROM `keyfo_msghe` 
-		join keyfo_membri on keyfo_msghe.last_reply_author = keyfo_membri.hash
-		join keyfo_newmsg on keyfo_msghe.hash = keyfo_newmsg.edit_of
-	WHERE keyfo_newmsg.visibile='1'
-	ORDER BY keyfo_msghe.last_reply_time desc
+		  {$SNAME}_msghe.hash
+		, ({$SNAME}_msghe.last_reply_time + ".GMT_TIME.") as last_reply_time
+		, {$SNAME}_msghe.last_reply_author
+		, {$SNAME}_newmsg.sez
+		, {$SNAME}_newmsg.title
+		,{$SNAME}_membri.autore 
+	FROM `{$SNAME}_msghe` 
+		join {$SNAME}_membri on {$SNAME}_msghe.last_reply_author = {$SNAME}_membri.hash
+		join {$SNAME}_newmsg on {$SNAME}_msghe.hash = {$SNAME}_newmsg.edit_of
+	WHERE {$SNAME}_newmsg.visibile='1'
+	ORDER BY {$SNAME}_msghe.last_reply_time desc
 	)as asd
 GROUP BY asd.sez";
 $result_last = $db->get_results($query_last);
@@ -84,7 +84,7 @@ numfigli($ris,2,3); //NON MI CHIEDETE PERCHE' 2 e 3
 foreach($num_figli as $id => $numero)
 {
 	$id = (int)$ris[$id]['id'];
-	$forum[$id]['num_figli'] = $numero;
+	if($forum[$id])	$forum[$id]['num_figli'] = $numero;
 }
 
 
@@ -156,35 +156,24 @@ function draw_forum($sez, $level,$indice)
 			$notfirst=0;
 			$subsections="";
 			
-			$last_action_id = $sez['SEZ_ID'];
-			$last_action_max = $sez['last_action']['date'];
 			for($i=0;$i<$sez['num_figli'];$i++)
 			{
 				$next_id = $ris[$indice+$i+1];
 				$next_id = (int) $next_id['id'];
-
-				//ultima azione
-				if($forum[$next_id]['last_action']['date'] > $last_action_max)
-				{
-					$last_action_max = $forum[$next_id]['last_action']['date'];
-					$last_action_id  = $next_id;
-				}
-				//numero discussioni e risposte
-				$num_sotto_reply += $forum[$next_id]['REPLY_NUM'];
-				$num_sotto_thr += $forum[$next_id]['THR_NUM'];
-				
+			
 				if($notfirst)
     		     $subsections .= ", <b><a href='sezioni.php?SEZID={$forum[$next_id]['SEZ_ID']}'>".secure_v($forum[$next_id]['SEZ_NAME'])."</a></b>";
 		        else
 		          $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID={$forum[$next_id]['SEZ_ID']}'>".secure_v($forum[$next_id][SEZ_NAME])."</a></b>";
 		       $notfirst=1;
 			}
+			//Ultimo messaggio
+			$sez['last_action'] = last_action($sez,$indice);
+			//Numero messaggi
+			list($num_sotto_reply,$num_sotto_thr) = get_reply_thr($sez,$indice);
 			$sez['REPLY_NUM'] += $num_sotto_reply ;
 			$sez['THR_NUM'] += $num_sotto_thr;
-			if($last_action_id != $sez['SEZ_ID'])
-			{
-				$sez['last_action'] = $forum[$last_action_id]['last_action'];
-			}
+
 			
 			$write_date=$std->PostDate($sez['last_action']['date']);
 			$hash = @unpack("H32alfa",$sez['last_action']['thr_hash']);
@@ -206,8 +195,6 @@ function draw_forum($sez, $level,$indice)
 			<td class="row2" align="center">'.$sez['THR_NUM'].'</td>
 			<td class="row2" align="center">'.$sez['REPLY_NUM'].'</td>
 			<td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$sez['last_action']['sez_id'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($sez['last_action']['autore']).'</a></td>';
-			
-		
 		break;
 	}
 }
@@ -234,6 +221,45 @@ function numfigli($a,$i,$j)
 			$j = numfigli($a,$j-1,$j);
 		}
 	}
+}
+function last_action($current,$indice)
+{
+	global $forum,$ris;
+	$max = $current['last_action']['date'];
+	$return = $current['last_action'];
+	
+	for($i=0;$i<$current['num_figli'];$i++)
+	{
+		$next_id = $ris[$indice+$i+1];
+		$next_id = (int) $next_id['id'];
+		$tmp = last_action($forum[$next_id],$indice+$i+1);
+		if($tmp['date'] > $max)
+		{
+			$max = $tmp['date'];
+			$return = $tmp;
+		}
+	}
+	return $return;
+}
+
+
+function get_reply_thr($current,$indice)
+{
+	global $forum,$ris;
+	
+	$rep = $current['REPLY_NUM'];
+	$thr = $current['THR_NUM'];
+	
+	for($i=0;$i<$current['num_figli'];$i++)
+	{
+		$next_id = $ris[$indice+$i+1];
+		$next_id = (int) $next_id['id'];
+		list($sotto_rep,$sotto_thr) = get_reply_thr($forum[$next_id],$indice+$i+1);
+		$rep += $sotto_rep;
+		$thr += $sotto_thr;
+	}
+	$return = Array($rep,$thr);
+	return $return;
 }
 
 ?>
