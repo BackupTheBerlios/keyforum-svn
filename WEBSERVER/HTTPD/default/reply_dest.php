@@ -14,7 +14,7 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
         $edit_val=1;
 }
 
-if (!$GLOBALS['sess_auth']) $std->Error ($lang['reply_login']);
+if (!$GLOBALS['sess_auth']) $std->Error ($lang['reply_login'],$_REQUEST['body']);
 
 $IDENTIFICATORE=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
 $KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
@@ -26,7 +26,7 @@ $req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
 $core=new CoreSock;
-if (!$core->Send($req)) $std->Error($lang['reply_core']);
+if (!$core->Send($req)) $std->Error($lang['reply_core'],$_REQUEST['body']);
 
 // timeout ?
 if (!$risp=$core->Read()) 
@@ -42,7 +42,7 @@ if ( strlen($PKEY) < 120 )
 $std->Error($lang['reply_admin'],$_REQUEST['body']);
 }
 
-if (strlen($risp[FUNC][BlowDump2var][hash])!=16) $std->Error ($lang['reply_pdata']);
+if (strlen($risp[FUNC][BlowDump2var][hash])!=16) $std->Error ($lang['reply_pdata'],$_REQUEST['body']);
 
 $userhash=$risp[FUNC][BlowDump2var][hash];
 if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
@@ -50,11 +50,11 @@ $userhash=mysql_real_escape_string($userhash);
 
 $banquery="SELECT ban FROM $SNAME" . "_membri WHERE HASH='$userhash';";
 $banned=$db->get_var($banquery);
-if ( $banned ) $std->Error($lang['reply_ban']);
+if ( $banned ) $std->Error($lang['reply_ban'],$_REQUEST['body']);
 
 $querysql="SELECT count(1) FROM {$SNAME}_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
 $sqlresult=$db->get_var($querysql);
-if (!$sqlresult) $std->Error($lang['reply_mnf']);
+if (!$sqlresult) $std->Error($lang['reply_mnf'],$_REQUEST['body']);
 $mreq['FORUM']['ADDMSG'];
 $mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
 $mreq['FORUM']['ADDMSG']['REP_OF']=$MSG_HASH;
@@ -75,8 +75,8 @@ $mreq['FORUM']['ADDMSG']['MD5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['priv_key']=$KEY_DECRYPT;
 $nreq['RSA']['FIRMA'][0]['priv_pwd']=$privkey;
-if (!$core->Send($nreq)) $std->Error($lang['reply_core']);
-if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
+if (!$core->Send($nreq)) $std->Error($lang['reply_core'],$_REQUEST['body']);
+if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout'],$_REQUEST['body']);
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 #$mreq[FORUM][ADDMSG]=$REP_DATA;
 
