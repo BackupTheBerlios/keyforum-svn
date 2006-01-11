@@ -47,7 +47,7 @@ else {
     $num = $riga;
   else
     $num = 0;
-
+ 
   echo "Sono stati trovati <b>$num</b> post che soddisfano la ricerca.<br><br>";
 
   $SQLQuery1 = "SELECT msg.hash, msg.edit_of as rep_of, msg.sez, msg.edit_of, msg.type, msg.date, msg.title, msg.subtitle, msg.body FROM {$SNAME}_newmsg as msg $NickTable where visibile = '1' and $where";
@@ -71,7 +71,7 @@ $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p>".$SEZ_DATA['SEZ_NAME']."</p>";
+	echo "<p>".$SEZ_DATA->SEZ_NAME."</p>";
     ?>
   </div>
   <table cellspacing="1">
