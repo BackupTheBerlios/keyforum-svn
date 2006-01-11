@@ -155,7 +155,7 @@ function FastReply() {
 						<input type='button' name='nfr' onclick="show_hide('FastReply');" value='<?=$lang['shmsg_hidefp']?>' accesskey='h' />
 						</center><br />
 					</td>
-					<td>ASD
+					<td>
 					</td>
 				</tr>
 			</table>
