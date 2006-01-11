@@ -1,5 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-11:
+mmorselli:				[MOD] migliorato modulo gestione IP
+
 2006-01-10:
 mmorselli:				[ADD] avvisi agli utenti in attesa di validazione
 
