@@ -114,8 +114,10 @@ var remove_pressed = 0;
 <? echo " <div class=\"formsubtitle\">".$lang['optavt_avataropt']."</div>"; ?>
 	<? echo" ".$lang['optavt_info1'].""; ?>
 <? echo" <div class=\"formsubtitle\">".$lang['optavt_current']."</div>"; ?>
-<div class=\"tablepad\" align=\"center\"><img src='<?=$current_avatar?>' border='0'  alt='' /><br /><? echo"".$lang['optavt_info2']."</div>"; ?>
-<? echo" <div class=\"formsubtitle\">".$lang['optavt_preext']."</div>"; ?>
+<div class='tablepad' align='center'>
+	<img src='<?=$current_avatar?>' border='0'  alt='' /><br /><?=$lang['optavt_info2']?>
+</div>
+<div class='formsubtitle'><?=$lang['optavt_preext']?></div>
 <form action="http://www.keyforum.net/forum/index.php?act=UserCP&amp;CODE=getgallery" method="post">
 	<table cellspacing="0" width="100%">
 		<tr>
@@ -126,7 +128,7 @@ var remove_pressed = 0;
 					<option value='IPB_Community_Pack'>IPB Community Pack</option>
 					<option value='Smiley_Avatars'>Smiley Avatars</option>
 				</select>&nbsp;&nbsp;
-				<? echo "<input type=\"submit\" value=\"".$lang['optavt_submit']."\" name=\"submit\" />"; ?>
+				<input type='submit' value='<?=$lang['optavt_submit']?>' name='submit' />
 			</td>
 		</tr>
 	</table>
@@ -134,7 +136,7 @@ var remove_pressed = 0;
 <form action="" method="post"  enctype='multipart/form-data' name="creator" onsubmit="return checkform();">
 <input type="hidden" name="MEM_ID" value="<?=$mem_id?>" />
 <input type='hidden' name='MAX_FILE_SIZE' value='9000000' />
-<? echo "<div class=\"formsubtitle\">".$lang['optavt_avtprsnl']."</div>"; ?>
+<div class='formsubtitle'><?=$lang['optavt_avtprsnl']?></div>
 <table cellspacing="0"  width="100%">
 	<tr>
 		<? echo "<td class=\"pformleft\" >".$lang['optavt_url']."</td>"; ?>
@@ -166,7 +168,7 @@ var remove_pressed = 0;
 </table>
 	<!-- end main CP area -->
 
-	</tr></td>
+	</td></tr>
 
 <?php 
 } //end postback

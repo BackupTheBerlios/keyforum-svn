@@ -74,11 +74,11 @@ $membertitle=$std->MemberTitle($member_titles,$MSG->msg_num);
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
 <tr>
  <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></span>
-   <a name={$postid}></a>
+   <a name='{$postid}'></a>
  </td>
  <td class='row4' valign='top' width='99%'>
   <div align='left' class='row4' style='float:left;padding-top:4px;padding-bottom:4px'>
-   <span class='postdetails'><b>{$lang['shmsg_sendon']}</b>{$write_date}</span></b>
+   <span class='postdetails'><b>{$lang['shmsg_sendon']}</b>{$write_date}</span>
   </div>
   <div align='right'>
   </div>
@@ -110,8 +110,14 @@ EOF;
  }
  
  if($title) {
- echo "<table border='1' bordercolor='#DEDEFF' cellspacing='0' cellpadding='0' width='100%'><tr><td bordercolor='#F0F0FF' class='postdetails'><b>{$lang['shmsg_title']}</b> ";
- echo secure_v($title)."</td></tr></table><br />";
+ echo "<table border='1' bordercolor='#DEDEFF' cellspacing='0' cellpadding='0' width='100%' class='post_title'>
+ 		<tr>
+			<td bordercolor='#F0F0FF' class='postdetails'>
+				<b>{$lang['shmsg_title']}</b>
+				".secure_v($title)."
+			</td>
+		</tr>
+	   </table><br />";
  }
  
  $tmp=unpack("H32mshash", $MSG->edit_of);

@@ -4,7 +4,7 @@ include "testa.php";
 
 ?>
 
-<script language="JavaScript">
+<script language="JavaScript" type="text/javascript">
 <!--
 function  KeyRingPopUp(retform,retfield) {
       

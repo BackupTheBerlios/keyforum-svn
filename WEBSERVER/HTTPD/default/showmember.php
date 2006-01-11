@@ -155,7 +155,6 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 				<!--{WARN_LEVEL}-->
 			</td>
 			<td width="30%" align="center" nowrap="nowrap"  valign="top" class="row1">
-				<fieldset>
 					<table cellspacing="0">
 						<tr>
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
@@ -172,7 +171,6 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
 							<td width="99%"><a href=""><? echo" ".$lang['shmbr_ignore']." "; ?></a></td>
 						</tr>					</table>
-				</fieldset>
 			</td>
 		</tr>
 	</table>
@@ -213,7 +211,7 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_lastactive']." "; ?></b></td>
 					<td class="row1">
 						<?=$user['last_action']['data']?> in 
-						<a href='showmsg.php?SEZID=<?=$user['last_action']['sez']?>=&THR_ID=<?=$user['last_action']['reply_id']?>&pag=last#end_page'><?=$user['last_action']['title']?></a> 
+						<a href='showmsg.php?SEZID=<?=$user['last_action']['sez']?>=&amp;THR_ID=<?=$user['last_action']['reply_id']?>&amp;pag=last#end_page'><?=$user['last_action']['title']?></a> 
 					</td>
 				</tr>
 <?php } //END SEZ DATA?>

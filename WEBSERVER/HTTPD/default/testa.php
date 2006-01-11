@@ -74,7 +74,7 @@ function confirmThis(url) {
 
 <div class="borderwrap">
   <div id="logostrip">
-    <div id="logographic" OnMouseOver="this.className='cursor';" onclick="location.href='index.php'"></div>
+    <div id="logographic" OnMouseOver="this.className='cursor';" onClick="location.href='index.php'"></div>
   </div>
   <div id="submenu">
     <p class="home">

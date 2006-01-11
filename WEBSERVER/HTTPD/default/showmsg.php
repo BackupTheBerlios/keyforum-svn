@@ -97,77 +97,71 @@ function PageSelect($pos) {
 }
 
 function FastReply() {
-	global $lang;
-	echo "<script language='JavaScript'>";
-        include "bbcode.php";
-	echo"
-		</script>
-		<script type=\"text/javascript\">
-		<!--
-		function altezze(){
-			co1 = document.getElementById('colo-sx').offsetHeight;
-			co2 = document.getElementById('colo-dx').offsetHeight;
-			co3 = document.getElementById('centrale').offsetHeight;
-			altok = co1;
-			if (co2 > altok) altok = co2;
-			if (co3 > altok) altok = co3;
-			altokok = co1;
-			if (co2 < altokok) altokok = co2;
-			if (co3 < altokok) altokok = co3;
-			document.getElementById('colo-sx').style.height = altok + 'px';
-			document.getElementById('colo-dx').style.height = altok + 'px';
-			document.getElementById('centrale').style.height = altok + 'px';
-			document.getElementById('FastReply').style.height = altokok + 'px';
-		}
-		//-->
-		</script>
+	global $lang;?>
+	<script language='JavaScript' type='text/javascript'>
+        <? include "bbcode.php";?>
+	</script>
 
-		<div id=\"FastReply\" style=\"visibility:hidden;display:none;\" class='post2'>
+	<script type='text/javascript' language="javascript">
+	<!--
+	function altezze(){
+		co1 = document.getElementById('colo-sx').offsetHeight;
+		co2 = document.getElementById('colo-dx').offsetHeight;
+		co3 = document.getElementById('centrale').offsetHeight;
+		altok = co1;
+		if (co2 > altok) altok = co2;
+		if (co3 > altok) altok = co3;
+		altokok = co1;
+		if (co2 < altokok) altokok = co2;
+		if (co3 < altokok) altokok = co3;
+		document.getElementById('colo-sx').style.height = altok + 'px';
+		document.getElementById('colo-dx').style.height = altok + 'px';
+		document.getElementById('centrale').style.height = altok + 'px';
+		document.getElementById('FastReply').style.height = altokok + 'px';
+	}
+	//-->
+	</script>
+
+	<div id='FastReply' style='visibility:hidden;display:none;' class='post2'>
 		<form method=post action='reply_dest.php'>
-			<input type=hidden name=\"sezid\" value='{$_REQUEST[SEZID]}' />
-			<input type=hidden name=\"repof\" value='{$_REQUEST[THR_ID]}' />
-		<div id=\"head01\" align=left class='maintitle'>
+			<input type='hidden' name='sezid' value='<?=$_REQUEST[SEZID]?>' />
+			<input type='hidden' name='repof' value='<?=$_REQUEST[THR_ID]?>' />
+		<div id='head01' align=left class='maintitle'>
 			FastReply:
 		</div>
-		<div id=\"colo-sx\" class='post2' align='center'>
-					<br />
-   		<table border=\"0\" cellspacing=\"0\" cellpadding=\"3\">
-    		<tr>
-     			<td height='31' colspan='4'>
-      			<div align='center'><p><strong>Smiles:</strong></p></div>
-     			</td>
-    		</tr>";
-        include "emoticons.php";
-    	echo "</table>
+		<div id='colo-sx' class='post2' align='center'><br />
+			<table border='0' cellspacing='0' cellpadding='3'>
+				<tr>
+					<td height='31' colspan='4'>
+					<div align='center'><p><strong>Smiles:</strong></p></div>
+					<? include("emoticons.php");?>
+	     			</td>
+	    		</tr>
+			</table>
    		</div>
-   		<div id=\"colo-dx\"></div>
-  		<div id=\"centrale\" class='post2' align=center>
-		<br />
-		<table border='0' cellspacing='0' cellpadding='0'>
-		 <tr>
-		  <td align='center'>";
-	include "buttons.php";
-	echo "	  </td>
-		  <td width='100%'>
-		 </tr>
-		 <tr>
-		  <td>
-			<textarea name=\"body\" rows=\"8\" cols=\"70\" wrap=\"virtual\" onselect=\"storeCaret(this);\" onclick=\"storeCaret(this);\" onkeyup=\"storeCaret(this);\"></textarea>
-			<br /><br />
-			<center>
-			<input type='submit' name='submit' value='".$lang['shmsg_submit']."' accesskey='s' />
-			<input type='button' name='nfr' onclick=\"show_hide('FastReply');\" value='".$lang['shmsg_hidefp']."' accesskey='h' />
-			</center>
-			<br />
-		  </td>
-		  <td>
-		  </td>
-		 </tr>
-		</table>
+   		<div id='colo-dx'></div>
+  		<div id='centrale' class='post2' align='center'><br />
+			<table border='0' cellspacing='0' cellpadding='0'>
+				<tr>
+					<td align='center'>
+						<? include "buttons.php"; ?>
+					</td>
+				</tr>
+		 		<tr>
+					<td>
+						<textarea name='body' rows='8' cols='70' wrap='virtual' onselect='storeCaret(this);' onclick='storeCaret(this);' onkeyup='storeCaret(this);'></textarea><br /><br />
+						<center>
+						<input type='submit' name='submit' value='<?=$lang['shmsg_submit']?>' accesskey='s' />
+						<input type='button' name='nfr' onclick="show_hide('FastReply');" value='<?=$lang['shmsg_hidefp']?>' accesskey='h' />
+						</center><br />
+					</td>
+					<td>ASD
+					</td>
+				</tr>
+			</table>
 		</div>
 		</form>
-		</div>
-	";
+		</div><? //end FastReply();
 }
 
 ?>

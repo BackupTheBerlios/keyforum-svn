@@ -546,7 +546,7 @@ function MemberTitle($member_titles,$msgnum)
 
  for ($i = 1; $i <= $pips; ++$i)
   	{
-  	$membertitle['pips'] .= "<img src='img/pip.gif'>";
+  	$membertitle['pips'] .= "<img src='img/pip.gif' alt='-'>";
   	}
 
 return $membertitle;

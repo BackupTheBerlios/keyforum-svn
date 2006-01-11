@@ -20,7 +20,7 @@ list($user_hash,$user_id) = get_my_info($SNAME);
 if (!$sess_auth) {
     $url = "login.php";
     echo "<tr><td><center>".$lang['sign_login']."<br>";
-    echo "".$lang['reply_loginred']."</center></td></tr><script language=\"javascript\">setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";
+    echo "".$lang['reply_loginred']."</center></td></tr><script language=\"javascript\" type='text\javasript'>setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";
     include ("end.php");
     exit(0);
   }
@@ -68,7 +68,7 @@ if(!$is_post_back)
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
 			<? echo "<div class=\"maintitle\">".$lang['optsign_welcome']."</div>"; ?>
-			<script type="text/javascript">
+			<script type="text/javascript" language="javascript">
 			<!--
 			var MessageMax  = "10000";
 			var Override    = "";
@@ -112,7 +112,7 @@ if(!$is_post_back)
 <table cellspacing="0" align="center">
 	<tr>
 		<td align="center">
-			<script language='JavaScript'>
+			<script language='JavaScript' type="text/javascript">
 <? include "bbcode.php"; ?>
 </script>
 			<? include('buttons.php')?>
@@ -134,7 +134,7 @@ if(!$is_post_back)
 	</tr>
 </table>
 	<!-- end main CP area -->
-	</tr></td>
+	</td></tr>
 
 <?php 
 } //end postback

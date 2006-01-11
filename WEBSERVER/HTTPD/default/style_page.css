@@ -82,7 +82,7 @@ option.sub { font-weight:bold;color:#555 }
 .edit { font-size: 9px }
 
 .signature   { font-size: 10px; color: #339 }
-.postdetails { font-size: 10px }
+.postdetails { font-size: 10px; }
 .postcolor   { font-size: 12px; line-height: 160% }
 
 .normalname { font-size: 12px; font-weight: bold; color: #003 }
