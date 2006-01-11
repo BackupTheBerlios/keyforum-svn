@@ -171,8 +171,8 @@ function draw_forum($sez, $level,$indice)
 			$sez['last_action'] = last_action($sez,$indice);
 			//Numero messaggi
 			list($num_sotto_reply,$num_sotto_thr) = get_reply_thr($sez,$indice);
-			$sez['REPLY_NUM'] += $num_sotto_reply ;
-			$sez['THR_NUM'] += $num_sotto_thr;
+			$sez['REPLY_NUM'] = $num_sotto_reply ;
+			$sez['THR_NUM'] = $num_sotto_thr;
 
 			
 			$write_date=$std->PostDate($sez['last_action']['date']);
