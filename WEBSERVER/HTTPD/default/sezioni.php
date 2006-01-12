@@ -179,6 +179,12 @@ PageSelect();
     <th align="center" width="7%" class='titlemedium'><?PHP echo $lang['toppic_views'] ?></th>
     <th align="center" width="18%" class='titlemedium'><?PHP echo $lang['topic_laction'] ?></th>
    </tr>
+
+ 
+
+
+
+
 <?PHP
 /*$query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
   ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, read_num,newmsg.SUBTITLE as 'subtitle' "
@@ -218,6 +224,8 @@ PageSelect();
 
 $risultato=$db->get_results($query);
 
+
+
 if($risultato) foreach($risultato as $riga)
 {
   $iden=unpack("H32hex",$riga->HASH);
@@ -241,14 +249,38 @@ if($risultato) foreach($risultato as $riga)
 	
 
     // pinned
-	$post_icon = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
-	$pinned_str = ($riga->pinned ?  "<b>Pinned: </b>" : '');
+    if ($riga->pinned)
+    {
+    $post_icon="<img src='img/pinned.gif' alt='Pinned!'>";
+    $pinned_str="<b>Pinned: ";
+    $pinned_close="</b>";
+    $ispin=true;
+    } else
+    {
+    $post_icon="";
+    $pinned_str="";
+    $pinned_close="";
+    $ispin=false;
+    }
+    
 
     // closed
 	if ($riga->closed)  {$PostStatImage = "f_closed";}
 
     // fixed
 	if ($riga->fixed)  {$PostStatImage = "f_fixed";}
+
+// *** separatore: inizio post in evidenza ***
+if($ispin AND !$stop_pin)
+{
+echo "    <tr>
+      <td align='center' class='darkrow1'>&nbsp;</td>
+      <td align='center' class='darkrow1'>&nbsp;</td>
+	  <td align='left' class='darkrow1' colspan='5' style='padding:6px'><b>Discussioni in rilievo</b></td>
+    </tr>";
+$stop_pin=true;
+}
+
 
 		 
   $rep=$riga->reply_num;
@@ -273,16 +305,30 @@ if($risultato) foreach($risultato as $riga)
   }else{
      $title=$riga->title;
   }
+
+// *** separatore: fine post in evidenza ***
+if (!$ispin AND $stop_pin AND !$stop_not_pin)
+{
+echo "<td align='center' class='darkrow1'>&nbsp;</td>";
+echo "<td align='center' class='darkrow1'>&nbsp;</td>";
+echo "<td align='left' class='darkrow1' colspan='5' style='padding:6px'><b>Altre discussioni</b></td>";
+$stop_not_pin=true;
+}
+
   echo "
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
   <td align='center' class='row2'>$post_icon</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'>".$riga->reply_num."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
   <td align=center class='row4'>".$riga->read_num."</td>
   <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga->dnick)."</a></b></small></tD>
 </tr>\n";
+
+
+
+
 }
 
 
