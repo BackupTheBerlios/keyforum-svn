@@ -191,24 +191,24 @@ PageSelect();
   ." ORDER BY msghe.last_reply_time DESC"
   ." LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";*/
   $query="
-	SELECT keyfo_msghe.hash 	as HASH
-		, keyfo_newmsg.title 	as title
-		, keyfo_newmsg.subtitle
- 		, keyfo_msghe.pinned	as pinned
-		, keyfo_msghe.autore	as dnickhash 
+	SELECT {$SNAME}_msghe.hash 	as HASH
+		, {$SNAME}_newmsg.title 	as title
+		, {$SNAME}_newmsg.subtitle
+ 		, {$SNAME}_msghe.pinned	as pinned
+		, {$SNAME}_msghe.autore	as dnickhash 
 		, autore.AUTORE as dnick
-		, keyfo_msghe.last_reply_author as nickhash
+		, {$SNAME}_msghe.last_reply_author as nickhash
 		, lastreply.AUTORE 		as nick
-		,(keyfo_msghe.DATE+".GMT_TIME.") 				AS open_date
-		,(keyfo_msghe.last_reply_time+".GMT_TIME.") 	AS last_reply_time
-		, keyfo_msghe.reply_num
-		, keyfo_msghe.read_num
+		,({$SNAME}_msghe.DATE+".GMT_TIME.") 				AS open_date
+		,({$SNAME}_msghe.last_reply_time+".GMT_TIME.") 	AS last_reply_time
+		, {$SNAME}_msghe.reply_num
+		, {$SNAME}_msghe.read_num
    FROM {$SNAME}_msghe
-   JOIN keyfo_membri as autore on autore.hash = keyfo_msghe.autore
-   JOIN keyfo_membri as lastreply on lastreply.hash = keyfo_msghe.last_reply_author
-   JOIN keyfo_newmsg on keyfo_newmsg.edit_of = keyfo_msghe.hash
-   WHERE keyfo_newmsg.SEZ='$SEZID' AND {$SNAME}_newmsg.visibile='1'
-   ORDER BY keyfo_msghe.pinned desc, keyfo_msghe.last_reply_time DESC
+   JOIN {$SNAME}_membri as autore on autore.hash = {$SNAME}_msghe.autore
+   JOIN {$SNAME}_membri as lastreply on lastreply.hash = {$SNAME}_msghe.last_reply_author
+   JOIN {$SNAME}_newmsg on {$SNAME}_newmsg.edit_of = {$SNAME}_msghe.hash
+   WHERE {$SNAME}_newmsg.SEZ='$SEZID' AND {$SNAME}_newmsg.visibile='1'
+   ORDER BY {$SNAME}_msghe.pinned desc, {$SNAME}_msghe.last_reply_time DESC
    LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
 $risultato=$db->get_results($query);
 
