@@ -85,6 +85,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = str_replace("[TOPIC-PINNED]", "<!--TOPIC-PINNED-->", $text);
   $text = str_replace("[TOPIC-CLOSED]", "<!--TOPIC-CLOSED-->", $text);
   $text = str_replace("[TOPIC-HIDDEN]", "<!--TOPIC-HIDDEN-->", $text);
+  $text = str_replace("[TOPIC-FIXED]", "<!--TOPIC-FIXED-->", $text);
   $text = str_replace("[TOPIC-SPECIAL]", "<!--TOPIC-SPECIAL-->", $text);
   $text = str_replace("[TOPIC-HOME]", "<!--TOPIC-HOME-->", $text);
  

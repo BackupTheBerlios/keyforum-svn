@@ -194,7 +194,11 @@ PageSelect();
 	SELECT {$SNAME}_msghe.hash 	as HASH
 		, {$SNAME}_newmsg.title 	as title
 		, {$SNAME}_newmsg.subtitle
- 		, {$SNAME}_msghe.pinned	as pinned
+		
+		, {$SNAME}_newmsg.body like '%[TOPIC-PINNED]%' as pinned
+		, {$SNAME}_newmsg.body like '%[TOPIC-CLOSED]%' as closed
+		, {$SNAME}_newmsg.body like '%[TOPIC-FIXED]%' as fixed
+		
 		, {$SNAME}_msghe.autore	as nickhash 
 		, autore.AUTORE as nick
 		, {$SNAME}_msghe.last_reply_author as dnickhash
@@ -208,8 +212,11 @@ PageSelect();
    JOIN {$SNAME}_membri as lastreply on lastreply.hash = {$SNAME}_msghe.last_reply_author
    JOIN {$SNAME}_newmsg on {$SNAME}_newmsg.edit_of = {$SNAME}_msghe.hash
    WHERE {$SNAME}_newmsg.SEZ='$SEZID' AND {$SNAME}_newmsg.visibile='1'
-   ORDER BY {$SNAME}_msghe.pinned desc, {$SNAME}_msghe.last_reply_time DESC
+   ORDER BY pinned desc, {$SNAME}_msghe.last_reply_time DESC
    LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
+
+// die($query);
+
 $risultato=$db->get_results($query);
 
 if($risultato) foreach($risultato as $riga)
@@ -236,7 +243,7 @@ if($risultato) foreach($risultato as $riga)
 
 	// $riga->pinned=1;
 	$pinned_img = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
-	$pinned_str = ($riga->pinned ?  "Pinned: " : '');
+	$pinned_str = ($riga->pinned ?  "<b>Pinned: </b>" : '');
 		 
   $rep=$riga->reply_num;
   $i=0;
