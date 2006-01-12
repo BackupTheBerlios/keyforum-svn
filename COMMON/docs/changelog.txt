@@ -1,6 +1,9 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 2006-01-11:
+mmorselli:				[ADD] gestione provvisoria di discussioni chiuse, in evidenza, ecc..
+
+2006-01-11:
 mmorselli:				[MOD] migliorato modulo gestione IP
 
 2006-01-10:

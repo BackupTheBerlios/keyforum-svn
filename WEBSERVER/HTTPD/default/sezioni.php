@@ -215,7 +215,6 @@ PageSelect();
    ORDER BY pinned desc, {$SNAME}_msghe.last_reply_time DESC
    LIMIT ".($CurrPag*$ThreadXPage).",$ThreadXPage;";
 
-// die($query);
 
 $risultato=$db->get_results($query);
 
@@ -241,9 +240,15 @@ if($risultato) foreach($risultato as $riga)
     $dnickhash=@unpack("H32alfa",$riga->dnickhash);
 	
 
-	// $riga->pinned=1;
-	$pinned_img = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
+    // closed
+	if ($riga->closed)  {$PostStatImage = "f_closed";}
+
+    // pinned
+	$post_icon = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
 	$pinned_str = ($riga->pinned ?  "<b>Pinned: </b>" : '');
+
+
+
 		 
   $rep=$riga->reply_num;
   $i=0;
@@ -270,7 +275,7 @@ if($risultato) foreach($risultato as $riga)
   echo "
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
-  <td align='center' class='row2'>$pinned_img</td>
+  <td align='center' class='row2'>$post_icon</td>
   <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'>".$riga->reply_num."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>

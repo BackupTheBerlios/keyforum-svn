@@ -23,6 +23,7 @@ function PageSelect($pos) {
   global $Section;
   global $blanguage;
   global $lang;
+  global $closed;
   $link = "showmsg.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['shmsg_pages']."</span>&nbsp;";
@@ -56,7 +57,17 @@ function PageSelect($pos) {
     ?>
     </td>
     <td align="right" width="80%">
-      <a href="reply.php?SEZID=<?=$_REQUEST["SEZID"]?>&amp;THR_ID=<?=$_REQUEST["THR_ID"]?>"><img src='img/buttons/<?=$blanguage?>/t_reply.gif' border='0' alt='Rispondi' /></a>
+      
+      <?
+	if ($closed)
+
+	{
+	echo "<img src='img/buttons/$blanguage/t_closed.gif' border='0' alt='Closed' />";
+	} else {
+	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&THR_ID={$_REQUEST['THR_ID']}\"><img src='img/buttons/$blanguage/t_reply.gif' border='0' alt='Rispondi' /></a>";    
+       }
+     ?>
+
     </td>
     <td align="right" width="80%">
       <a href="writenewmsg.php?SEZID=<?=$_REQUEST[SEZID]?>" class="normalname"><img src='img/buttons/<?=$blanguage?>/t_new.gif' border='0' alt='Apri Nuovo Topic' /></a>
@@ -90,7 +101,19 @@ function PageSelect($pos) {
 	}else{
 	  $logged="login.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;pag=".$_REQUEST["pag"];
 	}
-  	echo "</td><td align='right' width='80%' class='normalname'><a href=\"$logged\"><img src='img/buttons/".$blanguage."/t_qr.gif' border='0' alt='FastReply' /></a></td><td align='right' width='80%'><a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&amp;THR_ID={$_REQUEST['THR_ID']}\"><img src=\"img/buttons/".$blanguage."/t_reply.gif\" border=\"0\" alt=\"Rispondi\" /></a></td><td align='right' width='80%'><a href=\"writenewmsg.php?SEZID={$_REQUEST['SEZID']}\" class=\"normalname\"><img src=\"img/buttons/".$blanguage."/t_new.gif\" border=\"0\" alt=\"Apri Nuovo Topic\" /></a></td></tr>\n";
+  	echo "</td><td align='right' width='80%' class='normalname'><a href=\"$logged\">";
+  	
+  	if (!$closed) {echo "<img src='img/buttons/".$blanguage."/t_qr.gif' border='0' alt='FastReply' /></a>";}
+  	
+  	echo "</td><td align='right' width='80%'>";
+  	
+  	if ($closed) {
+  	echo "<img src=\"img/buttons/".$blanguage."/t_closed.gif\" border=\"0\" alt=\"Closed\" />";
+  	} else {
+  	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&amp;THR_ID={$_REQUEST['THR_ID']}\"><img src=\"img/buttons/".$blanguage."/t_reply.gif\" border=\"0\" alt=\"Rispondi\" /></a>";
+  	}
+  	
+  	echo "</td><td align='right' width='80%'><a href=\"writenewmsg.php?SEZID={$_REQUEST['SEZID']}\" class=\"normalname\"><img src=\"img/buttons/".$blanguage."/t_new.gif\" border=\"0\" alt=\"Apri Nuovo Topic\" /></a></td></tr>\n";
 
   }
   echo "</tbody>\n</table>\n";
@@ -180,6 +203,9 @@ $query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autor
 .";"
 ;
 $riga=$db->get_row($query);
+
+$closed=strpos($riga->body,"[TOPIC-CLOSED]");
+
 
 if (!$riga) {
   echo "".$lang['shmsg_msgnotfound']."\n\t</td>\n</tR>\n";
