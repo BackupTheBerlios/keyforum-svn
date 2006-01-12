@@ -195,10 +195,10 @@ PageSelect();
 		, {$SNAME}_newmsg.title 	as title
 		, {$SNAME}_newmsg.subtitle
  		, {$SNAME}_msghe.pinned	as pinned
-		, {$SNAME}_msghe.autore	as dnickhash 
-		, autore.AUTORE as dnick
-		, {$SNAME}_msghe.last_reply_author as nickhash
-		, lastreply.AUTORE 		as nick
+		, {$SNAME}_msghe.autore	as nickhash 
+		, autore.AUTORE as nick
+		, {$SNAME}_msghe.last_reply_author as dnickhash
+		, lastreply.AUTORE 		as dnick
 		,({$SNAME}_msghe.DATE+".GMT_TIME.") 				AS open_date
 		,({$SNAME}_msghe.last_reply_time+".GMT_TIME.") 	AS last_reply_time
 		, {$SNAME}_msghe.reply_num
