@@ -33,7 +33,7 @@ select * from (
 	)as asd
 GROUP BY asd.sez";
 $result_last = $db->get_results($query_last);
-foreach($result_last as $riga)
+if($result_last)foreach($result_last as $riga)
 {
 	$last_action[$riga->sez] = Array(
 		 'sez_id' => $riga->sez
@@ -49,13 +49,13 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
-$query = "SELECT id, sez_name, SEZ_DESC, figlio, `MOD`, SEZ_DESC, REPLY_NUM, PKEY,PRKEY,THR_NUM
- from {$_ENV['sesname']}_sez order by figlio,ordine ";
+$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO, `MOD`, SEZ_DESC, REPLY_NUM, PKEY,PRKEY,THR_NUM
+ from {$_ENV['sesname']}_sez order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 
 foreach ( $result as $row )
 {
-$tree->AddNode(" ".$row->id," ".$row->figlio);
+$tree->AddNode(" ".$row->id," ".$row->FIGLIO);
 $forum[$row->id+0]= Array(
 	 'SEZ_ID'	=> $row->id
 	,'SEZ_NAME' => $row->sez_name
@@ -80,13 +80,17 @@ unset($last_action);
 $ris=$tree->drawTree();
 $num_figli = array_fill(0,count($ris),0);
 numfigli($ris,2,3); //NON MI CHIEDETE PERCHE' 2 e 3
-
+$i=0;
 foreach($num_figli as $id => $numero)
 {
+	$i++;
 	$id = (int)$ris[$id]['id'];
 	if($forum[$id])	$forum[$id]['num_figli'] = $numero;
+	$lev = $ris[$i]['lev'];
+	$id  = (int)$ris[$i]['id'];
+	$level=$lev-4;
+	$forum[$id]['level'] = $level;
 }
-
 
 
 
@@ -94,15 +98,13 @@ for($i=0;$i<=count($ris);$i++)
 {
 	$lev = $ris[$i]['lev'];
 	$id  = (int)$ris[$i]['id'];
-	$level=$lev-4;  
+	$level=$lev-4;
 	if ($level == 0)
 	{
-		$sez_id = $id;
-		draw_forum($forum[$sez_id],0,$i);
+		draw_forum($forum[$id],$i);
 	}
 	$totmsg += $forum[$id]['REPLY_NUM'] + $forum[$id]['THR_NUM'];
 }
-
 
 include('end.php');
 
@@ -111,10 +113,10 @@ include('end.php');
 
 
 //FUNZIONE DI VISUALIZZAZIONE
-function draw_forum($sez, $level,$indice)
+function draw_forum($sez,$indice)
 {
 	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std;
-	switch($level)
+	switch($sez[level])
 	{
 		case 0:
 		$divshow = ( in_array($sez['SEZ_ID'],$hidesez) ? 'none' : 'show');
@@ -142,11 +144,14 @@ function draw_forum($sez, $level,$indice)
       <th align=\"center\" width=\"1%\" class='titlemedium'>".$lang['col_replies']."</th>
       <th align=\"left\" width=\"39%\" class='titlemedium'>".$lang['col_lastpost']."</th>
     </tr>";
-		for($i=0;$i <$sez['num_figli'] ; $i++)
+		for($i=0;$i<$sez['num_figli']; $i++)
 		{
 			$next_id = $ris[$indice+$i+1];
 			$next_id = (int) $next_id['id'];
-			draw_forum($forum[$next_id],$level+1,$indice+1+$i);
+					
+			draw_forum($forum[$next_id],$indice+1+$i);
+			$num_sottofigli = sottofigli($forum[$next_id],$indice+1);
+			$indice = $indice+$num_sottofigli;
 		}
 		echo "<tr><td class='darkrow2' colspan='5'>&nbsp;</td></tr></table></div><br>";
 		break;
@@ -155,7 +160,6 @@ function draw_forum($sez, $level,$indice)
 			//Default value
 			$notfirst=0;
 			$subsections="";
-			
 			for($i=0;$i<$sez['num_figli'];$i++)
 			{
 				$next_id = $ris[$indice+$i+1];
@@ -195,6 +199,8 @@ function draw_forum($sez, $level,$indice)
 			<td class="row2" align="center">'.$sez['THR_NUM'].'</td>
 			<td class="row2" align="center">'.$sez['REPLY_NUM'].'</td>
 			<td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$sez['last_action']['sez_id'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($sez['last_action']['autore']).'</a></td>';
+		break;
+		default:
 		break;
 	}
 }
@@ -261,6 +267,21 @@ function get_reply_thr($current,$indice)
 	$return = Array($rep,$thr);
 	return $return;
 }
-
+function sottofigli($sez,$indice)
+{
+	global $ris,$forum;
+	$result=0;
+	//echo "<br>asdasd su {$sez[SEZ_NAME]}:  ";
+	for($i=0;$i<$sez['num_figli'];$i++)
+	{
+		$next_id = $ris[$indice+$i+1];
+		$next_id = (int) $next_id['id'];
+		//echo "il prossimo id è $next_id";
+		$result += sottofigli($forum[$next_id],$indice+1);
+	}
+	//echo "result vale $result a cui aggiungo {$sez['num_figli']}";
+	$result += $sez['num_figli'];
+	return $result;
+}
 ?>
 
