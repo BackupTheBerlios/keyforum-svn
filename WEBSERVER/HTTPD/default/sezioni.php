@@ -233,6 +233,8 @@ if($risultato) foreach($risultato as $riga)
     $nickhash=@unpack("H32alfa",$riga->nickhash);
     $dnickhash=@unpack("H32alfa",$riga->dnickhash);
 	
+
+	// $riga->pinned=1;
 	$pinned_img = ($riga->pinned ?  "<img src='img/pinned.gif' alt='Pinned!'>" : '');
 	$pinned_str = ($riga->pinned ?  "Pinned: " : '');
 		 
@@ -250,6 +252,9 @@ if($risultato) foreach($risultato as $riga)
         }
      }
   }
+  
+  if(!trim($riga->title)){$riga->title="(untitled)";}
+  
   if(strlen($riga->title)>100){
      $title=substr($riga->title, 0, 100)."...";
   }else{

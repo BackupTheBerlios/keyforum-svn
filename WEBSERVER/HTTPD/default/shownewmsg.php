@@ -200,7 +200,7 @@ if($risultato) foreach($risultato as $riga ) {
      }
   }
   
-  if(!$riga->title){$riga->title="(untitled)";}
+  if(!trim($riga->title)){$riga->title="(untitled)";}
   
   if(strlen($riga->title)>100){
      $title=substr($riga->title, 0, 100)."...";
