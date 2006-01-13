@@ -13,7 +13,9 @@ $lang['topic_laction']  = "Last Action";
 $lang['inv_query']  = "Invalid query: ";
 $lang['msg_last']  = "last messages from: ";
 $lang['mark_all_read']  = "mark all read and return to index ";
-
+$lang['shnwmsg_allread'] = "set all read";
+$lang['shnwmsg_markedread'] = "all messages marked as read";
+$lang['shnwmsg_at'] = "at ";
 $lang['col_forum']  = "Forum";
 $lang['col_topic']  = "Topic";
 $lang['col_replies']  = "Replies";

@@ -13,7 +13,9 @@ $lang['topic_laction']  = "Ultima azione";
 $lang['inv_query']  = "errore nella query: ";
 $lang['msg_last']  = "ultimi messaggi dal: ";
 $lang['mark_all_read']  = "segna tutti come già letti e torna all'indice ";
-
+$lang['shnwmsg_allread'] = "segna i thread come gia' letti";
+$lang['shnwmsg_markedread'] = "Tutti i messaggi sono stati segnati come letti";
+$lang['shnwmsg_at'] = " in data ";
 $lang['col_forum']  = "Forum";
 $lang['col_topic']  = "Discussione";
 $lang['col_replies']  = "Risposte";
