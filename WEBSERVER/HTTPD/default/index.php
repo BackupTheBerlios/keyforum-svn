@@ -181,17 +181,31 @@ function draw_forum($sez,$indice)
 			$sez['REPLY_NUM'] = $num_sotto_reply ;
 			$sez['THR_NUM'] = $num_sotto_thr;
 
+			if($sez['last_action']['date'] !== NULL) //Se esiste un ultimo messaggio
+			{	
+				//formattazione data;
+				$write_date=$std->PostDate($sez['last_action']['date']);
+				//Presenza e lunghezza Titolo
+				$msg=$sez['last_action']['title'];
+				if(!trim($msg))
+				{
+					$msg="(untitled)";
+				}
+				if(strlen($msg)>50){$msg=substr($msg, 0, 50)."...";}
+			}
+			else
+			{
+				$lang['last_in'] = '';
+				$lang['last_from'] = '';
+				$write_date = '';
+			}
 			
-			$write_date=$std->PostDate($sez['last_action']['date']);
 			$hash = @unpack("H32alfa",$sez['last_action']['thr_hash']);
 			$nickhash= @unpack("H32alfa",$sez['last_action']['autore_hash']);
-			
-			$msg=$sez['last_action']['title'];
-			
-			if(!trim($msg)){$msg="(untitled)";}
-			
-			if(strlen($msg)>50){$msg=substr($msg, 0, 50)."...";}
-			
+			if($sez['last_action']['title'] !== NULL)
+			{
+				
+			}
 			$moderators=$std->ListMod($sez[MOD]);
 
 			echo "

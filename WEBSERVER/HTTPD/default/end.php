@@ -78,6 +78,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	</th>
        </tr>
        <tr>
+	   	   <!-- BEGIN Nodi connessi -->
 	<td class="formsubtitle" colspan="2"><img src='img/connect.gif' alt=''>&nbsp;
         <?PHP
            $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
@@ -98,13 +99,21 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
         ?>
         </td>
        </tr>
+	   <!-- End Nodi connessi -->
        <tr>
+   	   <!-- Begin  Nodi connessi -->
 	<td class="row1" width="1%"><img src='img/stats.gif' border='0' alt='Stats'></td>
 	<td class="row2">
 	 <? if ($totmsg) {print $lang['stat_dbmess1']."<b>$totmsg</b>".$lang['stat_dbmess2']."<br>";} ?>
 	 <div class="thin">
          <?
-           $num_msg_inserted=$db->get_var("SELECT count(1) FROM {$SNAME}_congi WHERE INSTIME>'".(time()-3600)."' AND (TYPE='1' OR TYPE='2');");
+           $num_msg_inserted=$db->get_var("SELECT count(1) 
+		   	FROM {$SNAME}_congi 
+			join {$SNAME}_newmsg on {$SNAME}_congi.hash = {$SNAME}_newmsg.edit_of
+			WHERE INSTIME>'".(time()-3600)."' 
+				AND ({$SNAME}_congi.TYPE='1' OR {$SNAME}_congi.TYPE='2')
+				AND {$SNAME}_newmsg.visibile='1'
+			");
 	   if($num_msg_inserted)
 	   {
 	     echo "{$lang['stat_dbmesslh1']}<b>$num_msg_inserted</b>{$lang['stat_dbmesslh2']}";
