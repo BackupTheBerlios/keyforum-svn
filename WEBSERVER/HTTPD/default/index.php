@@ -185,14 +185,13 @@ function draw_forum($sez,$indice)
 			$write_date=$std->PostDate($sez['last_action']['date']);
 			$hash = @unpack("H32alfa",$sez['last_action']['thr_hash']);
 			$nickhash= @unpack("H32alfa",$sez['last_action']['autore_hash']);
-			if(strlen($sez['last_action']['title'])>50)
-			{
-				$msg=substr($sez['last_action']['title'], 0, 50)."...";
-			}
-			else
-			{
-				$msg=$sez['last_action']['title'];
-			}
+			
+			$msg=$sez['last_action']['title'];
+			
+			if(!trim($msg)){$msg="(untitled)";}
+			
+			if(strlen($msg)>50){$msg=substr($msg, 0, 50)."...";}
+			
 			$moderators=$std->ListMod($sez[MOD]);
 
 			echo "

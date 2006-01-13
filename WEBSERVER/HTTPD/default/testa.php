@@ -43,6 +43,7 @@ $lang += $std->load_lang('lang_testa', $blanguage );
     $result=$db->get_row($query);
     $title=$result->title;
     $title=secure_v($title);
+    if(!trim($title)){$title="(untitled)";}
     $title2=" - ".$title;
   }else{
     if ($SEZ_DATA->ID)
