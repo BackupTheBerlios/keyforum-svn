@@ -43,7 +43,8 @@ else {
     		case 2:	// MODO=2 reply search
     				if (!empty($_REQUEST['REPOF'])) $hashreq['HASHREQ'][$forumid]['REPOF'] = pack("H32",$_REQUEST['REPOF']);
     				if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = pack("H32",$_REQUEST['EDITOF']);
-    				break;
+    				if (!empty($_REQUEST['AUTORE'])) $hashreq['HASHREQ'][$forumid]['AUTORE'] = pack("H32",$_REQUEST['AUTORE']);
+					break;
     		case 3:
     				if (!empty($_REQUEST['TITLE'])) $hashreq['HASHREQ'][$forumid]['TITLE'] = $_REQUEST['TITLE'];
     				break;
