@@ -234,13 +234,8 @@ if($risultato) foreach($risultato as $riga)
   $write_date=$std->PostDate($riga->write_date);
   
   $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
-  if ($tmp) {
-    $num = $tmp["valore"];
-    if ($num<$riga->reply_num)
-      $PostStatImage = "f_norm";
-    else
-      $PostStatImage = "f_norm_no";
-	}
+  if ($tmp)
+    $PostStatImage = ($tmp < $riga->reply_num ? "f_norm" : "f_norm_no");
   else
     $PostStatImage = "f_norm";
 	

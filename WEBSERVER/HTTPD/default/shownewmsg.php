@@ -158,7 +158,8 @@ foreach ($sez as $riga) {
 }
 
 $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
-  ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, newmsg.SUBTITLE as 'subtitle',newmsg.SEZ AS 'sez' "
+  ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, newmsg.SUBTITLE as 'subtitle',newmsg.SEZ AS 'sez',"
+  ." newmsg.body like '%[TOPIC-PINNED]%' as pinned, newmsg.body like '%[TOPIC-CLOSED]%' as closed, newmsg.body like '%[TOPIC-FIXED]%' as fixed "
   ." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri,{$SNAME}_membri AS repau "
   ." WHERE newmsg.EDIT_OF=msghe.HASH"
   ." AND newmsg.visibile='1'"
@@ -189,6 +190,23 @@ if($risultato) foreach($risultato as $riga ) {
   }
   else
   $PostStatImage = "f_norm";
+  
+  if ($riga->pinned) {
+      $post_icon="<img src='img/pinned.gif' alt='Pinned!'>";
+      $pinned_str="<b>Pinned: ";
+      $pinned_close="</b>";
+  } else {
+      $post_icon="";
+      $pinned_str="";
+      $pinned_close="";
+  }
+  
+  // closed
+  if ($riga->closed)  {$PostStatImage = "f_closed";}
+  
+  // fixed
+  if ($riga->fixed)  {$PostStatImage = "f_fixed";}
+
   $rep=$riga->reply_num;
   $i=0;
   $Pages="";
@@ -214,8 +232,8 @@ if($risultato) foreach($risultato as $riga ) {
   echo "
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
-  <td align='center' class='row2'>&nbsp;</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'><a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a></td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
+  <td align='center' class='row2'>$post_icon</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga->sez."'>".$sezname[$riga->sez]."</td>
   <td align=center class='row4'>".$riga->reply_num."</td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
