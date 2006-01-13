@@ -10,6 +10,7 @@ include_once("lib/bbcode_parser.php");
 // leggo i titoli utente
 $member_titles=$std->CollectMemberTitles();
 
+echo "<a href=\"searcher.php?MODO=2&amp;REPOF=" . $_REQUEST['THR_ID'] . "\">" . $lang['shmsg_findnewmsg'] . "</a><br>";
 
 function PageSelect($pos) {
 ?>

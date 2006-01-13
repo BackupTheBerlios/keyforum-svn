@@ -37,12 +37,12 @@ else {
     				if ( empty($SEZ) or ($SEZ < 0) ) $std->Error("Invalid HashReq SezID!");
     				$hashreq['HASHREQ'][$forumid]['SEZ']=$SEZ;
     				// optional data
-    				if (!empty($_REQUEST['AUTORE'])) $hashreq['HASHREQ'][$forumid]['AUTORE'] = $_REQUEST['AUTORE'];
-					if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = $_REQUEST['EDITOF'];
+    				if (!empty($_REQUEST['AUTORE'])) $hashreq['HASHREQ'][$forumid]['AUTORE'] = pack("H32",$_REQUEST['AUTORE']);
+					if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = pack("H32",$_REQUEST['EDITOF']);
     				break;
     		case 2:	// MODO=2 reply search
-    				if (!empty($_REQUEST['REPOF'])) $hashreq['HASHREQ'][$forumid]['REPOF'] = $_REQUEST['REPOF'];
-    				if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = $_REQUEST['EDITOF'];
+    				if (!empty($_REQUEST['REPOF'])) $hashreq['HASHREQ'][$forumid]['REPOF'] = pack("H32",$_REQUEST['REPOF']);
+    				if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = pack("H32",$_REQUEST['EDITOF']);
     				break;
     		case 3:
     				if (!empty($_REQUEST['TITLE'])) $hashreq['HASHREQ'][$forumid]['TITLE'] = $_REQUEST['TITLE'];
