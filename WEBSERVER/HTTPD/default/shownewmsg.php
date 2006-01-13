@@ -1,24 +1,22 @@
 <?PHP
-// v. 0.10
-
-
-
-if($_REQUEST['allread'])
- {
- include "lib/lib.php";
- 
- $userdata->LASTREAD=$_REQUEST['allread'];
- $std->UpdateUserData($_ENV["sesname"],$userdata);
- $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$_REQUEST['allread']));
- }
-
-$tst=$_REQUEST['tst'];
 
 // devo caricare la lingua per ricavare il titolo della pagina...
 require_once("lib/lib.php");
 if (is_array($lang)) {$lang += $std->load_lang('lang_shownewmsg', $blanguage );} else {$lang = $std->load_lang('lang_shownewmsg', $blanguage );}
 $title=$lang['page_title'] ;
 
+
+
+//POSTBACK!
+if($_REQUEST['allread'])
+ {
+ $userdata->LASTREAD=$_REQUEST['allread'];
+ $std->UpdateUserData($_ENV["sesname"],$userdata);
+ $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$_REQUEST['allread'])); //GLUP MODIFICA QUI :D
+ }
+
+//END POSTBACK!
+$tst=$_REQUEST['tst'];
 include ("testa.php");
 
 function PageSelect() {
@@ -30,7 +28,7 @@ global $tst,$sess_auth;
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
 <?
-	global $blanguage;
+  global $blanguage;
   global $NumPag;
   global $CurrPag;
   global $Section;
