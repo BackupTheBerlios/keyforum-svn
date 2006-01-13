@@ -34,9 +34,7 @@ else {
     switch ($MODO) {
     		case 1:	// MODO=1 search in threads
     				$SEZ = $_REQUEST['SEZ'];
-    				if ( empty($SEZ) or ($SEZ < 0) ) $std->Error("Invalid HashReq SezID!");
-    				$hashreq['HASHREQ'][$forumid]['SEZ']=$SEZ;
-    				// optional data
+    				if ( !empty($SEZ) and ($SEZ > 0) ) $hashreq['HASHREQ'][$forumid]['SEZ']=$SEZ;
     				if (!empty($_REQUEST['AUTORE'])) $hashreq['HASHREQ'][$forumid]['AUTORE'] = pack("H32",$_REQUEST['AUTORE']);
 					if (!empty($_REQUEST['EDITOF'])) $hashreq['HASHREQ'][$forumid]['EDITOF'] = pack("H32",$_REQUEST['EDITOF']);
     				break;
