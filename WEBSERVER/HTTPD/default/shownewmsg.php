@@ -9,7 +9,7 @@ if($_REQUEST['allread'])
  
  $userdata->LASTREAD=$_REQUEST['allread'];
  $std->UpdateUserData($_ENV["sesname"],$userdata);
- $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$mytime));
+ $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$_REQUEST['allread']));
  }
 
 $tst=$_REQUEST['tst'];
