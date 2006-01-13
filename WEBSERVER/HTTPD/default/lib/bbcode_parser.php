@@ -19,6 +19,7 @@ function convert($text) {
 
   // BBCode che richiedono una funzione
   $text = preg_replace("#\[code\](.+?)\[/code\]#ies"        , "convert_code('\\1')"  , $text);
+  $text = preg_replace("#\[codebox\](.+?)\[/codebox\]#ies"        , "convert_code('\\1',1)"  , $text);
   $text = preg_replace("#\[spoiler\](.+?)\[/spoiler\]#ies" , "convert_spoiler('\\1')" , $text);
   $text = preg_replace("#(\[quote(.+?)?\].*\[/quote\])#ies" , "convert_quote('\\1')" , $text);
   
@@ -81,6 +82,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = str_replace("[hr]", "<hr />", $text);
   $text = str_replace("[cuthere]", "<!--cuthere-->", $text);
  
+ 
   // bbcode di comodo
   $text = str_replace("[TOPIC-PINNED]", "<!--TOPIC-PINNED-->", $text);
   $text = str_replace("[TOPIC-CLOSED]", "<!--TOPIC-CLOSED-->", $text);
@@ -114,7 +116,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
 }
 
  
-function convert_code($text) {
+function convert_code($text,$wrap=0) {
 
   if (preg_match( "/\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\].+?\[(quote|code|spoiler)\]/i", $text) ) {
     return "\[code\]".$text."\[/code\]";
@@ -133,8 +135,14 @@ function convert_code($text) {
   $text = preg_replace("#\s{1};#", "&#59;"  , $text);
   $text = preg_replace("#\s{2}#" , " &nbsp;", $text);
 
+  if($wrap)
+  {
+  $text = "<!--codewrapstart--><textarea rows='5' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$text."</textarea><!--codewrapend-->";
+  $text = str_replace("<br />","",$text);
+  } else {
   $text = "<!--codestart--><div class=codetl>CODE</div><div class=codetx>".$text."</div><!--codeend-->";
-
+  }
+  
   return $text;
 }
   
