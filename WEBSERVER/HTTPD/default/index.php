@@ -53,6 +53,8 @@ $query = "SELECT id, sez_name, SEZ_DESC, FIGLIO, `MOD`, SEZ_DESC, REPLY_NUM, PKE
  from {$_ENV['sesname']}_sez order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 
+if ($result)
+{
 foreach ( $result as $row )
 {
 $tree->AddNode(" ".$row->id," ".$row->FIGLIO);
@@ -73,6 +75,7 @@ $forum[$row->id+0]= Array(
 	,'last_action' => $last_action[$row->id+0]
 	,'num_figli' => 0
 	);
+}
 }
 unset($last_action);
 
