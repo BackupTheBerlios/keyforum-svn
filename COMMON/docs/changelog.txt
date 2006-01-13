@@ -1,5 +1,10 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-13
+Luftw@ffer:			[FIX] Vari fix minori
+Luftw@ffer:			[ADD] Icone di stato in shownewmsg.php
+Luftw@ffer:			[FIX] Thread con messaggi non letti in sezioni.php
+
 2006-01-11:
 mmorselli:				[ADD] gestione provvisoria di discussioni chiuse, in evidenza, ecc..
 
