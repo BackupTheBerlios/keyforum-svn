@@ -1,4 +1,5 @@
 <?
+ini_set("include_path", ini_get ("include_path").";.;../../../WEBSERVER/pear");
 
 $host="127.0.0.1";
 $timeout= 0.5;
