@@ -1,7 +1,7 @@
 <?PHP
 // v 0.14
 
-include ("testa.php");
+include_once ("testa.php");
 
 
 // carico la lingua per la index

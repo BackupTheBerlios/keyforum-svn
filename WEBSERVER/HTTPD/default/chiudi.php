@@ -2,6 +2,12 @@
 
 include("testa.php");
 $lang += $std->load_lang('lang_close', $blanguage );
+if($std->Multiutenza($SNAME)) 
+{
+	$std->Notice($lang[close_disabled_body],$lang[close_disabled_title]);
+	include('end.php');
+	die();
+}
 
 $corereq = new CoreSock;
 

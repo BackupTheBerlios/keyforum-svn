@@ -6,8 +6,8 @@
 if($_REQUEST['allread'])
  {
  include "lib/lib.php";
- $mytime=time();
- $userdata->LASTREAD=$mytime;
+ 
+ $userdata->LASTREAD=$_REQUEST['allread'];
  $std->UpdateUserData($_ENV["sesname"],$userdata);
  $std->Redirect("set all read","index.php","all messages marked as read","at ".date("d/m/Y H:i:s",$mytime));
  }
@@ -35,6 +35,7 @@ global $tst,$sess_auth;
   global $CurrPag;
   global $Section;
   global $lang;
+  $mytime=time();
   $link = "shownewmsg.php?tst=$tst&pag=";
   if ($NumPag > 0) {
     echo "<span class='pagelink'>".($NumPag+1)."&nbsp;".$lang['pages']."</span>&nbsp;";
@@ -66,7 +67,10 @@ global $tst,$sess_auth;
 
     
     
-     if ($sess_auth) { echo "<td align=right><a href=\"shownewmsg.php?allread=1\">{$lang['mark_all_read']}</a></td>";}
+     if ($sess_auth) 
+	 {
+	 	echo "<td align=right><a href='?allread=$mytime'>{$lang['mark_all_read']}</a></td>";
+	 }
       ?>
       
     </tr>

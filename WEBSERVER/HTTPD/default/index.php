@@ -6,7 +6,7 @@
 	$totmsg		= numero totale di messaggi presenti nel db
 */ 
 
-include ("testa.php");
+include_once ("testa.php");
 echo "<tr><td>";
 // carico la lingua per la index
 $lang += $std->load_lang('lang_index', $blanguage );
