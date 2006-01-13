@@ -66,7 +66,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
 
   // Immagini
   $text = preg_replace("#\[img\](.+?)\[/img\]#is","<img alt=\"user posted image\" border=\"0\" src=\"\\1\" />", $text);
-  $text = preg_replace("#\[tmb\](.+?)\[/tmb\]#is","<a href=\"\\1\" target='_blank'><img src=\"\\1\" width='120'  border='0' alt='Thumbnail, click to enlarge'>", $text);
+  $text = preg_replace("#\[tmb\](.+?)\[/tmb\]#is","<a href=\"\\1\" target='_blank'><img src=\"\\1\" width='180'  border='0' alt='Thumbnail, click to enlarge'>", $text);
   $text = preg_replace("#\[img\s*=left\](.+?)\[/img\]#is","<img style=\"float: left\" align=\"left\" alt=\"user posted image\" border=\"0\" src=\"\\1\" />", $text);
   $text = preg_replace("#\[img\s*=center\](.+?)\[/img\]#is","<div align=\"center\"><img align=\"center\" alt=\"user posted image\" border=\"0\" src=\"\\1\" \/></div>", $text);
   $text = preg_replace("#\[img\s*=right\](.+?)\[/img\]#is","<img style=\"float: right\" align=\"right\" alt=\"user posted image\" border=\"0\" src=\"\\1\" \/>", $text);
