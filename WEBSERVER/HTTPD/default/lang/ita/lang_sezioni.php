@@ -10,7 +10,7 @@ $lang['topic_starter']  = "Autore";
 $lang['toppic_views']  = "Visite";
 $lang['topic_laction']  = "Ultima azione";
 $lang['inv_query']  = "errore nella query: ";
-
+$lang['topic_pinned'] = "<b>Importante!: ";
 $lang['col_forum']  = "Forum";
 $lang['col_topic']  = "Discussione";
 $lang['col_replies']  = "Risposte";

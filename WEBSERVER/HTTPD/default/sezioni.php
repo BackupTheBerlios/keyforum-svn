@@ -247,7 +247,7 @@ if($risultato) foreach($risultato as $riga)
     if ($riga->pinned)
     {
     $post_icon="<img src='img/pinned.gif' alt='Pinned!'>";
-    $pinned_str="<b>Pinned: ";
+    $pinned_str=$lang['topic_pinned'];
     $pinned_close="</b>";
     $ispin=true;
     } else

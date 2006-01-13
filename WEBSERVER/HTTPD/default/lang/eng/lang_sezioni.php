@@ -10,7 +10,7 @@ $lang['topic_starter']  = "Topic Starter";
 $lang['toppic_views']  = "Views";
 $lang['topic_laction']  = "Last Action";
 $lang['inv_query']  = "Invalid query: ";
-
+$lang['topic_pinned'] = "<b>Pinned: ";
 $lang['col_forum']  = "Forum";
 $lang['col_topic']  = "Topic";
 $lang['col_replies']  = "Replies";
