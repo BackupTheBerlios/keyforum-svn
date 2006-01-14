@@ -109,7 +109,12 @@ if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new
 	if ( !$coreresp ) $std->Error("Error receiving response form the core!");
 	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) $std->Error("Forum unknown, cannot register the user.");
 	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) $std->Error("The Core didn't accept the message, aborting.");
-	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) $std->Error("","","Ok");
+	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) $std->Error("","","<p>utente creato correttamente</p>
+<p><b>IMPORTANTISSIMO:</b> devi salvare il file con l'utente generato e metterlo 
+in un posto sicuro, ti servirà in futuro se vorrai reinstallare keyforum e 
+loggarti con lo stesso utente. Per salvare il file <a href=\"userexport.php\">fai 
+click qui</a></p>
+");
 	include("end.php");
 	exit(0);			
 }
