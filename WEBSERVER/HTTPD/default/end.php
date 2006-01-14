@@ -110,9 +110,11 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
            $num_msg_inserted=$db->get_var("SELECT count(1) 
 		   	FROM {$SNAME}_congi 
 			join {$SNAME}_newmsg on {$SNAME}_congi.hash = {$SNAME}_newmsg.edit_of
+			join {$SNAME}_reply on {$SNAME}_congi.hash = {$SNAME}_reply.rep_of
 			WHERE INSTIME>'".(time()-3600)."' 
 				AND ({$SNAME}_congi.TYPE='1' OR {$SNAME}_congi.TYPE='2')
-				AND {$SNAME}_newmsg.visibile='1'
+				AND {$SNAME}_newmsg.visibile='1' 
+				AND {$SNAME}_reply.visibile='1'
 			");
 	   if($num_msg_inserted)
 	   {
