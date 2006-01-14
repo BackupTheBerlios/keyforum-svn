@@ -111,11 +111,12 @@ $user['sign'] = secure_v($user['sign']);
 $user['home'] = secure_v($user['home']);
 $user['location'] = secure_v($user['location']);
 $user['msg_sez']['sez_name'] = secure_v($user['msg_sez']['sez_name']);
-$user['last_action']['title'] = secure_v($user['last_action']['title']);
+$user['last_action']['title'] = ($user['last_action']['title'] ? secure_v($user['last_action']['title']) : '(untitled)' );
 
 //Default data
 $user['group']['text'] = ($user['group']['text'] ? $user['group']['text'] : 'membri');
 $user['avatar'] = ($user['avatar'] ? "<div><img src='{$user['avatar']}' border='0' alt='avatar' /></div>" : ''); //Default avatar?::NULL
+
 if(!$user['last_action']['date'])
 {
 	$user['last_action']['date'] = 'Mai';
@@ -197,7 +198,7 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 						/ <?=$user['msg_num']['perc']?>% <? echo" ".$lang['shmbr_ofall']." "; ?> )
 					</td>
 				</tr>
-<?php if($user['last_action']['title']){?>
+<?php if($user['last_action']['date']){?>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_activity']." "; ?></b></td>
 					<td class="row1">
