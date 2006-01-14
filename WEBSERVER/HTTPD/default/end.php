@@ -125,7 +125,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	 ?>
 	 </div>
 	 <?
-	    $reg_users=$db->get_var("SELECT COUNT(AUTORE) FROM {$SNAME}_membri;");
+	    $reg_users=$db->get_var("SELECT COUNT(AUTORE) FROM {$SNAME}_membri WHERE is_auth='1';");
 	    if($reg_users)
               echo "{$lang['stat_reguser1']}<b>$reg_users</b>{$lang['stat_reguser2']}";
 	 ?>
