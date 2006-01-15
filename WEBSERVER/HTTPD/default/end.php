@@ -108,10 +108,12 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	 <!-- Messaggi scritti nell'ultima ora -->
 	<?
 	$timelimit = time()-GMT_TIME-3600;
-	$query_rep="SELECT count(1) from {$SNAME}_reply where date > $timelimit AND visibile='1'";
-	$query_thr="SELECT count(1) from {$SNAME}_newmsg where date > $timelimit AND visibile='1'";
-	$num_rep_inserted=$db->get_var($query_rep);
-	$num_thr_inserted=$db->get_var($query_thr);
+	$query ="SELECT count(1) as num from {$SNAME}_reply where date > $timelimit AND visibile='1' 
+			UNION
+			SELECT count(1) from {$SNAME}_newmsg where date > $timelimit AND visibile='1'";
+	$results = $db->get_results($query);
+	$num_rep_inserted = $results[0]->num;
+	$num_thr_inserted = $results[1]->num;
 	if($num_rep_inserted || $num_thr_inserted)
 	{
 		echo "{$lang['stat_dbmesslh1']} <b>$num_rep_inserted</b> {$lang['stat_dbmesslh2rep']}<br>";
@@ -123,6 +125,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	}
 	?>
 	 </div>
+	 <!-- Utenti iscritti -->
 	 <?
 	    $reg_users=$db->get_var("SELECT COUNT(AUTORE) FROM {$SNAME}_membri WHERE is_auth='1';");
 	    if($reg_users)
