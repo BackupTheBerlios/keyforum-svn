@@ -103,9 +103,14 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
    	   <!-- Begin  totale messaggi -->
 	<td class="row1" width="1%"><img src='img/stats.gif' border='0' alt='Stats'></td>
 	<td class="row2">
-	 <? if ($totmsg) {print $lang['stat_dbmess1']."<b>$totmsg</b>".$lang['stat_dbmess2']."<br>";} ?>
+	
+<? if ($totmsg)
+{
+	echo "{$lang['stat_dbmess1']}<b>$totmsg</b>{$lang['stat_dbmess2']}";
+} ?>
 	 <div class="thin">
 	 <!-- Messaggi scritti nell'ultima ora -->
+	 <table width="100%" align="center"><tr>
 	<?
 	$timelimit = time()-GMT_TIME-3600;
 	$query ="SELECT count(1) as num from {$SNAME}_reply where date > $timelimit AND visibile='1' 
@@ -113,17 +118,38 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 			SELECT count(1) from {$SNAME}_newmsg where date > $timelimit AND visibile='1'";
 	$results = $db->get_results($query);
 	$num_rep_inserted = $results[0]->num;
-	$num_thr_inserted = $results[1]->num;
+	$num_thr_inserted = (int) $results[1]->num;
 	if($num_rep_inserted || $num_thr_inserted)
 	{
-		echo "{$lang['stat_dbmesslh1']} <b>$num_rep_inserted</b> {$lang['stat_dbmesslh2rep']}<br>";
-		echo "{$lang['stat_dbmesslh1']} <b>$num_thr_inserted</b> {$lang['stat_dbmesslh2thr']}";
-	}
-	else 
-	{
-		echo $lang['stat_dbmesslh3'];
+		echo "<td>{$lang['stat_dbmesslh1']} <b>$num_rep_inserted</b> {$lang['stat_dbmesslh2rep']}</td>";
+		echo "<td>{$lang['stat_dbmesslh1']} <b>$num_thr_inserted</b> {$lang['stat_dbmesslh2thr']}</td>";
 	}
 	?>
+	 <!-- Messaggi scritti nell'ultima ora -->
+	<?
+	$timelimit +=GMT_TIME; //INSTIME NON NE TIENE CONTO
+	$query = "
+	SELECT num+lol as tot FROM 
+	(SELECT count(1) as num
+     FROM {$SNAME}_congi
+	 join {$SNAME}_reply on {$SNAME}_reply.hash = {$SNAME}_congi.hash
+     WHERE INSTIME > '$timelimit'
+	 AND visibile='1') as num_rep ,
+	 (SELECT count(1) as lol
+     FROM {$SNAME}_congi
+	 join {$SNAME}_newmsg on {$SNAME}_newmsg.hash = {$SNAME}_congi.hash
+     WHERE INSTIME > '$timelimit'
+	 AND visibile='1') as num_thr
+	";
+	$num_inserted = $db->get_var($query);
+	if($num_inserted)
+	echo "<td>{$lang['stat_dbmesslh1']} <b>$num_inserted</b> {$lang['stat_dbmesslh4']}<br></td>";
+	else
+	{
+		echo "<td>{$lang['stat_dbmesslh3']}</td>";
+	}
+	?>
+	</tr></table>
 	 </div>
 	 <!-- Utenti iscritti -->
 	 <?
@@ -131,6 +157,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	    if($reg_users)
               echo "{$lang['stat_reguser1']}<b>$reg_users</b>{$lang['stat_reguser2']}";
 	 ?>
+	 	<? /*if($USERPREF->most_active_users)*/ include('most_active_users.php');?>
 	</td>
        </tr>
        <tr>
@@ -151,6 +178,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	    echo "<td width=\"33%\" align=\"right\"><img src=\"img/stat_sql.gif\" alt=\"\">&nbsp;".$lang['stat_numquery']."<b>$db->num_queries</b> / core calls: <b>$corecalls</b></td>";
 	 ?>
 	 </tr></table>
+
 	</td>
        </tr>
      </table>
@@ -183,7 +211,6 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
    <?
      };
    ?>
-
   </td>
 </tr>
 <? 
@@ -197,7 +224,7 @@ echo "</td></tr>";
 ?>
 <tr>
 <? $revision = file("revision.txt"); ?>
-  <td align=center><br>KeyForum 0.43 <b>Alfa</b> rev. <? echo $revision[0]; ?></td>
+  <td align=center><br><a href='index.php'>KeyForum 0.43 <b>Alfa</b> rev. <? echo $revision[0]; ?></a></td>
 </tr>
 </table>
 <a name="end_page"></a>

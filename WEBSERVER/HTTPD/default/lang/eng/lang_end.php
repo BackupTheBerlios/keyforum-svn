@@ -8,6 +8,7 @@ $lang['stat_dbmesslh1']  = "Inserted";
 $lang['stat_dbmesslh2rep']  = "new reply in the last hour";
 $lang['stat_dbmesslh2thr']  = "new topic in the last hour";
 $lang['stat_dbmesslh3']  = "no messages inserted in the last hour";
+$lang['stat_dbmesslh4']  = "new records in the database";
 $lang['stat_reguser1']  = "We have ";
 $lang['stat_reguser2']  = " registered users";
 $lang['stat_extime']  = "Execution time: ";
