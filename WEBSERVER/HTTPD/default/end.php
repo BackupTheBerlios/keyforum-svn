@@ -157,7 +157,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	    if($reg_users)
               echo "{$lang['stat_reguser1']}<b>$reg_users</b>{$lang['stat_reguser2']}";
 	 ?>
-	 	<? /*if($USERPREF->most_active_users)*/ include('most_active_users.php');?>
+	 	<? if($USERPREF->most_active_users) include('most_active_users.php');?>
 	</td>
        </tr>
        <tr>
