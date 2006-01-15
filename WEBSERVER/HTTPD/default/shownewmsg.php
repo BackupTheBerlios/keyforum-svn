@@ -151,7 +151,7 @@ PageSelect();
 // ricavo la lista delle sezioni e la metto in un array
 $query="SELECT ID,SEZ_NAME from {$SNAME}_sez";
 $sez = $db->get_results($query);
-foreach ($sez as $riga) {
+if ($sez) foreach ($sez as $riga) {
  $sezname[$riga->ID]=$riga->SEZ_NAME;
 }
 
