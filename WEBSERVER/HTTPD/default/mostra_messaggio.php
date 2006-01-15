@@ -7,6 +7,7 @@ function printmsg($MSG) {
   global $userdata;
   global $db;
   global $member_titles;
+  global $closed;
 
   $usercolor = $std->GetUserColor($MSG->memhash);
   $mio_nick = $GLOBALS['sess_nick'];
@@ -136,8 +137,10 @@ EOF;
 
    <!-- REPORT / UP -->
    <div align='right'>
-   $EDITER
-   <a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;quote=".$tmp['mshash']."\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>
+   $EDITER";
+   
+   if (!$closed) {echo "<a href=\"reply.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;quote=".$tmp['mshash']."\"><img src='img/buttons/".$blanguage."/p_quote.gif' alt='Quote' border='0'></a>";}
+   echo"
    </div>
  </td>
 </tr>
