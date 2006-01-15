@@ -3,7 +3,6 @@
 $lang += $std->load_lang('lang_end', $blanguage );
 
 $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
-
 ?>
 <tr>
   <td>
@@ -101,28 +100,28 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
        </tr>
 	   <!-- End Nodi connessi -->
        <tr>
-   	   <!-- Begin  Nodi connessi -->
+   	   <!-- Begin  totale messaggi -->
 	<td class="row1" width="1%"><img src='img/stats.gif' border='0' alt='Stats'></td>
 	<td class="row2">
 	 <? if ($totmsg) {print $lang['stat_dbmess1']."<b>$totmsg</b>".$lang['stat_dbmess2']."<br>";} ?>
 	 <div class="thin">
-         <?
-           $num_msg_inserted=$db->get_var("SELECT count(1) 
-		   	FROM {$SNAME}_congi 
-			join {$SNAME}_newmsg on {$SNAME}_congi.hash = {$SNAME}_newmsg.edit_of
-			join {$SNAME}_reply on {$SNAME}_congi.hash = {$SNAME}_reply.rep_of
-			WHERE INSTIME>'".(time()-3600)."' 
-				AND ({$SNAME}_congi.TYPE='1' OR {$SNAME}_congi.TYPE='2')
-				AND {$SNAME}_newmsg.visibile='1' 
-				AND {$SNAME}_reply.visibile='1'
-			");
-	   if($num_msg_inserted)
-	   {
-	     echo "{$lang['stat_dbmesslh1']}<b>$num_msg_inserted</b>{$lang['stat_dbmesslh2']}";
-	  } else {
-	     echo $lang['stat_dbmesslh3'];
-	  }
-	 ?>
+	 <!-- Messaggi scritti nell'ultima ora -->
+	<?
+	$timelimit = time()-GMT_TIME-3600;
+	$query_rep="SELECT count(1) from {$SNAME}_reply where date > $timelimit AND visibile='1'";
+	$query_thr="SELECT count(1) from {$SNAME}_newmsg where date > $timelimit AND visibile='1'";
+	$num_rep_inserted=$db->get_var($query_rep);
+	$num_thr_inserted=$db->get_var($query_thr);
+	if($num_rep_inserted || $num_thr_inserted)
+	{
+		echo "{$lang['stat_dbmesslh1']} <b>$num_rep_inserted</b> {$lang['stat_dbmesslh2rep']}<br>";
+		echo "{$lang['stat_dbmesslh1']} <b>$num_thr_inserted</b> {$lang['stat_dbmesslh2thr']}";
+	}
+	else 
+	{
+		echo $lang['stat_dbmesslh3'];
+	}
+	?>
 	 </div>
 	 <?
 	    $reg_users=$db->get_var("SELECT COUNT(AUTORE) FROM {$SNAME}_membri WHERE is_auth='1';");
