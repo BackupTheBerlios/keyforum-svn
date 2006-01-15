@@ -335,6 +335,14 @@ $ris=$tree->drawTree();
 
 $output .= "<form method='POST' name='jumpform' action=''>";
 $output .= "<select name='forumjump' class='content' size='1' onchange='location.href=document.jumpform.forumjump.options[document.jumpform.forumjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>";
+
+$output .= "<optgroup label='Link rapidi'>"; 			
+$output .= "<option value='index.php'>Home</option>"; 		
+$output .= "<option value='options_forum.php'>Opzioni</option>"; 		
+$output .= "<option value='shownewmsg.php'>Nuovi messaggi</option>"; 		
+
+
+
 $output .= "<optgroup label='Salta a un forum'>"; 			
 
 
