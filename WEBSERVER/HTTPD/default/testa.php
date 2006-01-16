@@ -196,6 +196,7 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
   <img src="img/3.gif" alt="" /> <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
 <?php
 
+$seznum=0;
 if ($SEZ_DATA->ID) {
   $notlastid=$SEZ_DATA->ID;
   $seznum=1;
@@ -207,9 +208,10 @@ if ($SEZ_DATA->ID) {
     $notlastid=$notlast->FIGLIO;
     $seznum++;
   }
-  while($seznum){
-    echo $sezvet[$seznum];
-    $seznum--;
+  $seznum2=$seznum;
+  while($seznum2){
+    echo $sezvet[$seznum2];
+    $seznum2--;
   }
 }
 if ($title) {
