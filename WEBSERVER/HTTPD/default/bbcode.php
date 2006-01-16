@@ -51,6 +51,9 @@ w_help = "Inserisci URL: [url]http://url[/url] o [url=http://url]testo URL[/url]
 a_help = "Chiudi tutti i bbCode tags aperti";
 e_help = "Indirizzo e-mail: [email]nome@indirizzo.com[/email] (alt+e)";
 t_help = "Miniatura immagine: [tmb]http://image_url[/tmb]  (alt+t)";
+f_help = "Dimensione carattere: [size=x]testo[/size]";
+s_help = "Colore carattere: [color=red]testo[/color]  Aiuto: puoi anche usare color=#FF0000";
+
 
 // Define the bbCode tags
 
@@ -96,6 +99,34 @@ function arraypop(thearray) {
 	retval = thearray[thearraysize - 1];
 	delete thearray[thearraysize - 1];
 	return retval;
+}
+
+
+function bbfontstyle(bbopen, bbclose) {
+	var txtarea = document.forms[2].elements['body'];
+
+	if ((clientVer >= 4) && is_ie && is_win) {
+		theSelection = document.selection.createRange().text;
+		if (!theSelection) {
+			txtarea.value += bbopen + bbclose;
+			txtarea.focus();
+			return;
+		}
+		document.selection.createRange().text = bbopen + theSelection + bbclose;
+		txtarea.focus();
+		return;
+	}
+	else if (txtarea.selectionEnd && (txtarea.selectionEnd - txtarea.selectionStart > 0))
+	{
+		mozWrap(txtarea, bbopen, bbclose);
+		return;
+	}
+	else
+	{
+		txtarea.value += bbopen + bbclose;
+		txtarea.focus();
+	}
+	storeCaret(txtarea);
 }
 
 
