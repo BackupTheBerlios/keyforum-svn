@@ -1,5 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-16
+Luftw@ffer:			[ADD] Navbar in fondo alla pagina
+
 2006-01-13
 Luftw@ffer:			[FIX] Vari fix minori
 Luftw@ffer:			[ADD] Icone di stato in shownewmsg.php
