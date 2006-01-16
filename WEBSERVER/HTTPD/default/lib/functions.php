@@ -313,7 +313,7 @@ function Multiutenza($SNAME)
 
 function ForumJumper($forumid=0)
 {
-global $db,$_ENV;
+global $db,$_ENV,$title;
 
 include_once "lib/TreeClass.php";
 
@@ -336,7 +336,12 @@ $ris=$tree->drawTree();
 $output .= "<form method='POST' name='jumpform' action=''>";
 $output .= "<select name='forumjump' class='content' size='1' onchange='location.href=document.jumpform.forumjump.options[document.jumpform.forumjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>";
 
+if(!$forumid) {$output .=  "<option selected>Link rapidi</option>";}
+
+
 $output .= "<optgroup label='Link rapidi'>"; 			
+
+
 $output .= "<option value='index.php'>Home</option>"; 		
 $output .= "<option value='options_forum.php'>Opzioni</option>"; 		
 $output .= "<option value='shownewmsg.php'>Nuovi messaggi</option>"; 		
@@ -344,6 +349,7 @@ $output .= "<option value='shownewmsg.php'>Nuovi messaggi</option>";
 
 
 $output .= "<optgroup label='Salta a un forum'>"; 			
+
 
 
 while (list ($key, $value) = each ($ris)) {
@@ -358,6 +364,7 @@ while (list ($key, $value) = each ($ris)) {
     $output .= "</option>";
     }  
 }
+
 
 $output .= "</optgroup></select></form>";
 
