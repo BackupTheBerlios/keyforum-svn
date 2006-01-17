@@ -53,6 +53,7 @@ e_help = "Indirizzo e-mail: [email]nome@indirizzo.com[/email] (alt+e)";
 t_help = "Miniatura immagine: [tmb]http://image_url[/tmb]  (alt+t)";
 f_help = "Dimensione carattere: [size=x]testo[/size]";
 s_help = "Colore carattere: [color=red]testo[/color]  Aiuto: puoi anche usare color=#FF0000";
+o_help = "Tipo carattere: [font=Arial]testo[/font]";
 
 
 // Define the bbCode tags

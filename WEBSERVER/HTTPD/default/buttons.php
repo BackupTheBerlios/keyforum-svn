@@ -14,9 +14,22 @@
 <br>
 </td></tr>
 <tr><td>
-&nbsp;Colore:
+
+&nbsp;
+<select name="addbbcodefont" onChange="bbfontstyle('[FONT=' + this.form.addbbcodefont.options[this.form.addbbcodefont.selectedIndex].value + ']', '[/FONT]');this.selectedIndex=0;" onMouseOver="helpline('o')" onMouseOut="helpline('x')">
+  <option>Carattere</option>
+  <option value="Arial" >Arial</option>
+  <option value="Times" >Times</option>
+  <option value="Courier" >Courier</option>
+  <option value="Geneva" >Geneva</option>
+  <option value="Optima" >Optima</option>
+  <option value="Impact" >Impact</option>
+</select>
+
+
+&nbsp;
 <select name="addbbcode18" onChange="bbfontstyle('[color=' + this.form.addbbcode18.options[this.form.addbbcode18.selectedIndex].value + ']', '[/color]');this.selectedIndex=0;" onMouseOver="helpline('s')" onMouseOut="helpline('x')">
-  <option style="color:black; background-color: #FAFAFA" value="#444444" >Default</option>
+  <option>Colore</option>
   <option style="color:darkred; background-color: #FAFAFA" value="darkred" >Dark Red</option>
   <option style="color:red; background-color: #FAFAFA" value="red" >Red</option>
   <option style="color:orange; background-color: #FAFAFA" value="orange" >Orange</option>
@@ -32,14 +45,15 @@
   <option style="color:white; background-color: #FAFAFA" value="white" >White</option>
   <option style="color:black; background-color: #FAFAFA" value="black" >Black</option>
 </select>
-&nbsp;&nbsp;&nbsp;
-Dimensione:<select name="addbbcode20" onChange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]')" onMouseOver="helpline('f')" onMouseOut="helpline('x')">
+
+&nbsp;<select name="addbbcode20" onChange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.selectedIndex=0;" onMouseOver="helpline('f')" onMouseOut="helpline('x')">
+  <option>Dimensione</option>
   <option value="1" >Piccolo</option>
   <option value="7" >Medio</option>
   <option value="14" >Grande</option>
   <option value="28" >Enorme</option>
 </select>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input name="btnCloseAll" type="button" accesskey="a" class="button"  id="btnCloseAll" value="CHIUDI TAG" onMouseOver="helpline('a')" onMouseOut="helpline('x')" onClick="bbstyle(-1);">	
 <br>
 <input type="text" name="helpbox" size="40" maxlength="100" style="width:448px; font-size:10px" class="helpline" value="Info: selezionando il testo potrai applicare velocemente i BBcode" />
