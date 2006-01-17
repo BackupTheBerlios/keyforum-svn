@@ -23,6 +23,7 @@ $lang['reload_300s']  = "Refresh every 5 minutes";
 $lang['reload_600s']  = "Refresh every 10 minutes";
 $lang['shownewmsg']  = "Show new messages";
 $lang['user_panel']  = "Options";
-
+$lang['user_to_auth']  = "There are users to validate";
+$lang['user_info_auth']  = "Your user had to be validated by Admin, please wait to be validated, until validation you cannot write messages.";
 
 ?>
