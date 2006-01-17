@@ -1,5 +1,8 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+2006-01-17
+Luftw@ffer:			[FIX] Ordinamento dei forum in sezioni.php
+
 2006-01-16
 Luftw@ffer:			[ADD] Navbar in fondo alla pagina
 
