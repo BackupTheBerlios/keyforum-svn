@@ -70,7 +70,7 @@ function PageSelect() {
 // sottoforum
 
   $mainzedid=$_REQUEST["SEZID"];
-  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ID;";
+  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ORDINE;";
   $sez = $db->get_results($query);
   $num_sottoforum=$db->num_rows;
   
@@ -108,7 +108,7 @@ function PageSelect() {
 	  
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ID;";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ORDINE;";
       $subsez = $db->get_results($querysubs);
       if($subsez)foreach($subsez as $subsezval) {
         if($notfirst)
