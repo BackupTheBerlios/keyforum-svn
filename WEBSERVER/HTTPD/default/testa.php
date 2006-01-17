@@ -51,6 +51,26 @@ $lang += $std->load_lang('lang_testa', $blanguage );
   }
   echo ucfirst($BNAME);
   echo " Forum $title2</title>";
+  
+  $userlinks =array(
+    	 'index.php' 		=> $lang['userlink_home']
+  	,'gestip.php' 		=> $lang['userlink_ipman']
+  	,'userlist.php?validati=1&amp;nonvalidati=1' 	=> $lang['userlink_usrlst']
+  	,'boardlist.php'	=> $lang['userlink_brdlst']
+  	);
+  	if ($sess_auth)
+  	{
+  		$userlinks['options_forum.php'] = $lang['user_panel'];
+  		$userlinks['shownewmsg.php']	= $lang['shownewmsg'];
+  		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$sess_nick.'</b>';
+  		$userlinks['logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_logout'];
+  	}
+  	else
+  	{
+  		$userlinks[] = $lang['userlink_wlcm'].' '.$lang['userlink_guest'];
+  		$userlinks['login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_login'];
+  		$userlinks['register.php'] = $lang['userlink_signup'];
+	}
 
 ?>
 <link type="text/css" rel="stylesheet" href="style_page.css">
@@ -107,8 +127,11 @@ function confirmThis(url) {
     </p>
       <form method="post" name="boardlinkform" action="">
        <p>
-        <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>|
-        <select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
+        <a href="search.php<?php if ($_REQUEST["SEZID"]) echo "?SEZID=".$_REQUEST["SEZID"];?>"><?php echo $lang['search']; ?></a>
+        | <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> 
+	| <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> 
+	| <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a>
+        |<select class="forminput" name="boardlink" size="1"  onchange="if(document.boardlinkform.boardlink.selectedIndex)window.open(document.boardlinkform.boardlink.options[document.boardlinkform.boardlink.selectedIndex].value)">
           <option value="" selected="selected"><?php echo $lang['sel_otherbrd']; ?></option>
 <?php
 foreach($config['WEBSERVER'] as $nome_board=>$array)
@@ -135,33 +158,7 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
 </div>
 <div id="userlinks">
   <p class="home"><b><a href="javascript:confirmThis('chiudi.php')"><?php echo $lang['userlink_close']; ?></a></b></p>
-  <?php
-  $userlinks =array(
-  	 'index.php' 		=> $lang['userlink_home']
-	,'gestip.php' 		=> $lang['userlink_ipman']
-	,'userlist.php?validati=1&amp;nonvalidati=1' 	=> $lang['userlink_usrlst']
-	,'boardlist.php'	=> $lang['userlink_brdlst']
-	);
-	if ($sess_auth)
-	{
-		$userlinks['options_forum.php'] = $lang['user_panel'];
-		$userlinks['shownewmsg.php']	= $lang['shownewmsg'];
-		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$sess_nick.'</b>';
-		$userlinks['logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_logout'];
-	}
-	else
-	{
-		$userlinks[] = $lang['userlink_wlcm'].' '.$lang['userlink_guest'];
-		$userlinks['login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_login'];
-		$userlinks['register.php'] = $lang['userlink_signup'];
-	}
-	 
-	//echo "<p>".userlinks($userlinks) ?>
-	
   <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> 
-	| <a href="gestip.php"><?php echo $lang['userlink_ipman']; ?></a> 
-	| <a href="userlist.php?validati=1&amp;nonvalidati=1"><?php echo $lang['userlink_usrlst']; ?></a> 
-	| <a href="boardlist.php"><?php echo $lang['userlink_brdlst']; ?></a>
 	| <a href='shownewmsg.php'><?php echo $lang['shownewmsg']; ?></a>
 	<?	
 	if($sess_auth)
