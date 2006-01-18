@@ -1,12 +1,18 @@
 package keyforum;
-
-
+#use Data::Dump qw(dump);
+$GLOBAL::Fconf={};
+$GLOBAL::ForUtility={};
+$GLOBAL::SelectQuery='';
+$GLOBAL::PubKey={};
 use Itami::Cycle;
 require ShareDB;
 require "versione.pm";
 require "GestIp.pm";
 require "kfdebug.pm";
-require "FRule.pm";
+require "FRule2.pm";
+require "LoadForumConfig.pm";
+require "ForumUtility.pm";
+
 use strict;
 #%GLOBAL::ItemSubscribe
 #%GLOBAL::Gate
@@ -287,12 +293,16 @@ sub MakeShareSession {
 	
 	# Creo la chiave che identificherà quello specifico forum (in base alla chiave pubblica)
 	my $Identificatore=Digest::SHA1::sha1("$public_key");
-	
+	$GLOBAL::PubKey->{$Identificatore}=$public_key;
+	#Carico la configurazione impostata dall'admin per questo forum che si crea
+	LoadForumConfig::Load($ForumName,$Identificatore);
+	$GLOBAL::ForUtility->{$Identificatore}=ForumUtility->new($ForumName,$Identificatore);
 	# Creo l'oggetto Rule.
 	# La classe FRule è l'abbreviazione di ForumRule, regole del forum.
 	# I metodi dell'oggetto mi dicono se certe azioni da parte di certi utenti sono permesse
 	# in base anche alla configurazione caricata da $ForumName."_conf" .
-	my $rule=FRule->new($GLOBAL::SQL, $ForumName, $Identificatore,$public_key,$GLOBAL::CONFIG->{BUFFER}) || return errore("Errore nel caricamento della configurazione di $ForumName\n");
+	
+	my $rule=FRule->new($ForumName, $Identificatore,$public_key) || return errore("Errore nel caricamento della configurazione di $ForumName\n");
 	
 	# Creo l'oggetto che mi permetterà di scambiare le righe delle varie tabelle.
 	# Questo oggetto particolare si chiama Gate (non lavora con socket).
@@ -304,34 +314,19 @@ sub MakeShareSession {
 				  membri=> $ForumName."_membri",
 				  admin=> $ForumName."_admin",
 				  reply=> $ForumName."_reply",
+				  extdati=> $ForumName."_extdati",
 				 );
+	#print  dump($rule->MakeQuery)."<-\n";
 	$Gate->tab_conf(
 		ShareName=>$Identificatore,
 		Identificatore=>"HASH",
 		Table=>$ForumName."_congi",
 		Type=>"TYPE",
 		LastSend=>"LAST_SEND",
-		Query=>{
-		"1"=>[
-			"SELECT `HASH`, `SEZ`, `AUTORE`, `EDIT_OF`, '1' AS `TYPE`,`DATE`, `TITLE`, `SUBTITLE`, `BODY`, `FIRMA`, `AVATAR`, `SIGN`,`FOR_SIGN` "
-			."FROM ".$ftable{newmsg}." WHERE `HASH`=?",
-			"SELECT `HASH`, `SEZ`, `AUTORE`, `EDIT_OF`,'1' AS `TYPE`, `DATE`, `TITLE`, `SUBTITLE`, `BODY`, `FIRMA`, `AVATAR`, `SIGN`,`FOR_SIGN` "
-			."FROM ".$ftable{newmsg}." WHERE `EDIT_OF`=?",
-			"SELECT `HASH`, `REP_OF`, `AUTORE`, `EDIT_OF`,'2' AS `TYPE`, `DATE`, `FIRMA`, `AVATAR`, `TITLE`, `BODY`, `SIGN` "
-			."FROM ".$ftable{reply}." WHERE `REP_OF`=?"
-			],
-		"2"=>[
-			"SELECT `HASH`, `REP_OF`, `AUTORE`, `EDIT_OF`, '2' AS `TYPE`, `DATE`, `FIRMA`, `AVATAR`, `TITLE`, `BODY`, `SIGN` "
-			."FROM ".$ftable{reply}." WHERE HASH=?",
-			"SELECT `HASH`, `REP_OF`, `AUTORE`, `EDIT_OF`, '2' AS `TYPE`, `DATE`, `FIRMA`, `AVATAR`, `TITLE`, `BODY`, `SIGN` "
-			."FROM ".$ftable{reply}." WHERE EDIT_OF=?"
-			],
-		"3"=> ["SELECT `HASH`, `DATE`, '3' AS `TYPE`,`SIGN`, `TITLE`, `COMMAND` FROM ".$ftable{admin}." WHERE `HASH`=? LIMIT 120;"],
-		"4"=>["SELECT `HASH`, `AUTORE`, '4' AS `TYPE`, `DATE`, `PKEY`, `SIGN`, `AUTH` FROM ".$ftable{membri}." WHERE `HASH`=? LIMIT 120;"]
-		}
+		Query=>eval '{'.$GLOBAL::SelectQuery.'}'
 	) or return errore("Impossibile completare alcune operazione per il forum $ForumName\n");
 	AddGate($Identificatore,$Gate,$rule,$GLOBAL::CONFIG->{SHARESERVER});
-	print scalar localtime(time())." KEYFORUM: Add ".unpack("H*",$Identificatore)."\n";
+	print "KEYFORUM: Aggiunta la board con ID ".unpack("H*",$Identificatore)."\n";
 }
 sub StartUp {
 	errore("Non è specificata una porta TCP per KeyForum!\n") unless $GLOBAL::CONFIG->{SHELL}->{TCP}->{PORTA};
@@ -340,7 +335,7 @@ sub StartUp {
 			LocalAddr => $GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{BIND},
 			Proto => 'tcp'
 		) or errore("Impossibile creare il server SHARESERVER sulla porta ".$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA}."\nErrore:$!\n");
-	print scalar localtime(time())." KEYFORUM: Started and listening on port ".$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA}."\n";
+	print "KEYFORUM: Avviato ed in ascolto sulla porta ".$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{PORTA}."\n";
 	$GLOBAL::SERVER{fileno($keyforum)}=\&keyforum::new;
 	$GLOBAL::ctcp->AddSock($keyforum,(type=>'server',group=>$GLOBAL::CONFIG->{SHARESERVER}->{TCP}->{GROUP})) or errore("Errore non previsto nell'aggiunta del'oggetto server KeyForum\n");
 	# Configuro KeyForumDebug

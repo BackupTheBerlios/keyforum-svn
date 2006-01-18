@@ -12,9 +12,9 @@ sub Connect {
 	if (my $pkt = Net::NTP::get_ntp_response($host)) {
 		return undef if $pkt->{"Receive Timestamp"}<1109508769;
 		$GLOBAL::ntpoffset=int($pkt->{"Receive Timestamp"}-time());
-		print scalar localtime(time())." NTPTIME: Sync on $host done, Offset:".$GLOBAL::ntpoffset."\n";
+		print "NTPTIME: Sincronizzazione orologio con $host riuscita, Offset:".$GLOBAL::ntpoffset."\n";
 	} else {
-		print scalar localtime(time())." NTPTIME: Sync on $host failed.\n";
+		print "NTPTIME: Sincronizzazione orologio con $host fallita.\n";
 	}
 }
 

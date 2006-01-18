@@ -23,16 +23,19 @@ sub check_req {
 	}
 	return $query;
 }
+# Ricerca in congi
 sub MODO4 {
 	my ($this, $req,$val)=@_;
 	my $where = "congi.CAN_SEND='1'";
 	$where.=" AND ".$_ if $_=$this->where_date($req,$val);
 	$where.=" AND ".$_ if $_=$this->where_type($req,$val);
+	$where.=" AND ".$_ if $_=$this->where_autore($req,$val);
 	$where.=$this->limit($req);
 	return "SELECT congi.HASH"
 	." FROM ".$this->{Fname}."_congi AS congi"
 	." WHERE $where;";
 }
+# Ricerca in admin
 sub MODO3 {
 	my ($this, $req,$val)=@_;
 	my $where = "tmp.HASH=congi.HASH AND congi.CAN_SEND='1'";
@@ -43,6 +46,7 @@ sub MODO3 {
 	." FROM ".$this->{Fname}."_admin AS tmp, ".$this->{Fname}."_congi AS congi"
 	." WHERE $where;";
 }
+# Ricerca in reply
 sub MODO2 {
 	my ($this, $req,$val)=@_;
 	my $where = "tmp.HASH=congi.HASH AND congi.CAN_SEND='1'";
@@ -56,6 +60,7 @@ sub MODO2 {
 	." FROM ".$this->{Fname}."_reply AS tmp, ".$this->{Fname}."_congi AS congi"
 	." WHERE $where;";
 }
+# Ricerca in thread
 sub MODO1 {
 	my ($this, $req,$val)=@_;
 	my $where = "tmp.HASH=congi.HASH AND congi.CAN_SEND='1'";
@@ -87,7 +92,7 @@ sub where_type {
 	my ($this, $req,$val)=@_;
 	return undef unless exists $req->{TYPE};
 	return undef if $req->{TYPE}=~ /\D/;
-	return undef if $req->{TYPE}<0 || $req->{TYPE}>4;
+	#return undef if $req->{TYPE}<0 || $req->{TYPE}>4;
 	push(@$val, $req->{TYPE});
 	return "TYPE=?";
 }

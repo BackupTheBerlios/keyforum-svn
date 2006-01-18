@@ -6,7 +6,6 @@ use Fcntl; # For O_RDWR, O_CREAT, etc. all'inizio
 use Itami::stati;
 use Itami::Cycle;
 use Itami::ConvData;
-require "flusher.pm";
 # $this contenuto:
 # DataBase	=> Oggetto per accedere al database.
 # DBM		=> Oggetto DBM con tutti gli MD5 delle righe.
@@ -51,7 +50,7 @@ sub tab_conf {
 	$this->{TabConf}=\%tab_conf;
 	$sth=$this->{DataBase}->prepare("SELECT ".($this->{TabConf}->{Identificatore}).",".($this->{TabConf}->{Type})." FROM ".($this->{TabConf}->{Table}));
 	$sth->execute() or return Error($this->{DataBase}->errstr."\n");
-	print scalar localtime(time())." KEYFORUM: Indexing HASHES.\n";
+	print "KEYFORUM: Creazione indice degli HASH.\n";
 	$this->{DBM}->{$md5_list->[0]}=$md5_list->[1] while $md5_list=$sth->fetchrow_arrayref;
 	$sth->finish;
 	my ($query, $type, $list);
@@ -62,7 +61,6 @@ sub tab_conf {
 			push(@{$this->{Type}->{$type}},$this->{DataBase}->prepare($query));
 		}
 	}
-	$this->{flusher}=flusher->new($this->{DataBase},$this->{fname});
 	$this->{Query}={};
 	$this->{Query}->{RandomSelect}=$this->{DataBase}->prepare("SELECT HASH, TYPE, `ID` FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' AND `ID`>? ORDER BY `ID`");
 	$this->{Query}->{SendTime}=$this->{DataBase}->prepare("UPDATE ".($this->{TabConf}->{Table})." SET SNDTIME=SNDTIME+1 WHERE HASH=?");
@@ -70,14 +68,9 @@ sub tab_conf {
 	$this->{Query}->{Contali}=$this->{DataBase}->prepare("SELECT ID FROM ".$this->{TabConf}->{Table}." ORDER BY ID DESC LIMIT 1");
 	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' ORDER BY WRITE_DATE DESC LIMIT 150");
 	#$this->{Query}->{SelPrio}=$this->{DataBase}->prepare("SELECT HASH FROM ".$this->{fname}."_priority ORDER BY `PRIOR` LIMIT 50");
-	$this->{Query}->{DelePrio}=$this->{DataBase}->prepare("DELETE FROM ".$this->{fname}."_priority WHERE HASH=?");
+	#$this->{Query}->{DelePrio}=$this->{DataBase}->prepare("DELETE FROM ".$this->{fname}."_priority WHERE HASH=?");
 	
 	# Converto le PKEY binarie in decimale dove non è stato fatto
-	my $temp=$this->{DataBase}->prepare("SELECT HASH, PKEY FROM ".$this->{fname}."_membri WHERE PKEYDEC=''");
-	my $update=$this->{DataBase}->prepare("UPDATE ".$this->{fname}."_membri SET PKEYDEC=? WHERE HASH=?");
-	$temp->execute();
-	$update->execute(ConvData::Bin2Dec($_->[1]), $_->[0]) while $_=$temp->fetchrow_arrayref;
-	$temp->finish();
 	
 	$this->contali();
 	$this->{Index}=int(rand()*$this->{NumRows});
@@ -93,9 +86,9 @@ sub NewSession {
 	$this->{NumeroOggetti}++;
 	my $hash_req={};
 	$hash_req->{MODO}=4;
-	$hash_req->{TYPE}=3;	
-	$hash_req->{LIMIT}=120;
-	$hash_req->{ORDER}='DESC';
+	$hash_req->{TYPE}=1;	
+	$hash_req->{LIMIT}=600;
+	$hash_req->{ORDER}='DESC' if rand()<0.5;
 	$this->{Sender}->($this->{TabConf}->{ShareName},'HASH_REQ', $oggname, $hash_req);
 	my $msgref=$this->PrendiUltimiMsg();
 	$this->{Sender}->($this->{TabConf}->{ShareName},'OFF_HASH', $oggname, $msgref) if $#{$msgref} > -1;
@@ -213,7 +206,6 @@ sub OFF_HASH {
 sub SendRandomHash {  # Invia hash random periodicamente.
 	my ($this, $num)=@_;
 	return undef if $this->{NumeroOggetti}<1;
-	$this->{flusher}->check;
 	my ($tmp,@hash,$type);
 	$this->{Query}->{RandomSelect}->execute($this->{Index}) or return Error("DB ERROR:".$this->{DataBase}->errstr."\n");
 	my $numero=0;
@@ -250,7 +242,7 @@ sub OffertHashBrCa { # offre una lista di hash a tutti quegli iscritti
 		$this->{Sender}->($this->{TabConf}->{ShareName},"OFF_HASH", $tmp, $arrayref);
 		$sendto++;
 	}
-	print scalar localtime(time())." SHARE DB: ".($#{$arrayref}+1)." new HASH offers to $sendto persons\n";
+	print "SHARE DB: Offerti ".($#{$arrayref}+1)." HASH nuovi a $sendto persone\n";
 	return $sendto;
 }
 sub GenericRequest { # richiede/offre una lista di hash a tutti quegli iscritti

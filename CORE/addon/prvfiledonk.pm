@@ -3,7 +3,7 @@ use strict;
 require "WriteDonkeyProtocol.pm";
 require "ReadDonkeyProtocol.pm";
 use IO::Socket::INET;
-use Data::Dump qw(dump);
+
 # Variabili usate dalla libreria
 my %server;
 my %serverid;
@@ -13,14 +13,18 @@ my $reader=ReadDonkeyProtocol->new(); # Intepreta i pacchetti del server donkey
 $GLOBAL::SQL->do("UPDATE filedonkip SET IS_CONNECT='0' WHERE 1");
 $query{CercaServer}=$GLOBAL::SQL->prepare("SELECT IP,PORTA,NOME,ID FROM filedonkip WHERE IS_CONNECT='0' AND NEXT_TRY<?");
 $query{UpDateTry}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET NEXT_TRY=?,IS_CONNECT='0' WHERE IP=?");
-$query{UpDateConnect}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET IS_CONNECT='1',SRVMSG='' WHERE IP=?");
+$query{UpDateConnect}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET IS_CONNECT='1',SRVMSG='',LAST_CONNECT=? WHERE IP=?");
 $query{UpDateSrvMsg}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET SRVMSG=CONCAT(SRVMSG,?) WHERE IP=?");
 $query{UpDateFilesUsers}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET NFILES=?,NUSERS=? WHERE IP=?");
 $query{UpDateNameDesc}=$GLOBAL::SQL->prepare("UPDATE filedonkip SET NOME=?,DESCRIZIONE=? WHERE IP=?");
-$query{CercaWord}=$GLOBAL::SQL->prepare("SELECT PAROLA,ID FROM filedonkword WHERE IS_SEARCH='0' ORDER BY ID LIMIT 1");
+$query{CercaWord}=$GLOBAL::SQL->prepare("SELECT PAROLA,DIMMIN,DIMMAX,TIPO,ID FROM filedonkword WHERE IS_SEARCH='0' ORDER BY ID LIMIT 1");
 $query{Cercato}=$GLOBAL::SQL->prepare("UPDATE filedonkword SET IS_SEARCH='1',SEARCH_DATE=? WHERE ID=?");
 $query{UpdateFile}=$GLOBAL::SQL->prepare("UPDATE filedonkfile SET NOME=?,`SIZE`=?,TIPO=?,FONTI=?,COMPLETE=?,CODEC=?,DURATA=?,BITRATE=?,LAST_UPDATE=? WHERE HASH=? AND SERVID=?");
 $query{InsertFile}=$GLOBAL::SQL->prepare("INSERT INTO filedonkfile (NOME,SIZE,TIPO,FONTI,COMPLETE,CODEC,DURATA,BITRATE,LAST_UPDATE,HASH,SERVID) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+$query{UpdateHashSrv}=$GLOBAL::SQL->prepare("UPDATE filedonkhash SET FONTI=? WHERE HASH=?");
+$query{UpdateHash}=$GLOBAL::SQL->prepare("UPDATE filedonkhash SET FONTI=?,SERVID=? WHERE HASH=?");
+$query{InserisciHash}=$GLOBAL::SQL->prepare("INSERT INTO filedonkhash (HASH,SERVID,FONTI) VALUES(?,?,?)");
+$query{SelectHash}=$GLOBAL::SQL->prepare("SELECT * FROM filedonkhash WHERE HASH=?");
 my $lastrequest=0;
 my $isconnect=0;
 # Funzioni appartenenti all'oggetto del server
@@ -32,7 +36,7 @@ sub new {
     $GLOBAL::CLIENT{$ogg}=$this;
     $this->{Write}=WriteDonkeyProtocol->new();
     $this->{Write}->edit_var('client_port',8794);
-    $this->{Write}->edit_var('id',$this->{Write}->ip2id("87.7.201.189"));#$sock->sockhost));
+    $this->{Write}->edit_var('id',$this->{Write}->ip2id($sock->sockhost));
     $this->{Write}->edit_var('name','KeyForumFK');
     $this->{Write}->edit_var('DisableHeader',1);
     $this->{ip}=$ip;
@@ -45,11 +49,11 @@ sub new {
 }
 sub RecData {
     my ($this,$ogg,$data,$sock)=@_;
-    print "Ricevo qualcosa dal server ".$this->{ip}."\n";
-   # {
-        #$this->OffriFiles($ogg),last unless $this->{OffriFiles};
+    #print "Ricevo qualcosa dal server ".$this->{ip}."\n";
+    {
+        $this->OffriFiles($ogg),last unless $this->{OffriFiles};
         #$this->ListaServer($ogg),last unless $this->{ListaServer};
-    #}
+    }
     my $valore=ReadDonkeyProtocol->Estrai($data);
     return undef unless $valore;
     $query{UpDateSrvMsg}->execute($valore->{'Server_message'}."\n",$this->{ip}) if $valore->{'Server_message'};
@@ -66,19 +70,32 @@ sub FileTrovati {
     my $file=$valore->{File_info_list};
     return undef if ref($file) ne "ARRAY";
     my $tmp;
+    my ($numtot,$hashinsert,$filenovi)=(0,0,0);
     foreach my $buf (@$file) {
         next unless $tmp=$buf->{Meta_tag_list};
         my @dati=($tmp->{'name'} || '',$tmp->{'size'} || '0', $tmp->{'type'} || '',$tmp->{'availab'} || '0',$tmp->{'availab_compl'} || '0',
                   $tmp->{'codec'} || '',$tmp->{'durata'} || '0',$tmp->{'bitrate'} || '0',time(),$buf->{File_hash},$this->{id});
         $query{UpdateFile}->execute(@dati);
-        $query{InsertFile}->execute(@dati) unless $query{UpdateFile}->rows;
-        $tmp='';
+        $query{InsertFile}->execute(@dati),$filenovi++ unless $query{UpdateFile}->rows;
+        $query{SelectHash}->execute($buf->{File_hash});
+        if (my $riga=$query{SelectHash}->fetchrow_hashref) {
+            if($riga->{SERVID}==$this->{id}) {
+                $query{UpdateHashSrv}->execute($tmp->{'availab'} || '0',$buf->{File_hash});
+            } elsif ($riga->{FONTI}<$tmp->{'availab'}) {
+                $query{UpdateHash}->execute($tmp->{'availab'} || '0',$this->{id},$buf->{File_hash});
+            }
+        } else {
+            $hashinsert++;
+            $query{InserisciHash}->execute($buf->{File_hash},$this->{id},$tmp->{'availab'} || '0');
+        }
+        $tmp='';$numtot++;
     }
-    
+    print "FILESERVER: $numtot ricevuti,$filenovi nuovi,$hashinsert HASH INSERITI\n";
 }
 sub Cerca {
-    my ($this,$parola)=@_;
-    $GLOBAL::ctcp->send($this->{ogg},$this->{Write}->Search_file($parola));
+    my ($this,@dati)=@_;
+    print "Cerco nei server la parola ".$dati[0]."\n";
+    $GLOBAL::ctcp->send($this->{ogg},$_) if $_=$this->{Write}->Search_file(@dati);
 }
 sub update_servinfo {
     my ($this,$info)=@_;
@@ -92,8 +109,7 @@ sub ListaServer {
 }
 sub OffriFiles {
     my ($this,$ogg)=@_;
-    #$GLOBAL::ctcp->send($ogg,$this->{Write}->offer_files);
-    send($this->{sock},$this->{Write}->offer_files,0);
+    $GLOBAL::ctcp->send($ogg,$this->{Write}->offer_files);
     $this->{OffriFiles}=1;
 }
 # Quando il buffer è vuoto, va inserito anche se non si usa
@@ -105,7 +121,7 @@ sub DESTROY {
     my $this=shift;
     print "Disconnesso\n";
     delete $server{$this->{ogg}};
-    $query{UpDateTry}->execute(time()+60,$this->{ip});
+    $query{UpDateTry}->execute(time()+120,$this->{ip});
 }
 
 # Funzione non appartenenti all'oggetto dei server.
@@ -119,7 +135,7 @@ sub tryconn {
 sub ConnessioneRiuscita {
     my ($fileno,$sock,$ip)=@_;
     print "Connesisone riuscita con $ip\n";
-    $query{UpDateConnect}->execute($ip);
+    $query{UpDateConnect}->execute($ip,time());
     FileDonkey->new($fileno,$sock,$ip);
     $isconnect=1;
 }
@@ -127,7 +143,7 @@ sub ConnessioneRiuscita {
 sub ConnessioneFallita {
     my ($fileno,$sock,$ip)=@_;
     print "COnnessione fallita\n";
-    $query{UpDateTry}->execute(time()+60,$ip);
+    $query{UpDateTry}->execute(time()+200,$ip);
 }
 
 # Prova a stabilire una connessione ad un server
@@ -153,18 +169,19 @@ sub CercaServer {
 sub CercaWord {
     $query{CercaWord}->execute();
     if (my $riga=$query{CercaWord}->fetchrow_hashref) {
+        $lastrequest=time();
         print "Dovrei cercare la parola ".$riga->{PAROLA}."\n";
-        return $lastrequest=time() unless $isconnect;
-        return undef unless CercaTutti($riga->{PAROLA});
+        return undef unless $isconnect;
+        return undef unless CercaTutti($riga->{PAROLA},$riga->{TIPO},int($riga->{DIMMIN})*1048576,int($riga->{DIMMAX})*1048576);
         $query{Cercato}->execute(time,$riga->{ID});
     }
     $query{CercaWord}->finish;
 }
 sub CercaTutti {
-    my $chiave=shift;
+    my @dati=@_;
     my $num=0;
     foreach my $buf (keys(%server)) {
-        $GLOBAL::CLIENT{$buf}->Cerca($chiave);
+        $GLOBAL::CLIENT{$buf}->Cerca(@dati);
         $num++;
     }
     return $num;

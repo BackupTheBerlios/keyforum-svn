@@ -58,14 +58,38 @@ sub offer_files {
     return $this->header("\x15",$msg);
 }
 sub Search_file {
-    my ($this,$keyword,$altro)=@_;
-    my $msg="\x01".$this->String($keyword);
-    $msg.=$this->pack_meta_tag_list($altro) if ref($altro) eq "HASH";
+    my ($this,$keyword,$tipo,$dimmin,$dimmax)=@_;
+    return undef if length($keyword)<3 || length($keyword)>30;
+    my $msg=$this->pack_search_size($dimmax,'max');
+    $msg=$this->pack_search_operator($msg,$this->pack_search_size($dimmin,'min'));
+    $msg=$this->pack_search_operator($msg,$this->pack_search_type($tipo));
+    $msg=$this->pack_search_operator($msg,"\x01".$this->String($keyword));
     return $this->header("\x16",$msg);
 }
 
 
-#varie
+#varie+
+sub pack_search_operator {
+    my ($this,$msg,$altro)=@_;
+    return $msg unless $altro;
+    return $altro unless $msg;
+    return "\x00\x00".$altro.$msg;
+}
+sub pack_search_type {
+    my ($this,$type)=@_;
+    return undef if length($type)>12 || length($type)==1;
+    return "\x02".$this->String($type).$tags{'type'};
+}
+sub pack_search_size {
+    my ($this,$dim,$type)=@_;
+    return undef if $dim=~ m/\D/;
+    return undef if $dim>4294967296 || $dim<100;
+    if($type eq "min") {$type="\x01";}
+        elsif($type eq "max") {$type="\x02";}
+            else {return undef;}
+    return "\x03".pack("I",$dim).$type.$tags{'size'};
+    
+}
 sub pack_meta_tag_list {
     my ($this,$hash)=@_;
     return undef if ref($hash) ne "HASH";
