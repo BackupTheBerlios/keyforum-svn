@@ -6,7 +6,7 @@ my $lista={};
 sub new {
     my ($pack,$fname,$id,$regole,$name,$tipo)=@_;
     if (exists $lista->{$fname.$name}) {  # Se l'oggetto antiflood esiste già con questo nome allora torno quello
-        $lista->{$fname.$name}->LoadType($tipo,$fname);  # Aggiungo a questo oggetto antiflood tutti i msg di quel tipo
+        $lista->{$fname.$name}->LoadType($tipo,$fname) if $lista->{$fname.$name}->{Attivato};  # Aggiungo a questo oggetto antiflood tutti i msg di quel tipo
         return $lista->{$fname.$name};
     }
     my $this=bless({},'AntiFlood');
