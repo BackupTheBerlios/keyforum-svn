@@ -318,27 +318,27 @@ $db->query("insert  into config values
 ('WEBSERVER', '$bsess', 'PORTA', '$bport');");
 $db->query("CREATE TABLE `{$bsess}_admin` (
   `HASH` binary(16) NOT NULL,
-  `TITLE` tinytext collate latin1_general_ci NOT NULL,
-  `COMMAND` mediumtext collate latin1_general_ci NOT NULL,
-  `TYPE` enum('3') collate latin1_general_ci NOT NULL default '3',
+  `TITLE` tinytext NOT NULL,
+  `BODY` mediumtext NOT NULL,
   `DATE` int(10) unsigned NOT NULL default '0',
   `SIGN` tinyblob NOT NULL,
   PRIMARY KEY  (`HASH`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 $db->query("CREATE TABLE `{$bsess}_conf` (
-  `GROUP` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `FKEY` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `SUBKEY` varchar(100) collate latin1_general_ci NOT NULL default '',
-  `VALUE` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `GROUP` varchar(100) NOT NULL default '',
+  `FKEY` varchar(100) NOT NULL default '',
+  `SUBKEY` varchar(100) NOT NULL default '',
+  `VALUE` mediumtext NOT NULL,
+  `present` tinyint(3) unsigned NOT NULL default '1',
+  `date` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`GROUP`,`FKEY`,`SUBKEY`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 $db->query("CREATE TABLE `{$bsess}_congi` (
   `ID` int(10) unsigned NOT NULL auto_increment,
   `HASH` binary(16) NOT NULL,
-  `TYPE` enum('1','2','3','4') collate latin1_general_ci NOT NULL,
+  `TYPE` tinyint(3) unsigned NOT NULL,
   `WRITE_DATE` int(10) unsigned NOT NULL,
-  `CAN_SEND` enum('0','1') collate latin1_general_ci NOT NULL default '1',
-  `SNDTIME` int(10) unsigned NOT NULL default '0',
+  `CAN_SEND` enum('0','1') NOT NULL default '1',
   `INSTIME` int(10) unsigned NOT NULL default '0',
   `AUTORE` binary(16) NOT NULL,
   PRIMARY KEY  (`ID`),
@@ -346,7 +346,7 @@ $db->query("CREATE TABLE `{$bsess}_congi` (
   KEY `AUTORE` (`AUTORE`),
   KEY `WRITE_DATE` (`WRITE_DATE`),
   KEY `INSTIME` (`INSTIME`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED COLLATE=latin1_general_ci AUTO_INCREMENT=1;");
 $db->query("CREATE TABLE `{$bsess}_emoticons` (
   `id` smallint(3) NOT NULL auto_increment,
   `typed` varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
@@ -357,7 +357,7 @@ $db->query("CREATE TABLE `{$bsess}_emoticons` (
   `clickable` tinyint(1) NOT NULL default '0',
   `enabled` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=248;");
 $db->query("insert  into {$bsess}_emoticons values 
 (1, ':mellow:', 'mellow.gif', null, 'gif', 0, 1, 1), 
 (2, ':huh:', 'huh.gif', null, 'gif', 0, 1, 1), 
@@ -610,7 +610,7 @@ $db->query("CREATE TABLE `{$bsess}_extdati` (
   `HASH` binary(16) NOT NULL,
   `AUTORE` binary(16) NOT NULL,
   `DATE` int(10) unsigned NOT NULL,
-  `TITLE` tinytext collate latin1_general_ci NOT NULL,
+  `TITLE` tinytext NOT NULL,
   `BODY` blob NOT NULL,
   `SIGN` tinyblob NOT NULL,
   PRIMARY KEY  (`HASH`),
@@ -623,7 +623,7 @@ $db->query("CREATE TABLE `{$bsess}_localkey` (
   `kvalue` text collate latin1_general_ci NOT NULL,
   `ktype` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1;");
 $db->query("CREATE TABLE `{$bsess}_localmember` (
   `HASH` char(32) character set latin1 collate latin1_general_ci NOT NULL,
   `PASSWORD` mediumtext character set latin1 collate latin1_general_ci NOT NULL,
@@ -638,57 +638,63 @@ $db->query("CREATE TABLE `{$bsess}_localmember` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
 $db->query("CREATE TABLE `{$bsess}_membri` (
   `HASH` binary(16) NOT NULL,
-  `AUTORE` varchar(30) collate latin1_general_ci default '',
-  `DATE` int(10) unsigned NOT NULL default '0',
-  `PKEY` tinyblob NOT NULL,
-  `PKEYDEC` text collate latin1_general_ci NOT NULL,
+  `AUTORE` varchar(30) NOT NULL default '',
+  `DATE` int(10) unsigned NOT NULL,
   `AUTH` tinyblob NOT NULL,
-  `TYPE` enum('4') collate latin1_general_ci NOT NULL default '4',
   `SIGN` tinyblob NOT NULL,
-  `is_auth` enum('0','1') collate latin1_general_ci NOT NULL default '0',
-  `firma` tinytext collate latin1_general_ci NOT NULL,
-  `avatar` tinytext collate latin1_general_ci NOT NULL,
-  `title` tinytext collate latin1_general_ci NOT NULL,
-  `ban` enum('0','1') collate latin1_general_ci NOT NULL default '0',
-  `present` enum('0','1') collate latin1_general_ci NOT NULL default '1',
+  `is_auth` enum('0','1') NOT NULL default '0',
+  `firma` text NOT NULL,
+  `avatar` blob NOT NULL,
+  `title` varchar(100) NOT NULL default '',
+  `email` varchar(100) NOT NULL default '',
+  `nascita` varchar(20) NOT NULL default '',
+  `provenienza` varchar(70) NOT NULL default '',
+  `ban` int(10) unsigned NOT NULL default '0',
+  `present` enum('0','1') NOT NULL default '1',
   `msg_num` int(10) unsigned NOT NULL default '0',
-  `edit_firma` int(10) unsigned NOT NULL default '0',
+  `tot_msg_num` int(10) unsigned NOT NULL default '0',
+  `edit_avatar` int(10) unsigned NOT NULL,
+  `edit_dati` int(10) unsigned NOT NULL default '0',
   `edit_adminset` int(10) unsigned NOT NULL default '0',
+  `EXTRA` blob NOT NULL,
+  `PKEYDEC` text NOT NULL,
+  `PKEYMD5` binary(16) NOT NULL,
   PRIMARY KEY  (`HASH`),
+  KEY `PKEYMD5` (`PKEYMD5`),
   KEY `is_auth` (`is_auth`),
-  KEY `PKEY` (`PKEY`(20))
+  KEY `DATE` (`DATE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 $db->query("CREATE TABLE `{$bsess}_msghe` (
   `HASH` binary(16) NOT NULL,
-  `last_reply_time` int(10) unsigned NOT NULL default '0',
-  `last_reply_author` binary(16) NOT NULL default '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `last_reply_time` int(10) unsigned NOT NULL,
+  `last_reply_author` binary(16) NOT NULL,
   `reply_num` int(10) unsigned NOT NULL default '0',
-  `DATE` int(10) unsigned NOT NULL default '0',
-  `AUTORE` binary(16) NOT NULL default '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `DATE` int(10) unsigned NOT NULL,
+  `AUTORE` binary(16) NOT NULL,
   `read_num` int(10) unsigned NOT NULL default '0',
   `block_date` int(10) unsigned NOT NULL default '0',
-  `pinned` enum('0','1') collate latin1_general_ci NOT NULL default '0',
+  `pinned` enum('0','1') NOT NULL default '0',
   `last_admin_update` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`HASH`),
   KEY `last_reply_time` (`last_reply_time`),
   KEY `AUTORE` (`AUTORE`),
   KEY `last_reply_author` (`last_reply_author`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ROW_FORMAT=FIXED;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;");
 $db->query("CREATE TABLE `{$bsess}_newmsg` (
   `HASH` binary(16) NOT NULL,
   `SEZ` int(8) unsigned NOT NULL default '0',
-  `visibile` enum('0','1') collate latin1_general_ci NOT NULL default '1',
-  `AUTORE` binary(16) NOT NULL default '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-  `EDIT_OF` binary(16) NOT NULL default '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-  `TYPE` enum('1') collate latin1_general_ci NOT NULL default '1',
+  `visibile` enum('0','1') NOT NULL default '1',
+  `IS_EDIT` int(10) unsigned NOT NULL default '0',
+  `AUTORE` binary(16) NOT NULL,
+  `EDIT_OF` binary(16) NOT NULL,
   `DATE` int(10) unsigned NOT NULL default '0',
-  `TITLE` tinytext collate latin1_general_ci NOT NULL,
-  `SUBTITLE` tinytext collate latin1_general_ci NOT NULL,
-  `BODY` mediumtext collate latin1_general_ci NOT NULL,
-  `FIRMA` tinytext collate latin1_general_ci NOT NULL,
-  `AVATAR` tinytext collate latin1_general_ci NOT NULL,
+  `TITLE` tinytext NOT NULL,
+  `SUBTITLE` tinytext NOT NULL,
+  `BODY` mediumtext NOT NULL,
   `SIGN` tinyblob NOT NULL,
   `FOR_SIGN` tinyblob NOT NULL,
+  `ADMIN_SIGN` tinyblob NOT NULL,
+  `EXTVAR` blob NOT NULL,
   PRIMARY KEY  (`HASH`),
   KEY `EDIT_OF` (`EDIT_OF`),
   KEY `DATE` (`DATE`),
@@ -711,15 +717,15 @@ $db->query("CREATE TABLE `{$bsess}_reply` (
   `HASH` binary(16) NOT NULL,
   `REP_OF` binary(16) NOT NULL,
   `AUTORE` binary(16) NOT NULL,
+  `IS_EDIT` enum('0','1') NOT NULL default '0',
   `EDIT_OF` binary(16) NOT NULL,
-  `DATE` int(10) unsigned NOT NULL default '0',
-  `FIRMA` tinytext collate latin1_general_ci NOT NULL,
-  `TYPE` enum('2') collate latin1_general_ci NOT NULL default '2',
-  `AVATAR` tinytext collate latin1_general_ci NOT NULL,
-  `TITLE` tinytext collate latin1_general_ci NOT NULL,
-  `BODY` mediumtext collate latin1_general_ci NOT NULL,
-  `visibile` enum('0','1') collate latin1_general_ci NOT NULL default '1',
+  `DATE` int(10) unsigned NOT NULL,
+  `TITLE` tinytext NOT NULL,
+  `BODY` mediumtext NOT NULL,
+  `visibile` enum('0','1') NOT NULL default '1',
   `SIGN` tinyblob NOT NULL,
+  `ADMIN_SIGN` tinyblob NOT NULL,
+  `EXTVAR` blob NOT NULL,
   PRIMARY KEY  (`HASH`),
   KEY `REP_OF` (`REP_OF`),
   KEY `EDIT_OF` (`EDIT_OF`),
@@ -727,24 +733,19 @@ $db->query("CREATE TABLE `{$bsess}_reply` (
   KEY `AUTORE` (`AUTORE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 $db->query("CREATE TABLE `{$bsess}_sez` (
-  `ID` int(8) unsigned NOT NULL,
-  `SEZ_NAME` varchar(250) collate latin1_general_ci default '',
-  `SEZ_DESC` text collate latin1_general_ci,
-  `MOD` varchar(250) collate latin1_general_ci NOT NULL default '',
-  `PKEY` tinyblob NOT NULL,
+  `ID` int(10) unsigned NOT NULL,
+  `SEZ_NAME` varchar(250) default '',
+  `SEZ_DESC` text,
+  `MOD` text NOT NULL,
+  `PKEY` text NOT NULL,
   `PRKEY` tinyblob NOT NULL,
-  `THR_NUM` int(8) unsigned NOT NULL default '0',
-  `REPLY_NUM` int(8) unsigned NOT NULL default '0',
-  `ONLY_AUTH` int(8) unsigned NOT NULL default '1',
+  `THR_NUM` int(10) unsigned NOT NULL default '0',
+  `REPLY_NUM` int(10) unsigned NOT NULL default '0',
+  `ONLY_AUTH` int(10) unsigned NOT NULL default '1',
   `AUTOFLUSH` int(10) unsigned NOT NULL default '0',
   `ORDINE` int(10) unsigned NOT NULL default '0',
   `FIGLIO` int(10) unsigned NOT NULL default '0',
-  `last_admin_edit` int(8) unsigned NOT NULL default '0',
-  `LAST_POST` int(10) unsigned NOT NULL default '0',
-  `LAST_TITLE` tinytext collate latin1_general_ci,
-  `LAST_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-  `LAST_POSTER_NAME` varchar(30) collate latin1_general_ci NOT NULL default '',
-  `LAST_POSTER_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `last_admin_edit` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 $db->query("CREATE TABLE `{$bsess}_titles` (
