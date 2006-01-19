@@ -14,8 +14,10 @@ function printmsg($MSG) {
   if ($MSG->date)
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG->date);
   $hash=unpack("H32hex",$MSG->hash);
-  if (eregi("http:\/\/", secure_v($MSG->avatar)))
-    $avatar="<img src='".$MSG->avatar."'alt=''><br />";
+  if (eregi("http:\/\/", secure_v($MSG->avatar))){
+    if(!$userdata->HIDEAVATAR)
+      $avatar="<img src='".$MSG->avatar."'alt=''><br />";
+  }
   if ($MSG->regdate)
     $register_date=strftime("%d/%m/%y",$MSG->regdate);
   if ($MSG->gruppo)
