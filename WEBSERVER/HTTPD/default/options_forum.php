@@ -65,6 +65,7 @@ if($_POST['MEM_ID'])
 			,TPP = '$new_tpp' 
 			,PPP = '$new_ppp'
 			,HIDESIG ='$new_hidesig'
+			,HIDEAVATAR ='$new_hideavatar'
 			,LEVEL ='$new_level'
 		WHERE HASH = '{$userdata->HASH}'  LIMIT 1 ";
 		$result = $db->query($query);
@@ -79,7 +80,7 @@ if($_POST['MEM_ID'])
 
 
 $query = "
-	Select LANG, TPP, PPP, HIDESIG , LEVEL
+	Select LANG, TPP, PPP, HIDESIG ,HIDEAVATAR, LEVEL
 	FROM {$SNAME}_localmember
 	WHERE hash = '{$userdata->HASH}'
 	LIMIT 1;
@@ -213,7 +214,16 @@ function select_yn($name,$current)
 {
 	//Dal momento che stiamo nascondendo :D
 	//0 YES
-	//1	NO
+	//1 NO
+	
+	$selected[$current]=" selected ";
+
+	return "<select name='$name'><option {$selected[0]} value='0'  >Si</option>
+	<option value='1' {$selected[1]} >No</option>
+	</select>";
+	
+	
+	/*
 	$string[0] = 'Si';
 	$string[1] = 'No';
 	$return .="<select name='$name'>";
@@ -223,7 +233,11 @@ function select_yn($name,$current)
 		$return.= "<option value='$i' $selected >{$string[$i]}</option>\n";
 	}
 	$return .="</select>";
+	
+
 	return $return;
+	
+	*/
 	
 }
 function select_language($name,$default)

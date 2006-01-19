@@ -44,7 +44,23 @@ echo "<br><font color=red><b>errore aggiornando a 0.43 rev $rev</b></font><br>";
 }
 
 
+// ******* V 466 **********
+$rev="466";
+echo "<font color=blue>AGGIORNAMENTO PER VERSIONE $rev</font><br>";
 
+$db->query("alter table intkf_localmember add column  `HIDEAVATAR` tinyint(1) unsigned NOT NULL default '0';");
+$db->query("alter table keyfo_localmember add column  `HIDEAVATAR` tinyint(1) unsigned NOT NULL default '0';");
+$db->query("alter table tstkf_localmember add column  `HIDEAVATAR` tinyint(1) unsigned NOT NULL default '0';");
+
+// test
+$EZSQL_ERROR="";
+$db->get_var("select IS_AUTH from keyfo_localmember");
+if (!$EZSQL_ERROR)
+{
+echo "<br>DB Aggiornato alla versione 0.43 rev $rev<br><br><br>";
+} else {
+echo "<br><font color=red><b>errore aggiornando a 0.43 rev $rev</b></font><br>";
+}
 
 
 echo "</b></center>";
