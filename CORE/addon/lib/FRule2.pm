@@ -56,6 +56,9 @@ sub AddRows {
             $this->{msgpila}->aggiunto($msg->{'TRUEMD5'});
         }
     }
+    while (my ($key,$value)=each %$list) {
+        print unpack("H*",$value->{TRUEMD5})." ERRORE ".$value->{ERRORE}."\n";
+    }
     $ritorna[1] = [ keys %{$ritorna[1]} ];  # Prendo le chiave dell'hash e le metto in un vettore :)
     return @ritorna;
 }
