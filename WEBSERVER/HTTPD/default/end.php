@@ -145,7 +145,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	 AND visibile='1') as num_rep ,
 	 (SELECT count(1) as lol
      FROM {$SNAME}_congi
-	 join {$SNAME}_newmsg on {$SNAME}_newmsg.hash = {$SNAME}_congi.hash
+	 join {$SNAME}_newmsg on {$SNAME}_newmsg.EDIT_OF = {$SNAME}_congi.hash
      WHERE INSTIME > '$timelimit'
 	 AND visibile='1') as num_thr
 	";

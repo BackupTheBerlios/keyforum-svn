@@ -368,7 +368,7 @@ $stop_not_pin=true;
 	<td align=center class='row4'><?=$riga->read_num?></td>
 	<tD align=left class='row4'>
 		<small><?=$reply_date?><br>
-		<a href=\"showmsg.php?SEZID=<?=$SEZID?>&amp;THR_ID=<?=$iden['hex']?>&amp;pag=last#end_page\">
+		<a href="showmsg.php?SEZID=<?=$SEZID?>&amp;THR_ID=<?=$iden['hex']?>&amp;pag=last#end_page">
 		<?=$lang['topic_last']?></a>: 
 		<b>
 			<a href='showmember.php?MEM_ID=<?=$dnickhash['alfa']?>'>

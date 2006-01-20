@@ -9,7 +9,7 @@ $SID = $_GET['SID'];
 
 $THASH = mysql_real_escape_string(pack('H*',$TID));
 //Query;
-$thr_name = $db->get_var("SELECT TITLE FROM {$SNAME}_newmsg where HASH = '$THASH' AND visibile = '1'");
+$thr_name = $db->get_var("SELECT TITLE FROM {$SNAME}_newmsg where EDIT_OF = '$THASH' AND visibile = '1'");
 $query = "
 	SELECT count({$SNAME}_membri.AUTORE) as NUM_REP,{$SNAME}_membri.AUTORE,{$SNAME}_membri.HASH
 	FROM {$SNAME}_reply

@@ -37,7 +37,7 @@ if(!$totmsg)
 $query = "
 SELECT count( sez ) AS num, {$SNAME}_sez.sez_name, {$SNAME}_newmsg.sez
 FROM {$SNAME}_reply
-JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.hash = {$SNAME}_reply.rep_of
+JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.EDIT_OF = {$SNAME}_reply.rep_of
 JOIN {$SNAME}_sez ON {$SNAME}_sez.id = {$SNAME}_newmsg.sez
 WHERE {$SNAME}_reply.autore = '$hash'
 AND {$SNAME}_newmsg.visibile = '1'
@@ -63,12 +63,12 @@ $sez_data = $sez_data[0];
 
 //last action 
 $query = "
-(SELECT {$SNAME}_reply.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.hash,{$SNAME}_newmsg.title
+(SELECT {$SNAME}_reply.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.EDIT_OF,{$SNAME}_newmsg.title
 FROM {$SNAME}_reply
-JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.hash = {$SNAME}_reply.rep_of
+JOIN {$SNAME}_newmsg ON {$SNAME}_newmsg.EDIT_OF = {$SNAME}_reply.rep_of
 WHERE {$SNAME}_reply.autore = '$hash')
 UNION 
-(SELECT {$SNAME}_newmsg.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.hash, {$SNAME}_newmsg.title
+(SELECT {$SNAME}_newmsg.date+".GMT_TIME." AS date, {$SNAME}_newmsg.sez, {$SNAME}_newmsg.EDIT_OF, {$SNAME}_newmsg.title
 FROM {$SNAME}_newmsg
 WHERE {$SNAME}_newmsg.autore = '$hash')
 ORDER BY date DESC 
