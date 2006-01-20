@@ -55,7 +55,7 @@ if ($_POST[action]=="new") {
 
 if ($_POST['STATIC']) $stat=1; else $stat=0; 
 	$db->query("INSERT INTO iplist (BOARD,IP,TCP_PORT,TROVATO,STATIC) VALUES "
-	."('".$idriga['value']."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');");
+	."('".$idriga."','".Ip2Num($_POST[ip])."','$_POST[TCP_PORT]','3','$stat');");
 }
 
 

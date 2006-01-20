@@ -49,7 +49,7 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
-$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO, `MOD`, SEZ_DESC, REPLY_NUM, PKEY,PRKEY,THR_NUM
+$query = "SELECT *
  from {$_ENV['sesname']}_sez order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 
