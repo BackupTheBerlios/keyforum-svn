@@ -13,6 +13,7 @@
   $res=$db->get_results($query);
   
   $emocol=$userdata->EMOCOL;
+  if(!$emocol) $emocol=4; //Supporto per chi non ha aggiornato il database Da rimuovere
   
   $colcont=0;	
 	if($res) foreach($res as $row)
