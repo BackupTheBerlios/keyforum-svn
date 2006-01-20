@@ -121,7 +121,7 @@ function PageSelect($pos) {
 }
 
 function FastReply() {
-	global $lang;?>
+	global $lang,$userdata?>
 	<script language='JavaScript' type='text/javascript'>
         <? include "bbcode.php";?>
 	</script>

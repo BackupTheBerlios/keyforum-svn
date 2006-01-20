@@ -12,13 +12,13 @@
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons WHERE enabled AND clickable";
   $res=$db->get_results($query);
   
-  $emocol=4; // numero colonne emoticon
-
+  $emocol=$userdata->EMOCOL;
+  
   $colcont=0;	
 	if($res) foreach($res as $row)
 	{
 		if ($colcont%$emocol== 0) { echo "<tr>"; }
-		$emoadr = ($row->internal ? "showemo.php?id={$row['id']}" : "img/emoticons/{$row->image}");
+		$emoadr = ($row->internal ? "showemo.php?id={$row->id}" : "img/emoticons/{$row->image}");
 		echo "
 		<td>
 			<img src='$emoadr' border='0' valign='absmiddle' style='cursor:pointer;' onclick='javascript:emot(\"{$row->typed}\")' alt='{$row->typed}' title='{$row->typed}'>

@@ -74,12 +74,13 @@ function show_menu()
 		
 	$menu[$lang['usrpnl_pnlprofile']] = Array(
 		'options_profile.php'	=> $lang['usrpnl_profilemod']
-		,'options_sign.php' => $lang['usrpnl_signaturemod']
-		,'options_avatar.php' => $lang['usrpnl_avatarmod'] 
+		,'options_sign.php' 	=> $lang['usrpnl_signaturemod']
+		,'options_avatar.php' 	=> $lang['usrpnl_avatarmod'] 
 		);
 			
 	$menu[$lang['usrpnl_options']] = Array(
-		'options_forum.php' => $lang['usrpnl_forumopt']
+		'options_forum.php' 	=> $lang['usrpnl_forumopt']
+		,'options_emoticons.php' => $lang['usrpnl_emoopt']
 			);
 	
 	$return ='
