@@ -46,7 +46,7 @@ if($result)foreach($result as $utente)
 	function ReimpostaDimensioni(num)
 	{
 		if(num == 0) num = num +1;
-		height = (num*15)+175;
+		height = (num*16)+175;
 		window.resizeTo(350,height);
 	}
 	function bog_off(){
