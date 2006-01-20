@@ -66,6 +66,7 @@ sub GetValue {
 	return substr($$ref,0,16,"") if $type==5;
 	return HashDeDump($ref) if $type==4;
 	return ArrayDeDump($ref) if $type==7;
+	return ArrayDeDumpil($ref) if $type==8;
 	return undef;	
 }
 # Dato l'indirizzo di uno scalare, tiglie i primi byte e prende il nome della variabile che segue.
@@ -106,7 +107,8 @@ sub HashDump {
 			if (ref($value)) { # Se è un riferimento a qualcosa prova a fare il dumping
 				next WDUMP unless $subref;
 				$KeyValue="\x04".HashDump($value,$onlyregister,1),last KVALUE if ref($value) eq "HASH";
-				$KeyValue="\x07".ArrayDump($value,$onlyregister,1),last KVALUE if ref($value) eq "ARRAY";
+				#$KeyValue="\x07".ArrayDump($value,$onlyregister,1),last KVALUE if ref($value) eq "ARRAY";
+				$KeyValue="\x08".ArrayDumpil($value,$onlyregister,1),last KVALUE if ref($value) eq "ARRAY";
 				next WDUMP;
 			}
 			if ($value!~ m/\D/ && $value<4294967296) { # Se contiene solo cifre decimali prova a fare il dumping
@@ -130,7 +132,7 @@ sub PackValue {
 	if (ref($value)) { # Se è un riferimento a qualcosa prova a fare il dumping
 		return undef unless $subref;
 		return "\x04".HashDump($value,$onlyregister,1) if ref($value) eq "HASH";
-		return "\x07".ArrayDump($value,$onlyregister,1) if ref($value) eq "ARRAY";
+		return "\x08".ArrayDumpil($value,$onlyregister,1) if ref($value) eq "ARRAY";
 		return undef;
 	}
 	if ($value!~ m/\D/ && $value<4294967296) { # Se contiene solo cifre decimali prova a fare il dumping
@@ -156,19 +158,24 @@ sub ArrayDeDump {
 	}
 	return $arrayref;
 }
-sub ArrayDump {
+sub ArrayDeDumpil {
+	my $pacchetto=shift;
+	my ($value,$estratti)=(0,"",0);
+	my $num=unpack("I",substr($$pacchetto,0,4,""));
+	my $arrayref=[];
+	push(@$arrayref,GetValue($pacchetto)) while $estratti++<$num && length($$pacchetto)>2;
+	return $arrayref;
+}
+sub ArrayDumpil {
 	my ($arrayref,$onlyregister,$subref)=@_;
 	return undef if ref($arrayref) ne "ARRAY";
 	my $buf;
 	my ($index,$struttura,$KeyValue,$totind)=(0,"","",0);
 	foreach $buf (@$arrayref) {
-		$KeyValue="";
-		$KeyValue=PackValue($buf,$onlyregister,$subref) if $buf;
-		if ($KeyValue) {
-			$struttura.=pack("S",$index).$KeyValue;
-			$totind++;
-		}
-		$index++;
+		$KeyValue=PackValue($buf,$onlyregister,$subref);
+		next unless $KeyValue;
+		$struttura.=$KeyValue;
+		$totind++;
 	}
 	return pack("I",$totind).$struttura;
 }
