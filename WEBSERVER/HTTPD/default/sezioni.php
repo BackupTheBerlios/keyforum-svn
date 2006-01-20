@@ -3,6 +3,9 @@
 include ("testa.php");
 $lang += $std->load_lang('lang_sezioni', $blanguage );
 
+
+?>
+<?
 function PageSelect() {
 ?>
 <tr><td>
@@ -118,14 +121,30 @@ function PageSelect() {
         $notfirst=1;
       }
       $moderators=$std->ListMod($sezval->MOD);
-      echo '
+		?>
       <tr>
-        <td class="row4" width="5%" align="center"><img src="img/bf_new.gif" alt=""></td>
-        <td class="row4"><b><a href="sezioni.php?SEZID='.$sezval->ID.'">'.secure_v($sezval->SEZ_NAME).'</a></b><br /><span class="desc">'.secure_v($sezval->SEZ_DESC).$subsections.'<br /><font color="#808080"><i>'.$lang['col_moderators'].":".$moderators.'</i></font><br /></span></td>
-        <td class="row2" align="center">'.$sezval->THR_NUM.'</td>
-        <td class="row2" align="center">'.$sezval->REPLY_NUM.'</td>
-        <td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$MSG->SEZID.'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($MSG->nick).'</a></td>';
-
+        <td class="row4" width="5%" align="center">
+			<img src="img/bf_new.gif" alt="">
+		</td>
+        <td class="row4">
+		<b><a href="sezioni.php?SEZID=<?=$sezval->ID?>"><?=secure_v($sezval->SEZ_NAME)?></a></b><br />
+		<span class="desc">
+			<?=secure_v($sezval->SEZ_DESC).$subsections?><br />
+			<font color="#808080">
+				<i><?=$lang['col_moderators']?>:<?=$moderators?></i>
+			</font><br />
+		</span>
+		</td>
+        <td class="row2" align="center"><?=$sezval->THR_NUM?></td>
+        <td class="row2" align="center"><?=$sezval->REPLY_NUM?></td>
+        <td class="row2" nowrap="nowrap">
+			<?=$lang['last_in']?>
+			<a href="showmsg.php?SEZID=<?=$MSG->SEZID?>&amp;THR_ID=<?=$hash['alfa']?>&amp;pag=last#end_page">
+			<?=secure_v($msg)?></a><br>
+			<?=$lang['last_data'].$write_date?><br>
+			<?=$lang['last_from']?><a href="showmember.php?MEM_ID=<?=$nickhash['alfa']?>">
+			<?=secure_v($MSG->nick)?></a></td>
+<?
 
       $totmsg = $totmsg + $sezval->THR_NUM + $sezval->REPLY_NUM;
     }
@@ -142,6 +161,14 @@ echo "<tr>
 
 
 ?>
+<!-- who posted -->
+<script  language="javascript" type="text/javascript">
+function who_posted(tid,sid)
+{
+	window.open("who_posted.php?TID=" + tid + "&amp;SID=" + sid, "WhoPosted","toolbar=no,scrollbars=yes,resizable=yes,width=350,height=300");
+}
+</script>
+
 
 
 <?PHP
@@ -310,17 +337,47 @@ echo "<td align='left' class='darkrow1' colspan='5' style='padding:6px'><b>Altre
 $stop_not_pin=true;
 }
 
-  echo "
+  ?>
 <tr>
-  <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
-  <td align='center' class='row2'>$post_icon</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
-  <td align=center class='row4'>".$riga->reply_num."</td>
-  <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
-  <td align=center class='row4'>".$riga->read_num."</td>
-  <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID={$SEZID}&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga->dnick)."</a></b></small></tD>
-</tr>\n";
-
+	<td align='center' class='row2'>
+	<img src='img/$PostStatImage.gif' alt=''>
+	</td>
+	<td align='center' class='row2'><?=$post_icon?></td>
+	<td align='left' class='row2'>
+	<table border='0' cellpadding='2px' cellspacing='0'>
+		<tbody>
+		<tr>
+			<td align='left' nowrap='nowrap'>
+			<?=$pinned_str?><a href='showmsg.php?SEZID=<?=$SEZID?>&amp;THR_ID=<?=$iden['hex']?>' title='<?=$lang['topic_start'] . $write_date?>'>
+			<?=secure_v($title)?></a>
+			<?=$pinned_close?>
+			</td>
+			<?=$Pages?>
+		</tr>
+		</tbody>
+	</table>&nbsp;<?=secure_v($riga->subtitle)?>
+	</td>
+	<td align=center class='row4'>
+		<a href="javascript:who_posted('<?=$iden['hex']?>','<?=$SEZID?>');"><?=$riga->reply_num?></a>
+	</td>
+	<td align=center class='row4'>
+		<small><u>
+			<a href='showmember.php?MEM_ID=<?=$nickhash['alfa']?>'><?=secure_v($riga->nick)?></a>
+		</u></small>
+	</td>
+	<td align=center class='row4'><?=$riga->read_num?></td>
+	<tD align=left class='row4'>
+		<small><?=$reply_date?><br>
+		<a href=\"showmsg.php?SEZID=<?=$SEZID?>&amp;THR_ID=<?=$iden['hex']?>&amp;pag=last#end_page\">
+		<?=$lang['topic_last']?></a>: 
+		<b>
+			<a href='showmember.php?MEM_ID=<?=$dnickhash['alfa']?>'>
+				<?=secure_v($riga->dnick)?></a>
+		</b>
+		</small>
+	</tD>
+</tr>
+<?
 
 
 
