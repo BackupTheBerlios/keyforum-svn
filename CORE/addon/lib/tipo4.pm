@@ -2,6 +2,7 @@ package tipo4;
 # reply
 use strict;
 use Digest::MD5;
+use Itami::BinDump;
 my $thistype=4;  # Dichiaro il tipo 
 $GLOBAL::TIPI->{$thistype}=\&new; # Si inserisce l'indirizzo della funzione in una variabile globale.
 my @campi=('DATE','TYPE','REP_OF','AUTORE','EDIT_OF','IS_EDIT','TITLE','BODY','EXTVAR'); # Questi sono i campi che verrano usati per il calcolo dell'md5
@@ -34,6 +35,7 @@ sub new {
 # Questa funzione viene sempre richiamata.
 sub Rule {
     my ($this,$msg)=@_;
+    return 1 if length($msg->{'ADMIN_SIGN'})>50;
     # Se il messaggio è scritto prima di una certa data impostata dall'utente si esce
     $msg->{ERRORE}=23,return undef if $msg->{DATE}< $GLOBAL::Fconf->{$this->{id}}->{'CORE'}->{'MSG'}->{'MAX_OLD'};
     $msg->{ERRORE}=24,return undef unless $this->{AntiFlood}->Check($msg->{AUTORE},$msg->{DATE});  # 23 Antiflood...troppi msg
@@ -46,18 +48,20 @@ sub Inserisci {
     my $forumid=$this->{id};
     # Controllo la firma digitale. Con la public key dell'amministratore. -100=firma non valida
     my $futils=$GLOBAL::ForUtility->{$forumid};
+    my $permessi=$GLOBAL::Permessi->{$this->{id}};
     return $this->Admin_ins($msg,$futils) if length($msg->{'ADMIN_SIGN'})>50;
     
     my ($valid_sign,$sez_data,$user_data);
     $msg->{ERRORE}=26,return undef unless $user_data=$futils->LoadUserData($msg->{AUTORE}); #26 dati utente non caricati
-    $msg->{ERRORE}=27,return undef if $user_data->{ban}<$msg->{DATE} && $user_data->{ban}>1000000000; # 27 L'utente è bannato
+    #$msg->{ERRORE}=27,return undef if $user_data->{ban}<$msg->{DATE} && $user_data->{ban}>1000000000; # 27 L'utente è bannato
+    $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     $msg->{ERRORE}=175,return undef unless $user_data->{is_auth}; # 175 i non autorizzati non possono rispondere ai msg
     $msg->{ERRORE}=179,return undef if $msg->{DATE}<$user_data->{DATE}; # 179 Non si può scriver msg prima della data di registrazione
-    
+    $msg->{ERRORE}=201,return undef if $futils->IsThreadClose($msg->{REP_OF},$msg->{DATE}); # 201 il thread è chiuso
     $valid_sign=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'SIGN'},$user_data->{'PKEYDEC'}) if length($user_data->{'PKEYDEC'})>270 && length($msg->{SIGN})>100;
     $msg->{ERRORE}=100,return undef unless $valid_sign; # 100 Nessun SIGN valido, si esce
     
-    return $this->non_edit_ins($msg,$futils,$user_data,$sez_data) unless $msg->{IS_EDIT}; # Inserisce le non modifiche
+    return $this->non_edit_ins($msg,$futils,$user_data,$sez_data,$permessi) unless $msg->{IS_EDIT}; # Inserisce le non modifiche
     
     
     return $this->edit_ins($msg,$futils,$user_data,$sez_data); # Inserisce le modifiche
@@ -68,9 +72,13 @@ sub non_edit_ins {
     return $this->_inserisci($msg);
 }
 sub edit_ins {
-    my ($this,$msg,$futils,$user_data,$sez_data)=@_;
+    my ($this,$msg,$futils,$user_data,$sez_data,$permessi)=@_;
     my $original_autore=$futils->GetOriginalAutoreReply($msg->{EDIT_OF});  # Prendo l'autore originale del messaggio.
-    $msg->{ERRORE}=164,return undef if $original_autore ne $msg->{AUTORE}; # Solo gli autori possono modificare i propri messaggi
+    if ($original_autore ne $msg->{AUTORE}) { # Solo gli autori possono modificare i propri messaggi
+        my $sez=$futils->LoadOriginalSez($msg->{REP_OF},$msg->{DATE});
+        $msg->{ERRORE}=200,return undef unless $sez; # 200 Errore imprevisto: Un reply scritto prima del thread?
+        $msg->{ERRORE}=164,return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},$sez,'IS_MOD'); # 164 MOD o gli stesso autore
+    }
     return $this->_inserisci($msg);
 }
 sub Admin_ins { #
@@ -96,8 +104,9 @@ sub _inserisci {
     }
     $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});
     $this->{Inserisci}->execute($msg->{TRUEMD5},$msg->{REP_OF},$msg->{AUTORE},$msg->{EDIT_OF},$msg->{DATE},$msg->{IS_EDIT},
-        $msg->{TITLE} || '',$msg->{BODY},$msg->{EXTVAR} || '',$msg->{SIGN},$msg->{FOR_SIGN} || '',$cambiati);
+        $msg->{TITLE} || '',$msg->{BODY},$msg->{EXTVAR} || '',$msg->{SIGN},$msg->{ADMIN_SIGN} || '',$cambiati);
     $this->{AntiFlood}->dbminsert($msg->{AUTORE},$msg->{DATE});
+    $GLOBAL::ExtVar->{$this->{id}}->ExecuteReply($msg->{AUTORE},$msg->{EDIT_OF},$msg->{REP_OF},BinDump::MainDeDump($msg->{EXTVAR}),$msg->{DATE}) if length $msg->{EXTVAR};
     return 1;
 }
 # Questa funzione viene richiamata dall'esterno e ci deve essere.
@@ -105,7 +114,7 @@ sub _inserisci {
 sub CheckFormat {
     my ($this, $msg)=@_;
     $msg->{ERRORE}=15,return undef if length($msg->{AUTORE}) != 16; # 15 dim dell'autore deve essere 16byte
-    $msg->{ERRORE}=18,return undef if length($msg->{EXTVAR}) > 15000; # 18 EXTVAR non può superare i 15000 caratteri
+    $msg->{ERRORE}=18,return undef if length($msg->{EXTVAR}) > 5000; # 18 EXTVAR non può superare i 5000 caratteri
     $msg->{ERRORE}=19,return undef if length($msg->{TITLE}) > 200; # 19 Il titolo può essere massimo di 200 caratteri
     $msg->{ERRORE}=170,return undef if length($msg->{REP_OF}) != 16; # 170 REP_OF deve essere di 16 caratteri
     $msg->{ERRORE}=33,return undef if length($msg->{EDIT_OF}) != 16 && $msg->{IS_EDIT}; # 33 lunghezza di edit_of non valida per essere una modifica

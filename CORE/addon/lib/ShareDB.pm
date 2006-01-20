@@ -66,7 +66,7 @@ sub tab_conf {
 	$this->{Query}->{SendTime}=$this->{DataBase}->prepare("UPDATE ".($this->{TabConf}->{Table})." SET SNDTIME=SNDTIME+1 WHERE HASH=?");
 	$this->{Query}->{GetType}=$this->{DataBase}->prepare("SELECT TYPE FROM ".$this->{TabConf}->{Table}." WHERE HASH=?");
 	$this->{Query}->{Contali}=$this->{DataBase}->prepare("SELECT ID FROM ".$this->{TabConf}->{Table}." ORDER BY ID DESC LIMIT 1");
-	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' ORDER BY WRITE_DATE DESC LIMIT 150");
+	$this->{Query}->{LastIns}=$this->{DataBase}->prepare("SELECT HASH,TYPE FROM ".($this->{TabConf}->{Table})." WHERE `CAN_SEND`='1' AND TYPE='1' LIMIT 1500");
 	#$this->{Query}->{SelPrio}=$this->{DataBase}->prepare("SELECT HASH FROM ".$this->{fname}."_priority ORDER BY `PRIOR` LIMIT 50");
 	#$this->{Query}->{DelePrio}=$this->{DataBase}->prepare("DELETE FROM ".$this->{fname}."_priority WHERE HASH=?");
 	
@@ -86,9 +86,9 @@ sub NewSession {
 	$this->{NumeroOggetti}++;
 	my $hash_req={};
 	$hash_req->{MODO}=4;
-	$hash_req->{TYPE}=1;	
+	#$hash_req->{TYPE}=1;	
 	$hash_req->{LIMIT}=600;
-	$hash_req->{ORDER}='DESC' if rand()<0.5;
+	$hash_req->{ORDER}='DESC';
 	$this->{Sender}->($this->{TabConf}->{ShareName},'HASH_REQ', $oggname, $hash_req);
 	my $msgref=$this->PrendiUltimiMsg();
 	$this->{Sender}->($this->{TabConf}->{ShareName},'OFF_HASH', $oggname, $msgref) if $#{$msgref} > -1;
@@ -165,6 +165,7 @@ sub ROW_REQ {
 	#my $hashcolum=$this->{TabConf}->{Identificatore};
 	my ($hash, $query,$buff,$thisrow);
 	my $numrow=0;
+	my $dim=0;
 	MAINFOR: foreach $hash (@$ref) {
 		next unless exists $this->{DBM}->{$hash};
 		next unless exists $this->{Type}->{$this->{DBM}->{$hash}};
@@ -176,7 +177,8 @@ sub ROW_REQ {
 				delete $buff->{HASH};
 				$refe->{$thisrow}=$buff;$numrow++;
 				#$this->{Query}->{SendTime}->execute($thisrow);
-				last MAINFOR if $numrow>300;
+				$dim+=length($buff->{BODY}) + length($buff->{EXTVAR}) + 180;
+				last MAINFOR if $numrow>300 || $dim>400000;
 			}
 			$query->finish;
 		}

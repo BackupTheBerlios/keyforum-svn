@@ -4,6 +4,8 @@ $GLOBAL::Fconf={};
 $GLOBAL::ForUtility={};
 $GLOBAL::SelectQuery='';
 $GLOBAL::PubKey={};
+$GLOBAL::Permessi={};
+$GLOBAL::ExtVar={};
 use Itami::Cycle;
 require ShareDB;
 require "versione.pm";
@@ -12,7 +14,8 @@ require "kfdebug.pm";
 require "FRule2.pm";
 require "LoadForumConfig.pm";
 require "ForumUtility.pm";
-
+require "permessi.pm";
+require "extvar.pm";
 use strict;
 #%GLOBAL::ItemSubscribe
 #%GLOBAL::Gate
@@ -297,11 +300,12 @@ sub MakeShareSession {
 	#Carico la configurazione impostata dall'admin per questo forum che si crea
 	LoadForumConfig::Load($ForumName,$Identificatore);
 	$GLOBAL::ForUtility->{$Identificatore}=ForumUtility->new($ForumName,$Identificatore);
+	$GLOBAL::ExtVar->{$Identificatore}=ExtVar->new($ForumName,$Identificatore);
 	# Creo l'oggetto Rule.
 	# La classe FRule è l'abbreviazione di ForumRule, regole del forum.
 	# I metodi dell'oggetto mi dicono se certe azioni da parte di certi utenti sono permesse
 	# in base anche alla configurazione caricata da $ForumName."_conf" .
-	
+	$GLOBAL::Permessi->{$Identificatore}=Permessi->new($ForumName,$Identificatore);
 	my $rule=FRule->new($ForumName, $Identificatore,$public_key) || return errore("Errore nel caricamento della configurazione di $ForumName\n");
 	
 	# Creo l'oggetto che mi permetterà di scambiare le righe delle varie tabelle.

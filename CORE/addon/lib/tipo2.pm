@@ -54,7 +54,8 @@ sub Inserisci {
 
     # 112-Un utente fittizio non può avere una public key (utente creato dall'admin in caso di importazione
     # di vecchie board. Si creano utenti senza PKEY e senza firma digitale propria ma validati dall'admin
-    $msg->{ERRORE}=112,return undef if !$valid_sign && length($msg->{PKEYDEC});  # Se non ha firma valida ma ha una PKEY.
+    # $msg->{ERRORE}=112,return undef if !$valid_sign && length($msg->{PKEYDEC});  # Se non ha firma valida ma ha una PKEY.
+    
     $msg->{PKEYMD5}=Digest::MD5::md5($msg->{PKEYDEC}) if $msg->{PKEYDEC}; # calcolo l'md5 della pkey
     unless ($valid_auth) { # Se non ha autorizzazione si controlla l'unicità della public key nel database.
         $msg->{ERRORE}=113,return undef if $this->univocita($msg->{PKEYMD5});  # Se c'è già un pkey uguale si esce

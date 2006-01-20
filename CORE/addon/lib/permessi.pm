@@ -1,29 +1,30 @@
 package Permessi;
-use Itami::BinDump;
 use strict;
+
+
 sub new {
     my ($packname,$fname,$id)=@_;
     my $this=bless({},$packname);
-           # AUTORE - DATE
-    
+    $this->{fname}=$fname;
+    $this->{SelVal}="SELECT VALORE FROM ".$this->{fname}."_permessi WHERE AUTORE=? AND CHIAVE_A=? AND CHIAVE_B=? AND `DATE`<? ORDER BY `DATE` DESC LIMIT 1";
+    $this->{'InsVal'}=$GLOBAL::SQL->prepare("INSERT INTO ".$this->{fname}."_permessi (AUTORE,`DATE`,CHIAVE_A,CHIAVE_B,VALORE) VALUES(?,?,?,?,?)");
+    return $this;
 }
 
-sub LoadPermessi {
-    my ($this,$autore,$data)=@_;
-    my $newthis=bless({},'SingPerm');
-    return $newthis;
-}
-
-
-package SingPerm;
 sub CanDo {
-    my ($this, $keyword)=@_;
-    return undef;
+    my ($this,$autore,$data,$chiave1,$chiave2)=@_;
+    return undef if length($autore) != 16;
+    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($autore,$chiave1 || '', $chiave2 || '',$data))) {
+        return $val;
+    }
     return undef;
 }
-sub AddPermit {
-    my ($this,$keyword)=@_;
-    $this->{permessi}->{$keyword}=1;
+
+sub EditPermessi {
+    my ($this,$autore,$data,$chiave1,$chiave2,$valore)=@_;
+    return undef if length($autore) != 16;
+    $this->{'InsVal'}->execute($autore,$data,$chiave1 || '', $chiave2 || '',$valore || '');
+    return 1;
 }
 
 1;

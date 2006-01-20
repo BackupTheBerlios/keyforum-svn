@@ -9,12 +9,14 @@ sub new {
     my ($packname,$fname,$id)=@_;
     my $this=bless({},$packname);
     @{$this}{'fname','id','query'}=($fname,$id,{});
-    $this->{LoadSezInfo}=$GLOBAL::SQL->prepare("SELECT `MOD`,`PKEY`,`ONLY_AUTH`,`AUTOFLUSH` FROM ".$fname."_sez WHERE ID=?");
-    $this->{LoadUserData}=$GLOBAL::SQL->prepare("SELECT `ban`,`PKEYDEC`,`is_auth`,`DATE`,`tot_msg_num` FROM ".$fname."_membri WHERE HASH=? AND present='1'");
+    $this->{LoadSezInfo}=$GLOBAL::SQL->prepare("SELECT `ONLY_AUTH`,`AUTOFLUSH`,`NEED_PERM` FROM ".$fname."_sez WHERE ID=?");
+    $this->{LoadUserData}=$GLOBAL::SQL->prepare("SELECT `PKEYDEC`,`is_auth`,`DATE`,`tot_msg_num` FROM ".$fname."_membri WHERE HASH=? AND present='1'");
     $this->{GetOrigAutNewMsg}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_newmsg WHERE HASH=? AND IS_EDIT='0'");
     $this->{GetOrigAutReply}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_reply WHERE HASH=? AND IS_EDIT='0'");
     $this->{ExistsThread}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_newmsg WHERE EDIT_OF=?");
     $this->{ExistsReply}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_reply WHERE EDIT_OF=?");
+    $this->{LoadOriginalSez}=$GLOBAL::SQL->prepare("SELECT `SEZ` FROM ".$fname."_newmsg WHERE EDIT_OF=? AND `DATE`<? ORDER BY `DATE` DESC LIMIT 1");
+    $this->{IsThreadClose}=$GLOBAL::SQL->prepare("SELECT block_date<? FROM ".$fname."_msghe WHERE HASH=? AND block_date>1000000");
     return $this;
 }
 sub InsertQuery {
@@ -86,6 +88,18 @@ sub LoadSezInfo {
     my ($this,$sezid)=@_;
     $this->{LoadSezInfo}->execute($sezid);
     return $_ if $_=$this->{LoadSezInfo}->fetchrow_hashref;
+    return undef;
+}
+sub LoadOriginalSez {
+    my ($this,$hash, $date)=@_;
+    $this->{LoadOriginalSez}->execute($hash,$date);
+    return $_ if $_=$this->{LoadOriginalSez}->fetchrow_hashref;
+    return undef;
+}
+sub IsThreadClose {
+     my ($this,$hash, $date)=@_;
+    $this->{IsThreadClose}->execute($date,$hash);
+    return $_ if $_=$this->{IsThreadClose}->fetchrow_hashref;
     return undef;
 }
 sub LoadUserData {
