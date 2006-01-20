@@ -136,6 +136,13 @@ PageSelect();
 	echo "<p>{$lang['msg_last'] }$dform</p>";
     ?>
   </div>
+  <!-- who posted -->
+<script  language="javascript" type="text/javascript">
+function who_posted(tid,sid)
+{
+	window.open("who_posted.php?TID=" + tid + "&amp;SID=" + sid, "WhoPosted","toolbar=no,scrollbars=yes,resizable=yes,width=350,height=300");
+}
+</script>
   <table cellspacing="1">
    <tr>
     <th align="center" width="1%">&nbsp;</th>
@@ -233,7 +240,7 @@ if($risultato) foreach($risultato as $riga ) {
   <td align='center' class='row2'>$post_icon</td>
   <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga->sez."'>".$sezname[$riga->sez]."</td>
-  <td align=center class='row4'>".$riga->reply_num."</td>
+  <td align=center class='row4'><a href=\"javascript:who_posted('{$iden['hex']}',$riga->sez)\">".$riga->reply_num."</a></td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
   <tD align=left class='row4'><small>{$reply_date}<br><a href=\"showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."&amp;pag=last#end_page\">".$lang['topic_last']."</a>: <b><a href='showmember.php?MEM_ID=".$dnickhash['alfa']."'>".secure_v($riga->dnick)."</a></b></small></tD>
 </tr>\n";
