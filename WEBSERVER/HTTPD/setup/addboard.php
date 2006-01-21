@@ -94,7 +94,7 @@ if (isset($import)) {
 // ******* DATI FORUM **********
 
 $postdata['bsession']=$_REQUEST['bsession'];
-$postdata['pkey']=$_REQUEST['pkey'];
+$postdata['pkey']=$_REQUEST['pkey']
 $postdata['bid']=$_REQUEST['bid'];
 $postdata['bind']=$_REQUEST['bind'];
 $postdata['bport']=$_REQUEST['bport'];
@@ -638,6 +638,8 @@ $db->query("CREATE TABLE `{$bsess}_localmember` (
   `TPP` smallint(6) NOT NULL default '20',
   `PPP` smallint(6) NOT NULL default '10',
   `HIDESIG` tinyint(1) NOT NULL default '0',
+  `HIDEAVATAR` tinyint(1) NOT NULL default '0',
+  `EMOCOL` tinyint(1) NOT NULL default '4',
   `LASTREAD` int(10) NOT NULL default '0',
   `LEVEL` tinyint(2) unsigned NOT NULL default '0',
   `IS_AUTH` tinyint(1) unsigned NOT NULL default '0',
