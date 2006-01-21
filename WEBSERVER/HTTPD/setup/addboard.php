@@ -316,6 +316,7 @@ $db->query("insert  into config values
 ('WEBSERVER', '$bsess', 'GROUP', 'generic'), 
 ('WEBSERVER', '$bsess', 'DIRECTORY', 'default'), 
 ('WEBSERVER', '$bsess', 'PORTA', '$bport');");
+
 $db->query("CREATE TABLE `{$bsess}_admin` (
   `HASH` binary(16) NOT NULL,
   `TITLE` tinytext NOT NULL,
@@ -324,6 +325,7 @@ $db->query("CREATE TABLE `{$bsess}_admin` (
   `SIGN` tinyblob NOT NULL,
   PRIMARY KEY  (`HASH`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_conf` (
   `GROUP` varchar(100) NOT NULL default '',
   `FKEY` varchar(100) NOT NULL default '',
@@ -333,6 +335,7 @@ $db->query("CREATE TABLE `{$bsess}_conf` (
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`GROUP`,`FKEY`,`SUBKEY`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_congi` (
   `ID` int(10) unsigned NOT NULL auto_increment,
   `HASH` binary(16) NOT NULL,
@@ -347,6 +350,7 @@ $db->query("CREATE TABLE `{$bsess}_congi` (
   KEY `WRITE_DATE` (`WRITE_DATE`),
   KEY `INSTIME` (`INSTIME`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED COLLATE=latin1_general_ci AUTO_INCREMENT=1;");
+
 $db->query("CREATE TABLE `{$bsess}_emoticons` (
   `id` smallint(3) NOT NULL auto_increment,
   `typed` varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
@@ -358,6 +362,7 @@ $db->query("CREATE TABLE `{$bsess}_emoticons` (
   `enabled` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=248;");
+
 $db->query("insert  into {$bsess}_emoticons values 
 (1, ':mellow:', 'mellow.gif', null, 'gif', 0, 1, 1), 
 (2, ':huh:', 'huh.gif', null, 'gif', 0, 1, 1), 
@@ -617,6 +622,7 @@ $db->query("CREATE TABLE `{$bsess}_extdati` (
   KEY `DATE` (`DATE`),
   KEY `AUTORE` (`AUTORE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_localkey` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `kname` varchar(30) collate latin1_general_ci NOT NULL,
@@ -624,6 +630,7 @@ $db->query("CREATE TABLE `{$bsess}_localkey` (
   `ktype` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1;");
+
 $db->query("CREATE TABLE `{$bsess}_localmember` (
   `HASH` char(32) character set latin1 collate latin1_general_ci NOT NULL,
   `PASSWORD` mediumtext character set latin1 collate latin1_general_ci NOT NULL,
@@ -636,6 +643,7 @@ $db->query("CREATE TABLE `{$bsess}_localmember` (
   `IS_AUTH` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`HASH`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+
 $db->query("CREATE TABLE `{$bsess}_membri` (
   `HASH` binary(16) NOT NULL,
   `AUTORE` varchar(30) NOT NULL default '',
@@ -664,6 +672,7 @@ $db->query("CREATE TABLE `{$bsess}_membri` (
   KEY `is_auth` (`is_auth`),
   KEY `DATE` (`DATE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_msghe` (
   `HASH` binary(16) NOT NULL,
   `last_reply_time` int(10) unsigned NOT NULL,
@@ -680,6 +689,7 @@ $db->query("CREATE TABLE `{$bsess}_msghe` (
   KEY `AUTORE` (`AUTORE`),
   KEY `last_reply_author` (`last_reply_author`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;");
+
 $db->query("CREATE TABLE `{$bsess}_newmsg` (
   `HASH` binary(16) NOT NULL,
   `SEZ` int(8) unsigned NOT NULL default '0',
@@ -701,11 +711,13 @@ $db->query("CREATE TABLE `{$bsess}_newmsg` (
   KEY `AUTORE` (`AUTORE`),
   KEY `SEZ` (`SEZ`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_priority` (
   `HASH` binary(16) NOT NULL,
   `PRIOR` int(10) NOT NULL default '0',
   PRIMARY KEY  (`HASH`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_purgatorio` (
   `HASH` binary(16) NOT NULL,
   `TYPE` enum('1','2','3','4') collate latin1_general_ci NOT NULL,
@@ -713,6 +725,7 @@ $db->query("CREATE TABLE `{$bsess}_purgatorio` (
   PRIMARY KEY  (`HASH`),
   KEY `DELETE_DATE` (`DELETE_DATE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_reply` (
   `HASH` binary(16) NOT NULL,
   `REP_OF` binary(16) NOT NULL,
@@ -732,22 +745,7 @@ $db->query("CREATE TABLE `{$bsess}_reply` (
   KEY `DATE` (`DATE`),
   KEY `AUTORE` (`AUTORE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
-$db->query("CREATE TABLE `{$bsess}_sez` (
-  `ID` int(10) unsigned NOT NULL,
-  `SEZ_NAME` varchar(250) default '',
-  `SEZ_DESC` text,
-  `MOD` text NOT NULL,
-  `PKEY` text NOT NULL,
-  `PRKEY` tinyblob NOT NULL,
-  `THR_NUM` int(10) unsigned NOT NULL default '0',
-  `REPLY_NUM` int(10) unsigned NOT NULL default '0',
-  `ONLY_AUTH` int(10) unsigned NOT NULL default '1',
-  `AUTOFLUSH` int(10) unsigned NOT NULL default '0',
-  `ORDINE` int(10) unsigned NOT NULL default '0',
-  `FIGLIO` int(10) unsigned NOT NULL default '0',
-  `last_admin_edit` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
+
 $db->query("CREATE TABLE `{$bsess}_titles` (
   `id` smallint(5) NOT NULL auto_increment,
   `posts` int(10) default NULL,
@@ -755,6 +753,7 @@ $db->query("CREATE TABLE `{$bsess}_titles` (
   `pips` mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+
 $db->query("insert  into {$bsess}_titles values 
 (1, 0, 'Timido allievo', 1), 
 (2, 50, 'Pronto a postare', 2), 
@@ -767,6 +766,34 @@ $db->query("insert  into {$bsess}_titles values
 (9, 1500, 'Veterano del forum', 6), 
 (10, 2000, 'Silver member', 6), 
 (11, 2500, 'Gold member', 7);");
+
+$db->query("CREATE TABLE `{$bsess}_permessi` (
+ `AUTORE` binary(16) NOT NULL,
+ `DATE` int(10) unsigned NOT NULL,
+ `CHIAVE_A` varchar(100) NOT NULL,
+ `CHIAVE_B` varchar(100) NOT NULL,
+ `VALORE` varchar(250) NOT NULL,
+ PRIMARY KEY  (`AUTORE`,`DATE`,`CHIAVE_A`,`CHIAVE_B`),
+ KEY `SEZ_GROUP` (`DATE`),
+ KEY `PKEYID` (`CHIAVE_B`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+");
+
+$db->query("CREATE TABLE `{$bsess}_sez` (
+ `ID` int(10) unsigned NOT NULL,
+ `SEZ_NAME` varchar(250) default '',
+ `SEZ_DESC` text,
+ `NEED_PERM` int(11) NOT NULL,
+ `THR_NUM` int(10) unsigned NOT NULL default '0',
+ `REPLY_NUM` int(10) unsigned NOT NULL default '0',
+ `ONLY_AUTH` int(10) unsigned NOT NULL default '1',
+ `AUTOFLUSH` int(10) unsigned NOT NULL default '0',
+ `ORDINE` int(10) unsigned NOT NULL default '0',
+ `FIGLIO` int(10) unsigned NOT NULL default '0',
+ `last_admin_edit` int(10) unsigned NOT NULL default '0',
+ PRIMARY KEY  (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+");
 
 }
 
