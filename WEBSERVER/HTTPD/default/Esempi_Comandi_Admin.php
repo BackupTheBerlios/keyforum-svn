@@ -53,8 +53,7 @@ $admin->EditPerm($danieleg,25,'IS_MOD',1); # E' mod
 $admin->EditPerm($danieleg,30,'IS_MOD',1); # E' mod
 $admin->EditPerm($danieleg,35,'IS_MOD',1); # E' mod
 $admin->EditPerm($danieleg,'CAN','EDIT_ALL_AVAT',1); # Può modificare tutti gli avatar, firme, e dati di tutti gli utenti (oltre che il titolo)
-*/
-$danieleg=pack("H*",'7E025BF04C441DD381BEA1A65BB19126');
+
 $admin->AuthMem($danieleg);
 
 $messaggio['BODY']=$core->Var2BinDump($admin->ReturnVar());
