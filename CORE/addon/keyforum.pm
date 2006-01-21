@@ -327,7 +327,7 @@ sub MakeShareSession {
 		Table=>$ForumName."_congi",
 		Type=>"TYPE",
 		LastSend=>"LAST_SEND",
-		Query=>eval '{'.$GLOBAL::SelectQuery.'}'
+		Query=>$rule->MakeQuery()
 	) or return errore("Impossibile completare alcune operazione per il forum $ForumName\n");
 	AddGate($Identificatore,$Gate,$rule,$GLOBAL::CONFIG->{SHARESERVER});
 	print "KEYFORUM: Aggiunta la board con ID ".unpack("H*",$Identificatore)."\n";
