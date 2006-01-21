@@ -215,15 +215,15 @@ if(!$_REQUEST['order']){
 <?PHP
 if($_REQUEST['validati']){
    if($_REQUEST['nonvalidati']){
-      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE,  is_auth, msg_num FROM {$SNAME}_membri ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE,  is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='1' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }else{
    if($_REQUEST['nonvalidati']){
-      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE,  is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='0' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }else{
-      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE, TYPE, is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
+      $risultato=$db->get_results("SELECT HASH,AUTORE, DATE,  is_auth, msg_num FROM {$SNAME}_membri WHERE is_auth='2' ORDER BY ".$order_by.$order." LIMIT ".($CurrPag*$UserXPage).",$UserXPage;");
    }
 }
 # 2 Scambio nodi
