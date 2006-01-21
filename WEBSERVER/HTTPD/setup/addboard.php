@@ -94,7 +94,7 @@ if (isset($import)) {
 // ******* DATI FORUM **********
 
 $postdata['bsession']=$_REQUEST['bsession'];
-$postdata['pkey']=$_REQUEST['pkey']
+$postdata['pkey']=$_REQUEST['pkey'];
 $postdata['bid']=$_REQUEST['bid'];
 $postdata['bind']=$_REQUEST['bind'];
 $postdata['bport']=$_REQUEST['bport'];
