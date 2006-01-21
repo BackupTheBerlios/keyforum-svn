@@ -5,7 +5,7 @@ include ("testa.php");
 $lang += $std->load_lang('lang_gestip', $blanguage );
 
 $whereiam="gestip.php";
-$idriga = $config[SHARE][$SNAME][ID];
+$idriga = $config[SHARE][$SNAME][id];
 ?>
 <tr>
 	<td>
