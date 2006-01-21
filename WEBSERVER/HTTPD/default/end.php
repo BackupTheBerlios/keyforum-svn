@@ -140,7 +140,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	SELECT num+lol as tot FROM 
 	(SELECT count(1) as num
      FROM {$SNAME}_congi
-	 join {$SNAME}_reply on {$SNAME}_reply.hash = {$SNAME}_congi.hash
+	 join {$SNAME}_reply on {$SNAME}_reply.edit_of = {$SNAME}_congi.hash
      WHERE INSTIME > '$timelimit'
 	 AND visibile='1') as num_rep ,
 	 (SELECT count(1) as lol

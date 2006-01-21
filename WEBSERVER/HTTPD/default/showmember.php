@@ -96,7 +96,7 @@ $user = Array(
 	, 'location'	=>''
 	, 'compleanno'	=>''
 	, 'online'	=>array('text' => '','image' =>'') //IMPOSSIBLE TO DO
-	, 'last_action'	=>array('title' => $last_data->title,'data' => $last_data->date,'sez' => $last_data->sez, 'reply_id' =>$last_data->hash)
+	, 'last_action'	=>array('title' => $last_data->title,'data' => $last_data->date,'sez' => $last_data->sez, 'reply_id' =>$last_data->EDIT_OF)
 	);
 unset($pdata);
 unset($sez_data);
