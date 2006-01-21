@@ -10,6 +10,7 @@ class CoreSock {
 	var $header;
 	var $lungh;
 	var $prov;
+	var $gmt_time;
 	function CoreSock() {
 		$this->connesso=0;
 		$this->std = new FUNC;
@@ -49,7 +50,9 @@ class CoreSock {
 		while(time()-$start < $timeout){
 			if (!$this->connesso) return false;
 			$this->_ricevi();
-			if ($this->_bufferizza($var)) return($var);
+			if ($this->_bufferizza($var)) {
+				$this->gmt_time=$var['CORE']['INFO']['GMT_TIME'];
+				return($var);}
 		}
 		return false;
 	}
@@ -93,6 +96,29 @@ class CoreSock {
 		$stringa=substr_replace($stringa,$replace,$start,$length);
 		return $ritorno;
 	}
-
+	function Var2BinDump($array) {
+		$tosend['FUNC']['var2BinDump']=$array;
+		$this->Send($tosend);
+		$risp=$this->Read();
+		return $risp['FUNC']['var2BinDump'];
+	}
+	function AddMsg($array) {
+		global $forum_id;
+		$array['FDEST']=$forum_id;
+		$array['DATE']=$this->gmt_time;
+		$tosend['FORUM']['ADDMSG']=$array;
+		$this->Send($tosend);
+		$risp=$this->Read();
+		return $risp['FORUM']['ADDMSG']['ERRORE'];
+	}
+	function GetSign($md5,$privkey,$pwd='') {
+		$req[RSA][FIRMA][0][md5]=$md5;
+		$req[RSA][FIRMA][0][priv_pwd]=$privkey;
+		$req[RSA][FIRMA][0][priv_key]=$pwd;
+		$this->Send($req);
+		$risp=$this->Read();
+		return $risp[RSA][FIRMA][$md5];
+	}
+	
 }
 ?>
