@@ -99,6 +99,10 @@ $postdata['bid']=$_REQUEST['bid'];
 $postdata['bind']=$_REQUEST['bind'];
 $postdata['bport']=$_REQUEST['bport'];
 
+// elimino eventuali problemi di copia&incolla
+$postdata['pkey']=preg_replace("/\r\n|\n|\r/", "", trim($postdata['pkey']));
+
+
 // pkey da decimale a base64
 $req['FUNC']['Dec2Base64']=$postdata['pkey'];
 if (!$core->Send($req)) die ("Errore mentre si tentava di comunicare con il core: ".$core->errmsg);
