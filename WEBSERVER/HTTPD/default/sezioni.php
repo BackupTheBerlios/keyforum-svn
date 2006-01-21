@@ -340,7 +340,7 @@ $stop_not_pin=true;
   ?>
 <tr>
 	<td align='center' class='row2'>
-	<img src='img/$PostStatImage.gif' alt=''>
+	<img src='img/<? echo $PostStatImage; ?>.gif' alt=''>
 	</td>
 	<td align='center' class='row2'><?=$post_icon?></td>
 	<td align='left' class='row2'>
