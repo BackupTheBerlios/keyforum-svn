@@ -1,3 +1,4 @@
+#FileDonkey|Consente di fare un mare di cose
 package FileDonkey;
 use strict;
 require "WriteDonkeyProtocol.pm";

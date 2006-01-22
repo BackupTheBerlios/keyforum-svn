@@ -1,3 +1,4 @@
+#SignTime|Permette di sincronizzare l'ora con il server ntp per una maggiore precisione
 package SignTime;
 use strict;
 require BNTP;

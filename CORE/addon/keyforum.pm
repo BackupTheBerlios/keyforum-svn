@@ -1,3 +1,4 @@
+#Keyforum|che dire ancora
 package keyforum;
 #use Data::Dump qw(dump);
 $GLOBAL::Fconf={};

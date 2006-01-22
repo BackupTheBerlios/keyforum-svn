@@ -1,3 +1,4 @@
+#Kfshell|Descrizione
 package kfshell;
 use strict;
 use Crypt::RSA;

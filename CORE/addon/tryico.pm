@@ -1,3 +1,4 @@
+#Tryico|Consente di ridurre nella trayicon la finestra del core
 package tryico;
 use strict;
 use Win32::GUI;
