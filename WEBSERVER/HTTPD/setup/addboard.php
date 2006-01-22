@@ -1,8 +1,19 @@
 <?
 require_once('ez_sql.php');
 include ("core.php");
+include("langsupport.php");
 $core=NEW CoreSock;
 
+// determino la lingua
+if(!$_REQUEST['lang'])
+{
+$blanguage=GetUserLanguage();
+} else {
+$blanguage=$_REQUEST['lang'];
+}
+
+// lingua
+$lang = load_lang('lang_addboard', $blanguage ); 
 
 //inizializzo il db
 //classe PEAR per file config (XML)
@@ -33,7 +44,6 @@ $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['
 // nascondo gli errori mysql
 $db->hide_errors();
 
-// occhio, la chiave va trasformata da decimale...
 
 //layout iniziale
 $data=array();
@@ -102,6 +112,41 @@ $postdata['bport']=$_REQUEST['bport'];
 // elimino eventuali problemi di copia&incolla
 $postdata['pkey']=preg_replace("/\r\n|\n|\r/", "", trim($postdata['pkey']));
 
+// il nome sessione non deve contenere spazi
+$postdata['bsession']=str_replace(" ","",$postdata['bsession']);
+
+// controlli di conformità
+
+$check=true;
+
+// chiave e id sono corretti ?
+$bid_check=sha1($postdata['pkey']);
+if($postdata['bid'] != $bid_check) { $check=false; $error .= "<li>l'ID o la chiave pubblica non sono corretti</li>"; }
+
+// la sessione va da 5 a 15 caratteri ?
+$slen=strlen($postdata['bsession']);
+if ($slen <5 OR $slen >15) {$check=false; $error .= "<li>nome/sessione deve essere da 5 a 15 caratteri</li>"; }
+
+// porta è un numero ?
+if (!is_numeric($postdata['bport'])) {$check=false; $error .= "<li>la porta deve essere un numero</li>"; }
+
+if(!$check)
+ {
+ echo "<CENTER><b><H2>Errore nei dati !</H2></b>";
+ echo "<br><H4>$error</H4><br>";
+echo "<font color=red><b><H3>Non è stato possibile importare la board</H3></b></font><br><br></center>";
+
+
+// sovrascrivo in caso i dati siano stati modificati manualmente o corretti formalmente
+$data['root']['BOARD']['SESSION']=$postdata['bsession'];
+$data['root']['BOARD']['ID']=$postdata['bid'];
+$data['root']['BOARD']['PKEY']=$postdata['pkey'];
+
+layout($data);
+
+die();
+
+ } else {
 
 // pkey da decimale a base64
 $req['FUNC']['Dec2Base64']=$postdata['pkey'];
@@ -109,7 +154,7 @@ if (!$core->Send($req)) die ("Errore mentre si tentava di comunicare con il core
 if (!($risp=$core->Read(6))) die ("Errore mentre si tentava di comunicare con il core: ".$core->errmsg);
 $postdata['pkey']=$risp['FUNC']['Dec2Base64'];
 
-CreateDb($postdata);
+////////////////////CreateDb($postdata);
 
 // sovrascrivo chkdir.bat in modo da forzare una autoconfigurazione al prossimo avvio
 
@@ -141,6 +186,8 @@ echo "<font color=red><b><H3>Ricorda che per attivarla occorre riavviare KeyForu
 layout();
 
 die();
+
+} // FI (!$check)
 
 }
 
