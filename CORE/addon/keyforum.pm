@@ -292,7 +292,8 @@ sub MakeShareSession {
 	# Carico la chiave pubblica del forum che carico.
 	# La chiave pubblica è di vitale importanza e serve non solo per identificare un forum
 	# ma anche per autentificare le operazioni dell'admin.
-	$public_key=ConvData::Base642Dec($public_key);
+	# $public_key=ConvData::Base642Dec($public_key);
+	return errore("La chiave pubblica del forum $ForumName non è valida.\n") if $public_key =~ /\D/ || length($public_key)<200 || length($public_key)>500;
 	
 	# Creo la chiave che identificherà quello specifico forum (in base alla chiave pubblica)
 	my $Identificatore=Digest::SHA1::sha1("$public_key");
