@@ -85,7 +85,7 @@ if ($file->isValid()) {
 
 $root =& $xmldata->parseConfig('uploads/'.$file->getProp('name'), 'XML');
 if (PEAR::isError($root)) {
-    die('Error reading XML config file: ' . $root->getMessage());
+    die($lang['addboard_error1'] . $root->getMessage());
 }
 
 $data = $root->toArray();
@@ -120,20 +120,20 @@ $check=true;
 
 // chiave e id sono corretti ?
 $bid_check=sha1($postdata['pkey']);
-if($postdata['bid'] != $bid_check) { $check=false; $error .= "<li>l'ID o la chiave pubblica non sono corretti</li>"; }
+if($postdata['bid'] != $bid_check) { $check=false; $error .= "".$lang['addboard_infoID'].""; }
 
 // la sessione va da 5 a 15 caratteri ?
 $slen=strlen($postdata['bsession']);
-if ($slen <5 OR $slen >15) {$check=false; $error .= "<li>nome/sessione deve essere da 5 a 15 caratteri</li>"; }
+if ($slen <5 OR $slen >15) {$check=false; $error .= "".$lang['addboard_infosession'].""; }
 
 // porta è un numero ?
-if (!is_numeric($postdata['bport'])) {$check=false; $error .= "<li>la porta deve essere un numero</li>"; }
+if (!is_numeric($postdata['bport'])) {$check=false; $error .= "".$lang['addboard_infoport'].""; }
 
 if(!$check)
  {
- echo "<CENTER><b><H2>Errore nei dati !</H2></b>";
+ echo "<CENTER><b><H2>".$lang['addboard_dataerror']."</H2></b>";
  echo "<br><H4>$error</H4><br>";
-echo "<font color=red><b><H3>Non è stato possibile importare la board</H3></b></font><br><br></center>";
+echo "<font color=red><b><H3>".$lang['addboard_importerror']."</H3></b></font><br><br></center>";
 
 
 // sovrascrivo in caso i dati siano stati modificati manualmente o corretti formalmente
@@ -173,8 +173,8 @@ fclose($handle);
 
 
 echo "<CENTER><b><H3>Board {$postdata['bsession']} importata ! </H3></b>";
-echo "<br><H3>l'indirizzo per raggiungerla è http://127.0.0.1:{$postdata['bport']}</H3><br>";
-echo "<font color=red><b><H3>Ricorda che per attivarla occorre riavviare KeyForum...</H3></b></font><br><br></center>";
+echo "<br><H3>".$lang['addboard_boardaddress']."http://127.0.0.1:{$postdata['bport']}</H3><br>";
+echo "<font color=red><b><H3>".$lang['addboard_reboot']."</H3></b></font><br><br></center>";
 
 layout();
 
@@ -190,7 +190,7 @@ function FindFreePort()
 
 $host="127.0.0.1";
 $timeout= 0.5;
-echo "<center>finding free port... wait ...";
+echo "<center>".$lang['addboard_freeport']."";
 for ($port = 20585; $port <= 65000; $port++) {
     
     settype($ports[$i], "integer");
@@ -235,7 +235,7 @@ echo  "
 	<table border=\"0\" width=\"500\" id=\"table1\">
 		<tr>
 			<th class='row1'>
-			<font face=\"Verdana\"><b>IMPORTA NUOVA BOARD</b></font></th>
+			<font face=\"Verdana\"><b>".$lang['addboard_importnewboard']."</b></font></th>
 		</tr>
 		<tr>
 			<td class='row1' >
@@ -245,7 +245,7 @@ echo  "
                 <form method=\"post\" encType=\"multipart/form-data\" action=\"addboard.php?submit=1\">
                   <table width=\"550\" align=\"center\" id=\"table4\">
                     <tr>
-                      <td align=\"middle\">&nbsp; <b>carica file XML:</b>
+                      <td align=\"middle\">&nbsp; <b>".$lang['addboard_xmlload']."</b>
                       <input type=\"file\" name=\"userfile\"><br>
                       <input type=\"hidden\" name=\"file\" value=1>
                       <input type=\"submit\" value=\"Importa\"> </td>
@@ -256,20 +256,17 @@ echo  "
               </tr>
             </table>
             <p align=\"center\"><br>
-            <b>Dati modificabili dall'utente</b></p>
+            <b>".$lang['addboard_userdata']."</b></p>
             <form method=\"POST\" action=\"addboard.php?import=1\">
 				
 				<table border=\"0\" width=\"100%\" id=\"table2\">
 					<tr>
 						<td class='row1' width=\"27%\"><b>
-						<font size=\"2\">nome/sessione</font></b></td>
+						<font size=\"2\">".$lang['addboard_sessname']."</font></b></td>
 						<td class='row1' width=\"71%\"><input type=\"text\" name=\"bsession\" value=\"{$data['root']['BOARD']['SESSION']}\" size=\"20\"></td>
 					</tr>
 					<tr>
-						<td class='row3' colspan=\"2\">nome della 
-						board e identificativo per le tabelle del database, 
-                        inserire un nome alfanumerico senza spazi o lasciare 
-                        quello proposto di default (scelta consigliata)</td>
+						<td class='row3' colspan=\"2\">".$lang['addboard_info1']."</td>
 					</tr>
 					<tr>
 						<td class='row1' width=\"27%\"><b><font face=\"Verdana\" size=\"2\">porta</font></b></td>
@@ -277,9 +274,8 @@ echo  "
 					</tr>
 					<tr>
 						<td class='row3' width=\"98%\" colspan=\"2\">
-						inserisci un valore &gt; 
-						10.000, o mantieni quella proposta di default (scelta 
-						consigliata)</td>
+						".$lang['addboard_insertvalue']." &gt; 
+						".$lang['addboard_valueinfo']."</td>
 					</tr>
 					<tr>
 						<td class='row1' width=\"27%\"><b><font face=\"Verdana\" size=\"2\">bind</font></b></td>
@@ -290,18 +286,13 @@ echo  "
 					</tr>
 					<tr>
 						<td class='row3' width=\"98%\" colspan=\"2\">
-						lascia 127.0.0.1 se non 
-						vuoi che il forum sia accessibile dall'esterno, oppure * se 
-						invece vuoi che altre persone possano navigare il forum 
-						usando il tuo server web.<br>
-						Questo valore non influenza lo scambio messaggi tra i 
-						client. </td>
+						".$lang['addboard_info3']."</td>
 					</tr>
 					<tr>
 						<td class='row1' width=\"98%\" colspan=\"2\">
                         <p align=\"center\"><br>
-                        <b>Dati della board <br>
-                        (forniti dall'amministratore e non modificabili)<br>
+                        <b>".$lang['addboard_boarddata']."<br>
+                        ".$lang['addboard_info4']."<br>
 &nbsp;</b></td>
 					</tr>
 					<tr>
@@ -310,17 +301,15 @@ echo  "
 					</tr>
 					<tr>
 						<td class='row3' width=\"98%\" colspan=\"2\">
-						identificatore univoco 
-						della board (esadecimale)</td>
+						".$lang['addboard_uniqueid']."</td>
 					</tr>
 					<tr>
-						<td class='row1' width=\"27%\"><b><font size=\"2\">chiave pubblica</font></b></td>
+						<td class='row1' width=\"27%\"><b><font size=\"2\">".$lang['addboard_pb']."</font></b></td>
 						<td class='row1' width=\"71%\">
 						<textarea rows=\"6\" name=\"pkey\" cols=\"41\">{$data['root']['BOARD']['PKEY']}</textarea></td>
 					</tr>
 					<tr>
-						<td class='row3' width=\"98%\" colspan=\"2\">la chiave 
-						pubblica della board (decimale)</td>
+						<td class='row3' width=\"98%\" colspan=\"2\">".$lang['addboard_decpk']."</td>
 					</tr>
 					<tr>
 						<td class='row1' width=\"27%\" height=\"16\"></td>
