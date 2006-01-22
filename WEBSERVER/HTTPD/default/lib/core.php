@@ -102,6 +102,14 @@ class CoreSock {
 		$risp=$this->Read();
 		return $risp['FUNC']['var2BinDump'];
 	}
+	function NewUser($nick,$publickey,$privatekey,$passwd='') {
+		$utente[PKEYDEC]=$publickey;
+		$utente[AUTORE]=$nick;
+		$utente[TYPE]=2; # Utente
+		$utente[_PRIVATE]=$privatekey;
+		$utente[_PWD]=$passwd;
+		return $this->AddMsg($utente);
+	}
 	function AddMsg($array) {
 		global $forum_id;
 		$array['FDEST']=$forum_id;
@@ -119,6 +127,14 @@ class CoreSock {
 		$risp=$this->Read();
 		return $risp[RSA][FIRMA][$md5];
 	}
-	
+	function GenRsaKey($pwd='',$output=0) {
+		$req['RSA']['GENKEY']['CONSOLE_OUTPUT'] = $output;
+		$req['RSA']['GENKEY']['PWD'] = $pwd;
+		$this->Send($req);
+		$coreresp = $this->Read(120);
+		$ret[pub] = $coreresp['RSA']['GENKEY']['pub'];		// in decimale
+		$ret[priv]= $coreresp['RSA']['GENKEY']['priv'];		// in base64
+		return $ret;
+	}
 }
 ?>
