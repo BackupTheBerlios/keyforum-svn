@@ -56,10 +56,6 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 	if($config['WEBSERVER'][$board[$i]['nome']]['PORTA'])
 	{
 	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$bindboard)){
-			 $req_dec[FUNC][Base642Dec]=$board[$i]['pkey'];
-			 $core   = new CoreSock;
-			 $core->Send($req_dec);
-			 if (!($rep_dec=$core->Read())) $std->Error ($lang['timeout']);
 		 echo "<tr>
 			<td class='row1' align='right'>".($i+1)."</td>
 			<td class='row2' align='left'>
@@ -68,48 +64,11 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['BIND']."</td>
 				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['PORTA']."</td>
 			<td class='row2' align='center'>
-				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
+				<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$board[$i]['pkey']."</textarea></td>\n</tr>";
 			}
 	}
 }
 
-/*$querywse="SELECT DISTINCT SUBKEY, VALUE FROM config WHERE MAIN_GROUP='SHARE' AND FKEY='PKEY' LIMIT ".($CurrPag*$BoardXPage).",$BoardXPage;";
-$valuewsea = $db->get_results($querywse);
-foreach($valuewsea as $valuewse)
-{
-	$queryws="SELECT DISTINCT SUBKEY FROM config WHERE FKEY='SesName' AND VALUE='$valuewse->SUBKEY'";
-	$valuewsa=$db->get_results($queryws);
-	foreach($valuewsa as $valuews)
-	{
-	   $querywsl="SELECT SUBKEY, FKEY, VALUE FROM config WHERE SUBKEY='$valuews->SUBKEY' OR SUBKEY='$BNAME';";
-	   $valuewsla =$db->get_results($queryws1);
-	   foreach($valuewsla as $valuewsl)
-	   {
-		  if(($valuewsl->FKEY=="BIND")AND($valuewsl->SUBKEY==$valuews->SUBKEY))  {
-			 $bindwsl=$valuewsl->VALUE;
-		  }elseif(($valuewsl->FKEY=="PORTA")AND($valuewsl->SUBKEY==$valuews->SUBKEY)){
-			 $portwsl=$valuewsl->VALUE;
-		  }elseif($valuewsl->FKEY=="BIND"){
-			 $bindboard=$valuewsl->VALUE;
-		  }
-	   }
-	   if($portwsl){
-		  if((!$bindwsl)OR($bindwsl==$_SERVER['REMOTE_ADDR'])OR($bindwsl==$bindboard)){
-			 $req_dec[FUNC][Base642Dec]=$valuewse->VALUE;
-			 $core   = new CoreSock;
-			 $core->Send($req_dec);
-			 if (!($rep_dec=$core->Read())) $std->Error ($lang['timeout']);
-			 echo "<tr>
-			<td class='row1' align='right'>".++$i."</td>
-			<td class='row2' align='left'>&nbsp;<a href=\"http://$bindwsl:$portwsl\">$valuews->SUBKEY</a></td>
-				<td class='row2' align='center'>".$bindwsl."</td>
-				<td class='row2' align='center'>".$portwsl."</td>
-			<td class='row2' align='center'><textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>".$rep_dec[FUNC][Base642Dec]."</textarea></td>\n</tr>";
-		  }
-	   }
-}
-
-}*/
 ?>
   </table>
 </div>
