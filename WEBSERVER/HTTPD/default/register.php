@@ -1,25 +1,25 @@
 <?php
-
-
+$whereiam="register";
 //classe PEAR per file config (XML)
 require_once "Config.php";
 $xmldata = new Config;
-
-
-$whereiam="register";
-ob_start('ob_gzhandler'); 
-include ("testa.php");
-
 // classe PEAR per gli UPLOAD
 require 'HTTP/Upload.php';
+include("testa.php");
+
+
 
 // carico la lingua per la registrazione
 $lang += $std->load_lang('lang_register', $blanguage );
 
+//POSTBACK
+
+//ACQUISIZIONE DATI
+$forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
+
 $nick = $_REQUEST['nick'];
 $password = $_REQUEST['password'];
 $privkey = $_REQUEST['privkey'];
-
 // valori opzionali
 $rlang = $_REQUEST['lang'];
 $rtpp = $_REQUEST['TPP'];
@@ -29,14 +29,17 @@ if($rlang) {$optfield .= ",lang"; $optvalue .= ",'$rlang'";}
 if($rtpp) {$optfield .= ",tpp"; $optvalue .= ",'$rtpp'";}
 if($rppp) {$optfield .= ",ppp"; $optvalue .= ",'$rppp'";}
 
-
-if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the user
-        if ( strlen($nick) < 3 or strlen($nick) > 30 ) $std->Error("".$lang['reg_nicknotvalid']."");
-        if ( strlen($password) < 3 or strlen($password) > 30 ) $std->Error("".$lang['reg_passnotvalid']."");
-        // ?? Error("Non hai i permessi per registrare un utente su questa board\n<br>") unless ForumLib::PermessiRegistrazione($ENV{sesname});
-        // ?? Error("L'Antiflood che controlla le registrazioni effettuate nel sistema ti impedisce di registrare al momento, riprova più tardi\n<br>") unless ForumLib::CanRegisterFlood($ENV{sesname}, time());
+//CONTROLLO I DATI
+if(!$forum_id) $std->Error('Non riesco a trovare il forum');
+if(!empty($nick) and !empty($password) and !empty($privkey) ) 	$import_user=1;
+if(!empty($nick) and !empty($password) and empty($privkey) )	$create_user=1; 
+if ($import_user) 
+{	
+	// BEGIN IMPORT
+    if ( strlen($nick) < 3 or strlen($nick) > 30 ) $std->Error("".$lang['reg_nicknotvalid']."");
+    if ( strlen($password) < 3 or strlen($password) > 30 ) $std->Error("".$lang['reg_passnotvalid']."");
         
-        $identif = md5( md5($password,TRUE) . $nick );
+        $identif = md5( pack('H*',md5($password)) . $nick );
         $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
                         . $identif . "','" . mysql_real_escape_string($privkey) . "' $optvalue)";
         if ( !$db->query($sql_insert) ) $std->Error("".$lang['reg_usererr']."");
@@ -44,80 +47,44 @@ if ( !empty($nick) and !empty($password) and !empty($privkey) ) {	// import the 
         include ("end.php");
         exit;
 }
+//END IMPORT
+if ($create_user) 
+{   
+	// BEGIN CREATE
 
-if ( !empty($nick) and !empty($password) and empty($privkey) ) { // create a new user
-	$identif = md5(md5($password,TRUE) . $nick);
-	$PKEY64 = $std->getpkey($SNAME);
-	$corereq['RSA']['GENKEY']['CONSOLE_OUTPUT'] = 0;
-	$corereq['RSA']['GENKEY']['PWD'] = md5($nick . md5($password,TRUE),TRUE);
-	$corereq['RSA']['GENKEY']['NICK'] = $nick;
-	$corereq['RSA']['GENKEY']['PKEY64'] = $PKEY64;
-	// quando invio una richiesta GENKEY dove è presente NICK sto generando una chiave per un utente, il core mi ritorna anche la PKEY in decimale in ['pkeydec']
-	// e l'hash del messaggio in ['hash'] così evito di fare richieste/conti dopo
+	$identif = md5(pack('H*',md5($password)) . $nick);
+	$password= pack('H*',md5($nick . pack('H*',md5($password))));
 	
-	$coresk = new CoreSock;
-	if ( !$coresk->Send($corereq) ) $std->Error("Error in send1!");
-	$coreresp = $coresk->Read(120);
-	if ( !$coreresp ) $std->Error("Error in read1!");
-	$rsapub = $coreresp['RSA']['GENKEY']['pub'];		// in decimale
-	$rsapriv = $coreresp['RSA']['GENKEY']['priv'];		// in base64
-	$PKEY = $coreresp['RSA']['GENKEY']['pkeydec'];		//pkey del forum in decimale
-	$date = $coreresp['RSA']['GENKEY']['date'];			// la prendo così perchè deve essere quella usata per creare l'hash
-	$hash = $coreresp['RSA']['GENKEY']['hash'];
-	
-	unset($coreresp,$corereq);
-	if ( strlen($PKEY) < 120 ) $std->Error("".$lang['reg_keynotvalid']."");
-	$corereq['FUNC']['Dec2Bin'] = $rsapub;			// converto la chiave pubblica in binario
-	if ( !$coresk->Send($corereq) ) $std->Error("Error sending a request to the core!");
-	$coreresp = $coresk->Read();
-	if ( !$coreresp ) $std->Error("Error receiving a response from the core!");
-	$rsapub_bin = $coreresp['FUNC']['Dec2Bin'];
-	unset($coreresp, $corereq);
-	
-	//$hash = md5($PKEY . $nick . $date . $rsapub,TRUE);
-	$corereq['RSA']['FIRMA'][0]['md5'] = $hash;
-	$corereq['RSA']['FIRMA'][0]['priv_key'] = md5($nick . md5($password,TRUE),TRUE);
-	$corereq['RSA']['FIRMA'][0]['priv_pwd'] = base64_decode($rsapriv);
-	
-	if ( !$coresk->Send($corereq) ) $std->Error("Error in send2!");
-	$coreresp = $coresk->Read();
-	if ( !$coreresp ) $std->Error("Error in read2!");
-	
-	if ( empty($coreresp['RSA']['FIRMA'][$hash]) ) $std->Error($coreresp['RSA']['FIRMA']["ERR" . $hash]);
-	$firma_rsa = $coreresp['RSA']['FIRMA'][$hash];
-	unset($coreresp,$corereq);
-	
+	$core = new CoreSock;
+	$chiavi=$core->GenRsaKey($password,1);
+	if($privkey) $chiavi[priv] = $privkey; //Prendo la chiave privata dal form se presente altrimenti prendo quella appena generata
+
+	echo "Adding user into the system... ";
+	$risp = $core->NewUser($nick,$chiavi[pub],base64_decode($chiavi[priv]),$password);
+	if($risp['FORUM']['ADDMSG']['ERRORE'])
+	{
+		$std->Error('Errore generico nella registrazione');
+	}
+
 	echo "Adding user into the local members table... ";
-	$sqladd = "INSERT INTO {$SNAME}_localmember (hash, password $optfield) VALUES ('"
-                    . $identif . "','" . mysql_real_escape_string($rsapriv) . "' $optvalue)";
+	$sqladd = "
+		INSERT INTO {$SNAME}_localmember 
+			(hash, password $optfield) VALUES 
+			('$identif','" . mysql_real_escape_string($chiavi[priv]) . "' $optvalue)";
         if ( !$db->query($sqladd) ) $std->Error("".$lang['reg_usererr']."");
         else echo "Ok<br><br>";
 	
 	echo "<br>";
-	
-	echo "Adding user into the system... ";
-	$addreq['FORUM']['ADDMSG']['MD5'] = $hash;
-	$addreq['FORUM']['ADDMSG']['AUTORE'] = $nick;
-	$addreq['FORUM']['ADDMSG']['DATE'] = $date;
-	$addreq['FORUM']['ADDMSG']['PKEY'] = $rsapub_bin;
-	$addreq['FORUM']['ADDMSG']['SIGN'] = $firma_rsa;
-	$addreq['FORUM']['ADDMSG']['TYPE'] = '4';
-	$addreq['FORUM']['ADDMSG']['FDEST'] = pack('H*',sha1($PKEY));
-	
-	if ( !$coresk->Send($addreq) ) $std->Error("Error sending the request to the core!");
-	$coreresp = $coresk->Read();
-	if ( !$coreresp ) $std->Error("Error receiving response form the core!");
-	if ( $coreresp['FORUM']['ADDMSG'] == -2 ) $std->Error("Forum unknown, cannot register the user.");
-	if ( $coreresp['FORUM']['ADDMSG'] == -1 ) $std->Error("The Core didn't accept the message, aborting.");
-	if ( $coreresp['FORUM']['ADDMSG'] == 1 ) $std->Error("","","<p>utente creato correttamente</p>
-<p><b>IMPORTANTISSIMO:</b> devi salvare il file con l'utente generato e metterlo 
-in un posto sicuro, ti servirà in futuro se vorrai reinstallare keyforum e 
-loggarti con lo stesso utente. Per salvare il file <a href=\"userexport.php\">fai 
-click qui</a></p>
-");
+	echo "	
+	<p><b>IMPORTANTISSIMO:</b> devi salvare il file con l'utente generato e metterlo 
+	in un posto sicuro, ti servirà in futuro se vorrai reinstallare keyforum e 
+	loggarti con lo stesso utente. Per salvare il file <a href=\"userexport.php\">fai 
+	click qui</a></p>";
 	include("end.php");
-	exit(0);			
+	exit(0);	
+	//END CREATE		
 }
+
 
 if (isset($submit)) {
 
@@ -146,7 +113,6 @@ if ($file->isValid()) {
 
 // leggo il file
 
-
 $root =& $xmldata->parseConfig('uploads/'.$file->getProp('name'), 'XML');
 if (PEAR::isError($root)) {
     $std->Error('Error reading XML config file: ' . $root->getMessage());
@@ -161,16 +127,13 @@ $usertpp=$userdata['root']['USERDATA']['TPP'];
 $userppp=$userdata['root']['USERDATA']['PPP'];
 $userlang=$userdata['root']['USERDATA']['LANG'];
 
-
-
 }
-
 ?>
 
 
 <tr><td>
 
-<form method=post action="register.php">
+<form method=post action="">
 <table align=center width=550>
 <tr>
 <? echo" <td class=row3 colspan=\"2\" align=center><b>".$lang['reg_info3']."</td>";?>
@@ -185,7 +148,7 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
-  <input type=submit value="<? echo $lang['reg_submit']; ?>" ><br>
+  <input type='submit' name='action' value="<? echo $lang['reg_submit']; ?>" ><br>
   </td>
 </tr>
 <tr>
@@ -233,7 +196,8 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 </form>
 
 <center>
-<form action="<?php echo $_SERVER['PHP_SELF'];?>?submit=1" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data">
+<input type="hidden" name="submit" value="1" />
 <input type="hidden" name="MAX_FILE_SIZE" value="100000">
 <table align=center width=550>
 <tr><td align="center"> 

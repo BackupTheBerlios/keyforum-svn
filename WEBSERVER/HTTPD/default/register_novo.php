@@ -1,5 +1,5 @@
 <?php
-
+/* MA SI PUO' ELEMINARE QUESSTA???*/
 
 //classe PEAR per file config (XML)
 require_once "Config.php";
