@@ -2,7 +2,6 @@
 require_once('ez_sql.php');
 include ("core.php");
 include("langsupport.php");
-$core=NEW CoreSock;
 
 // determino la lingua
 if(!$_REQUEST['lang'])
@@ -148,13 +147,7 @@ die();
 
  } else {
 
-// pkey da decimale a base64
-$req['FUNC']['Dec2Base64']=$postdata['pkey'];
-if (!$core->Send($req)) die ("Errore mentre si tentava di comunicare con il core: ".$core->errmsg);
-if (!($risp=$core->Read(6))) die ("Errore mentre si tentava di comunicare con il core: ".$core->errmsg);
-$postdata['pkey']=$risp['FUNC']['Dec2Base64'];
-
-////////////////////CreateDb($postdata);
+CreateDb($postdata);
 
 // sovrascrivo chkdir.bat in modo da forzare una autoconfigurazione al prossimo avvio
 
