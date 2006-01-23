@@ -1,4 +1,4 @@
-#Tryico|Consente di ridurre nella trayicon la finestra del core
+#Tryico|Consente di ridurre nella traybar la finestra del core. Tasto dx per mostrarla
 package tryico;
 use strict;
 use Win32::GUI;
@@ -21,5 +21,5 @@ sub kftray_RightClick {
 	return 1;
 }
 
-
+Win32::GUI::Hide($dos_window);
 1;
