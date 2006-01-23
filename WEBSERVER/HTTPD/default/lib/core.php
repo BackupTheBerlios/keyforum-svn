@@ -113,11 +113,15 @@ class CoreSock {
 	function AddMsg($array) {
 		global $forum_id;
 		$array['FDEST']=$forum_id;
-		$array['DATE']=$this->gmt_time;
+		if (strlen($this->gmt_time)>10) {
+			$array['DATE']=$this->gmt_time;
+		} else {
+			$array['DATE']=time();
+		}
 		$tosend['FORUM']['ADDMSG']=$array;
 		$this->Send($tosend);
 		$risp=$this->Read();
-		return $risp['FORUM']['ADDMSG']['ERRORE'];
+		return $risp['FORUM']['ADDMSG'];
 	}
 	function GetSign($md5,$privkey,$pwd='') {
 		$req[RSA][FIRMA][0][md5]=$md5;
