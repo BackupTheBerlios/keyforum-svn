@@ -15,6 +15,8 @@ $SNAME=$_ENV['sesname'];
 $query="select * from {$SNAME}_localkey";
 $result = $db->get_results($query);
 
+if($result)
+{
 foreach($result as $row)
 {
 $keycount++;
@@ -22,7 +24,7 @@ $key['id'][$keycount]=$row->id;
 $key['name'][$keycount]=$row->kname;
 $key['value'][$keycount]=$row->kvalue;
 }
-
+}
 ?>
 
 <script language="JavaScript"><!-- Hide
