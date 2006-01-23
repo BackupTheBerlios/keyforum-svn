@@ -26,6 +26,9 @@ echo"
 <p align=\"center\"><b><a href=\"newboard.php\">".$lang['index_createnewbrd']."</a></b></p>
 <hr>
 <p align=\"center\"><b><a href=\"addon.php\">".$lang['index_addon']."</a></b></p>
+<hr>
+<p align=\"center\"><b><a target=_blank href=\"restart.php\">".$lang['index_restart']."</a></b></p>
+
 
 </body>
 
