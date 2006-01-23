@@ -3,7 +3,7 @@
 $lang['page_title']  = "Import new board";
 $lang['addboard_error1']  = "Error reading XML config file: ";
 $lang['addboard_infoID']  = "<li>Incorrect ID or Public Key</li>";
-$lang['addboard_infosession']  = "<li>Session/Name had to be at least of 5 to 15 character</li>";
+$lang['addboard_infosession']  = "<li>Session/Name had to be at least from 5 to 15 character</li>";
 $lang['addboard_infoport']  = "<li>Port had to be a number</li>";
 $lang['addboard_dataerror']  = "Data error !";
 $lang['addboard_importerror']  = "Impossible to import the board";
