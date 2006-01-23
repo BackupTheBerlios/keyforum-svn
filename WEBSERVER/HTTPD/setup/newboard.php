@@ -1,29 +1,40 @@
+<?
+include("langsupport.php");
+
+// determino la lingua
+if(!$_REQUEST['lang'])
+{
+$blanguage=GetUserLanguage();
+} else {
+$blanguage=$_REQUEST['lang'];
+}
+
+// lingua
+$lang = load_lang('lang_newboard', $blanguage ); 
+
+echo "
 <html>
 
 <head>
 <meta http-equiv=\"Content-Language\" content=\"it\">
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">
-<title>CREA NUOVA BOARD</title>
-<link type=\"text/css\" rel=\"stylesheet\" href=\"style_page.css\">
+<title>".$lang['newbrd_title']."</title>
 </head>
 
-<style>
+<body bgcolor=\"#E4EAF2\">
 
-</style>
-
-<body bgcolor="#E4EAF2">
-
-<form method="POST" action="newboard.php">
-  <p>Nome sessione (5 caratteri, niente spazi)<br>
-  <input type="text" name="bsession" size="20"></p>
-  <p>Descrizione Board<br>
-  <input type="text" name="bdesc" size="73"></p>
+<form method=\"POST\" action=\"newboard.php\">
+  <p>".$lang['newbrd_sesname']."<br>
+  <input type=\"text\" name=\"bsession\" size=\"20\"></p>
+  <p>".$lang['newbrd_description']."<br>
+  <input type=\"text\" name=\"bdesc\" size=\"73\"></p>
   <p>&nbsp;</p>
   <p>
-  <input type=hidden name="submit" value=1>
-  <input type="submit" value="Crea !" name="B1"></p>
+  <input type=hidden name=\"submit\" value=1>
+  <input type=\"submit\" value=\"".$lang['newbrd_create']."\" name=\"B1\"></p>
 </form>
-
+</body>
+</html>";?>
 
 
 <?php
@@ -35,14 +46,14 @@ $corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
 
 $coresk = new CoreSock;
 
-echo "Generazione chiavi in corso, attendere .......<br><br>";
+echo $lang['newbrd_keygen'];
 flush();
 
-if ( !$coresk->Send($corereq) ) $std->Error("Errore in send!");
+if ( !$coresk->Send($corereq) ) $std->Error($lang['newbrd_senderr']);
 
 $coreresp = $coresk->Read(180);
 
-if ( !$coreresp ) die("il core non ha risposto nel tempo indicato");
+if ( !$coreresp ) die($lang['newbrd_coretimeout']);
 
 $bname=$_REQUEST['bsession'];
 $bdesc=$_REQUEST['bdesc'];
@@ -61,16 +72,16 @@ $xmlcont="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
     	<STARTUP>*</STARTUP>
   </BOARD>";
 
-echo "<b>chiave pubblica (da distribuire):</b> <br>";
+echo "<b>".$lang['newbrd_pk']."</b> <br>";
 echo "<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$pubkey</textarea><br><br>";
-echo "<b>id board</b><br>";
+echo "<b>".$lang['newbrd_brdid']."</b><br>";
 echo "<textarea rows='1' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$bid</textarea><br><br>";
 
-echo "<b>file XML (es $bname.xml) da distribuire/importare in addboard.php: </b><br>";
+echo "<b>".$lang['newbrd_xmlfile']." (es $bname.xml) ".$lang['newbrd_infoxml'].": </b><br>";
 echo "<textarea rows='15' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$xmlcont</textarea><br><br>";
 
 
-echo "<b>chiave privata ADMIN (conservare gelosamente e non distribuire): </b><br>";
+echo "<b>".$lang['newbrd_infoprvkey']."</b><br>";
 echo "<textarea rows='40' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$privkey</textarea><br>";
 
 
