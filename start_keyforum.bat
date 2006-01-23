@@ -69,7 +69,13 @@ COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf  shutdown --
 echo KEYFORUM STOPPED !
 echo;
 REM pause
-GOTO end
+
+if not exist restart.txt GOTO end
+echo RESTARTING KEYFORUM...
+del restart.txt
+start_keyforum.bat
+
+
 
 :exitall
 echo SOME PROBLEMS OCCURS
