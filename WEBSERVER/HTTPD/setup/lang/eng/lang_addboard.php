@@ -10,7 +10,7 @@ $lang['addboard_importerror']  = "Impossible to import the board";
 $lang['addboard_boardaddress']  = "address of new board is ";
 $lang['addboard_reboot']  = "Remember to restart KeyForum to see the new board...";
 $lang['addboard_freeport']  = "finding free port... wait ...";
-$lang['addboard_importnewboard']  = "IMPORT A NEW BOARD";
+$lang['addboard_impnewbrd']  = "IMPORT A NEW BOARD";
 $lang['addboard_xmlload']  = "Load a XML file:";
 $lang['addboard_userdata']  = "User personalizable data";
 $lang['addboard_sessname']  = "name/session";
@@ -23,5 +23,6 @@ $lang['addboard_info4']  = "(given by Administrator and not modificable)";
 $lang['addboard_uniqueid']  = "board ID (exadecimal)";
 $lang['addboard_pb']  = "public key";
 $lang['addboard_decpk']  = "Board public key (decimal)";
+$lang['addboard_imported'] = "imported !";
 
 ?>

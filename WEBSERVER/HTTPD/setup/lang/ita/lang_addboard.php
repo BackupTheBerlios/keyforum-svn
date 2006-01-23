@@ -10,7 +10,7 @@ $lang['addboard_importerror']  = "Non è stato possibile importare la board";
 $lang['addboard_boardaddress']  = "l'indirizzo per raggiungerla è ";
 $lang['addboard_reboot']  = "Ricorda che per attivarla occorre riavviare KeyForum...";
 $lang['addboard_freeport']  = "cerco le porte libere... attendere ...";
-$lang['addboard_importnewboard']  = "IMPORTA NUOVA BOARD";
+$lang['addboard_impnewbrd']  = "IMPORTA NUOVA BOARD";
 $lang['addboard_xmlload']  = "carica file XML:";
 $lang['addboard_userdata']  = "Dati modificabili dall'utente";
 $lang['addboard_sessname']  = "nome/sessione";
@@ -23,5 +23,6 @@ $lang['addboard_info4']  = "(forniti dall'amministratore e non modificabili)";
 $lang['addboard_uniqueid']  = "identificatore univoco della board (esadecimale)";
 $lang['addboard_pb']  = "chiave pubblica";
 $lang['addboard_decpk']  = "la chiave pubblica della board (decimale)";
+$lang['addboard_imported'] = "importata !";
 
 ?>

@@ -24,7 +24,7 @@ require 'HTTP/Upload.php';
 
 $root =& $xmldata->parseConfig('http://'.$_SERVER['HTTP_HOST'].'/config/config.xml', 'XML');
 if (PEAR::isError($root)) {
-    die('Error reading XML config file: ' . $root->getMessage());
+    die($lang['addboard_error1'] . $root->getMessage());
 }
 
 $settings = $root->toArray();
@@ -120,14 +120,14 @@ $check=true;
 
 // chiave e id sono corretti ?
 $bid_check=sha1($postdata['pkey']);
-if($postdata['bid'] != $bid_check) { $check=false; $error .= "".$lang['addboard_infoID'].""; }
+if($postdata['bid'] != $bid_check) { $check=false; $error .= $lang['addboard_infoID']; }
 
 // la sessione va da 5 a 15 caratteri ?
 $slen=strlen($postdata['bsession']);
-if ($slen <5 OR $slen >15) {$check=false; $error .= "".$lang['addboard_infosession'].""; }
+if ($slen <5 OR $slen >15) {$check=false; $error .= $lang['addboard_infosession']; }
 
 // porta è un numero ?
-if (!is_numeric($postdata['bport'])) {$check=false; $error .= "".$lang['addboard_infoport'].""; }
+if (!is_numeric($postdata['bport'])) {$check=false; $error .= $lang['addboard_infoport']; }
 
 if(!$check)
  {
@@ -172,7 +172,7 @@ fwrite($handle, $chkdir);
 fclose($handle);
 
 
-echo "<CENTER><b><H3>Board {$postdata['bsession']} importata ! </H3></b>";
+echo "<CENTER><b><H3>Board {$postdata['bsession']} ".$lang['addboard_imported']."</H3></b>";
 echo "<br><H3>".$lang['addboard_boardaddress']."http://127.0.0.1:{$postdata['bport']}</H3><br>";
 echo "<font color=red><b><H3>".$lang['addboard_reboot']."</H3></b></font><br><br></center>";
 
@@ -211,6 +211,15 @@ for ($port = 20585; $port <= 65000; $port++) {
 // layout
 function layout($data=array())
 {
+	if(!$_REQUEST['lang'])
+{
+$blanguage=GetUserLanguage();
+} else {
+$blanguage=$_REQUEST['lang'];
+}
+
+// lingua
+$lang = load_lang('lang_addboard', $blanguage ); 
 
 $portalibera=FindFreePort();
 
@@ -235,7 +244,7 @@ echo  "
 	<table border=\"0\" width=\"500\" id=\"table1\">
 		<tr>
 			<th class='row1'>
-			<font face=\"Verdana\"><b>".$lang['addboard_importnewboard']."</b></font></th>
+			<font face=\"Verdana\"><b>".$lang['addboard_impnewbrd']."</b></font></th>
 		</tr>
 		<tr>
 			<td class='row1' >
