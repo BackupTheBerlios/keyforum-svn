@@ -64,6 +64,7 @@ if ($cnt==3){
  $cnt=0;
  $apacheconf .= "# {$row['subkey']}\n";
  $apacheconf .= "Listen $port\n";
+ if(!$bind) $bind='*';
  $apacheconf .= "<VirtualHost $bind:$port>\n";
  $apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/$dir\"\n";
  $apacheconf .= "</VirtualHost>\n\n";
