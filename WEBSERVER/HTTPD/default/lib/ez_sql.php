@@ -560,6 +560,22 @@
 		{
 			return "<font size=1 face=arial color=000000>If ezSQL has helped <a href=\"https://www.paypal.com/xclick/business=justin%40justinvincent.com&item_name=ezSQL&no_note=1&tax=0\" style=\"color: 0000CC;\">make a donation!?</a> &nbsp;&nbsp;[ go on! you know you want to! ]</font>";	
 		}
+		// **** MOD FOR KEYFORUM START***
+		function MakeQuery($query,$vet) {
+			$parti=explode("?",$query);
+			$num=count($parti);
+			$query='';
+			foreach ($parti as $parte) {
+				$query.=$parte;
+				if (--$num) $query.="'".mysql_escape_string(array_shift ($vet))."'";			
+			}
+			return $query;
+		}
+		function doQuery ($query, $vet) {
+			return $this->query($this->MakeQuery($query,$vet));
+		}
+		// **** MOD FOR KEYFORUM END***
+
 
 	}
 
