@@ -1,0 +1,99 @@
+<?php
+
+//------------------------------------------------------------ SYSTEM PARAMETERS
+
+define("PATH_INC",		"WinBinder/include/");
+define("PATH_RES",		"./resources/");
+
+//----------------------------------------------------------------- DEPENDENCIES
+
+include PATH_INC . "winbinder.php";
+
+//-------------------------------------------------------------------- CONSTANTS
+
+// Control identifiers
+
+define("ID_LABEL",		101);
+define("ID_ABOUT",		102);
+define("ID_CLOSE_KEYFORM",		103);
+
+
+define("APPNAME",		"KeyForum Control Center");			// Application name
+define("WELCOME_TEXT",	"Welcome to KeyForum control center !");
+
+//-------------------------------------------------------------- EXECUTABLE CODE
+
+// Create main window, then assign a procedure and an icon to it
+
+$mainwin = wb_create_window(NULL, AppWindow, APPNAME, 0, 0, 10, 10, WBC_INVISIBLE | WBC_TOP);
+wb_set_handler($mainwin, "process_main");
+wb_set_image($mainwin, PATH_RES . "keyforum.ico");
+
+// Create menu
+
+wb_create_control($mainwin, Menu, array(
+	"&File",
+		array(IDCLOSE,		"E&xit/tAlt+F4",			null, PATH_RES . "menu_exit.bmp"),
+));
+
+// Create toolbar
+wb_create_control($mainwin, ToolBar, array(
+	null,
+	array(ID_RELNOTES,	NULL, "&Release notes",			0),
+	array(ID_CHANGELOG,	NULL, "&Changelog",				23),
+	null,
+	array(ID_ABOUT, 	NULL, "About this application",	19),
+), 0, 0, 16, 15, 0, 0, PATH_RES . "toolbar.bmp");
+
+wb_create_control($mainwin, Frame, "", 0, 28, 320, 2);
+
+// Create label
+wb_create_control($mainwin, Label, WELCOME_TEXT, 15, 40, 290, 80, ID_LABEL, WBC_LEFT | WBC_MULTILINE);
+wb_set_font(wb_get_control($mainwin, ID_LABEL), wb_create_font("Verdana", 9, null, FTA_NORMAL));
+
+// Create buttons
+
+$buttons = array(
+		array(ID_CLOSE_KEYFORM,		"Close KeyForum")
+);
+
+$nbuttons = count($buttons);
+
+for($i = 0; $i < $nbuttons; $i++) {
+	wb_create_control($mainwin, PushButton, $buttons[$i][1], 80, 115 + 25 * $i, 150, 22, $buttons[$i][0]);
+}
+
+wb_set_size($mainwin, 320, 180 + 25 * $nbuttons);
+wb_set_position($mainwin, WBC_CENTER, WBC_CENTER);
+
+// Enter application loop
+
+wb_create_timer($mainwin, ID_TIMER, 4000);
+wb_set_visible($mainwin, true);
+wb_main_loop();
+
+//-------------------------------------------------------------------- FUNCTIONS
+
+/* Process main window commands */
+
+function process_main($window, $id)
+{
+	switch($id) {
+
+		case ID_CLOSE_KEYFORM:
+			wb_message_box($window, "Un giorno, forse...");
+			break;
+
+		case ID_ABOUT:
+			wb_message_box($window, "KeyForum Control Center V. 0.0.0.1 Alfa");
+			break;
+
+		case IDCLOSE:		// IDCLOSE is predefined
+			wb_destroy_window($window);
+			break;
+	}
+}
+
+//------------------------------------------------------------------ END OF FILE
+
+?>

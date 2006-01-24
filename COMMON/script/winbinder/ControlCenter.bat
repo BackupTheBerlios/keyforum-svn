@@ -1,0 +1,1 @@
+start ..\..\..\WEBSERVER\Apache\bin\php-win.exe ControlCenter.phpw
