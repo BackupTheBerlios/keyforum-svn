@@ -34,6 +34,6 @@ COMMON\mysql\bin\mysqladmin --defaults-file=COMMON\mysql\bin\my.cnf shutdown --u
 
 echo;
 echo ALL DONE...
-pause 
+
 
 :END
