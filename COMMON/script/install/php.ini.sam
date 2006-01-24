@@ -1,4 +1,4 @@
-include_path = ".;{keypath}\WEBSERVER\pear\"
+include_path = ".;{keypath}\WEBSERVER\pear\;{keypath}\WEBSERVER\lib\"
 extension_dir = "{keypath}\WEBSERVER\apache\bin\ext\"
 browscap = "{keypath}\WEBSERVER\apache\bin\browscap\browscap.ini"
 session.save_path = "{keypath}\COMMON\tmp"
@@ -59,6 +59,7 @@ default_socket_timeout = 180
 extension=php_mysql.dll
 extension=php_sockets.dll
 extension=php_gd2.dll
+extension=php_winbinder.dll
 define_syslog_variables  = Off
 SMTP = localhost
 smtp_port = 25
