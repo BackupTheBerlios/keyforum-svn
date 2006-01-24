@@ -1,18 +1,11 @@
 <?
 require_once('ez_sql.php');
 include ("core.php");
-include("langsupport.php");
+include("testa.php");
 
-// determino la lingua
-if(!$_REQUEST['lang'])
-{
-$blanguage=GetUserLanguage();
-} else {
-$blanguage=$_REQUEST['lang'];
-}
 
 // lingua
-$lang = load_lang('lang_addboard', $blanguage ); 
+$lang += load_lang('lang_addboard', $blanguage ); 
 
 //inizializzo il db
 //classe PEAR per file config (XML)
@@ -82,7 +75,7 @@ if($_REQUEST['action'])
 
 	if(count($to_add)) $db->query($query_add);
 	if(count($to_rem)) $db->query($query_rem);
-	echo "MODIFICHE APPORTATE CON SUCESSO<br> Riavviare Keyforum... (sarebbe bello poterlo far fare da php... se c'è chiudi magari si può fare anche apri :D";
+	echo "<center><b>MODIFICHE APPORTATE CON SUCESSO</b><br>  <a target=_blank href=\"restart.php\">Riavviare Keyforum...</a></center>";
 	exit();
 }
 
@@ -133,7 +126,7 @@ if (is_dir($dir))
 </head>
 <body>
 <br>
-<h1>Attenzione! Dopo controllate prima di aver messo tutti i file al posto giusto prima di attivare un addon (gui rulezz)</h1>
+<h3>Attenzione! Alcuni add-on possono richiedere l'installazione di file aggiuntivi per potere essere attivati<br>altri possono funzionare solo su determinati sistemi operativi</h3>
 <div align="center">
 <form method="post" action="">
 	<table border="0" width="100%">

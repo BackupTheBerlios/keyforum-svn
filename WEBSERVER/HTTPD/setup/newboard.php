@@ -1,28 +1,13 @@
 <?
-include("langsupport.php");
+include("testa.php");
 
-// determino la lingua
-if(!$_REQUEST['lang'])
-{
-$blanguage=GetUserLanguage();
-} else {
-$blanguage=$_REQUEST['lang'];
-}
 
 // lingua
-$lang = load_lang('lang_newboard', $blanguage ); 
+$lang += load_lang('lang_newboard', $blanguage ); 
 
 echo "
-<html>
 
-<head>
-<meta http-equiv=\"Content-Language\" content=\"it\">
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">
-<title>".$lang['newbrd_title']."</title>
-</head>
-
-<body bgcolor=\"#E4EAF2\">
-
+<div align=center>
 <form method=\"POST\" action=\"newboard.php\">
   <p>".$lang['newbrd_sesname']."<br>
   <input type=\"text\" name=\"bsession\" size=\"20\"></p>
@@ -33,8 +18,8 @@ echo "
   <input type=hidden name=\"submit\" value=1>
   <input type=\"submit\" value=\"".$lang['newbrd_create']."\" name=\"B1\"></p>
 </form>
-</body>
-</html>";?>
+</div>
+";?>
 
 
 <?php

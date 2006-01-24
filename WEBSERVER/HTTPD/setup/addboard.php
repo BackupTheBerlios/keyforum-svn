@@ -1,18 +1,13 @@
 <?
 require_once('ez_sql.php');
 include ("core.php");
-include("langsupport.php");
 
-// determino la lingua
-if(!$_REQUEST['lang'])
-{
-$blanguage=GetUserLanguage();
-} else {
-$blanguage=$_REQUEST['lang'];
-}
+include("testa.php");
+
+
 
 // lingua
-$lang = load_lang('lang_addboard', $blanguage ); 
+$lang += load_lang('lang_addboard', $blanguage ); 
 
 //inizializzo il db
 //classe PEAR per file config (XML)
