@@ -30,7 +30,7 @@ include ("core.php");
 $corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
 
 $coresk = new CoreSock;
-
+echo "<div align=center>";
 echo $lang['newbrd_keygen'];
 flush();
 
@@ -57,6 +57,7 @@ $xmlcont="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
     	<STARTUP>*</STARTUP>
   </BOARD>";
 
+
 echo "<b>".$lang['newbrd_pk']."</b> <br>";
 echo "<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$pubkey</textarea><br><br>";
 echo "<b>".$lang['newbrd_brdid']."</b><br>";
@@ -68,6 +69,7 @@ echo "<textarea rows='15' name='chiave' cols='70' readonly class='row2' style='b
 
 echo "<b>".$lang['newbrd_infoprvkey']."</b><br>";
 echo "<textarea rows='40' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$privkey</textarea><br>";
+echo "</div>";
 
 
 
