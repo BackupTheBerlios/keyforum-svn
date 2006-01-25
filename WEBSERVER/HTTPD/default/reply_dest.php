@@ -22,7 +22,7 @@ $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATOR
 $privkey=base64_decode($db->get_var($query));
 
 $PKEY=$std->getpkey($SNAME);
-$req[FUNC][Base642Dec]=$PKEY;
+//$req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
 $core=new CoreSock;
@@ -35,7 +35,7 @@ if (!$risp=$core->Read())
 $std->Error($lang['reply_timeout'],$_REQUEST['body']);
 }
 
-$PKEY=$risp[FUNC][Base642Dec];
+//$PKEY=$risp[FUNC][Base642Dec];
 
 if ( strlen($PKEY) < 120 ) 
 {
@@ -61,12 +61,14 @@ $mreq['FORUM']['ADDMSG']['REP_OF']=$MSG_HASH;
 $mreq['FORUM']['ADDMSG']['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
 $mreq['FORUM']['ADDMSG']['AVATAR']=$_REQUEST['avatar'];
 $mreq['FORUM']['ADDMSG']['FIRMA']=$_REQUEST['firma'];
-$mreq['FORUM']['ADDMSG']['TYPE']='2';
+$mreq['FORUM']['ADDMSG']['TYPE']='4';
 $mreq['FORUM']['ADDMSG']['DATE']=$risp['CORE']['INFO']['GMT_TIME'];
 $mreq['FORUM']['ADDMSG']['TITLE']=$_REQUEST['title'];
-
-
 $mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
+$mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
+$mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
+
+
 $MD5_MSG=pack('H*',md5($PKEY.$MSG_HASH.$mreq[FORUM][ADDMSG]['AUTORE']."2".$EDIT_OF
         .$_REQUEST['avatar'].$_REQUEST['firma'].$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['title'].$_REQUEST['body']));
         if ( $edit_val )
@@ -96,10 +98,12 @@ switch ($risp['FORUM']['ADDMSG']) {
         break;
     case -1:
         // error: Unknown error
+		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
         break;
     default:
         // error: Unknown error
+		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
 } 
 

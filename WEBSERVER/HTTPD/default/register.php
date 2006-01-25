@@ -57,20 +57,51 @@ if ($create_user)
 	
 	$core = new CoreSock;
 	$chiavi=$core->GenRsaKey($password,1);
-	if($privkey) $chiavi[priv] = $privkey; //Prendo la chiave privata dal form se presente altrimenti prendo quella appena generata
+	//if($privkey) $chiavi[priv] = $privkey; //Prendo la chiave privata dal form se presente altrimenti prendo quella appena generata
 
 	echo "Adding user into the system... ";
 	$risp = $core->NewUser($nick,$chiavi[pub],base64_decode($chiavi[priv]),$password);
-	if($risp['FORUM']['ADDMSG']['ERRORE'])
-	{
+	if ( !empty($risp['ERRORE']) ) {
 		$std->Error('Errore generico nella registrazione');
-	}
-
+	} else "Ok <br><br>\n";
+	
+	//add user hash returned from the core (md5) into the private key
+	if ( empty($risp['MD5']) ) $std->Error("Core didn't return TRUEMD5, aborting!");
+	$truemd5=$risp['MD5'];
+	//var_dump($risp);
+	echo "TRUEMD5: " . $truemd5 . "<br><br>";
+		
+	// dedump private key....
+	$req[FUNC][BlowDump2var][Data]=base64_decode($chiavi[priv]);
+	$req[FUNC][BlowDump2var][Key]=$password;
+	if ( !$core->Send($req) ) $std->Error("Timeout sending data  to the core, aborting.");
+	$resp=$core->Read();
+	$newprivkey=$resp[FUNC][BlowDump2var];
+	if ( !$newprivkey ) $std->Error("Error receiving data from the core, aborting.");
+	
+	//....add user hash....
+	$newprivkey[hash]=$truemd5;
+	var_dump($newprivkey);
+	// ...dump the new private key....we'll get it in base64...
+	//unset($req);
+	$req2[FUNC][var2BlowDump64][Key]=$password;
+	$req2[FUNC][var2BlowDump64][Data]=$newprivkey;
+	var_dump($req2);
+	echo "<br>FATTO REQ2<br><br>";
+	if ( !$core->Send($req2) ) $std->Error("Timeout sending data to the core, aborting.");
+	$resp2=$core->Read();
+	var_dump($resp2);
+	echo "FATTO RESP2<br><br>";
+	if ( !$resp2 ) $std->Error("Error receiving data from the core, aborting.");
+	$finalpkey64=$resp2[FUNC][var2BlowDump64];
+	
+	var_dump($finalpkey64);
+	
 	echo "Adding user into the local members table... ";
 	$sqladd = "
 		INSERT INTO {$SNAME}_localmember 
 			(hash, password $optfield) VALUES 
-			('$identif','" . mysql_real_escape_string($chiavi[priv]) . "' $optvalue)";
+			('$identif','" . mysql_real_escape_string($finalpkey64) . "' $optvalue)";
         if ( !$db->query($sqladd) ) $std->Error("".$lang['reg_usererr']."");
         else echo "Ok<br><br>";
 	

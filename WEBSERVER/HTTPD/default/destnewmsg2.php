@@ -31,13 +31,13 @@ else
 
 
 $PKEY=$std->getpkey($SNAME);
-$req[FUNC][Base642Dec]=$PKEY;
+//$req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
 $core=new CoreSock;
 if (!$core->Send($req)) $std->Error($lang['reply_core']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
-$PKEY=$risp[FUNC][Base642Dec];
+//$PKEY=$risp[FUNC][Base642Dec];
 if ( strlen($PKEY) < 120 ) $std->Error($lang['reply_admin']);
 if ( strlen($risp[FUNC][BlowDump2var][hash]) != 16 ) $std->Error ($lang['reply_pdata']);
 
@@ -55,11 +55,13 @@ $mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
 $mreq['FORUM']['ADDMSG']['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
 $mreq['FORUM']['ADDMSG']['AVATAR']=$_REQUEST['avatar'];
 $mreq['FORUM']['ADDMSG']['FIRMA']=$_REQUEST['firma'];
-$mreq['FORUM']['ADDMSG']['TYPE']='1';
-$mreq['FORUM']['ADDMSG']['DATE']=$risp['CORE']['INFO']['GMT_TIME'];
+$mreq['FORUM']['ADDMSG']['TYPE']='3';
+$mreq['FORUM']['ADDMSG']['DATE']=$risp['CORE']['INFO']['GMT_TIME']; //'1138225060';
 $mreq['FORUM']['ADDMSG']['TITLE']=$_REQUEST['subject'];
 $mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
 $mreq['FORUM']['ADDMSG']['SUBTITLE']=$_REQUEST['desc'];
+$mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
+$mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
 
 $MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
         .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar']));
@@ -110,10 +112,12 @@ switch ($risp['FORUM']['ADDMSG']) {
         break;
     case -1:
         // error: Unknown error
+		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br><br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
         break;
     default:
         // error: Unknown error
+		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br><br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
 } 
 

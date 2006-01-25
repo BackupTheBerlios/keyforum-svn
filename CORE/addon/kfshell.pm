@@ -116,7 +116,9 @@ sub act_FUNC {
 		if exists $data->{BlowDump2var};
 	$this->{tosend}->{'FUNC'}->{BinDump2var}=BinDump::MainDeDump($data->{BinDump2var}) if exists $data->{BinDump2var};
 	$this->{tosend}->{'FUNC'}->{var2BinDump}=BinDump::MainDump($data->{var2BinDump},0,1) if exists $data->{var2BinDump};
+	$this->{tosend}->{'FUNC'}->{var2BlowDump64}=MIME::Base64::encode_base64(CryptBlowFish($data->{var2BlowDump64}->{Key},BinDump::MainDump($data->{var2BlowDump64}->{Data},0,1)),'') if exists $data->{var2BlowDump64};
 }
+
 sub ResetSendVar {
 	my $this=shift;
 	$this->{tosend}={};
