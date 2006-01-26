@@ -13,8 +13,8 @@ sub new {
     $this->{LoadUserData}=$GLOBAL::SQL->prepare("SELECT `PKEYDEC`,`is_auth`,`DATE`,`tot_msg_num` FROM ".$fname."_membri WHERE HASH=? AND present='1'");
     $this->{GetOrigAutNewMsg}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_newmsg WHERE HASH=? AND IS_EDIT='0'");
     $this->{GetOrigAutReply}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_reply WHERE HASH=? AND IS_EDIT='0'");
-    $this->{ExistsThread}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_newmsg WHERE EDIT_OF=?");
-    $this->{ExistsReply}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_reply WHERE EDIT_OF=?");
+    $this->{ExistsThread}=$GLOBAL::SQL->prepare("SELECT count(*) as num FROM ".$fname."_newmsg WHERE EDIT_OF=?");
+    $this->{ExistsReply}=$GLOBAL::SQL->prepare("SELECT count(*) as num FROM ".$fname."_reply WHERE EDIT_OF=?");
     $this->{LoadOriginalSez}=$GLOBAL::SQL->prepare("SELECT `SEZ` FROM ".$fname."_newmsg WHERE EDIT_OF=? AND `DATE`<? ORDER BY `DATE` DESC LIMIT 1");
     $this->{IsThreadClose}=$GLOBAL::SQL->prepare("SELECT block_date<? FROM ".$fname."_msghe WHERE HASH=? AND block_date>1000000");
     return $this;
@@ -111,13 +111,13 @@ sub LoadUserData {
 sub ExistsThread {
     my ($this,$hash) = @_;
     $this->{ExistsThread}->execute($hash);
-    return $_ if $_=$this->{ExistsThread}->fetchrow_hashref;
+    return $_->{num} if $_=$this->{ExistsThread}->fetchrow_hashref;
     return undef;
 }
 sub ExistsReply {
     my ($this,$hash) = @_;
     $this->{ExistsReply}->execute($hash);
-    return $_ if $_=$this->{ExistsReply}->fetchrow_hashref;
+    return $_->{num} if $_=$this->{ExistsReply}->fetchrow_hashref;
     return undef;
 }
 sub GetOriginalAutoreNewMsg {
