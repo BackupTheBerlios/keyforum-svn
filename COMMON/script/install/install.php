@@ -94,7 +94,6 @@ ECHO DIRECTORY CHECK
 IF EXIST \"$phpdir\WEBSERVER\Apache\conf\keyforum.conf\" GOTO fine
 ECHO KEYFORUM NEEDS CONFIGURATION
 ECHO;
-pause
 install_keyforum.bat
 :fine
 ECHO OK
