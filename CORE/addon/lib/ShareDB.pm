@@ -155,6 +155,7 @@ sub ROW_REQ {
 	my ($this, $ogg, $ref)=@_;
 	return undef if ref($ref) ne "ARRAY";
 	return undef if length($ref->[0])!=16;
+	print "Richiede post\n";
 	my $riga=$ref->[0];
 	kfdebug::scrivi(16,1,23,$#{$ref}+1);  # Mi richiede X messaggi
 	kfdebug::scrivi(12,8,14,$ogg), return(undef) if $this->{Sessioni}->{$ogg}->{'LastHashReq'} =~ /\Q$riga\E/;

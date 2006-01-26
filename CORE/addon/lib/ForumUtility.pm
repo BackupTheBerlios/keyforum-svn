@@ -93,7 +93,7 @@ sub LoadSezInfo {
 sub LoadOriginalSez {
     my ($this,$hash, $date)=@_;
     $this->{LoadOriginalSez}->execute($hash,$date);
-    return $_ if $_=$this->{LoadOriginalSez}->fetchrow_hashref;
+    return $_->{SEZ} if $_=$this->{LoadOriginalSez}->fetchrow_hashref;
     return undef;
 }
 sub IsThreadClose {

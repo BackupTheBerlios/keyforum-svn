@@ -38,7 +38,7 @@ sub LoadType {
     my ($this,$tipo,$fname)=@_;
     print "ANTIFLOOD: Il forum prevede regole antiflood. Creazione lista...\n";
     my $sth=$GLOBAL::SQL->prepare("SELECT `HASH`,`WRITE_DATE`,`AUTORE` FROM ".$fname."_congi WHERE `TYPE`=?");
-    $sth->execute();
+    $sth->execute($tipo);
     my $cont=0;
     while (my $tmp=$sth->fetchrow_arrayref) {
         $cont++;

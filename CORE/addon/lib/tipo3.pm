@@ -53,11 +53,12 @@ sub Inserisci {
     # Controllo la firma digitale. Con la public key dell'amministratore. -100=firma non valida
     my $futils=$GLOBAL::ForUtility->{$forumid};
     my $permessi=$GLOBAL::Permessi->{$this->{id}};
-    return $this->Admin_ins($msg,$futils) if length($msg->{'ADMIN_SIGN'})>50;
+    
     
     my ($valid_sign,$sez_data,$user_data);
     $msg->{ERRORE}=25,return undef unless $sez_data=$futils->LoadSezInfo($msg->{SEZ});  #25 Sezione non trovata
     $msg->{ERRORE}=26,return undef unless $user_data=$futils->LoadUserData($msg->{AUTORE}); #26 dati utente non caricati
+    return $this->Admin_ins($msg,$futils) if length($msg->{'ADMIN_SIGN'})>50;
     #$msg->{ERRORE}=27,return undef if $user_data->{ban}<$msg->{DATE} && $user_data->{ban}>1000000000; # 27 L'utente è bannato
     $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     $msg->{ERRORE}=179,return undef if $msg->{DATE}<$user_data->{DATE}; # 179 Non si può scriver msg prima della data di registrazione
@@ -109,7 +110,7 @@ sub _inserisci {
     my $cambiati='0';
     if ($msg->{IS_EDIT}) { # Se è una modifica...
         $this->{IncTotMsgNum}->execute($msg->{AUTORE});
-        $this->{InviUpdate}->execute($msg->{EDIT_OF});
+        $this->{InviUpdate}->execute($msg->{EDIT_OF},$msg->{DATE});
         $cambiati='1' if $GLOBAL::SQL->{mysql_info}=~/Changed: (\d+?)/ && $1;
     } else { # se è un nuovo thread
         $msg->{EDIT_OF}=$msg->{TRUEMD5}; # EDIT_OF è uguale a se stesso se non è una modifica

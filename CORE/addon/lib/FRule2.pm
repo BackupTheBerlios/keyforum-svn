@@ -75,9 +75,10 @@ sub AddRow {
     return undef if $tmptype->CheckDipen($msg,{});   # si cotrolla se manca una dipendenda, l'errore lo inserisce la funzione CheckDipen
     my $item=$GLOBAL::ForUtility->{$this->{id}};
     my $password;
+    my $CPSIGN=$msg->{CPSIGN} || 'SIGN';
     $msg->{ERRORE}=105,return undef unless $msg->{'_PRIVATE'};  # 105 non ho la chiave privata per firmare il msg
     $msg->{ERRORE}=104,return undef unless $password=$item->GetPrivateKey($msg->{'_PRIVATE'},$msg->{'_PWD'}); # 104 non riesco a convertire la chiave in oggetto
-    $msg->{ERRORE}=103,return undef unless $msg->{SIGN}=$item->Firma($msg->{TRUEMD5},$password);  # 103 non riesco a firmare il messaggio
+    $msg->{ERRORE}=103,return undef unless $msg->{$CPSIGN}=$item->Firma($msg->{TRUEMD5},$password);  # 103 non riesco a firmare il messaggio
     return undef unless $tmptype->CheckFormat($msg); 
     return $tmptype->Inserisci($msg);
 }
