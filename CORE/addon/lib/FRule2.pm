@@ -57,7 +57,7 @@ sub AddRows {
         }
     }
     while (my ($key,$value)=each %$list) {
-        print unpack("H*",$value->{TRUEMD5})." ERRORE ".$value->{ERRORE}."\n";
+        print unpack("H*",$value->{TRUEMD5})." ERRORE ".$value->{ERRORE}."\n" if $value->{ERRORE};
     }
     $ritorna[1] = [ keys %{$ritorna[1]} ];  # Prendo le chiave dell'hash e le metto in un vettore :)
     return @ritorna;
