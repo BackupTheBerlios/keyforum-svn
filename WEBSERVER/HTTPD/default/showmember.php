@@ -128,7 +128,7 @@ list($tmp,$user['last_action']['reply_id']) = unpack("H*",$user['last_action']['
 
 //statistiche messaggi
 $tmp = ceil((time() - $user['reg_date'])/(60*60*24)); //86400 seconds in a day
-$user['msg_num']['daily'] = number_format($user['msg_num']['tot']/$tmp,2);
+if($tmp) { $user['msg_num']['daily'] = number_format($user['msg_num']['tot']/$tmp,2);}
 if($totmsg)$user['msg_num']['perc'] = number_format($user['msg_num']['tot']*100/$totmsg,1); //to avoid division by 0
 if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_sez']['tot']*100/$user['msg_num']['tot'],1); //to avoid division by 0
 
