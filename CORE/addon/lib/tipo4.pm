@@ -111,8 +111,8 @@ sub _inserisci {
         $this->{IncMsgNum}->execute($msg->{AUTORE});
         $this->{IncReplyNum}->execute($msg->{REP_OF});
         $this->{IncReplySez}->execute($sez);
-        $this->{UpDateLastPosted}->execute($msg->{REPOF},$user_data->{AUTORE},$msg->{AUTORE},$msg->{DATE},$msg->{SEZ},$msg->{DATE});
-        $this->{LastReply}->execute($msg->{AUTORE},$msg->{DATE},$msg->{REPOF},$msg->{DATE});
+        $this->{UpDateLastPosted}->execute($msg->{REP_OF},$user_data->{AUTORE},$msg->{AUTORE},$msg->{DATE},$msg->{SEZ},$msg->{DATE});
+        $this->{LastReply}->execute($msg->{AUTORE},$msg->{DATE},$msg->{REP_OF},$msg->{DATE});
         $cambiati='1';
     }
     $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});
