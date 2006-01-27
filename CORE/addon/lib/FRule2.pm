@@ -28,8 +28,9 @@ sub new {
 # Questa funzione è incaricata di aggiungere i messaggi al database.
 
 sub AddRows {
-    my ($this,$list)=@_;
+    my ($this,$list,$p)=@_;
     return undef if ref($list) ne "HASH";
+    
     my $type=$this->{type};
     my @ritorna=([],{});
     # Viene creata una lista di hash secondo l'ordine di importanza.
@@ -56,10 +57,23 @@ sub AddRows {
             $this->{msgpila}->aggiunto($msg->{'TRUEMD5'});
         }
     }
-    while (my ($key,$value)=each %$list) {
-        print unpack("H*",$value->{TRUEMD5})." ERRORE ".$value->{ERRORE}."\n" if $value->{ERRORE};
-    }
+    #while (my ($key,$value)=each %$list) {
+    #    print unpack("H*",$value->{TRUEMD5})." ERRORE ".$value->{ERRORE}."\n" if $value->{ERRORE};
+    #}
     $ritorna[1] = [ keys %{$ritorna[1]} ];  # Prendo le chiave dell'hash e le metto in un vettore :)
+    
+    unless ($p) {
+        if (my $toadd=$this->{msgpila}->preleva) {
+            my ($inseriti,$mancanti);
+            ($inseriti,$mancanti)=$this->AddRows($toadd,1);
+            if (ref($inseriti) eq "ARRAY") {
+                print "Il buffer ha inserito ".($#{$inseriti}+2)." msg e ne ha richiesti ".($#{$mancanti}+2)."\n";
+                push (@{$ritorna[1]},@{$mancanti});
+                push(@{$ritorna[0]},@{$inseriti});
+            }
+        }
+        $this->{msgpila}->checktimeout;
+    }
     return @ritorna;
 }
 # Aggiunge una singola riga.

@@ -179,13 +179,13 @@ sub ROW_REQ {
 				$refe->{$thisrow}=$buff;$numrow++;
 				#$this->{Query}->{SendTime}->execute($thisrow);
 				$dim+=length($buff->{BODY}) + length($buff->{EXTVAR}) + 180;
-				last MAINFOR if $numrow>300 || $dim>400000;
+				last MAINFOR if $numrow>400 || $dim>400000;
 			}
 			$query->finish;
 		}
 	}
 	stati::updateadd($numrow,0,0,0,'BOARD','SENDMSG','TOTAL');
-	#print "ShareDb: $ogg :Richiede ".($#{$ref}+1)." MSG. Inviati $numrow ".unpack("H*",$this->{Sessioni}->{$ogg}->{'LastHashReq'}).".\n";
+	print "ShareDb: $ogg :Richiede ".($#{$ref}+1)." MSG. Inviati $numrow $dim byte.\n";
 	kfdebug::scrivi(17,1,24,$numrow);
 	return $this->{Sender}->($this->{TabConf}->{ShareName},"ROWS", $ogg, $refe) if $numrow>0;
 }

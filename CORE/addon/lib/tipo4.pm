@@ -78,6 +78,8 @@ sub non_edit_ins {
 }
 sub edit_ins {
     my ($this,$msg,$futils,$user_data,$permessi,$sez)=@_;
+    
+    
     my $original_autore=$futils->GetOriginalAutoreReply($msg->{EDIT_OF});  # Prendo l'autore originale del messaggio.
     if ($original_autore ne $msg->{AUTORE}) { # Solo gli autori possono modificare i propri messaggi
         

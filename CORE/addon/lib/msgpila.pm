@@ -27,7 +27,6 @@ sub addcoda {
 sub aggiunto {
     my ($this,$hash)=@_;
     return undef unless exists $this->{lista}->{$hash};
-    print "Aggiunto un messaggio nel buffer in attesa di quello dipendente\n";
     delete $this->{mancanti}->{$hash};
     while (my ($md5,$msg)=each(%{$this->{lista}->{$hash}})) {
         $this->{inpila}->{$md5}=$msg;
@@ -49,7 +48,6 @@ sub checktimeout {
     return undef unless $this->{timeout}->check;
     while (my ($key,$value)=each(%{$this->{mancanti}})) {
         if (time()-$value>$timeout) {
-            print "Cancellato un messaggio nel buffer\n";
             delete $this->{mancanti}->{$key};
             delete $this->{lista}->{$key}
         }
