@@ -1,6 +1,6 @@
 package Permessi;
 use strict;
-
+use Digest::MD5;
 
 sub new {
     my ($packname,$fname,$id)=@_;
@@ -19,7 +19,16 @@ sub CanDo {
     }
     return undef;
 }
-
+# I permessi delle sezione
+sub SezPerm {
+    my ($this,$autore,$data,$chiave1,$chiave2)=@_;
+    $autore=Digest::MD5::md5(int($autore));
+    return undef if length($autore) != 16;
+    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($autore,$chiave1 || '', $chiave2 || '',$data))) {
+        return $val;
+    }
+    return undef; 
+}
 sub EditPermessi {
     my ($this,$autore,$data,$chiave1,$chiave2,$valore)=@_;
     return undef if length($autore) != 16;

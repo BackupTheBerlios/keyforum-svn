@@ -32,6 +32,7 @@ sub new {
     $this->{Inserisci}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_newmsg (`HASH`,`SEZ`,`AUTORE`, `EDIT_OF`,`DATE`,`IS_EDIT`, `TITLE`, `SUBTITLE`, `BODY`, `EXTVAR`, `SIGN`,`ADMIN_SIGN`,`visibile`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $this->{InsertMsghe}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_msghe (`HASH`,`last_reply_time`,`last_reply_author`,`DATE`,`AUTORE`) VALUES(?,?,?,?,?)");
     $this->{IncThrnum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_sez SET THR_NUM=THR_NUM+1 WHERE ID=?");
+    $this->{UpDateLastPosted}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_sez SET LAST_HASH=?,LAST_POSTER_NAME=?,LAST_POSTER_HASH=?,LAST_POST=? WHERE ID=? AND LAST_POST<?");
     $this->{IncMsgNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_membri SET msg_num=msg_num+1 WHERE HASH=?");
     $this->{IncTotMsgNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_membri SET tot_msg_num=tot_msg_num+1 WHERE HASH=?");
     return $this;
@@ -58,7 +59,7 @@ sub Inserisci {
     my ($valid_sign,$sez_data,$user_data);
     $msg->{ERRORE}=25,return undef unless $sez_data=$futils->LoadSezInfo($msg->{SEZ});  #25 Sezione non trovata
     $msg->{ERRORE}=26,return undef unless $user_data=$futils->LoadUserData($msg->{AUTORE}); #26 dati utente non caricati
-    return $this->Admin_ins($msg,$futils) if length($msg->{'ADMIN_SIGN'})>50;
+    return $this->Admin_ins($msg,$futils,$user_data) if length($msg->{'ADMIN_SIGN'})>50;
     #$msg->{ERRORE}=27,return undef if $user_data->{ban}<$msg->{DATE} && $user_data->{ban}>1000000000; # 27 L'utente è bannato
     $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     $msg->{ERRORE}=179,return undef if $msg->{DATE}<$user_data->{DATE}; # 179 Non si può scriver msg prima della data di registrazione
@@ -82,7 +83,7 @@ sub non_edit_ins {
     } else { # Se non richiede l'autorizzazione si può scrivere un solo messaggio
         $msg->{ERRORE}=32,return undef if !$user_data->{is_auth} && $user_data->{tot_msg_num}>1; #32 se non si è autorizzati  solo 1 msg
     }
-    return $this->_inserisci($msg);
+    return $this->_inserisci($msg,$user_data);
 }
 sub edit_ins {
     my ($this,$msg,$futils,$user_data,$sez_data,$permessi)=@_;
@@ -93,20 +94,20 @@ sub edit_ins {
         # 164 Solo gli autori e moderatori possono modificare i propri messaggi
         $msg->{ERRORE}=164,return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},$msg->{SEZ},'IS_MOD');
     }
-    return $this->_inserisci($msg);
+    return $this->_inserisci($msg,$user_data);
 }
 sub Admin_ins { #
-    my ($this,$msg,$futils)=@_;
+    my ($this,$msg,$futils,$user_data)=@_;
     my $admin_auth=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'ADMIN_SIGN'},$GLOBAL::PubKey->{$this->{id}});
     $msg->{ERRORE}=151,return undef unless $admin_auth; # 151 Firma admin_sign non valida
     $msg->{FOR_SIGN}='';
     $msg->{SIGN}='';
-    $this->_inserisci($msg);
+    $this->_inserisci($msg,$user_data);
     return 1;
 }
 # questa funzione è richiamata solo dalle funzioni interne e aggiunge la riga nella tabella solo se tutte le condizioni sono rispettate
 sub _inserisci {
-    my ($this,$msg)=@_;
+    my ($this,$msg,$user_data)=@_;
     my $cambiati='0';
     if ($msg->{IS_EDIT}) { # Se è una modifica...
         $this->{IncTotMsgNum}->execute($msg->{AUTORE});
@@ -117,6 +118,7 @@ sub _inserisci {
         $this->{InsertMsghe}->execute($msg->{TRUEMD5},$msg->{DATE},$msg->{AUTORE},$msg->{DATE},$msg->{AUTORE});
         $this->{IncThrnum}->execute($msg->{SEZ});
         $this->{IncMsgNum}->execute($msg->{AUTORE});
+        $this->{UpDateLastPosted}->execute($msg->{TRUEMD5},$user_data->{AUTORE},$msg->{AUTORE},$msg->{DATE},$msg->{SEZ},$msg->{DATE});
         $cambiati='1';
     }
     $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});

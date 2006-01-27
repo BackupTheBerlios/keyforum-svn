@@ -30,8 +30,10 @@ sub new {
     $this->{Inserisci}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_reply (`HASH`,`REP_OF`,`AUTORE`, `EDIT_OF`,`DATE`,`IS_EDIT`, `TITLE`, `BODY`, `EXTVAR`, `SIGN`,`ADMIN_SIGN`,`visibile`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     $this->{IncMsgNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_membri SET msg_num=msg_num+1 WHERE HASH=?");
     $this->{IncReplyNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_msghe SET reply_num=reply_num+1 WHERE HASH=?");
+    $this->{LastReply}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_msghe SET last_reply_author=?, last_reply_time=? WHERE HASH=? AND last_reply_time<?");
     $this->{IncReplySez}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_sez SET REPLY_NUM=REPLY_NUM+1 WHERE ID=?");
     $this->{IncTotMsgNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_membri SET tot_msg_num=tot_msg_num+1 WHERE HASH=?");
+    $this->{UpDateLastPosted}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_sez SET LAST_HASH=?,LAST_POSTER_NAME=?,LAST_POSTER_HASH=?,LAST_POST=? WHERE ID=? AND LAST_POST<?");
     return $this;
 }
 # Questa funzione viene sempre richiamata.
@@ -57,7 +59,7 @@ sub Inserisci {
     $msg->{ERRORE}=26,return undef unless $user_data=$futils->LoadUserData($msg->{AUTORE}); #26 dati utente non caricati
     my $sez=$futils->LoadOriginalSez($msg->{REP_OF},$msg->{DATE});
     $msg->{ERRORE}=221,return undef unless $sez; # 221 sezione non trovata, forse il reply è stato scritto prima del thread
-    return $this->Admin_ins($msg,$futils,$sez) if length($msg->{'ADMIN_SIGN'})>50;
+    return $this->Admin_ins($msg,$futils,$sez,$user_data) if length($msg->{'ADMIN_SIGN'})>50;
     #$msg->{ERRORE}=27,return undef if $user_data->{ban}<$msg->{DATE} && $user_data->{ban}>1000000000; # 27 L'utente è bannato
     $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     $msg->{ERRORE}=175,return undef unless $user_data->{is_auth}; # 175 i non autorizzati non possono rispondere ai msg
@@ -66,15 +68,15 @@ sub Inserisci {
     $valid_sign=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'SIGN'},$user_data->{'PKEYDEC'}) if length($user_data->{'PKEYDEC'})>270 && length($msg->{SIGN})>100;
     $msg->{ERRORE}=100,return undef unless $valid_sign; # 100 Nessun SIGN valido, si esce
     
-    return $this->non_edit_ins($msg,$futils,$user_data,$permessi,$sez) unless $msg->{IS_EDIT}; # Inserisce le non modifiche
+    return $this->non_edit_ins($msg,$futils,$user_data,$sez) unless $msg->{IS_EDIT}; # Inserisce le non modifiche
     
     
-    return $this->edit_ins($msg,$futils,$user_data,$sez); # Inserisce le modifiche
+    return $this->edit_ins($msg,$futils,$user_data,$permessi,$sez); # Inserisce le modifiche
 }
 
 sub non_edit_ins {
     my ($this,$msg,$futils,$user_data,$sez)=@_;
-    return $this->_inserisci($msg,$sez);
+    return $this->_inserisci($msg,$sez,$user_data);
 }
 sub edit_ins {
     my ($this,$msg,$futils,$user_data,$permessi,$sez)=@_;
@@ -86,19 +88,19 @@ sub edit_ins {
         $msg->{ERRORE}=200,return undef unless $sez; # 200 Errore imprevisto: Un reply scritto prima del thread?
         $msg->{ERRORE}=164,return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},$sez,'IS_MOD'); # 164 MOD o gli stesso autore
     }
-    return $this->_inserisci($msg,$sez);
+    return $this->_inserisci($msg,$sez,$user_data);
 }
 sub Admin_ins { #
-    my ($this,$msg,$futils,$sez)=@_;
+    my ($this,$msg,$futils,$sez,$user_data)=@_;
     my $admin_auth=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'ADMIN_SIGN'},$GLOBAL::PubKey->{$this->{id}});
     $msg->{ERRORE}=151,return undef unless $admin_auth; # 151 Firma admin_sign non valida
     $msg->{SIGN}='';
-    $this->_inserisci($msg,$sez);
+    $this->_inserisci($msg,$sez,$user_data);
     return 1;
 }
 # questa funzione è richiamata solo dalle funzioni interne e aggiunge la riga nella tabella solo se tutte le condizioni sono rispettate
 sub _inserisci {
-    my ($this,$msg,$sez)=@_;
+    my ($this,$msg,$sez,$user_data)=@_;
     my $cambiati='0';
     if ($msg->{IS_EDIT}) { # Se è una modifica...
         $this->{IncTotMsgNum}->execute($msg->{AUTORE});
@@ -109,6 +111,8 @@ sub _inserisci {
         $this->{IncMsgNum}->execute($msg->{AUTORE});
         $this->{IncReplyNum}->execute($msg->{REP_OF});
         $this->{IncReplySez}->execute($sez);
+        $this->{UpDateLastPosted}->execute($msg->{REPOF},$user_data->{AUTORE},$msg->{AUTORE},$msg->{DATE},$msg->{SEZ},$msg->{DATE});
+        $this->{LastReply}->execute($msg->{AUTORE},$msg->{DATE},$msg->{REPOF},$msg->{DATE});
         $cambiati='1';
     }
     $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});

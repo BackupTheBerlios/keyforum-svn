@@ -18,8 +18,8 @@ sub EditSez {
 	$GLOBAL::SQL->do("INSERT INTO ".$this->{Fname}."_sez (`ID`) values (?);",undef, $com->{SEZID});
 
 	if (length($com->{SEZ_NAME}) || length($com->{SEZ_DESC})) {
-		$GLOBAL::SQL->do("UPDATE ".$this->{Fname}."_sez SET `SEZ_NAME`=?,`SEZ_DESC`=?,`AUTOFLUSH`=?,`ORDINE`=?,`FIGLIO`=?,NEED_PERM=?,`ONLY_AUTH`=?,`last_admin_edit`=? WHERE `last_admin_edit`<=? AND ID=?;",
-						undef, $com->{SEZ_NAME} || '', $com->{SEZ_DESC} || '',$com->{AUTOFLUSH} || '0',$com->{ORDINE} || '0',$com->{FIGLIO} || '0',$com->{NEED_PERM} || '0',$com->{ONLY_AUTH} || '0',$date,$date,$com->{SEZID});
+		$GLOBAL::SQL->do("UPDATE ".$this->{Fname}."_sez SET `SEZ_NAME`=?,`SEZ_DESC`=?,`AUTOFLUSH`=?,`ORDINE`=?,`FIGLIO`=?,`ONLY_AUTH`=?,`HIDE`=?,`ALIAS`=?,`REDIRECT`=?,`last_admin_edit`=? WHERE `last_admin_edit`<=? AND ID=?;",
+		undef, $com->{SEZ_NAME} || '', $com->{SEZ_DESC} || '',$com->{AUTOFLUSH} || '0',$com->{ORDINE} || '0',$com->{FIGLIO} || '0',$com->{ONLY_AUTH} || '0',int($com->{HIDE}) || '0',$com->{ALIAS} || '',$com->{REDIRECT} || '',$date,$date,$com->{SEZID});
 	}
 	return 1;
 }
