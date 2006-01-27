@@ -45,27 +45,23 @@ $userhash=$risp[FUNC][BlowDump2var][hash];
 if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
 $userhash=mysql_real_escape_string($userhash);
 
-$banquery="SELECT ban FROM {$SNAME}_membri WHERE HASH='$userhash';";
-$banned=$db->get_var($banquery);
-if ($banned) $std->Error($lang['reply_ban'],$_REQUEST['body']);
-
-$mreq['FORUM']['ADDMSG'];
-$mreq['FORUM']['ADDMSG']['SEZ']=$_REQUEST['sezid'];
-$mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
-$mreq['FORUM']['ADDMSG']['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
-$mreq['FORUM']['ADDMSG']['AVATAR']=$_REQUEST['avatar'];
-$mreq['FORUM']['ADDMSG']['FIRMA']=$_REQUEST['firma'];
-$mreq['FORUM']['ADDMSG']['TYPE']='3';
-$mreq['FORUM']['ADDMSG']['DATE']=$risp['CORE']['INFO']['GMT_TIME']; //'1138225060';
-$mreq['FORUM']['ADDMSG']['TITLE']=$_REQUEST['subject'];
-$mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
-$mreq['FORUM']['ADDMSG']['SUBTITLE']=$_REQUEST['desc'];
-$mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
-$mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
+$forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
+$mreq['SEZ']=$_REQUEST['sezid'];
+//$mreq['FDEST']=pack('H*',sha1($PKEY));
+$mreq['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
+$mreq['AVATAR']=$_REQUEST['avatar'];
+$mreq['FIRMA']=$_REQUEST['firma'];
+$mreq['TYPE']='3';
+$mreq['DATE']=$risp['CORE']['INFO']['GMT_TIME']; //'1138225060';
+$mreq['TITLE']=$_REQUEST['subject'];
+$mreq['BODY']=$_REQUEST['body'];
+$mreq['SUBTITLE']=$_REQUEST['desc'];
+$mreq['_PRIVATE']=$privkey;
+$mreq['_PWD']=$KEY_DECRYPT;
 
 if ( $edit_val ) {
-    $mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
-	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+    $mreq['EDIT_OF']=$EDIT_OF;
+	$mreq['IS_EDIT']='1';
 }
 
 /*$MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
@@ -87,22 +83,17 @@ if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 */
 
-// if a private key was supplied (passworded forum) use it to sign the message and add it in FOR_SIGN
-if ( !empty($_REQUEST['PrivKey']) ) {
-	$corereq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
-	$corereq['RSA']['FIRMA'][0]['priv_pwd']=base64_decode($_REQUEST['PrivKey']);
-	if (!$core->Send($corereq)) $std->Error($lang['reply_core']);
-	if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
-	$mreq['FORUM']['ADDMSG']['FOR_SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
-}
+//if (!$core->Send($mreq)) $std->Error($lang['reply_core']);
+//if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 
-if (!$core->Send($mreq)) $std->Error($lang['reply_core']);
-if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
+$risp = $core->AddMsg($mreq);
 
-if ( empty($risp[ERRORE]) ) {		// ok, redirect
-	if($_REQUEST['edit_of']) $THR_ID=$_REQUEST['edit_of'];
-	else $THR_ID=bin2hex($risp[MD5]);
-    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
+var_dump($risp);
+
+if ( empty($risp['ERRORE']) ) {		// ok, redirect
+	if ($_REQUEST['edit_of']) $THR_ID=$_REQUEST['edit_of'];
+	else $THR_ID=bin2hex($risp['MD5']);
+    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$THR_ID."&pag=last#end_page";
     $std->Redirect($lang['reply_thanks'],$rurl,$lang['reply_ok'],$lang['reply_ok']);
 }
 else $std->Error("Error adding reply, error code: " . $risp[ERRORE],$_REQUEST['body']);

@@ -21,7 +21,7 @@ $KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// 
 $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
 $privkey=base64_decode($db->get_var($query));
 
-$PKEY=$config[SHARE][$SNAME][PKEY];
+$PKEY=$std->getpkey($SNAME);;
 //$req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
@@ -48,29 +48,26 @@ $userhash=$risp[FUNC][BlowDump2var][hash];
 if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
 $userhash=mysql_real_escape_string($userhash);
 
-$banquery="SELECT ban FROM $SNAME" . "_membri WHERE HASH='$userhash';";
-$banned=$db->get_var($banquery);
-if ( $banned ) $std->Error($lang['reply_ban'],$_REQUEST['body']);
-
 $querysql="SELECT count(1) FROM {$SNAME}_newmsg WHERE HASH='".mysql_escape_string($MSG_HASH)."'";
 $sqlresult=$db->get_var($querysql);
 if (!$sqlresult) $std->Error($lang['reply_mnf'],$_REQUEST['body']);
-$mreq['FORUM']['ADDMSG'];
-$mreq['FORUM']['ADDMSG']['FDEST']=pack('H*',sha1($PKEY));
-$mreq['FORUM']['ADDMSG']['REP_OF']=$MSG_HASH;
-$mreq['FORUM']['ADDMSG']['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
-$mreq['FORUM']['ADDMSG']['AVATAR']=$_REQUEST['avatar'];
-$mreq['FORUM']['ADDMSG']['FIRMA']=$_REQUEST['firma'];
-$mreq['FORUM']['ADDMSG']['TYPE']='4';
-$mreq['FORUM']['ADDMSG']['DATE']=$risp['CORE']['INFO']['GMT_TIME'];
-$mreq['FORUM']['ADDMSG']['TITLE']=$_REQUEST['title'];
-$mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
-$mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
-$mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
+
+$forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
+//$mreq['FDEST']=pack('H*',sha1($PKEY));
+$mreq['REP_OF']=$MSG_HASH;
+$mreq['AUTORE']=$risp['FUNC']['BlowDump2var']['hash'];
+$mreq['AVATAR']=$_REQUEST['avatar'];
+$mreq['FIRMA']=$_REQUEST['firma'];
+$mreq['TYPE']='4';
+//$mreq['DATE']=$risp['CORE']['INFO']['GMT_TIME'];
+$mreq['TITLE']=$_REQUEST['title'];
+$mreq['BODY']=$_REQUEST['body'];
+$mreq['_PRIVATE']=$privkey;
+$mreq['_PWD']=$KEY_DECRYPT;
 
 if ( $edit_val ) {
-	$mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
-	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+	$mreq['EDIT_OF']=$EDIT_OF;
+	$mreq['IS_EDIT']='1';
 }
 
 /*$MD5_MSG=pack('H*',md5($PKEY.$MSG_HASH.$mreq[FORUM][ADDMSG]['AUTORE']."2".$EDIT_OF
@@ -88,9 +85,14 @@ if (!$core->Send($nreq)) $std->Error($lang['reply_core'],$_REQUEST['body']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout'],$_REQUEST['body']);
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 #$mreq[FORUM][ADDMSG]=$REP_DATA;
-*/
+
 $core->Send($mreq);
 $risp=$core->Read();
+*/
+
+$risp = $core->AddMsg($mreq);
+
+var_dump($risp);
 
 if ( empty($risp[ERRORE]) ) {		// ok, redirect
     $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
