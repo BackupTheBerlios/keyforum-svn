@@ -161,21 +161,62 @@ $userlang=$userdata['root']['USERDATA']['LANG'];
 }
 ?>
 
+<script type="text/javascript">
+<!--
+  
+function Validator(theForm)
+{
+
+// nickname must be between 3 and 30 characters long
+if (theForm.nick.value.length < 3 || theForm.nick.value.length >30 )
+   {
+alert("nickname must be between 3 and 30 characters long");
+theForm.nick.focus();
+return (false);
+   }
+
+// password must be between 3 and 30 characters long
+if (theForm.password.value.length < 3 || theForm.password.value.length >30 )
+   {
+alert("password must be between 3 and 30 characters long");
+theForm.password.focus();
+return (false);
+   }
+
+// password must match exactly
+if (theForm.password.value != theForm.password2.value )
+   {
+alert("passwords must match exactly");
+theForm.password.focus();
+return (false);
+   }
+}  
+  
+  
+  
+//-->
+</script>
+
+
 
 <tr><td>
 
-<form method=post action="">
+<form method=post action="" onsubmit="return Validator(this)">
 <table align=center width=550>
 <tr>
 <? echo" <td class=row3 colspan=\"2\" align=center><b>".$lang['reg_info3']."</td>";?>
 </tr>
 <tr>
  <td class=row1><? echo $lang['reg_nick']; ?></td>
-	<td class=row2><input type=text value="<? echo $usernick; ?>" name=nick></td>
+	<td class=row2><input type=text size=35 value="<? echo $usernick; ?>" name=nick></td>
 </tr>
 <tr>
 	<td class=row1><? echo $lang['reg_password']; ?></td>
-	<td class=row2><input type=password value="<? echo $userpwd; ?>"  name=password></td>
+	<td class=row2><input type=password size=35 value="<? echo $userpwd; ?>"  name=password></td>
+</tr>
+<tr>
+	<td width=250 class=row1><? echo $lang['reg_password2']; ?></td>
+	<td  class=row2><input type=password size=35 value="<? echo $userpwd; ?>"  name=password2></td>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">

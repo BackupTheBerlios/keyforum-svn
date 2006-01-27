@@ -1,7 +1,8 @@
 <?php
 
-$lang['reg_nick'] = "Username (Min3 - Max30 char):";
-$lang['reg_password']  = "Password:";
+$lang['reg_nick'] = "<b>Please choose a Username</b><br>Usernames must be between 3 and 30 characters long";
+$lang['reg_password']  = "<b>Please choose a Password</b><br>Passwords must be between 3 and 30 characters long";
+$lang['reg_password2']  = "<b>Please re-enter your password</b><br>It must match exactly";
 $lang['reg_submit']  = "Send registration data";
 $lang['reg_privkey']  = "Private Key";
 $lang['reg_import']  = "Import user: ";
