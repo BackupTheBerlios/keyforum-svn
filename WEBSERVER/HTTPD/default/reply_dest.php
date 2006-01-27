@@ -21,7 +21,7 @@ $KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// 
 $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
 $privkey=base64_decode($db->get_var($query));
 
-$PKEY=$std->getpkey($SNAME);
+$PKEY=$config[SHARE][$SNAME][PKEY];
 //$req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
@@ -68,11 +68,18 @@ $mreq['FORUM']['ADDMSG']['BODY']=$_REQUEST['body'];
 $mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
 $mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
 
+if ( $edit_val ) {
+	$mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
+	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+}
 
-$MD5_MSG=pack('H*',md5($PKEY.$MSG_HASH.$mreq[FORUM][ADDMSG]['AUTORE']."2".$EDIT_OF
+/*$MD5_MSG=pack('H*',md5($PKEY.$MSG_HASH.$mreq[FORUM][ADDMSG]['AUTORE']."2".$EDIT_OF
         .$_REQUEST['avatar'].$_REQUEST['firma'].$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['title'].$_REQUEST['body']));
-        if ( $edit_val )
-    $mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF; else $mreq['FORUM']['ADDMSG']['EDIT_OF']=$MD5_MSG;
+if ( $edit_val ) {
+	$mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
+	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+} else $mreq['FORUM']['ADDMSG']['EDIT_OF']=$MD5_MSG;
+
 $mreq['FORUM']['ADDMSG']['MD5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['md5']=$MD5_MSG;
 $nreq['RSA']['FIRMA'][0]['priv_key']=$KEY_DECRYPT;
@@ -81,12 +88,17 @@ if (!$core->Send($nreq)) $std->Error($lang['reply_core'],$_REQUEST['body']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout'],$_REQUEST['body']);
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 #$mreq[FORUM][ADDMSG]=$REP_DATA;
-
+*/
 $core->Send($mreq);
 $risp=$core->Read();
 
+if ( empty($risp[ERRORE]) ) {		// ok, redirect
+    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
+    $std->Redirect($lang['reply_thanks'],$rurl,$lang['reply_ok'],$lang['reply_ok']);
+}
+else $std->Error("Error adding reply, error code: " . $risp[ERRORE],$_REQUEST['body']);
 
-switch ($risp['FORUM']['ADDMSG']) {
+/*switch ($risp['FORUM']['ADDMSG']) {
     case 1:
         // ok, redirect
         $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
@@ -106,7 +118,7 @@ switch ($risp['FORUM']['ADDMSG']) {
 		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
 } 
-
+*/
 
 
 ?>

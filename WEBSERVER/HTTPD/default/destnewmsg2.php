@@ -5,7 +5,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 if(is_array($lang)) { $lang += $std->load_lang('lang_reply_dest', $blanguage );} else { $lang = $std->load_lang('lang_reply_dest', $blanguage );}
 
 $SNAME=$_ENV['sesname'];
-
+$forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 
 if ( strlen($_REQUEST['edit_of'])==32 ) {
     $EDIT_OF=pack("H32",$_REQUEST['edit_of']);
@@ -30,7 +30,7 @@ else
 }
 
 
-$PKEY=$std->getpkey($SNAME);
+$PKEY=$config[SHARE][$SNAME][PKEY];
 //$req[FUNC][Base642Dec]=$PKEY;
 $req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 $req[FUNC][BlowDump2var][Data]=$privkey;
@@ -63,10 +63,17 @@ $mreq['FORUM']['ADDMSG']['SUBTITLE']=$_REQUEST['desc'];
 $mreq['FORUM']['ADDMSG']['_PRIVATE']=$privkey;
 $mreq['FORUM']['ADDMSG']['_PWD']=$KEY_DECRYPT;
 
-$MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
-        .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar']));
-if ( $edit_val )
+if ( $edit_val ) {
     $mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
+	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+}
+
+/*$MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
+        .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar']));
+if ( $edit_val ) {
+    $mreq['FORUM']['ADDMSG']['EDIT_OF']=$EDIT_OF;
+	$mreq['FORUM']['ADDMSG']['IS_EDIT']='1';
+}
 else $mreq['FORUM']['ADDMSG']['EDIT_OF']=$MD5_MSG;
 $mreq['FORUM']['ADDMSG']['MD5']=$MD5_MSG;
 
@@ -78,6 +85,7 @@ if (!$core->Send($nreq)) $std->Error($lang['reply_core']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 
 $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
+*/
 
 // if a private key was supplied (passworded forum) use it to sign the message and add it in FOR_SIGN
 if ( !empty($_REQUEST['PrivKey']) ) {
@@ -91,14 +99,20 @@ if ( !empty($_REQUEST['PrivKey']) ) {
 if (!$core->Send($mreq)) $std->Error($lang['reply_core']);
 if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 
-if($_REQUEST['edit_of']) 
+if ( empty($risp[ERRORE]) ) {		// ok, redirect
+	if($_REQUEST['edit_of']) $THR_ID=$_REQUEST['edit_of'];
+	else $THR_ID=bin2hex($risp[MD5]);
+    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";
+    $std->Redirect($lang['reply_thanks'],$rurl,$lang['reply_ok'],$lang['reply_ok']);
+}
+else $std->Error("Error adding reply, error code: " . $risp[ERRORE],$_REQUEST['body']);
+
+/*if($_REQUEST['edit_of']) 
 {
 $THR_ID=$_REQUEST['edit_of'];
 } else {
 $THR_ID=bin2hex($MD5_MSG);
 }
-
-
 
 switch ($risp['FORUM']['ADDMSG']) {
     case 1:
@@ -119,6 +133,6 @@ switch ($risp['FORUM']['ADDMSG']) {
         // error: Unknown error
 		echo "ERRORE: " . $risp['FORUM']['ADDMSG']['ERRORE'] . "<br><br>";
         $std->Error($lang['reply_error3'],$_REQUEST['body']);
-} 
+} */
 
 ?>
