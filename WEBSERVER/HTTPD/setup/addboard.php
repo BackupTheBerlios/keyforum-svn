@@ -720,13 +720,17 @@ $db->query("CREATE TABLE `{$bsess}_msghe` (
   `AUTORE` binary(16) NOT NULL,
   `read_num` int(10) unsigned NOT NULL default '0',
   `block_date` int(10) unsigned NOT NULL default '0',
-  `pinned` enum('0','1') NOT NULL default '0',
   `last_admin_update` int(10) unsigned NOT NULL default '0',
+  `FIXED` tinyint(1) unsigned NOT NULL default '0',
+  `SPECIAL` int(10) unsigned NOT NULL default '0',
+  `HOME` tinyint(1) unsigned NOT NULL default '0',
+  `PINNED` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`HASH`),
   KEY `last_reply_time` (`last_reply_time`),
   KEY `AUTORE` (`AUTORE`),
   KEY `last_reply_author` (`last_reply_author`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED
+");
 
 $db->query("CREATE TABLE `{$bsess}_newmsg` (
   `HASH` binary(16) NOT NULL,
@@ -750,19 +754,6 @@ $db->query("CREATE TABLE `{$bsess}_newmsg` (
   KEY `SEZ` (`SEZ`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 
-$db->query("CREATE TABLE `{$bsess}_priority` (
-  `HASH` binary(16) NOT NULL,
-  `PRIOR` int(10) NOT NULL default '0',
-  PRIMARY KEY  (`HASH`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
-
-$db->query("CREATE TABLE `{$bsess}_purgatorio` (
-  `HASH` binary(16) NOT NULL,
-  `TYPE` enum('1','2','3','4') collate latin1_general_ci NOT NULL,
-  `DELETE_DATE` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`HASH`),
-  KEY `DELETE_DATE` (`DELETE_DATE`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;");
 
 $db->query("CREATE TABLE `{$bsess}_reply` (
   `HASH` binary(16) NOT NULL,
@@ -803,7 +794,10 @@ $db->query("insert  into {$bsess}_titles values
 (8, 1200, 'Colonna portante', 5), 
 (9, 1500, 'Veterano del forum', 6), 
 (10, 2000, 'Silver member', 6), 
-(11, 2500, 'Gold member', 7);");
+(11, 2500, 'Gold member', 7), 
+(12, 4000, 'In SPAM we Trust !', 7), 
+(13, 6000, 'Il Signore dei Messaggi', 7), 
+(14, 10000, 'Il cielo come limite', 7);");
 
 $db->query("CREATE TABLE `{$bsess}_permessi` (
  `AUTORE` binary(16) NOT NULL,
@@ -818,18 +812,23 @@ $db->query("CREATE TABLE `{$bsess}_permessi` (
 ");
 
 $db->query("CREATE TABLE `{$bsess}_sez` (
- `ID` int(10) unsigned NOT NULL,
- `SEZ_NAME` varchar(250) default '',
- `SEZ_DESC` text,
- `NEED_PERM` int(11) NOT NULL,
- `THR_NUM` int(10) unsigned NOT NULL default '0',
- `REPLY_NUM` int(10) unsigned NOT NULL default '0',
- `ONLY_AUTH` int(10) unsigned NOT NULL default '1',
- `AUTOFLUSH` int(10) unsigned NOT NULL default '0',
- `ORDINE` int(10) unsigned NOT NULL default '0',
- `FIGLIO` int(10) unsigned NOT NULL default '0',
- `last_admin_edit` int(10) unsigned NOT NULL default '0',
- PRIMARY KEY  (`ID`)
+  `ID` int(10) unsigned NOT NULL,
+  `SEZ_NAME` varchar(250) default '',
+  `SEZ_DESC` text,
+  `NEED_PERM` int(11) NOT NULL,
+  `THR_NUM` int(10) unsigned NOT NULL default '0',
+  `REPLY_NUM` int(10) unsigned NOT NULL default '0',
+  `ONLY_AUTH` int(10) unsigned NOT NULL default '1',
+  `AUTOFLUSH` int(10) unsigned NOT NULL default '0',
+  `ORDINE` int(10) unsigned NOT NULL default '0',
+  `FIGLIO` int(10) unsigned NOT NULL default '0',
+  `last_admin_edit` int(10) unsigned NOT NULL default '0',
+  `LAST_POST` int(10) unsigned NOT NULL default '0',
+  `LAST_TITLE` tinytext,
+  `LAST_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `LAST_POSTER_NAME` varchar(30) NOT NULL default '',
+  `LAST_POSTER_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ");
 
