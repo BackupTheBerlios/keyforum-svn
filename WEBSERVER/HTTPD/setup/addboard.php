@@ -828,6 +828,9 @@ $db->query("CREATE TABLE `{$bsess}_sez` (
   `LAST_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `LAST_POSTER_NAME` varchar(30) NOT NULL default '',
   `LAST_POSTER_HASH` binary(16) NOT NULL default '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `HIDE` tinyint(1) unsigned NOT NULL default '0',
+  `ALIAS` varchar(255) NOT NULL default '',
+  `REDIRECT` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ");
