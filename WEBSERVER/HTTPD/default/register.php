@@ -159,9 +159,10 @@ $userppp=$userdata['root']['USERDATA']['PPP'];
 $userlang=$userdata['root']['USERDATA']['LANG'];
 
 }
-?>
 
-<script type="text/javascript">
+// *** javascript per controlli formali *** DA TRADURRE !!!
+echo "
+<script type=\"text/javascript\">
 <!--
   
 function Validator(theForm)
@@ -170,7 +171,7 @@ function Validator(theForm)
 // nickname must be between 3 and 30 characters long
 if (theForm.nick.value.length < 3 || theForm.nick.value.length >30 )
    {
-alert("nickname must be between 3 and 30 characters long");
+alert(\"nickname must be between 3 and 30 characters long\");
 theForm.nick.focus();
 return (false);
    }
@@ -178,7 +179,7 @@ return (false);
 // password must be between 3 and 30 characters long
 if (theForm.password.value.length < 3 || theForm.password.value.length >30 )
    {
-alert("password must be between 3 and 30 characters long");
+alert(\"password must be between 3 and 30 characters long\");
 theForm.password.focus();
 return (false);
    }
@@ -186,25 +187,33 @@ return (false);
 // password must match exactly
 if (theForm.password.value != theForm.password2.value )
    {
-alert("passwords must match exactly");
+alert(\"passwords must match exactly\");
 theForm.password.focus();
 return (false);
    }
 }  
   
-  
-  
 //-->
 </script>
+";
 
-
+?>
 
 <tr><td>
 
 <form method=post action="" onsubmit="return Validator(this)">
 <table align=center width=550>
 <tr>
-<? echo" <td class=row3 colspan=\"2\" align=center><b>".$lang['reg_info3']."</td>";?>
+<td colspan=2>
+<div class='borderwrap'>
+ <div class='maintitle' align=center>
+   INSERT NEW USER
+ </div>
+</div>
+</td>
+</tr>
+<tr>
+<? echo" <td class=row3 colspan=\"2\" align=center><font color=blue><b>".$lang['reg_info3']."</b></font></td>";?>
 </tr>
 <tr>
  <td class=row1><? echo $lang['reg_nick']; ?></td>
@@ -220,12 +229,12 @@ return (false);
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
-  <input type='submit' name='action' value="<? echo $lang['reg_submit']; ?>" ><br>
+  <input class=button type='submit' name='action' value="<? echo $lang['reg_submit']; ?>" ><br>
   </td>
 </tr>
 <tr>
   <td class="row3" colspan="2" align="center">
-<? echo"    ".$lang['reg_info4']."</td>";?>
+<? echo"<font color=blue>".$lang['reg_info4']."</font></td>";?>
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
@@ -259,10 +268,12 @@ return (false);
 </tr>
 <tr>
   <td class="row1" colspan="2" align="center">
-  <input type=submit value="<? echo $lang['reg_submit']; ?>" ><br>
+  <input class=button type=submit value="<? echo $lang['reg_submit']; ?>" ><br>
   </td>
 </tr>
 </table>
+
+
 <center>
 </center>
 </form>
@@ -273,12 +284,14 @@ return (false);
 <input type="hidden" name="MAX_FILE_SIZE" value="100000">
 <table align=center width=550>
 <tr><td align="center"> 
-<br>
-<? echo"<p><b>".$lang['reg_importinfo']."</b></p>";?>
+<div class='borderwrap'>
+<font color=blue><b>IMPORT USER FROM XML FILE</b></font>
+<? echo"<b>".$lang['reg_importinfo']."</b>";?>
 <p>&nbsp;<? echo "   ".$lang['reg_import']; ?>
-<input name="userfile" type="file"><br>
-<input type="submit" value="<? echo $lang['reg_submit'] ?>">
+<input class=button name="userfile" type="file">
+<input class=button type="submit" value="<? echo $lang['reg_submit'] ?>">
 </p>
+</div>
   </td></tr>
 </table> 
 </form>
@@ -287,7 +300,18 @@ return (false);
 
 
 
-<?php echo $lang['reg_info1']."<br>".$lang['reg_info2']; ?>
+<?
+
+echo "<br>
+<table align=center width=80%>
+<tr>
+<td>
+{$lang['reg_info1']}<br>{$lang['reg_info2']} 
+</td>
+</tr>
+</table></br>";
+
+?>
 
 </td></tr>
 <?PHP
