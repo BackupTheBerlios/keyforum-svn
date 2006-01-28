@@ -34,7 +34,7 @@ sub ChangeOther {
     my $dest_autore=$extvar->{autore};
     return undef if length($dest_autore) != 16;
     $this->UpdateMyDati($dest_autore,$extvar->{UpdateDati},$date) if exists $extvar->{UpdateDati};
-    $this->UpdateMyAvatar($dest_autore,$extvar->{UpdateAvatar},$date) if exists $extvar->{UpdateDati};
+    $this->UpdateMyAvatar($dest_autore,$extvar->{UpdateAvatar},$date) if exists $extvar->{UpdateAvatar};
     $this->UpdateMySvar($dest_autore,$extvar->{UpdateSvar},$date) if exists $extvar->{UpdateSvar};
 }
 sub UpdateMySvar {

@@ -64,7 +64,7 @@ sub Inserisci {
     $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     $msg->{ERRORE}=179,return undef if $msg->{DATE}<$user_data->{DATE}; # 179 Non si può scriver msg prima della data di registrazione
     
-    if ($sez_data->{NEED_PERM}) { # se la sezione è protetta e richiede una autorizzazione esplicita
+    if ($permessi->SezPerm($msg->{SEZ},$msg->{DATE},'ONLY_PERM_THREAD')) { # se la sezione è protetta e richiede una autorizzazione esplicita
         $msg->{ERRORE}=29, return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},$msg->{SEZ},'CAN_WRITE_THREAD');  # 29 il forum è protetto (solo autorizzati)
     }
     $valid_sign=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'SIGN'},$user_data->{'PKEYDEC'}) if length($user_data->{'PKEYDEC'})>270 && length($msg->{SIGN})>100;
@@ -78,10 +78,12 @@ sub Inserisci {
 
 sub non_edit_ins {
     my ($this,$msg,$futils,$user_data,$sez_data)=@_;
-    if($sez_data->{ONLY_AUTH}) { # Se richiede l'autorizzazione la sezione
+    my $permessi=$GLOBAL::Permessi->{$this->{id}};
+    #if($sez_data->{ONLY_AUTH}) { # Se richiede l'autorizzazione la sezione
+    if ($permessi->SezPerm($msg->{SEZ},$msg->{DATE},'NEED_AUTH')) {
         $msg->{ERRORE}=31,return undef unless $user_data->{is_auth}; #31 I non autorizza non possono scrivere in questa sezione
     } else { # Se non richiede l'autorizzazione si può scrivere un solo messaggio
-        $msg->{ERRORE}=32,return undef if !$user_data->{is_auth} && $user_data->{tot_msg_num}>1; #32 se non si è autorizzati  solo 1 msg
+        $msg->{ERRORE}=32,return undef if !$user_data->{is_auth} && $user_data->{tot_msg_num}+$user_data->{msg_num}>1; #32 se non si è autorizzati  solo 1 msg
     }
     return $this->_inserisci($msg,$user_data);
 }
@@ -132,6 +134,7 @@ sub _inserisci {
 # Controlla se il formato del messaggio è valido. Non ci può essere una data che contenga dei caratteri :\
 sub CheckFormat {
     my ($this, $msg)=@_;
+    $msg->{SEZ}=int($msg->{SEZ});
     $msg->{ERRORE}=15,return undef if length($msg->{AUTORE}) != 16; # 15 dim dell'autore deve essere 16byte
     $msg->{ERRORE}=16,return undef if $msg->{SEZ} =~ /\D/; # 16 La sezione deve contenere solo numeri
     $msg->{ERRORE}=17,return undef if !$msg->{SEZ} || $msg->{SEZ}>=9000; # 17 La sezione deve avere un valore valido tra 1 e 9000

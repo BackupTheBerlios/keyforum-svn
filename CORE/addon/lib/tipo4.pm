@@ -68,6 +68,10 @@ sub Inserisci {
     $valid_sign=$futils->CheckSignPkey($msg->{TRUEMD5},$msg->{'SIGN'},$user_data->{'PKEYDEC'}) if length($user_data->{'PKEYDEC'})>270 && length($msg->{SIGN})>100;
     $msg->{ERRORE}=100,return undef unless $valid_sign; # 100 Nessun SIGN valido, si esce
     
+    if ($permessi->SezPerm($sez,$msg->{DATE},'ONLY_PERM_REPLY')) { # se la sezione è protetta e richiede una autorizzazione esplicita
+        $msg->{ERRORE}=29, return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},$sez,'CAN_WRITE_REPLY');  # 29 il forum è protetto (solo autorizzati)
+    }
+    
     return $this->non_edit_ins($msg,$futils,$user_data,$sez) unless $msg->{IS_EDIT}; # Inserisce le non modifiche
     
     

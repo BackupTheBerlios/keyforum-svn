@@ -10,7 +10,7 @@ sub new {
     my $this=bless({},$packname);
     @{$this}{'fname','id','query'}=($fname,$id,{});
     $this->{LoadSezInfo}=$GLOBAL::SQL->prepare("SELECT `ONLY_AUTH`,`AUTOFLUSH` FROM ".$fname."_sez WHERE ID=?");
-    $this->{LoadUserData}=$GLOBAL::SQL->prepare("SELECT `PKEYDEC`,`is_auth`,`DATE`,`tot_msg_num`,`AUTORE` FROM ".$fname."_membri WHERE HASH=? AND present='1'");
+    $this->{LoadUserData}=$GLOBAL::SQL->prepare("SELECT `PKEYDEC`,`is_auth`,`DATE`,`tot_msg_num`,`AUTORE`,`msg_num` FROM ".$fname."_membri WHERE HASH=? AND present='1'");
     $this->{GetOrigAutNewMsg}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_newmsg WHERE HASH=? AND IS_EDIT='0'");
     $this->{GetOrigAutReply}=$GLOBAL::SQL->prepare("SELECT AUTORE FROM ".$fname."_reply WHERE HASH=? AND IS_EDIT='0'");
     $this->{ExistsThread}=$GLOBAL::SQL->prepare("SELECT count(*) as num FROM ".$fname."_newmsg WHERE EDIT_OF=?");
