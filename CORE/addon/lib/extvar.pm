@@ -72,6 +72,7 @@ sub ExecuteThread {
     return undef if length($thread) != 16;
     my $permessi=$GLOBAL::Permessi->{$this->{id}};
     $this->Execute($autore,$extvar,$date);
+    $extvar->{'block_date'}=$date if $extvar->{'block'};
     return undef unless $permessi->CanDo($autore,$date,$sez,'IS_MOD');
     # if ( $extvar->{update_thread} ) 
     $this->{MSGHEVAR}->execute(int($extvar->{pinned}), int($extvar->{home}), int($extvar->{special}), int($extvar->{'fixed'}),
