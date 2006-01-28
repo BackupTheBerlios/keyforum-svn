@@ -14,7 +14,8 @@ $lang['reg_keynotvalid']  = "<br>La chiave pubblica dell'admin non è valida, non
 $lang['reg_nicknotvalid']  = "<br>Il nick non rispetta la lunghezza corretta (min 3, max 30).\n";
 $lang['reg_passnotvalid'] = "<br>La password non rispetta la lunghezza corretta.\n";
 $lang['reg_usererr'] = "<br>Errore nell'inserimento dell'utente!\n";
-$lang['reg_importok'] = "<br>Utente importato correttamente, puoi effettuare il login.\n";
+$lang['reg_importok'] = "<br>Utente importato correttamente, puoi effettuare il <a href='login.php'>Login</a>";
+$lang['reg_import_import'] ="<br><br><b>NOTA BENE:</b> se l'utente che hai importato proviene da una board differente rispetto a questa occorre convertirlo facendo click su <a target=_blank href='import_keyfo_user.php'>questo link</a> e l'utente deve già essere presente nella <a target=_blank href='userlist.php?validati=1&nonvalidati=1'>Lista utenti</a>";
 $lang['reg_nofile'] = "Nessun file selezionato\n<br>";
 $lang['reg_info3'] = "Inserisci solo utente e password per registrare un nuovo utente</b>";
 $lang['reg_info4'] = "<b>Oppure inserisci anche la chiave privata per importarne uno esistente</b>";

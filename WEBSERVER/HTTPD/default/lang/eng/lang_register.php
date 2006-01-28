@@ -15,6 +15,7 @@ $lang['reg_nicknotvalid']  = "<br>Invalid username length  (min 3, max 30).\n";
 $lang['reg_passnotvalid'] = "<br>Invalid password length  (min 3, max 30).\n";
 $lang['reg_usererr'] = "<br>Error importing user!\n";
 $lang['reg_importok'] = "<br>User imported, you can login now.\n";
+$lang['reg_import_import'] ="<br><br><b>NOTE:</b> if the user comes from different board it must be converted clicking on <a target=_blank href='import_keyfo_user.php'>this link</a> and the user must be present on the <a target=_blank href='userlist.php?validati=1&nonvalidati=1'>Users list</a>";
 $lang['reg_nofile'] = "No file selected\n<br>";
 $lang['reg_info3'] = "To register a new user, insert only username and password</b>";
 $lang['reg_info4'] = "<b>To import an existing user, insert also user private key</b>";

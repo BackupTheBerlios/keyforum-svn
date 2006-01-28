@@ -43,9 +43,7 @@ if ($import_user)
         $sql_insert = "INSERT INTO $SNAME" . "_localmember (hash, password $optfield) VALUES ('"
                         . $identif . "','" . mysql_real_escape_string($privkey) . "' $optvalue)";
         if ( !$db->query($sql_insert) ) $std->Error("".$lang['reg_usererr']."");
-        else echo "".$lang['reg_importok']."";
-        include ("end.php");
-        exit;
+        else $std->Error("","",$lang['reg_importok'].$lang['reg_import_import']);
 }
 //END IMPORT
 if ($create_user) 
