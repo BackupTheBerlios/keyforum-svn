@@ -195,7 +195,7 @@ $query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autor
 ." newmsg.BODY as body, (msghe.DATE+".GMT_TIME.") as 'date', membri.avatar AS 'avatar', membri.firma AS 'firma',"
 ." (membri.DATE+".GMT_TIME.") AS 'regdate', membri.msg_num AS 'msg_num',membri.title as 'gruppo',"
 ." membri.is_auth AS 'is_auth', membri.HASH AS 'memhash', newmsg.AUTORE AS 'real_autore', (newmsg.DATE+".GMT_TIME.") AS 'real_date',"
-." newmsg.SEZ AS 'SEZ', newmsg.EDIT_OF as edit_of, msghe.reply_num as reply_num"
+." newmsg.SEZ AS 'SEZ', newmsg.EDIT_OF as edit_of, msghe.reply_num as reply_num, msghe.block_date as closed"
 ." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri"
 ." WHERE newmsg.EDIT_OF=msghe.HASH"
 ." AND newmsg.EDIT_OF='".mysql_escape_string($MSGID)."'"
@@ -205,7 +205,7 @@ $query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autor
 ;
 $riga=$db->get_row($query);
 
-$closed=strpos($riga->body,"[TOPIC-CLOSED]");
+$closed=$riga->closed;
 
 
 if (!$riga) {
