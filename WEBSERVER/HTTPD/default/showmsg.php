@@ -13,6 +13,7 @@ $member_titles=$std->CollectMemberTitles();
 echo "<a href=\"searcher.php?MODO=2&amp;REPOF=" . $_REQUEST['THR_ID'] . "\">" . $lang['shmsg_findnewmsg'] . "</a><br>";
 
 function PageSelect($pos) {
+global $std;
 ?>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
   <tbody>
@@ -63,7 +64,8 @@ function PageSelect($pos) {
 	if ($closed)
 
 	{
-	echo "<img src='img/buttons/$blanguage/t_closed.gif' border='0' alt='Closed' />";
+	$dclose=$std->PostDate($closed);
+	echo "<img src='img/buttons/$blanguage/t_closed.gif' border='0' alt='Closed  $dclose' />";
 	} else {
 	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&THR_ID={$_REQUEST['THR_ID']}\"><img src='img/buttons/$blanguage/t_reply.gif' border='0' alt='Rispondi' /></a>";    
        }
@@ -109,7 +111,8 @@ function PageSelect($pos) {
   	echo "</td><td align='right' width='80%'>";
   	
   	if ($closed) {
-  	echo "<img src=\"img/buttons/".$blanguage."/t_closed.gif\" border=\"0\" alt=\"Closed\" />";
+	$dclose=$std->PostDate($closed);
+	echo "<img src='img/buttons/$blanguage/t_closed.gif' border='0' alt='Closed  $dclose' />";
   	} else {
   	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&amp;THR_ID={$_REQUEST['THR_ID']}\"><img src=\"img/buttons/".$blanguage."/t_reply.gif\" border=\"0\" alt=\"Rispondi\" /></a>";
   	}
