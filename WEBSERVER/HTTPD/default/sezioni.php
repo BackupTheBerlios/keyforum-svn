@@ -228,10 +228,12 @@ PageSelect();
 		, {$SNAME}_newmsg.title 	as title
 		, {$SNAME}_newmsg.subtitle
 		
-		, {$SNAME}_newmsg.body like '%[TOPIC-PINNED]%' as pinned
+		, {$SNAME}_msghe.PINNED as pinned
 		, {$SNAME}_newmsg.body like '%[TOPIC-CLOSED]%' as closed
-		, {$SNAME}_newmsg.body like '%[TOPIC-FIXED]%' as fixed
-		
+		, {$SNAME}_msghe.FIXED as fixed
+		, {$SNAME}_msghe.SPECIAL as special
+		, {$SNAME}_msghe.HOME as home
+	
 		, {$SNAME}_msghe.autore	as nickhash 
 		, autore.AUTORE as nick
 		, {$SNAME}_msghe.last_reply_author as dnickhash
