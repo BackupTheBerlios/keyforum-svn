@@ -164,7 +164,7 @@ if ($sez) foreach ($sez as $riga) {
 
 $query="SELECT msghe.HASH as 'HASH',newmsg.title AS 'title', (last_reply_time+".GMT_TIME.") as last_reply_time,membri.AUTORE as nick,membri.HASH AS 'nickhash',"
   ." repau.AUTORE as dnick, repau.HASH as dnickhash, (msghe.DATE+".GMT_TIME.") AS 'write_date', reply_num, newmsg.SUBTITLE as 'subtitle',newmsg.SEZ AS 'sez',"
-  ." newmsg.body like '%[TOPIC-PINNED]%' as pinned, newmsg.body like '%[TOPIC-CLOSED]%' as closed, newmsg.body like '%[TOPIC-FIXED]%' as fixed "
+  ." msghe.PINNED as pinned, msghe.block_date as closed, msghe.FIXED as fixed "
   ." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri,{$SNAME}_membri AS repau "
   ." WHERE newmsg.EDIT_OF=msghe.HASH"
   ." AND newmsg.visibile='1'"
