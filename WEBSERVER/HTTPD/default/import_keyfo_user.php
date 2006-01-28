@@ -36,8 +36,8 @@ $oldprivkey[hash]=$userhash;
 $req2[FUNC][var2BlowDump64][Key]=$KEY_DECRYPT;
 $req2[FUNC][var2BlowDump64][Data]=$oldprivkey;
 
-var_dump($req2);
-echo "<br><br><br>\n";
+//var_dump($req2);
+//echo "<br><br><br>\n";
 
 if ( !$core->Send($req2) ) $std->Error("Timeout sending data to the core, aborting.");
 $resp2=$core->Read();
@@ -49,7 +49,7 @@ echo "Updating user into the local members table... ";
 	$sqladd = "UPDATE {$SNAME}_localmember SET password='" . mysql_real_escape_string($finalpkey64) .
 		"' WHERE hash='$IDENTIFICATORE';";
     if ( !$db->query($sqladd) ) $std->Error("Error inserting updated private key");
-    else echo "Ok<br><br>";
+    else $std->Error("","","User correctly converted !");
 
 
 ?>
