@@ -5,7 +5,7 @@ include("testa.php");
 
 
 // lingua
-$lang += load_lang('lang_addboard', $blanguage ); 
+$lang += load_lang('lang_addon', $blanguage ); 
 
 //inizializzo il db
 //classe PEAR per file config (XML)
@@ -75,7 +75,7 @@ if($_REQUEST['action'])
 
 	if(count($to_add)) $db->query($query_add);
 	if(count($to_rem)) $db->query($query_rem);
-	echo "<center><b>MODIFICHE APPORTATE CON SUCESSO</b><br>  <a target=_blank href=\"restart.php\">Riavviare Keyforum...</a></center>";
+	echo "<center><b>".$lang['addon_successmod']."</b><br>  <a target=_blank href=\"restart.php\">".$lang['addon_restartkf']."</a></center>";
 	exit();
 }
 
@@ -126,13 +126,13 @@ if (is_dir($dir))
 </head>
 <body>
 <br>
-<h3>Attenzione! Alcuni add-on possono richiedere l'installazione di file aggiuntivi per potere essere attivati<br>altri possono funzionare solo su determinati sistemi operativi</h3>
+<? echo " <h3>".$lang['addon_info1']."</h3>";?>
 <div align="center">
 <form method="post" action="">
 	<table border="0" width="100%">
 		<tr>
 			<th class='row1'>
-			<font face="Verdana"><b>Gestione Addon</b></font></th>
+<? echo "			<font face=\"Verdana\"><b>".$lang['addon_addongest']."</b></font></th>";?>
 		</tr>
 		<tr>
 			<td class='row1' >
@@ -146,7 +146,7 @@ if (is_dir($dir))
 				<td>$nome</td>
 				<td>$descrizione</td>
 				<td>
-					Attiva :
+					".$lang['addon_enable']."
 					<input type='hidden'   name='old_addon[$file]' value='$stato'>
 					<input type='checkbox' name='new_addon[$file]' value='1' $checked >
 				</td>
@@ -158,7 +158,7 @@ if (is_dir($dir))
 		</tr>
 		<tr>
 			<td class='row1' align="center">
-				<input type="submit" name="action" value="Apporta modifiche" />
+				<? echo " <input type=\"submit\" name=\"action\" value=\"".$lang['addon_submit']."\" />"; ?>
 			</td>
 		</tr>
 	</table>
