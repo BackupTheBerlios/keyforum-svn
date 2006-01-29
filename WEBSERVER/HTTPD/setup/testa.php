@@ -43,6 +43,7 @@ document.toolbar.submit();
   echo "
   <input onClick=\"javascript:goTo('addboard.php')\" class=\"button\" type=\"button\" value=\"{$lang['index_importbrd']}\" name=\"B1\">
   <input onClick=\"javascript:goTo('newboard.php')\" class=\"button\" type=\"button\" value=\"{$lang['index_createnewbrd']}\" name=\"B2\">
+  <input onClick=\"javascript:goTo('mngws.php')\" class=\"button\" type=\"button\" value=\"{$lang['index_managews']}\" name=\"B3\">
   <input onClick=\"javascript:goTo('addon.php')\" class=\"button\" type=\"button\" value=\"{$lang['index_addon']}\" name=\"B3\">
   <input onClick=\"javascript:goTo('restart.php')\" class=\"button\" type=\"button\" value=\"{$lang['index_restart']}\" name=\"B4\">
   ";
