@@ -29,7 +29,7 @@ if ( !($corereq->Send($req)) )
     }
 
 
-echo "<br><br>per qualche secondo le pagine potrebbero non rispondere ai comandi... ";
+echo "<br><br>".$lang['info1']."";
 
 echo "</center></body>";
 ?>
