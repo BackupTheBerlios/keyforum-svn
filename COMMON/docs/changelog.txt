@@ -1,6 +1,33 @@
 ================ KeyForum 0.43 Alfa ===========================
 
+
+2006-01-28
+mmorselli:				[FIX] gestione stati PINNED, FIXED, HOME, SPECIAL, CLOSED per nuovo core
+
+2006-01-27
+mmorselli:				[MOD] controlli formali in register.php
+ebutera:				[ADD] conversione utenti da board diverse
+
+2006-01-23
+mmorselli:				[ADD] riavvio di keyforum direttamente dal browser
+dapuzz:				[ADD] gestione ADD-ON
+
+2006-01-22
+mmorselli:				[MOD] controlli formali in addboard.php e supporto lingua
+
+2006-01-20
+dapuzz:				[ADD] mostra tutti i partecipanti ad una discussione cliccando sul numero di risposte
+mmorselli:				[FIX] fixdb.php ora sistema il database di tutte le board presenti
+dapuzz:				[ADD] personalizzazione emoticon
+
+2006-01-19
+mmorselli:				[ADD] possibilità nascondere gli avatar degli altri utenti
+
+2006-01-18
+dapuzz:				[MOD] ordinamento in gestione IP
+
 2006-01-17
+mmorselli:				[MOD] scelta tipo/dimensione/colore carattere
 Luftw@ffer:			[FIX] Ordinamento dei forum in sezioni.php
 
 2006-01-16
