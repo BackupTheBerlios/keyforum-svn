@@ -56,7 +56,7 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 	if($config['WEBSERVER'][$board[$i]['nome']]['PORTA'])
 	{
 	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$bindboard)){
-	 	if(!$config['WEBSERVER'][$board[$i]['nome']]['BIND']){
+	 	if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']=='*')){
 	 		$bind=$_SERVER['SERVER_NAME'];
 	 	}else{
 	 		$bind=$config['WEBSERVER'][$board[$i]['nome']]['BIND'];
