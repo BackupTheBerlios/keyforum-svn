@@ -56,10 +56,15 @@ for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 	if($config['WEBSERVER'][$board[$i]['nome']]['PORTA'])
 	{
 	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$bindboard)){
+	 	if(!$config['WEBSERVER'][$board[$i]['nome']]['BIND']){
+	 		$bind=$_SERVER['SERVER_NAME'];
+	 	}else{
+	 		$bind=$config['WEBSERVER'][$board[$i]['nome']]['BIND'];
+	 	}
 		 echo "<tr>
 			<td class='row1' align='right'>".($i+1)."</td>
 			<td class='row2' align='left'>
-			&nbsp;<a target='_blank' href='http://{$config['WEBSERVER'][$board[$i]['nome']]['BIND']}:{$config['WEBSERVER'][$board[$i]['nome']]['PORTA']}'>{$board[$i]['nome']}</a>
+			&nbsp;<a target='_blank' href='http://{$bind}:{$config['WEBSERVER'][$board[$i]['nome']]['PORTA']}'>{$board[$i]['nome']}</a>
 			</td>
 				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['BIND']."</td>
 				<td class='row2' align='center'>".$config['WEBSERVER'][$board[$i]['nome']]['PORTA']."</td>
