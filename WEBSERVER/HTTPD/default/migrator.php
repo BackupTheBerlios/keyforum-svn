@@ -1,25 +1,31 @@
 <?PHP
 
+//******** CONFIGURAZIONE *************
 
-//classe PEAR per file config (XML)
-require_once "Config.php";
-$xmldata = new Config;
+//nome db con i dati di origine
+$dborigname="keyforum-org";
+// chiave privata Admin forum di destinazione
+$adminpkey="";
+// sessione da convertire
+$consess="keyfo";
 
+//************************************************
 
 $whereiam="migrator";
 ob_start('ob_gzhandler'); 
 include ("testa.php");
 
-// I dati di origine, nel mio computer, erano su un altro database.
-// Avevo due MySQL avviati nello stesso istante.
-$dborig=new db('root','','keyforum','127.0.0.1:33007');
+
+// database di origine
+$dborig = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $dborigname,$_ENV['sql_host'].":".$_ENV['sql_dbport']);
+
 
 // Necessito della chiave privata dell'admin!
-$PRIVKEY=base64_decode("");
+$PRIVKEY=base64_decode($adminpkey);
 
 // Vi ricordo che è necessario inserire le sezioni prima di fare le operazioni di migrazione!
 
-if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM keyfo_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in keyfo_membri :(");
+if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM $consess_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in $consess_membri :(");
 foreach ($res as $utente) {
     $riga=array();
     $riga[AUTORE]=$utente[1];
@@ -37,7 +43,7 @@ foreach ($res as $utente) {
     }
 }
 
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM keyfo_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in keyfo_membri :(");
+if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM $consess_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in $consess_newmsg :(");
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -66,7 +72,7 @@ foreach ($res as $msg) {
   
 
 
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM keyfo_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in keyfo_membri :(");
+if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM $consess_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in $consess_reply :(");
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
