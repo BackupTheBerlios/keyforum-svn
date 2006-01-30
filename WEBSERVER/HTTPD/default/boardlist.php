@@ -27,8 +27,8 @@ $i = 0;
 
 foreach($config['WEBSERVER'] as $nome_board=>$array)
 {
-	if($config['SHARE'][$array['SesName']]['PKEY']){
-		$board[$i] = Array('nome' =>$nome_board, 'nome_ses' => $array['SesName'], 'pkey' => $config['SHARE'][$array['SesName']]['PKEY']);
+	if($config['WEBSERVER'][$nome_board]['SesName']){
+		$board[$i] = Array('nome' =>$nome_board, 'pkey' => $config['SHARE'][$array['SesName']]['PKEY']);
 		$i++;
 	}
 } //prendo tutte le board;
@@ -49,13 +49,12 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
       <th align='center' width='72%' class='titlemedium'><?=$lang['board_pkey']?></th>
     </tr>
 <?
-$i=$CurrPag*$BoardXPage;
 $tot = $i + min(count($config['SHARE']) -$i ,$BoardXPage);
 for($i=$CurrPag*$BoardXPage;$i<$tot;$i++)
 {
 	if($config['WEBSERVER'][$board[$i]['nome']]['PORTA'])
 	{
-	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$bindboard)){
+	 if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$_SERVER['REMOTE_ADDR'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']==$config['WEBSERVER'][$SNAME]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']=='*')){
 	 	if((!$config['WEBSERVER'][$board[$i]['nome']]['BIND'])OR($config['WEBSERVER'][$board[$i]['nome']]['BIND']=='*')){
 	 		$bind=$_SERVER['SERVER_NAME'];
 	 	}else{
