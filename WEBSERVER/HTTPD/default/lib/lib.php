@@ -7,7 +7,12 @@ ini_set("include_path", ini_get ("include_path")."$sep.$sep../../../WEBSERVER/pe
 
 $corecalls=0;
 
-session_start();
+if($string=ob_get_contents())
+{
+	session_start();
+	ob_end_flush();
+}
+else	session_start();
 
 //--------------------------------
 // Classe per funzioni globali
