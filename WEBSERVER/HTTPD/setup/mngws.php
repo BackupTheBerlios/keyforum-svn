@@ -7,7 +7,7 @@ include("testa.php");
 
 
 // lingua
-$lang += load_lang('lang_managews', $blanguage ); 
+$lang += load_lang('lang_mngws', $blanguage ); 
 
 //inizializzo il db
 //classe PEAR per file config (XML)
@@ -52,7 +52,6 @@ if(!$_REQUEST['ws']){
 		$postdata['bind']=$_REQUEST['bind'];
 		$postdata['bport']=$_REQUEST['bport'];
 		$postdata['directory']=$_REQUEST['directory'];
-		$postdata['group']=$_REQUEST['group'];
 		
 		UpdateDb($postdata, $data);
 		
@@ -90,7 +89,7 @@ function layoutws($data=array()){
 		$blanguage=$_REQUEST['lang'];
 	}
 	// lingua
-	$lang = load_lang('lang_managews', $blanguage ); 
+	$lang = load_lang('lang_mngws', $blanguage ); 
 	echo "<p align='center'><b><font face='Verdana' size='6'>".$lang['mngws_title']."</font></b></p><br>";
 	foreach($data as $riga){
 		echo "<p align='center'><b><a href='mngws.php?ws=".$riga->SUBKEY."'>".$riga->SUBKEY."</a></b></p>";
@@ -106,7 +105,7 @@ function layout($data=array()){
 		$blanguage=$_REQUEST['lang'];
 	}
 	// lingua
-	$lang = load_lang('lang_managews', $blanguage ); 
+	$lang = load_lang('lang_mngws', $blanguage ); 
 	
 	echo  "
 	<br>
@@ -162,22 +161,6 @@ function layout($data=array()){
 							<td class='row3' width=\"98%\" colspan=\"2\">
 							".$lang['mngws_info4']."</td>
 						</tr>
-						<tr>
-							<td class='row1' width=\"27%\"><b><font face=\"Verdana\" size=\"2\">".$lang['mngws_group']."</font></b></td>
-							<td class='row1' width=\"71%\"><select size=\"1\" name=\"group\">";
-							$groups = $db->get_results("SELECT FKEY FROM config WHERE SUBKEY='BANDA_LIMITE'");
-							foreach($groups as $riga){
-								echo "<option ";
-								if($riga->FKEY==$data['GROUP']) echo "selected";
-								echo " value=\"".$riga->FKEY."\">".$riga->FKEY."</option>";
-							}
-							echo "</select></td>
-						</tr>
-						<tr>
-							<td class='row3' width=\"98%\" colspan=\"2\">
-							".$lang['mngws_info5']."</td>
-						</tr>
-
 					</table>
 					<p align=\"center\"><input type=\"submit\" value=\"Conferma\" name=\"B1\"></p>
 				</form>
@@ -194,13 +177,7 @@ function layout($data=array()){
 
 function UpdateDb($postdata, $data){
 	global $db;
-		
-	if($postdata['group']!=$data['GROUP']){
-		$db->query("UPDATE config
-		SET VALUE='".$postdata['group']."'
-		WHERE MAIN_GROUP='WEBSERVER' AND SUBKEY='".$_REQUEST['ws']."' AND FKEY='GROUP'");
-	}
-	
+
 	if($postdata['directory']!=$data['DIRECTORY']){
 		$db->query("UPDATE config
 		SET VALUE='".$postdata['directory']."'

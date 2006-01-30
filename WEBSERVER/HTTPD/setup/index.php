@@ -16,6 +16,7 @@ echo"
 <hr>
 <p align=\"center\"><b><a href=\"mngws.php\">".$lang['index_managews']."</a></b></p>
 <p align=\"center\"><b><a href=\"addon.php\">".$lang['index_addon']."</a></b></p>
+<p align=\"center\"><b><a href=\"mngbd.php\">".$lang['index_managebd']."</a></b></p>
 <hr>
 <p align=\"center\"><b><a target=_blank href=\"restart.php\">".$lang['index_restart']."</a></b></p>
 </td>
