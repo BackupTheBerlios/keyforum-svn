@@ -87,6 +87,7 @@ global $tst,$sess_auth;
 $timelimit=$userdata->LASTREAD - GMT_TIME;
 if($timelimit < 1) {$timelimit=time()-2592000;}
 
+$last1h=$timelimit-3600;
 $last24=$timelimit-86400;
 $last7g=$timelimit-604800;
 $last30g=$timelimit-2592000;
@@ -125,6 +126,7 @@ PageSelect();
        style=\"font-family: Verdana; font-size: 8pt\" >";
        
     $dform .="<option {$sel['from']} value=\"shownewmsg.php\">".date("d/m/Y H:i:s",$timelimit)."</option>";
+	$dform .="<option {$sel[$last1h]} value=\"shownewmsg.php?tst=$last1h\">ultima ora</option>";
     $dform .="<option {$sel[$last24]} value=\"shownewmsg.php?tst=$last24\">ultime 24 ore</option>";
     $dform .="<option {$sel[$last7g]} value=\"shownewmsg.php?tst=$last7g\">ultimi 7 giorni</option>";
     $dform .="<option {$sel[$last30g]} value=\"shownewmsg.php?tst=$last30g\">ultimi 30 giorni</option>";
