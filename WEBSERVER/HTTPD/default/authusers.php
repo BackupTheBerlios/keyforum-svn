@@ -61,8 +61,8 @@ if ( empty($_REQUEST['privkey']) ) {	// show hash list to auth
 }
 else {
 	
-	require_once("lib/admin.php");
-	require_once("lib/core.php");
+	require_once("admin.php");
+	require_once("core.php");
 	
 	$PRIVKEY = $_REQUEST['privkey'];
 

@@ -18,7 +18,7 @@ else	session_start();
 // Classe per funzioni globali
 //--------------------------------
 require "lib/functions.php";
-require "lib/core.php";
+require "core.php";
 $std   = new FUNC;
 
 
@@ -34,7 +34,7 @@ if (PEAR::isError($root)) {
 $settings = $root->toArray();
 
 // dati del db
-require_once('lib/ez_sql.php');
+require_once('ez_sql.php');
 $_ENV['sql_host']=$settings['root']['conf']['DB']['host'];
 $_ENV['sql_user']=$settings['root']['conf']['DB']['dbuser'];
 $_ENV['sql_passwd']=$settings['root']['conf']['DB']['dbpassword'];
