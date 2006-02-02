@@ -99,6 +99,7 @@ if (isset($import)) {
 // ******* DATI FORUM **********
 
 $postdata['bsession']=$_REQUEST['bsession'];
+$postdata['bdesc']=$_REQUEST['bdesc'];
 $postdata['pkey']=$_REQUEST['pkey'];
 $postdata['bid']=$_REQUEST['bid'];
 $postdata['bind']=$_REQUEST['bind'];
@@ -272,6 +273,18 @@ echo  "
 					<tr>
 						<td class='row3' colspan=\"2\">".$lang['addboard_info1']."</td>
 					</tr>
+					
+					<tr>
+						<td class='row1' width=\"27%\"><b>
+						<font size=\"2\">"."descrizione"."</font></b></td>
+						<td class='row1' width=\"71%\"><input type=\"text\" name=\"bdesc\" value=\"{$data['root']['BOARD']['DESC']}\" size=\"50\"></td>
+					</tr>
+					<tr>
+						<td class='row3' colspan=\"2\">"."descrizione board o nome per esteso"."</td>
+					</tr>
+					
+					
+					
 					<tr>
 						<td class='row1' width=\"27%\"><b><font face=\"Verdana\" size=\"2\">porta</font></b></td>
 						<td class='row1' width=\"71%\"><input type=\"text\" name=\"bport\" value=\"$portalibera\" size=\"20\"></td>
@@ -340,6 +353,7 @@ function CreateDb($data)
 global $db;
 
 $bsess=$data['bsession'];
+$bdesc=mysql_real_escape_string($data['bdesc']);
 $pkey=$data['pkey'];
 $bid=$data['bid'];
 $bbind=$data['bind'];
@@ -352,7 +366,10 @@ $db->query("insert  into config values
 ('WEBSERVER', '$bsess', 'SesName', '$bsess'), 
 ('WEBSERVER', '$bsess', 'GROUP', 'generic'), 
 ('WEBSERVER', '$bsess', 'DIRECTORY', 'default'), 
-('WEBSERVER', '$bsess', 'PORTA', '$bport');");
+('WEBSERVER', '$bsess', 'PORTA', '$bport'),
+('WEBSERVER', '$bsess', 'MULTIUSER', '0'), 
+('WEBSERVER', '$bsess', 'DESCRIPTION', '$bdesc');
+");
 
 $db->query("CREATE TABLE `{$bsess}_admin` (
   `HASH` binary(16) NOT NULL,
