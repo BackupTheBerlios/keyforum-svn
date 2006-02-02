@@ -1,5 +1,5 @@
 <?php
-
+require "functions.php";
 include ("core.php");
 include("testa.php");
 

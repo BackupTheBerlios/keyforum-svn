@@ -26,6 +26,7 @@ echo "
 
 if($submit)
 {
+require "functions.php";
 include ("core.php");
 $corereq['RSA']['GENKEY']['CONSOLE_OUTPUT']=0;
 

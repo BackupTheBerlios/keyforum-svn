@@ -2,6 +2,7 @@
 ob_start('ob_gzhandler'); 
 include ("lib.php");
 include ("testa.php");
+require "functions.php";
 include ("core.php");
 // le righe commentate con "funziona" significa che sono state provate
 ?>

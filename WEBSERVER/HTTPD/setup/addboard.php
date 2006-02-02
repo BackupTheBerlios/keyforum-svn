@@ -1,5 +1,6 @@
 <?
 require_once('ez_sql.php');
+require "functions.php";
 include ("core.php");
 
 include("testa.php");
