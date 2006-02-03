@@ -818,16 +818,30 @@ $db->query("insert  into {$bsess}_titles values
 (14, 10000, 'Il cielo come limite', 7);");
 
 $db->query("CREATE TABLE `{$bsess}_permessi` (
- `AUTORE` binary(16) NOT NULL,
- `DATE` int(10) unsigned NOT NULL,
- `CHIAVE_A` varchar(100) NOT NULL,
- `CHIAVE_B` varchar(100) NOT NULL,
- `VALORE` varchar(250) NOT NULL,
- PRIMARY KEY  (`AUTORE`,`DATE`,`CHIAVE_A`,`CHIAVE_B`),
- KEY `SEZ_GROUP` (`DATE`),
- KEY `PKEYID` (`CHIAVE_B`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `AUTORE` binary(16) NOT NULL,
+  `DATE` int(10) unsigned NOT NULL,
+  `CHIAVE_A` varchar(100) NOT NULL,
+  `CHIAVE_B` varchar(100) NOT NULL,
+  `VALORE` text NOT NULL,
+  PRIMARY KEY  (`AUTORE`,`DATE`,`CHIAVE_A`,`CHIAVE_B`),
+  KEY `SEZ_GROUP` (`DATE`),
+  KEY `PKEYID` (`CHIAVE_B`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
 ");
+
+
+$db->query("CREATE TABLE `{$bsess}_ticket` (
+  `HASH` binary(20) NOT NULL,
+  `ID` int(10) unsigned NOT NULL,
+  `KEY_ID` int(10) unsigned NOT NULL,
+  `START_DATE` int(10) unsigned NOT NULL,
+  `END_DATE` int(10) unsigned NOT NULL,
+  `AUTH` tinyblob NOT NULL,
+  PRIMARY KEY  (`HASH`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+");
+
+
 
 $db->query("CREATE TABLE `{$bsess}_sez` (
   `ID` int(10) unsigned NOT NULL,
