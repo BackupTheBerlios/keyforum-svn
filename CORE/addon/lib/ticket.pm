@@ -13,7 +13,7 @@ sub new {
     $this->{fid}=$fid;
     print "Forum id: $fid\n";
     $this->{coutvalid}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_ticket WHERE START_DATE<? AND END_DATE>?");
-    $this->{TakeTicket}=$GLOBAL::SQL->prepare("SELECT * FROM ".$fname."_ticket WHERE START_DATE<? AND END_DATE>? ORDER BY END_DATE LIMIT 1");
+    $this->{TakeTicket}=$GLOBAL::SQL->prepare("SELECT * FROM ".$fname."_ticket WHERE START_DATE<? AND END_DATE>? ORDER BY END_DATE LIMIT 2");
     $this->{DeleteTicket}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_ticket WHERE HASH=?");
     $this->{InsertTicket}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_ticket (HASH,ID,KEY_ID,START_DATE,END_DATE,AUTH) VALUES(?,?,?,?,?,?)");
     $this->{DeleteOldTicket}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_ticket WHERE END_DATE<?");
@@ -37,16 +37,19 @@ sub TicketReq { # Risponde alle richieste dei ticket degli altri nodi
     return undef if $this->{validi}<=1;
     my $num=0;
     ($this->{validi}>2) ? ($num=0) : ($num=1);
+    print "$num è num\n";
     if (exists $ipreq{$ip}) { # Se questo ip ci ha gia fatto una richiesta in questa sessione
+        print "l'utente $ip mi aveva gia chiest ticket.\n";
         (time-$ipreq{$ip}>7200) ? ($ipreq{$ip}=time) : (return undef); # Massimo su distribuisce un ticket ad IP ogni 2 ore
     } else {
+        print "E' la prima volta che $ip chiede dei ticket\n";
         $ipreq{$ip}=time();
     }
-    $this->{TakeTicket}->execute(GMTIME(),GMTIME()); # Prende prima i ticket che scadono prima (quelli che scadono dopo ce li teniamo noi)
+    $this->{TakeTicket}->execute(GMTIME()+3600,GMTIME()); # Prende prima i ticket che scadono prima (quelli che scadono dopo ce li teniamo noi)
     my @lista;
     while (my $ticket = $this->{TakeTicket}->fetchrow_hashref) {
         print "Trovato un ticket, spedito\n";
-        $this->{DeleteTicket}->excute($ticket->{HASH});
+        $this->{DeleteTicket}->execute($ticket->{HASH});
         push(@lista,$ticket);
         last if ++$num>=2;
     }
@@ -79,6 +82,7 @@ sub ValidateTicket {
     return undef if ref($ticket) ne "HASH";
     my $permessi=$GLOBAL::Permessi->{$this->{fid}};
     $ticket->{HASH}=TicketSha1($ticket);
+    print unpack("H*",$ticket->{HASH})." è l'id è ".$ticket->{'ID'}."\n";
     my $pkey=$permessi->KeyRing($ticket->{'KEY_ID'},$ticket->{'START_DATE'},'TICKET','');
     return undef if length($pkey)<150;
     my $futils=$GLOBAL::ForUtility->{$this->{fid}};
@@ -107,10 +111,10 @@ sub TicketSha1 {
 }
 sub CountValidTicket {
     my $this=shift;
-    my @conta;
-    $this->{coutvalid}->execute(GMTIME(),GMTIME());
-    return $this->{validi}=$conta[0] if @conta = $this->{coutvalid}->fetchrow_array;
-    return undef;
+    $this->{coutvalid}->execute(GMTIME()+3600,GMTIME());
+    my @conta = $this->{coutvalid}->fetchrow_array;
+    print "ci sono $conta[0] validi ".GMTIME()."\n";
+    return $this->{validi}=$conta[0];
 }
 
 sub GMTIME {
