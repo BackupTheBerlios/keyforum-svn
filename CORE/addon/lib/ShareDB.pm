@@ -124,7 +124,7 @@ sub PrendiUltimiMsg {
 #						oppure gli hash inseriti nel giorno 25 dicembre del tipo 2
 # $hashref{ROW_REQ}=[] Lista di hash di varie righe richieste dall'altro. IO devo rispondere con ROWS
 sub RecvData {
-	my ($this, $ogg, $hashref)=@_;
+	my ($this, $ogg, $hashref,$ip)=@_;
 	#print "ricevo da share tab\n";
 	return undef unless exists $this->{Sessioni}->{"$ogg"};
 	return undef if ref($hashref) ne "HASH";
@@ -132,8 +132,8 @@ sub RecvData {
 	$this->ROW_REQ($ogg, $hashref->{ROW_REQ}) if exists $hashref->{ROW_REQ};
 	$this->ROWS($ogg, $hashref->{ROWS}) if exists $hashref->{ROWS};
 	$this->HASH_REQ($ogg, $hashref->{HASH_REQ}) if exists $hashref->{HASH_REQ};
-	$this->{ticket}->TicketReq($hashref->{TicketReq}) if exists $hashref->{TicketReq};
-	$this->{ticket}->TicketResp($hashref->{TicketResp}) if exists $hashref->{TicketResp};
+	$this->{ticket}->TicketReq($hashref->{TicketReq},$ogg,$ip) if exists $hashref->{TicketReq};
+	$this->{ticket}->TicketResp($hashref->{TicketResp},$ogg) if exists $hashref->{TicketResp};
 	return 1;
 }
 

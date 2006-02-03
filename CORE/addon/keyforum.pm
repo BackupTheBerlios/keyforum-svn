@@ -129,7 +129,7 @@ sub RecData {
 	ReadIpList($ogg, $hashref->{IpList}) if exists $hashref->{IpList};
 	foreach $key (keys(%$hashref)) {
 		next unless exists $GLOBAL::Gate{$key};
-		$GLOBAL::Gate{$key}->RecvData($ogg,$hashref->{$key});
+		$GLOBAL::Gate{$key}->RecvData($ogg,$hashref->{$key},$sock->peerhost);
 		delete $hashref->{$key};
 	}
 	$value='';
