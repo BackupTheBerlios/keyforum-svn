@@ -6,6 +6,7 @@ use Fcntl; # For O_RDWR, O_CREAT, etc. all'inizio
 use Itami::stati;
 use Itami::Cycle;
 use Itami::ConvData;
+require "ticket.pm";
 # $this contenuto:
 # DataBase	=> Oggetto per accedere al database.
 # DBM		=> Oggetto DBM con tutti gli MD5 delle righe.
@@ -21,6 +22,7 @@ use Itami::ConvData;
 # può essere un punto debole per i lamer!!!
 # FERMATE IL MONDO!!! VOGLIO SCENDERE!!!
 # W l'erba B)
+$GLOBAL::TICKET={};
 sub Declare {
 	my $this=shift;
 	$this->{Sender}=shift;	
@@ -48,6 +50,8 @@ sub tab_conf {
 	my ($this, %tab_conf)=@_;
 	my ($sth, $md5_list);
 	$this->{TabConf}=\%tab_conf;
+	$this->{ticket}=$GLOBAL::TICKET{$this->{TabConf}->{ShareName}}=ticket->new($this->{fname},$this->{TabConf}->{ShareName}); # Crea l'oggetto per i ticket
+	
 	$sth=$this->{DataBase}->prepare("SELECT ".($this->{TabConf}->{Identificatore}).",".($this->{TabConf}->{Type})." FROM ".($this->{TabConf}->{Table}));
 	$sth->execute() or return Error($this->{DataBase}->errstr."\n");
 	print "KEYFORUM: Creazione indice degli HASH.\n";
@@ -92,6 +96,7 @@ sub NewSession {
 	$this->{Sender}->($this->{TabConf}->{ShareName},'HASH_REQ', $oggname, $hash_req);
 	my $msgref=$this->PrendiUltimiMsg();
 	$this->{Sender}->($this->{TabConf}->{ShareName},'OFF_HASH', $oggname, $msgref) if $#{$msgref} > -1;
+	$this->{ticket}->NewNode($oggname);
 	return $oggname;
 }
 sub RemoveItem {
@@ -127,11 +132,19 @@ sub RecvData {
 	$this->ROW_REQ($ogg, $hashref->{ROW_REQ}) if exists $hashref->{ROW_REQ};
 	$this->ROWS($ogg, $hashref->{ROWS}) if exists $hashref->{ROWS};
 	$this->HASH_REQ($ogg, $hashref->{HASH_REQ}) if exists $hashref->{HASH_REQ};
+	$this->{ticket}->TicketReq($hashref->{TicketReq}) if exists $hashref->{TicketReq};
+	$this->{ticket}->TicketResp($hashref->{TicketResp}) if exists $hashref->{TicketResp};
 	return 1;
 }
 
 sub ROWS {
 	my ($this, $ogg, $ref)=@_;
+	my $fid=$this->{TabConf}->{ShareName};
+	my ($AddedRows, $ReqRows);
+	($AddedRows, $ReqRows)=$GLOBAL::Rule{$fid}->AddRows($ref);
+	$this->RowReqDest($ogg,$ReqRows) if ref($ReqRows) eq "ARRAY" && $#{$ReqRows}>-1;
+	$this->OffertHashBrCa($AddedRows) if ref($AddedRows) eq "ARRAY" && $#{$AddedRows}>-1;
+	return 1;
 }
 ################################
 #

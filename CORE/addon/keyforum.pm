@@ -1,4 +1,3 @@
-#Keyforum|che dire ancora
 package keyforum;
 #use Data::Dump qw(dump);
 $GLOBAL::Fconf={};
@@ -122,32 +121,20 @@ sub RecData {
 	#while (my ($gate, $data)=each(%$hashref)) {
 		#print $gate."-".$data."\n";
 	#}
-	my ($BroCast)=0;
+	
 	ReadHello($ogg,$hashref->{Hello},$sock) if exists $hashref->{Hello};
 	ReadJoinInto($ogg, $hashref->{JoinInto},$sock->peerhost) if exists $hashref->{JoinInto};
 	ReadJoined($ogg, $hashref->{Joined},$sock) if exists $hashref->{Joined};
 	ReadIPrequest($ogg, $hashref->{IPrequest}) if exists $hashref->{IPrequest};
 	ReadIpList($ogg, $hashref->{IpList}) if exists $hashref->{IpList};
 	foreach $key (keys(%$hashref)) {
-		$value=$hashref->{$key};
-		SWITCH: {
-			last SWITCH unless exists $GLOBAL::Gate{$key};
-			last SWITCH unless $GLOBAL::Gate{$key}->RecvData($ogg,$value);
-			last SWITCH if ref($value->{ROWS}) ne "HASH";
-			kfdebug::scrivi(15,1,10,scalar(keys(%{$value->{ROWS}})),$sock->peerhost);  # X mi invia Y messaggi
-			($AddedRows, $ReqRows)=$GLOBAL::Rule{$key}->AddRows($value->{ROWS});
-			kfdebug::scrivi(16,1,11,undef,$sock->peerhost);  # X mi invia Y messaggi
-			delete $value->{ROWS};	# Cancello e libero spazio
-			$GLOBAL::Gate{$key}->RowReqDest($ogg, $ReqRows) if ref($ReqRows) eq "ARRAY" && scalar(@$ReqRows);
-			$BroCast||=$GLOBAL::Gate{$key}->OffertHashBrCa($AddedRows);
-			
-		}
+		next unless exists $GLOBAL::Gate{$key};
+		$GLOBAL::Gate{$key}->RecvData($ogg,$hashref->{$key});
 		delete $hashref->{$key};
 	}
 	$value='';
-
-	($BroCast) ? (&BigAutoFlush) : (AutoFlush($ogg)); # Inivio i dati se presenti nel buffer
-
+	&BigAutoFlush;
+	#($BroCast) ? (&BigAutoFlush) : (AutoFlush($ogg)); # Inivio i dati se presenti nel buffer
 }
 
 

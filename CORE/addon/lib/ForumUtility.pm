@@ -40,7 +40,6 @@ sub CheckSignPkey {
         Message    => $md5, 
         Signature  => $sign, 
         Key        => $public) || Warning("Errore nel modulo CheckRsa: ".$rsa->errstr());
-    
 }
 sub Firma {
     my ($this,$md5,$private)=@_;

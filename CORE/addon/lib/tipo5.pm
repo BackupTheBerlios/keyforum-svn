@@ -26,9 +26,8 @@ sub new {
     # Antiflood, queste righe dovrebbero andare bene per tutti i tipi. Si autoconfigura secondo la variabile $thistype
     my $name=$GLOBAL::Fconf->{$this->{id}}->{'TYPE'}->{$thistype}->{'ANTIFLOOD'};
     $this->{AntiFlood}=AntiFlood->new($fname,$id,$GLOBAL::Fconf->{$id}->{"ANTIFLOOD_".$name},$name,$thistype);
-    
-    
     $this->{congi}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_congi(`HASH`,`TYPE`,`WRITE_DATE`,`INSTIME`,`AUTORE`) VALUES (?,'".$thistype."',?,?,?)");
+    
     $this->{InviUpdate}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_reply SET visibile='0' WHERE EDIT_OF=? AND `DATE`<?");
     $this->{Inserisci}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_reply (`HASH`,`REP_OF`,`AUTORE`, `EDIT_OF`,`DATE`,`IS_EDIT`, `TITLE`, `BODY`, `EXTVAR`, `SIGN`,`ADMIN_SIGN`,`visibile`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     $this->{IncMsgNum}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_membri SET msg_num=msg_num+1 WHERE HASH=?");

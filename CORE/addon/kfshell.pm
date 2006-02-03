@@ -61,6 +61,18 @@ sub act_FORUM {
 	return undef if ref($data) ne "HASH";
 	$this->{tosend}->{'FORUM'}={} unless exists $this->{tosend}->{'FORUM'};
 	$this->act_FORUM_ADDMSG($data->{ADDMSG}) if exists $data->{ADDMSG};
+	$this->act_FORUM_ADDTICKET($data->{'ADDTICKET'}) if exists $data->{'ADDTICKET'};
+}
+sub act_FORUM_ADDTICKET {
+	my ($this,$data)=@_;
+	return undef if ref($data) ne "HASH";
+	my $fdest=$data->{FDEST};
+	unless (exists $GLOBAL::Gate{$fdest}) {
+		$this->{tosend}->{'FORUM'}->{ADDTICKET}=-15;
+		return undef;
+	}
+	$this->{tosend}->{'FORUM'}->{ADDTICKET}=$GLOBAL::Gate{$fdest}->{ticket}->MakeTicket($data);
+	return 1;
 }
 sub act_FORUM_ADDMSG {
 	my ($this,$data)=@_;

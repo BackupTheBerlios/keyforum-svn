@@ -21,10 +21,20 @@ sub CanDo {
 }
 # I permessi delle sezione
 sub SezPerm {
-    my ($this,$autore,$data,$chiave1,$chiave2)=@_;
-    $autore=Digest::MD5::md5(int($autore));
-    return undef if length($autore) != 16;
-    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($autore,$chiave1 || '', $chiave2 || '',$data))) {
+    my ($this,$sezione,$data,$chiave1,$chiave2)=@_;
+    $sezione=Digest::MD5::md5(int($sezione));
+    return undef if length($sezione) != 16;
+    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($sezione,$chiave1 || '', $chiave2 || '',$data))) {
+        return $val;
+    }
+    return undef; 
+}
+sub KeyRing {
+    my ($this,$key_id,$data,$chiave1,$chiave2)=@_;
+    $key_id=Digest::MD5::md5("KeyRing:".int($key_id));
+    #print unpack "H*",$key_id;print "\n";
+    return undef if length($key_id) != 16;
+    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($key_id,$chiave1 || '', $chiave2 || '',$data))) {
         return $val;
     }
     return undef; 
