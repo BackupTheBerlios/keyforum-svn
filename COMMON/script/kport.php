@@ -34,7 +34,7 @@ if (preg_match("/\blisten\b/i", $buffer)) {
 fclose($handle);
 
 // altre porte (keyforum com = 40569 , keyforum shell = 40565")
-$otherport=",40569,40565";
+require "otherport.php";
 
 $portlist = $portlist.$mysqlport.$otherport;
 
