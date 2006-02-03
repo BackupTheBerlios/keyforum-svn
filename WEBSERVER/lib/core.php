@@ -102,6 +102,12 @@ class CoreSock {
 		$risp=$this->Read();
 		return $risp['FUNC']['var2BinDump'];
 	}
+	function BinDump2Var($stringa) {
+		$tosend['FUNC']['BinDump2var']=$stringa;
+		$this->Send($tosend);
+		$risp=$this->Read();
+		return $risp['FUNC']['BinDump2var'];
+	}
 	function NewUser($nick,$publickey,$privatekey,$passwd='') {
 		$utente[PKEYDEC]=$publickey;
 		$utente[AUTORE]=$nick;
@@ -130,6 +136,27 @@ class CoreSock {
 		$this->Send($req);
 		$risp=$this->Read();
 		return $risp[RSA][FIRMA][$md5];
+	}
+	function MakeTicket($start_date,$end_date,$keyid,$id,$priv_key,$pwd='') {
+		global $forum_id;
+		$array['FDEST']=$forum_id;
+		if (!$start_date) {
+			if (strlen($this->gmt_time)>10) $array['START_DATE']=$this->gmt_time;
+			else $array['START_DATE']=time();
+		} else $array['START_DATE']=$start_date;
+		
+		if ($end_date<10000) {
+			if (strlen($this->gmt_time)>10) $array['END_DATE']=$this->gmt_time+$end_date*3600;
+			else $array['END_DATE']=time()+$end_date*3600;
+		} else $array['END_DATE']=$end_date;
+		$array['KEY_ID']=$keyid;
+		$array['ID']=$id;
+		$array['_PRIVATE']=$priv_key;
+		$array['_PWD']=$pwd;
+		$req[FORUM][ADDTICKET]=$array;
+		$this->Send($req);
+		$risp=$this->Read();
+		return $risp[FORUM][ADDTICKET];
 	}
 	function GenRsaKey($pwd='',$output=0) {
 		$req['RSA']['GENKEY']['CONSOLE_OUTPUT'] = $output;

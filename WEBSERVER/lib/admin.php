@@ -22,6 +22,9 @@ class Admin {
     function EditPerm($autore,$chiave1,$chiave2,$valore,$date=0) {
         $this->comandi['EditPerm'][]=array(autore=>$autore,chiave1=>$chiave1,chiave2=>$chiave2,valore=>$valore,data=>$date);
     }
+    function KeyRing($keyid,$chiave1,$chiave2,$valore,$date=0) {
+        $this->comandi['EditPerm'][]=array(autore=>md5("KeyRing:".$keyid,true),chiave1=>$chiave1,chiave2=>$chiave2,valore=>$valore,data=>$date);
+    }
     function AuthMem($autore) {
         global $core;
         $this->comandi[AuthMem][]=array(HASH=>$autore,AUTH=>$core->GetSign($md5,$this->privata));
