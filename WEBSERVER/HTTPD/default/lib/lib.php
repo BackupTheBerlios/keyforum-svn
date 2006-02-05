@@ -136,7 +136,7 @@ global $db,$SNAME;
 	$_SESSION['sess_nick'] = "";
     $_SESSION['sess_password'] = "";
     $_SESSION['sess_auth'] = 0;
-	setcookie("sess_auth_{$SNAME}");
+	if(isset($_COOKIE["sess_auth_{$SNAME}"]) setcookie("sess_auth_{$SNAME}",'',time()-60*60*24*1); //Scade ieri ed è vouto
 }
 
 function Muori($errore) {
