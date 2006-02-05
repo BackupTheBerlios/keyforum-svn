@@ -98,10 +98,11 @@ $GLOBALS['sess_auth'] = &$sess_auth;*/
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 
 function CheckSession() {
-	global $db;
+	global $db,$SNAME;
 	if($_COOKIE["sess_auth_{$SNAME}"])
 	{
 		$the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$SNAME}"]));
+		var_dump($the_cookie);
 		list($nick,$pass) = $the_cookie;
 		$_SESSION[$SNAME]['sess_nick'] = $nick;
 		$_SESSION[$SNAME]['sess_password'] = $pass;
