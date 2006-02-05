@@ -56,7 +56,7 @@ foreach($result as $riga)
 
 define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
-define ("GMT_TIME", 3600*1);
+define ("GMT_TIME", date("Z")); // offset GMT
 
     $porta=$_SERVER['SERVER_PORT'] ;
 	foreach($config['WEBSERVER'] as $nome=>$array)
