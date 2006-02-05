@@ -122,7 +122,7 @@ class CoreSock {
 		if (strlen($this->gmt_time)>10) {
 			$array['DATE']=$this->gmt_time;
 		} else {
-			$array['DATE']=time();
+			$array['DATE']=gmmktime();
 		}
 		$tosend['FORUM']['ADDMSG']=$array;
 		$this->Send($tosend);
