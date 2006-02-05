@@ -86,6 +86,30 @@ $handle = fopen($filename, 'w');
 fwrite($handle, $apacheconf);
 fclose($handle);
 
+// preparazione di otherport.php
+// leggo il sample
+echo "PREPARAZIONE OTHERPORT.PHP ....\n";
+$filename = "otherport.php.sam";
+$handle = fopen($filename, "r");
+$othrptstart = fread($handle, filesize($filename));
+fclose($handle);
+
+// leggo tutte le porte utilizzate
+$sql="SELECT VALUE FROM config WHERE SUBKEY='TCP' AND FKEY='PORTA'";
+$result = mysql_query($sql);
+
+$otherport='';
+while ($row=mysql_fetch_array($result))
+  $otherport .= ",".$row['VALUE'];
+
+$othrptend=str_replace("{otherport}",$otherport,$othrptstart);
+
+// sovrascrivo otherport.php
+$filename = "$apachedir/COMMON/script/otherport.php";
+echo "-> $filename\n";
+$handle = fopen($filename, 'w');
+fwrite($handle, $othrptend);
+
 // sovrascrivo chkdir.bat
 $filename = "$apachedir/COMMON/script/chkdir.bat";
 echo "-> $filename\n";
