@@ -10,7 +10,7 @@ $lang += $std->load_lang('lang_logout', $blanguage );
 <tR>
 	<td>
 	<?PHP
-if ($_SESSION['sess_auth']) {
+if ($_SESSION[$SNAME]['sess_auth']) {
 DestroySession();
 
 echo "".$lang['logout_success']."<br>\n";

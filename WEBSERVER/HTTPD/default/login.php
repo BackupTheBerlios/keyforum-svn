@@ -5,7 +5,7 @@ include ("testa.php"); echo "<tr><td>";
 
 // carico la lingua per il login
 $lang += $std->load_lang('lang_login', $blanguage );
-if ($_SESSION['sess_auth']==1) 
+if ($_SESSION[$SNAME]['sess_auth']==1) 
 {
 	echo $lang['login_info1'];
 }
@@ -28,9 +28,9 @@ else
 			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),mysql_real_escape_string($rawpasswd));
 			setcookie("sess_auth_{$SNAME}",serialize($the_cookie),time()+60*60*24*7);
 		}
-		$_SESSION['sess_nick'] = mysql_real_escape_string($_POST["nick"]);
-		$_SESSION['sess_password'] = mysql_real_escape_string($_REQUEST["passwd"]);
-		$_SESSION['sess_auth'] = 1;
+		$_SESSION[$SNAME]['sess_nick'] = mysql_real_escape_string($_POST["nick"]);
+		$_SESSION[$SNAME]['sess_password'] = mysql_real_escape_string($rawpasswd);
+		$_SESSION[$SNAME]['sess_auth'] = 1;
 		
 		echo $lang['login_succ'];
 		$SEZ_ID=$_REQUEST["SEZID"];

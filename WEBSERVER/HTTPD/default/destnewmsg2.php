@@ -13,10 +13,10 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
         $edit_val=1;
 }
 
-if (!$_SESSION['sess_auth']) $std->Error ($lang['reply_login']);
+if (!$_SESSION[$SNAME]['sess_auth']) $std->Error ($lang['reply_login']);
 
-$IDENTIFICATORE=md5($_SESSION['sess_password'].$_SESSION['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
-$KEY_DECRYPT=pack('H*',md5($_SESSION['sess_nick'].$_SESSION['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+$IDENTIFICATORE=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
+$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
 $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='$IDENTIFICATORE';";
 $password = $db->get_var($query);
 if(!$password)
@@ -87,8 +87,6 @@ $mreq['FORUM']['ADDMSG']['SIGN']=$risp[RSA][FIRMA][$MD5_MSG];
 //if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
 
 $risp = $core->AddMsg($mreq);
-
-var_dump($risp);
 
 if ( empty($risp['ERRORE']) ) {		// ok, redirect
 	if ($_REQUEST['edit_of']) $THR_ID=$_REQUEST['edit_of'];

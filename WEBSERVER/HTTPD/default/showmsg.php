@@ -20,6 +20,7 @@ global $std;
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
 <?php
+  global $SNAME;
   global $NumPag;
   global $CurrPag;
   global $Section;
@@ -98,7 +99,7 @@ global $std;
 	-->
 	</script>
 	";
-	if($_SESSION['sess_auth']){
+	if($_SESSION[$SNAME]['sess_auth']){
 	  $logged="javascript:show_hide('FastReply')";
 	}else{
 	  $logged="login.php?SEZID=".$_REQUEST["SEZID"]."&amp;THR_ID=".$_REQUEST["THR_ID"]."&amp;pag=".$_REQUEST["pag"];

@@ -29,6 +29,7 @@ global $tst;
     <td align="left" nowrap="nowrap" width="20%">
 <?
   global $blanguage;
+  global $SNAME;
   global $NumPag;
   global $CurrPag;
   global $Section;
@@ -65,7 +66,7 @@ global $tst;
 
     
     
-     if ($_SESSION['sess_auth']) 
+     if ($_SESSION[$SNAME]['sess_auth']) 
 	 {
 	 	echo "<td align=right><a href='?allread=$mytime'>{$lang['mark_all_read']}</a></td>";
 	 }

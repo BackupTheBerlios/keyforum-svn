@@ -14,10 +14,10 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
         $edit_val=1;
 }
 
-if (!$_SESSION['sess_auth']) $std->Error ($lang['reply_login'],$_REQUEST['body']);
+if (!$_SESSION[$SNAME]['sess_auth']) $std->Error ($lang['reply_login'],$_REQUEST['body']);
 
-$IDENTIFICATORE=md5($_SESSION['sess_password'].$_SESSION['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
-$KEY_DECRYPT=pack('H*',md5($_SESSION['sess_nick'].$_SESSION['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+$IDENTIFICATORE=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
+$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
 $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='".$IDENTIFICATORE."';";
 $privkey=base64_decode($db->get_var($query));
 
@@ -91,8 +91,6 @@ $risp=$core->Read();
 */
 
 $risp = $core->AddMsg($mreq);
-
-var_dump($risp);
 
 if ( empty($risp[ERRORE]) ) {		// ok, redirect
     $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$_REQUEST['repof']."&pag=last#end_page";

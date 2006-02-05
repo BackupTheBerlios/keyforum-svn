@@ -141,13 +141,13 @@ class FUNC {
 
 	function GetUserData($sess_name,$sess_nick,$sess_password) 
 	{
-		global $db;
+		global $db,$SNAME;
 		$userdata = array();
 		
-		if(!$sess_nick) { return $userdata; }
+		if(!$_SESSION[$SNAME]['sess_nick']) { return $userdata; }
 		
 		// hex id
-		$hash=md5($sess_password.$sess_nick);
+		$hash=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']);
 				
 		// all user data
 		$query = "SELECT * FROM {$sess_name}_localmember  WHERE HASH='$hash'";

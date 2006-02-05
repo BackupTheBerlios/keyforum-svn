@@ -17,7 +17,7 @@ $mem_id = $_GET['MEM_ID']; 			//dell'utente da modificare
 $mem_hash = pack('H*',$mem_id); 
 list($user_hash,$user_id) = get_my_info($SNAME);
 
-if (!$_SESSION['sess_auth']) {
+if (!$_SESSION[$SNAME]['sess_auth']) {
     $url = "login.php";
     echo "<tr><td><center>".$lang['sign_login']."<br>";
     echo "".$lang['reply_loginred']."</center></td></tr><script language=\"javascript\" type='text\javasript'>setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";

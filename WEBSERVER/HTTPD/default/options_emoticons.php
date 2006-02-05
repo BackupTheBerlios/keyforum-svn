@@ -9,7 +9,7 @@ include("testa.php");
 require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
-if (!$_SESSION['sess_auth']) {
+if (!$_SESSION[$SNAME]['sess_auth']) {
     $url = "login.php";
     echo "<tr><td><center>".$lang['sign_login']."<br>";
     echo "".$lang['reply_loginred']."</center></td></tr><script language=\"javascript\">setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";
