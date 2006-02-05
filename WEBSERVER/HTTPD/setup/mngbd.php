@@ -35,7 +35,8 @@ $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['
 $group = $db->get_var("SELECT VALUE FROM config WHERE MAIN_GROUP='SHARESERVER' AND SUBKEY='TCP' AND FKEY='GROUP'");
 
 if(!$_REQUEST['edit']){
-	$data = $db->get_var("SELECT VALUE FROM config WHERE MAIN_GROUP='TCP' AND SUBKEY='BANDA_LIMITE' AND FKEY='".$group."'");
+	$data['BAND'] = $db->get_var("SELECT VALUE FROM config WHERE MAIN_GROUP='TCP' AND SUBKEY='BANDA_LIMITE' AND FKEY='".$group."'");
+	$data['PORT'] = $db->get_var("SELECT VALUE FROM config WHERE MAIN_GROUP='SHARESERVER' AND SUBKEY='TCP' AND FKEY='PORTA'");
 	layout($data);
 	die();
 }else{
@@ -80,31 +81,40 @@ function layout($data){
 	echo  "
 	<br>
 	<div align=\"center\">
-		<table border=\"0\" width=\"500\" id=\"table1\">
-			<tr>
-				<th class='row1'>
-				<font face=\"Verdana\"><b>".$lang['mngbd_title']."</b></font></th>
-			</tr>
-			<tr>
-				<td class='row1' >
-	            <p align=\"center\"><br>
-	            <form method=\"POST\" action=\"mngbd.php?edit=1\">
+	  <table border=\"0\" width=\"500\" id=\"table1\">
+		<tr>
+		  <th class='row1'>
+		  <font face=\"Verdana\"><b>".$lang['mngbd_title']."</b></font></th>
+		</tr>
+		<tr>
+		  <td class='row1' >
+		    <p align=\"center\"><br>
+	            	<form method=\"POST\" action=\"mngbd.php?edit=1\">
 					
-					<table border=\"0\" width=\"100%\" id=\"table2\">
-						<tr>
-							<td class='row1' width=\"27%\"><b>
-							<font size=\"2\">".$lang['mngbd_band']."</font></b></td>
-							<td class='row1' width=\"71%\"><input type=\"text\" name=\"band\" value=\"".$data."\" size=\"20\">".$lang['mngbd_kb']."</td>
-						</tr>
-						<tr>
-							<td class='row3' colspan=\"2\">".$lang['mngbd_info']."</td>
-						</tr>
-					</table>
-					<p align=\"center\"><input type=\"submit\" value=\"Conferma\" name=\"B1\"></p>
-				</form>
-				</td>
-			</tr>
-		</table>
+				<table border=\"0\" width=\"100%\" id=\"table2\">
+					<tr>
+						<td class='row1' width=\"27%\"><b>
+						<font size=\"2\">".$lang['mngbd_band']."</font></b></td>
+						<td class='row1' width=\"71%\"><input type=\"text\" name=\"band\" value=\"".$data['BAND']."\" size=\"20\">".$lang['mngbd_kb']."</td>
+					</tr>
+					<tr>
+						<td class='row3' colspan=\"2\">".$lang['mngbd_info']."</td>
+					</tr>
+					<tr>
+						<td class='row1' width=\"27%\"><b>
+						<font size=\"2\">".$lang['mngbd_port']."</font></b></td>
+						<td class='row1' width=\"71%\"><input type=\"text\" name=\"port\" value=\"".$data['PORT']."\" size=\"20\"></td>
+					</tr>
+					<tr>
+						<td class='row3' colspan=\"2\">".$lang['mngbd_info2']."</td>
+					</tr>
+				</table>
+				<p align=\"center\"><input type=\"submit\" value=\"Conferma\" name=\"B1\"></p>
+			</form>
+		    </p>
+		  </td>
+		</tr>
+	  </table>
 	</div>
 	
 	</body>
@@ -121,6 +131,12 @@ function UpdateDb($group){
 		SET VALUE='".$_REQUEST['band']."'
 		WHERE MAIN_GROUP='TCP' AND SUBKEY='BANDA_LIMITE' AND FKEY='".$group."'");
 	}
+	if(is_numeric($_REQUEST['port'])){
+		$db->query("UPDATE config
+		SET VALUE='".$_REQUEST['port']."'
+		WHERE MAIN_GROUP='SHARESERVER' AND SUBKEY='TCP' AND FKEY='PORTA'");
+	}
+
 }
 
 ?>
