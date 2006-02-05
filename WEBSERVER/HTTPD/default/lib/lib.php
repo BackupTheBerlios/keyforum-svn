@@ -242,6 +242,7 @@ CheckSession();
 
 // *** variabili usate ovunque ***
 $SNAME = $_ENV['sesname'];
+$forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 
 
 

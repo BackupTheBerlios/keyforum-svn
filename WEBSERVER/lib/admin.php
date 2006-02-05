@@ -29,6 +29,16 @@ class Admin {
         global $core;
         $this->comandi[AuthMem][]=array(HASH=>$autore,AUTH=>$core->GetSign($md5,$this->privata));
     }
+    function Send2Core($title) {
+            global $core;
+            $messaggio['BODY']=$core->Var2BinDump($this->ReturnVar());
+	    $messaggio['TITLE']=$title;
+	    $messaggio['TYPE']=1; 
+	    $messaggio['_PRIVATE']=$this->privata;
+            return $core->AddMsg($messaggio); 
+    }
+    
+    
     function ReturnVar() {
         return $this->comandi;
     }

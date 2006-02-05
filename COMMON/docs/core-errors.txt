@@ -1,0 +1,5 @@
+101 Il tipo del messaggio non è installato
+102 il tipo non è specificato
+103 non riesco a firmare il messaggio
+104 non riesco a convertire la chiave in oggetto
+105 non ho la chiave privata per firmare il msg
