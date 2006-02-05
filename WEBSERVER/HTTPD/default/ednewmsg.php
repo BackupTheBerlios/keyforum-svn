@@ -6,7 +6,7 @@ include ("testa.php");
 // carico la lingua per l'edit
 $lang += $std->load_lang('lang_ednewmsg', $blanguage );
 
-  if (!$sess_auth) {
+  if (!$_SESSION['sess_auth']) {
     $url = "login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["EDIT_OF"]."&pag=".$_REQUEST["pag"];
     echo "<tr><td><center>".$lang['edmsg_login']."<br>";
     echo "".$lang['edmsg_loginred']."</center></td></tr><script language=\"javascript\">setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";

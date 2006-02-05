@@ -16,7 +16,7 @@ $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." AND {$SNAME}_membri.HASH={$SNAME}_msghe.AUTORE";
 
   echo "<tr><td>";
-  if (!$sess_auth) {
+  if (!$_SESSION['sess_auth']) {
     $url = "login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["REP_OF"]."&pag=".$_REQUEST["pag"];
     echo "<tr><td><center>".$lang['edrep_login']."<br>";
     echo "".$lang['edrep_loginred']."</center></td></tr><script language=\"javascript\">setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";

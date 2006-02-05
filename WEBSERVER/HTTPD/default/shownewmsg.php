@@ -20,7 +20,7 @@ $tst=$_REQUEST['tst'];
 include ("testa.php");
 
 function PageSelect() {
-global $tst,$sess_auth;
+global $tst;
 ?>
 <tr><td>
 <table border="0" cellpadding="5px" cellspacing="0" width="100%">
@@ -65,7 +65,7 @@ global $tst,$sess_auth;
 
     
     
-     if ($sess_auth) 
+     if ($_SESSION['sess_auth']) 
 	 {
 	 	echo "<td align=right><a href='?allread=$mytime'>{$lang['mark_all_read']}</a></td>";
 	 }

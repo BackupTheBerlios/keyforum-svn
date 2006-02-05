@@ -58,11 +58,11 @@ $lang += $std->load_lang('lang_testa', $blanguage );
   	,'userlist.php?validati=1&amp;nonvalidati=1' 	=> $lang['userlink_usrlst']
   	,'boardlist.php'	=> $lang['userlink_brdlst']
   	);
-  	if ($sess_auth)
+  	if ($_SESSION['sess_auth'])
   	{
   		$userlinks['options_forum.php'] = $lang['user_panel'];
   		$userlinks['shownewmsg.php']	= $lang['shownewmsg'];
-  		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$sess_nick.'</b>';
+  		$userlinks[] 					= $lang['userlink_wlcm'].' <b>'.$_SESSION['sess_nick'].'</b>';
   		$userlinks['logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"]] = $lang['userlink_logout'];
   	}
   	else
@@ -161,7 +161,7 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
   <p><b><a href="index.php"><?php echo $lang['userlink_home']; ?></a></b> 
 	| <a href='shownewmsg.php'><?php echo $lang['shownewmsg']; ?></a>
 	<?	
-	if($sess_auth)
+	if($_SESSION['sess_auth'])
 	{
 
 		echo "| <a href='options_forum.php'>{$lang['user_panel']}</a>";
@@ -169,8 +169,8 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
 	?>	
 	| <?php echo $lang['userlink_wlcm']; ?> 
    <?php
-      if ($sess_auth)
-        echo '<b>'.$sess_nick.'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
+      if ($_SESSION['sess_auth'])
+        echo '<b>'.$_SESSION['sess_nick'].'</b> ( <a href="logout.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_logout'].'</a> )';
       else
         echo $lang['userlink_guest'].' <a href="login.php?SEZID='.$_REQUEST["SEZID"].'&amp;THR_ID='.$_REQUEST["THR_ID"].'">'.$lang['userlink_login'].'</a> <a href="register.php">'.$lang['userlink_signup'].'</a>'; 
     ?> 
@@ -220,7 +220,7 @@ if ($title) {
 
 <?
 // avvisi ai registrati
-if ($sess_auth)
+if ($_SESSION['sess_auth'])
 {
 //print_r($userdata);
 //echo $userdata->IS_AUTH;

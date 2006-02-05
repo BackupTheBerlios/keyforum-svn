@@ -237,7 +237,7 @@ function GetUserColor($hash) {
 function Error($ermsg,$txtsave="",$info="")
 {
 
-global $lang,$std,$blanguage,$sess_auth, $sess_nick,$sess_password,$SEZ_DATA,$userdata,$_ENV,$db;
+global $lang,$std,$blanguage,$SEZ_DATA,$userdata,$_ENV,$db;
 
 if(!$blanguage) {$blanguage="eng";}
 

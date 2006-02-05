@@ -14,7 +14,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
   CheckSession();
 
-  if (!$sess_auth) {
+  if (!$_SESSION['sess_auth']) {
     $url = "login.php?SEZID=".$_REQUEST["SEZID"]."&THR_ID=".$_REQUEST["THR_ID"]."&pag=".$_REQUEST["pag"];
     echo "<tr><td><center>".$lang['reply_login']."<br>";
     echo "".$lang['reply_loginred']."</center></td></tr><script language=\"javascript\">setTimeout('delayer()', 1500);\nfunction delayer(){ window.location='$url';}</script>";

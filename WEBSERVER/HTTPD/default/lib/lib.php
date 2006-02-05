@@ -92,35 +92,51 @@ if (!$_ENV['sesname']) {
 #	if ($_SESSION['IP'] != $_ENV["REMOTE_ADDR"]) session_unset();
 #}
 
-$GLOBALS['sess_nick'] = &$sess_nick;
+/*$GLOBALS['sess_nick'] = &$sess_nick;
 $GLOBALS['sess_password'] = &$sess_password;
-$GLOBALS['sess_auth'] = &$sess_auth;
+$GLOBALS['sess_auth'] = &$sess_auth;*/
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 
 function CheckSession() {
 	global $db;
-	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+	if($_COOKIE["sess_auth_{$_ENV[sesname]}"])
+	{
+		$the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$_ENV[sesname]}"]));
+		list($nick,$pass) = $the_cookie;
+		$pass = pack("H*",md5($pass));
+		$_SESSION['sess_nick'] = $nick;
+		$_SESSION['sess_password'] = $pass;
+		$_SESSION['sess_auth'] = 1;
+	}
+	
+/*	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
    if ($result ) {
       $GLOBALS['sess_nick'] = $result->NICK;
       $GLOBALS['sess_password'] = $result->PASSWORD;
       $GLOBALS['sess_auth'] = 1;
+
   } else {
       
-      $GLOBALS['sess_nick'] = "";
-      $GLOBALS['sess_password'] = "";
-      $GLOBALS['sess_auth'] = 0;
-  }
+      $_SESSION['sess_nick'] = "";
+      $_SESSION['sess_password'] = "";
+      $_SESSION['sess_auth'] = 0;
+  }*/
 
 }
 
 function DestroySession() 
 {
-global $db;
+global $db,$SNAME;
 	$sess_id = session_id();
 	$my_ip = $_SERVER['REMOTE_ADDR'];
 	$SNAME = $_ENV['sesname'];
 	$query="DELETE FROM session WHERE SESSID='$sess_id' AND IP=md5('$my_ip') AND FORUM='$SNAME' ";
 	$db->query($query);
+	
+	$_SESSION['sess_nick'] = "";
+    $_SESSION['sess_password'] = "";
+    $_SESSION['sess_auth'] = 0;
+	setcookie("sess_auth_{$SNAME}");
 }
 
 function Muori($errore) {
@@ -189,9 +205,9 @@ function get_my_info()
 {
 	/* RETURN: Array( hash - id ) */
 	global $std,$SNAME,$userdata;
-	if(!$GLOBALS['sess_nick']) return "";
+	if(!$_SESSION['sess_nick']) return "";
 	if(!$userdata) return "";
-	$KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password'])); // = password per decriptare la chiave privata in localmember (16byte)
+	$KEY_DECRYPT=pack('H*',md5($_SESSION['sess_nick'].$_SESSION['sess_password'])); // = password per decriptare la chiave privata in localmember (16byte)
 	$privkey=base64_decode($userdata->PASSWORD);
 	$PKEY=$std->getpkey($SNAME);
 	$req[FUNC][Base642Dec]=$PKEY;
@@ -220,8 +236,6 @@ function WhoIsMe()
 	$Iam = $db->get_row($query);
 	return $Iam;
 }
-
-
 
 
 CheckSession();

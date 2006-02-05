@@ -2,10 +2,10 @@
 
 include("testa.php");
 
-if (!$GLOBALS['sess_auth']) $std->Error ("Fare il login prima di convertire l'utente");
+if (!$_SESSION['sess_auth']) $std->Error ("Fare il login prima di convertire l'utente");
 
-$IDENTIFICATORE=md5($GLOBALS['sess_password'].$GLOBALS['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
-$KEY_DECRYPT=pack('H*',md5($GLOBALS['sess_nick'].$GLOBALS['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+$IDENTIFICATORE=md5($_SESSION['sess_password'].$_SESSION['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
+$KEY_DECRYPT=pack('H*',md5($_SESSION['sess_nick'].$_SESSION['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
 $query="SELECT PASSWORD FROM ".$SNAME."_localmember WHERE HASH='$IDENTIFICATORE';";
 $password = $db->get_var($query);
 if(!$password)

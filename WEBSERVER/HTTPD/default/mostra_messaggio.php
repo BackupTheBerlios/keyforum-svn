@@ -10,7 +10,7 @@ function printmsg($MSG) {
   global $closed;
 
   $usercolor = $std->GetUserColor($MSG->memhash);
-  $mio_nick = $GLOBALS['sess_nick'];
+  $mio_nick = $_SESSION['sess_nick'];
   if ($MSG->date)
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG->date);
   $hash=unpack("H32hex",$MSG->hash);

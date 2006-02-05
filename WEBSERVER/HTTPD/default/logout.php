@@ -1,5 +1,6 @@
 <?PHP
 $whereiam="logout";
+ob_start();
 include ("testa.php");
 
 // carico la lingua per le sezioni
@@ -9,7 +10,7 @@ $lang += $std->load_lang('lang_logout', $blanguage );
 <tR>
 	<td>
 	<?PHP
-if ($sess_auth) {
+if ($_SESSION['sess_auth']) {
 DestroySession();
 
 echo "".$lang['logout_success']."<br>\n";
