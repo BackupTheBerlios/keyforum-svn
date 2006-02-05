@@ -103,7 +103,6 @@ function CheckSession() {
 	{
 		$the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$_ENV[sesname]}"]));
 		list($nick,$pass) = $the_cookie;
-		$pass = pack("H*",md5($pass));
 		$_SESSION['sess_nick'] = $nick;
 		$_SESSION['sess_password'] = $pass;
 		$_SESSION['sess_auth'] = 1;

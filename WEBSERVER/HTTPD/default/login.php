@@ -25,7 +25,7 @@ else
 		
 		if(isset($_POST['remember']))
 		{
-			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),mysql_real_escape_string($_REQUEST["passwd"]));
+			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),mysql_real_escape_string($rawpasswd));
 			setcookie("sess_auth_{$SNAME}",serialize($the_cookie),time()+60*60*24*7);
 		}
 		$_SESSION['sess_nick'] = mysql_real_escape_string($_POST["nick"]);
@@ -82,7 +82,7 @@ else
       <td background="img/login_8.gif"><input type=password name=passwd></td>
       <td background="img/login_8.gif" height="24"><font size="1">&nbsp;</font></td>-->
       <td align="right">Ricordami<?=$lang['login_remember']?>&nbsp;</td>
-      <td ><input type="checkbox" name="remember"></td>
+      <td align="left"><input type="checkbox" name="remember"></td>
     </tr>
     <tr>
 <!--      <td background="img/login_3.gif" height="25"><font size="1">&nbsp;</font></td>
