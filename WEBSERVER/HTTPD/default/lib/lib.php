@@ -202,19 +202,26 @@ function secure_v($val) {
 function get_my_info()
 {
 	/* RETURN: Array( hash - id ) */
-	global $std,$SNAME,$userdata;
+	global $std,$SNAME,$userdata,$db,$config,$lang;
 	if(!$_SESSION[$SNAME]['sess_nick']) return "";
 	if(!$userdata) return "";
-	$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password'])); // = password per decriptare la chiave privata in localmember (16byte)
-	$privkey=base64_decode($userdata->PASSWORD);
-	$PKEY=$std->getpkey($SNAME);
-	$req[FUNC][Base642Dec]=$PKEY;
+	$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+	$privkey=base64_decode($userdata->password);
+	$PKEY=$config[SHARE][$SNAME][PKEY];
+	
 	$req[FUNC][BlowDump2var][Key]=$KEY_DECRYPT;
 	$req[FUNC][BlowDump2var][Data]=$privkey;
 	$core=new CoreSock;
-	if (!$core->Send($req)) return NULL; 
-	if (!$risp=$core->Read()) return NULL; 
-	$return[0]=$risp[FUNC]["BlowDump2var"]["hash"]; 	//dell'utente loggato in questo momento
+	if (!$core->Send($req)) $std->Error($lang['reply_core']);
+	if (!$risp=$core->Read()) $std->Error ($lang['reply_timeout']);
+	
+	if ( strlen($PKEY) < 120 ) $std->Error($lang['reply_admin']);
+	if ( strlen($risp[FUNC][BlowDump2var][hash]) != 16 ) $std->Error ($lang['reply_pdata']);
+	
+	$userhash=$risp[FUNC][BlowDump2var][hash];
+	
+	if ( get_magic_quotes_gpc() ) $userhash=stripslashes($userhash);
+	$return[0]=mysql_real_escape_string($userhash);
 	list($asd,$return[1]) = unpack('H*',$return[0]);
 	return ($return);
 }
@@ -225,7 +232,8 @@ function WhoIsMe()
 	global $SNAME,$db;
 
 	list($user_hash,$user_id) = get_my_info($SNAME);
-
+	//var_dump($user_hash);
+	
 	$user_hash = mysql_real_escape_string($user_hash);
 	$query = "SELECT *
 			FROM {$SNAME}_membri where hash = '$user_hash'
