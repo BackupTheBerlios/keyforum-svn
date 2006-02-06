@@ -1,4 +1,4 @@
-z<?php
+<?php
 require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 ?>
