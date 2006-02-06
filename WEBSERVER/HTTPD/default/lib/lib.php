@@ -102,7 +102,7 @@ function CheckSession() {
 	if($_COOKIE["sess_auth_{$SNAME}"])
 	{
 		$the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$SNAME}"]));
-		var_dump($the_cookie);
+		//var_dump($the_cookie);
 		list($nick,$pass) = $the_cookie;
 		$_SESSION[$SNAME]['sess_nick'] = $nick;
 		$_SESSION[$SNAME]['sess_password'] = $pass;
@@ -223,11 +223,10 @@ function get_my_info()
 function WhoIsMe()
  {
 	global $SNAME,$db;
+
 	list($user_hash,$user_id) = get_my_info($SNAME);
 
-	$user_hash = @pack("H*",$user_id);
 	$user_hash = mysql_real_escape_string($user_hash);
-		
 	$query = "SELECT *
 			FROM {$SNAME}_membri where hash = '$user_hash'
 			LIMIT 1";
@@ -246,7 +245,7 @@ $forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 CheckSession();
 
 // *** DATI UTENTE ****
-$userdata=$std->GetUserData($SNAME,$sess_nick,$sess_password);
+$userdata=$std->GetUserData($SNAME,$_SESSION[$SNAME]['sess_nick'],$_SESSION[$SNAME]['sess_password']);
 
 // *** LINGUA UTENTE **
 if($userdata->LANG)

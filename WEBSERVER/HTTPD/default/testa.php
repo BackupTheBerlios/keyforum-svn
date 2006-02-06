@@ -1,4 +1,4 @@
-<?php
+z<?php
 require_once("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 ?>
@@ -236,7 +236,6 @@ if($me->is_auth)
    $std->Notice($lang['user_info_auth']);
 }
 }
-
 
 // avvisi per l'admin
 if($userdata->LEVEL >=9)
