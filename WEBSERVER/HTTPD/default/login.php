@@ -25,7 +25,7 @@ else
 		
 		if(isset($_POST['remember']))
 		{
-			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),mysql_real_escape_string($rawpasswd));
+			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),$rawpasswd);
 			setcookie("sess_auth_{$SNAME}",serialize($the_cookie),time()+60*60*24*7);
 		}
 		$_SESSION[$SNAME]['sess_nick'] = mysql_real_escape_string($_POST["nick"]);
