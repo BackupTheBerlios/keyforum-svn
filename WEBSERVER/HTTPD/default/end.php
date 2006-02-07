@@ -44,55 +44,12 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
     </tr>
  </table><br>";
 ?>
-<!-- Nota -->
+<!-- Stats -->
 <?       if ((!$SEZ_DATA->ID)AND($whereiam=="index")){
       
       // lo stato delle categorie salvato nel cookie
       $hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_ENV["sesname"]));
- 
-       if (in_array("note",$hidesez))
-       {
-          $divshow = 'none';
-          $divhide = 'show';
-      } else
-      {
-          $divshow = 'show';
-          $divhide = 'none';
-      }      
-	  include_once('lib/bbcode_parser.php');
-	  ?>
-	  
-<div class="borderwrap" style="display:<? echo $divhide; ?>" id="divhide_note">
-	<div class="maintitle">
-		<p class="expand">
-			<a href="javascript:ShowHideSection('note',0,'<?=$SNAME?>');"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a>
-		</p>
-		<p>	 <?=secure_v($forum_conf[FORUM][DATA][NAME][VALUE])?> by <?=secure_v($forum_conf[FORUM][DATA][ADMIN_NAME][VALUE])?></p>
-	</div>
-</div>
-<div class="borderwrap" style="display:<? echo $divshow; ?>" id="divshow_note">
-	<div class="maintitle">
-		<p class="expand">
-			<a href="javascript:ShowHideSection('note',1,'<?=$SNAME?>');"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a>
-		</p>
-		<p>	 <?=secure_v($forum_conf[FORUM][DATA][NAME][VALUE])?> by <?=secure_v($forum_conf[FORUM][DATA][ADMIN_NAME][VALUE])?></p>
-	</div>
-	<table cellspacing="1" width="100%">
-		<tr>
-			<th align="right" colspan="2">&nbsp;</th>
-		</tr>
-		<tr>
-			<td class="formsubtitle" width="1%" ><img src='img/pinned.gif' alt=''>Nota:</td>
-			<td class="formsubtitle" align="left">
-				<?=convert(secure_v($forum_conf[FORUM][DATA][NOTE][VALUE]))?>
-			</td>
-		</tr>
-	</table>
-</div>
-<br />
-
-	<!-- Stats -->
-	<? 
+	   
 	   if (in_array("stat",$hidesez))
        {
           $divshow = 'none';
@@ -286,7 +243,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 if($whereiam=="index")
 {
 echo "<tr><td align=right>";
-$sezcollector .= "stat,note";
+$sezcollector .= "stat";
 echo "<a href=\"javascript:ShowHideAll('$sezcollector',0,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector',1,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
 echo "</td></tr>";
 }
