@@ -205,7 +205,21 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	    if($reg_users)
               echo "{$lang['stat_reguser1']}<b>$reg_users</b>{$lang['stat_reguser2']}";
 	 ?>
-	 	<? if($USERPREF->most_active_users) include('most_active_users.php');?>
+	 <!-- Advanced Stats -->
+	<?
+	$USERPREF->most_active_users = 1;
+	$USERPREF->today_bithday = 1;
+	if($USERPREF->most_active_users) 
+	{
+		$advanced_stats_mode = 'most_active_day';
+		include('advanced_stats.php');
+	}
+	if($USERPREF->today_bithday) 
+	{
+		$advanced_stats_mode = 'today_bithday';
+		include('advanced_stats.php');
+	}
+	?>
 	</td>
        </tr>
        <tr>
