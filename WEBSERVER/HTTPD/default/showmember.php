@@ -13,12 +13,15 @@ $hash = addslashes(pack('H*',$id));
 
 //dati personali
 $query = "
-Select    AUTORE
+Select AUTORE
 	, (DATE+".GMT_TIME.") AS 'reg_date'
 	, firma
 	, avatar
 	, title
 	, msg_num
+	, nascita
+	, provenienza
+	, email
 from {$SNAME}_membri
 WHERE HASH = '$hash' LIMIT 1";//not used AUTH, TYPE, SIGN ,is_auth ,ban, present, edit_firma, edit_adminset
 $pdata = $db->get_row($query);
@@ -93,8 +96,9 @@ $user = Array(
 	, 'sign'	=>$pdata->firma
 	, 'icq'		=>NULL
 	, 'msn'		=>NULL
-	, 'location'	=>''
-	, 'compleanno'	=>''
+	, 'email'	=>$pdata->email
+	, 'location'	=>$pdata->provenienza
+	, 'compleanno'	=>$pdata->nascita
 	, 'online'	=>array('text' => '','image' =>'') //IMPOSSIBLE TO DO
 	, 'last_action'	=>array('title' => $last_data->title,'data' => $last_data->date,'sez' => $last_data->sez, 'reply_id' =>$last_data->EDIT_OF)
 	);
@@ -112,10 +116,13 @@ $user['home'] = secure_v($user['home']);
 $user['location'] = secure_v($user['location']);
 $user['msg_sez']['sez_name'] = secure_v($user['msg_sez']['sez_name']);
 $user['last_action']['title'] = ($user['last_action']['title'] ? secure_v($user['last_action']['title']) : '(untitled)' );
+//array_walk($user,secure_v);
+
 
 //Default data
 $user['group']['text'] = ($user['group']['text'] ? $user['group']['text'] : 'membri');
 $user['avatar'] = ($user['avatar'] ? "<div><img src='{$user['avatar']}' border='0' alt='avatar' /></div>" : ''); //Default avatar?::NULL
+$user['email'] = ($user['email'] ? "<a href='mailto:{$user['email']}'>{$user['email']}</a>" : NULL); //Default email
 
 
 //Converting data
@@ -131,7 +138,14 @@ if($user['msg_num']['tot'])$user['msg_sez']['perc'] = number_format($user['msg_s
 //Formatting data
 $user['reg_date'] = strftime("%d/%m/%y",$user['reg_date']);
 $user['last_action']['data'] = strftime("%d/%m/%y - %H:%M:%S",$user['last_action']['data']);
-$user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
+if($user['compleanno'])$user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
+
+
+//Nessuna info dove
+if(!$user['compleanno']) $user['compleanno'] = "<i>{$lang['shmbr_noinfo']}</i>";
+if(!$user['email']) $user['email'] = "<i>{$lang['shmbr_noinfo']}</i>";
+if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
+
 
 //OUTPUT
 ?>
@@ -260,7 +274,7 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 					<td width="1%" class="row1">
 						<img src='img/f_norm_no.gif' border='0'  alt='Contact' />
 					</td>
-					<td width="99%" class="row2"><i><? echo" ".$lang['shmbr_pvt']." "; ?></i></td>
+					<td width="99%" class="row2"><?=$user['email']?></td>
 				</tr>
 			</table>
 		</td>
@@ -280,11 +294,11 @@ $user['compleanno'] = strftime("%d/%m/%y",$user['compleanno']);
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_birthday']." "; ?></b></td>
-					<td class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
+					<td class="row1"><i><?=$user['compleanno']?></i></td>
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_location']." "; ?></b></td>
-					<td class="row1"><i><? echo" ".$lang['shmbr_noinfo']." "; ?></i></td>
+					<td class="row1"><?=$user['location']?></td>
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_interests']." "; ?></b></td>
