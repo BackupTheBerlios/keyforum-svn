@@ -14,7 +14,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
   $seleng["$blanguage"]="selected";
   
    echo "
-   <div id='navstrip'>
+   <div class='navstrip'>
     <img src='img/3.gif' alt=''> <a href='index.php'>".$lang['navstrp_findex']."</a> ";
    $seznum2=$seznum;
    while($seznum2){

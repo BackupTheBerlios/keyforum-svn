@@ -189,7 +189,7 @@ option.sub { font-weight:bold;color:#555 }
 	float: left;
 }
 
-#navstrip{ 
+.navstrip{ 
 	background: transparent;
 	color: #999;
 	font-size: 12px;
@@ -198,15 +198,15 @@ option.sub { font-weight:bold;color:#555 }
 	padding: 8px 0 8px 0px; 
 }
 
-#navstrip a:link, 
-#navstrip  a:visited{ 
+.navstrip a:link, 
+.navstrip  a:visited{ 
 	background: transparent; 
 	color: #222; 
 	text-decoration: none;
 }
 
-#navstrip a:hover, 
-#navstrip a:active{
+.navstrip a:hover, 
+.navstrip a:active{
 	background: transparent; 
 	color: #5176B5; 
 }

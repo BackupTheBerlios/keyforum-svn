@@ -258,6 +258,7 @@ return (false);
     <optgroup label='Language selection'>
     <option <? echo $langselect['eng']; ?> value="eng">English</option>
     <option <? echo $langselect['ita']; ?> value="ita">Italiano</option>
+	</optgroup>
     </select>
     
     <br>

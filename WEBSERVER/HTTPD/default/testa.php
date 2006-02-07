@@ -189,7 +189,7 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
 </select>
 </form>
 
-<div id="navstrip">
+<div class="navstrip">
   <img src="img/3.gif" alt="" /> <a href="index.php"><?php echo $lang['navstrp_findex']; ?></a>
 <?php
 

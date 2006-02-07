@@ -344,7 +344,8 @@ $output .= "<optgroup label='Link rapidi'>";
 
 $output .= "<option value='index.php'>Home</option>"; 		
 $output .= "<option value='options_forum.php'>Opzioni</option>"; 		
-$output .= "<option value='shownewmsg.php'>Nuovi messaggi</option>"; 		
+$output .= "<option value='shownewmsg.php'>Nuovi messaggi</option>"; 	
+$output .= "</optgroup>"; 	
 
 
 

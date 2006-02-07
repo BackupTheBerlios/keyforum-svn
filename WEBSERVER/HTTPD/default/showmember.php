@@ -22,6 +22,7 @@ Select AUTORE
 	, nascita
 	, provenienza
 	, email
+	, extra
 from {$SNAME}_membri
 WHERE HASH = '$hash' LIMIT 1";//not used AUTH, TYPE, SIGN ,is_auth ,ban, present, edit_firma, edit_adminset
 $pdata = $db->get_row($query);
@@ -101,12 +102,15 @@ $user = Array(
 	, 'compleanno'	=>$pdata->nascita
 	, 'online'	=>array('text' => '','image' =>'') //IMPOSSIBLE TO DO
 	, 'last_action'	=>array('title' => $last_data->title,'data' => $last_data->date,'sez' => $last_data->sez, 'reply_id' =>$last_data->EDIT_OF)
+	,'extra' => $pdata->extra
 	);
 unset($pdata);
 unset($sez_data);
 unset($last_data);
 
 //PREPROCESSING DATA
+if(!$core)$core=new CoreSock;
+$user['extra'] = $core->BinDump2Var($user['extra']);
 
 //Securing data
 $user['nick'] = secure_v($user['nick']);
@@ -314,11 +318,17 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 				   		<?=$lang['shmbr_otherinfo']?>
 					</td>
 				</tr>
+				<!-- Extraz -->
+				<?
+				if($user['extra'])foreach($user['extra'] as $key=>$value) echo "
 				<tr>
-					<td colspan="2" align="center" class="row2">
-						<i><? echo" ".$lang['shmbr_noinfo']." "; ?></i>
-					</td>
-				</tr>
+					<td class='row2' valign='top' width='1%'><b>".ucfirst($key).":</b></td>
+					<td class='row1'>".convert(secure_v($value))."</td>
+				</tr>";
+				else echo  "
+				<tr>
+					<td class='row2' valign='top'><i>{$lang['shmbr_noinfo']}</i></td>
+				</tr>";	 ?>
 			</table>
 		</td>
 	</tr>
