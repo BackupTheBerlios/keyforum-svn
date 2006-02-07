@@ -31,6 +31,6 @@
 			 }
 			-->
 			</script>
-			<a href='javascript:emopopup()'><? echo $lang['emo_showallemo']; ?></a>
+			<a href='javascript:()' onclick='emopopup()'><? echo $lang['emo_showallemo']; ?></a>
 		</td>
 	</tr>
