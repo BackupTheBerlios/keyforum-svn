@@ -49,7 +49,7 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
-$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM,{$SNAME}_membri.autore as 'MOD' 
+$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH' 
  from {$SNAME}_sez 
  LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
  LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
@@ -75,7 +75,7 @@ if ($result) foreach ( $result as $row )
 		,'last_action' => $last_action[$row->id+0]
 		,'num_figli' => 0
 		);
-		$mod[$row->id+0][] = $row->MOD;
+		$mod[$row->id+0][] = Array("Nick"=>$row->MOD, "Hash"=>$row->MOD_HASH);
 }
 unset($last_action);
 
@@ -207,7 +207,8 @@ function draw_forum($sez,$indice)
 			}
 			foreach($mod[$sez['SEZ_ID']] as $key=>$value)
 			{
-				$moderators.= "$value, ";
+				$modhash= @unpack("H32alfa",$value["Hash"]);
+				$moderators.= "<a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$value["Nick"]."</a>, ";
 			}
 			$moderators = substr($moderators,0,-2);
 
