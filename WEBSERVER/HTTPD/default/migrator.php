@@ -1,31 +1,63 @@
 <?PHP
 
+// *******************************
+// script di conversione utenti e messaggi da una board
+// ad una nuova
+//
+// richiede questa tabella temporanea, vuota nel db sorgente
+/*
+CREATE TABLE `hash_tmp` (
+  `OLD_HASH` binary(16) NOT NULL,
+  `NEW_HASH` binary(16) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+*/
+
 //******** CONFIGURAZIONE *************
+
+// massima durata in secondi dello script
+ini_set("max_execution_time",3600);
 
 //nome db con i dati di origine
 $dborigname="keyforum-org";
+// nome sessione di origine
+$sesorg="keyfo";
 // chiave privata Admin forum di destinazione
-$adminpkey="";
+// va inserita in un file chiamato pkeytemp.php
+// contenente
+//$PRIVKEY=".....";
+include("pkeytemp.php");
+
 // sessione da convertire
-$consess="keyfo";
+$consess="imptest";
+
+// il forum di destinazione è quello corrente...
 
 //************************************************
 
 $whereiam="migrator";
-ob_start('ob_gzhandler'); 
 include ("testa.php");
 
+$core=new CoreSock;
 
 // database di origine
 $dborig = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $dborigname,$_ENV['sql_host'].":".$_ENV['sql_dbport']);
 
 
 // Necessito della chiave privata dell'admin!
-$PRIVKEY=base64_decode($adminpkey);
+$PRIVKEY=base64_decode($PRIVKEY);
 
-// Vi ricordo che è necessario inserire le sezioni prima di fare le operazioni di migrazione!
+// è necessario inserire le sezioni prima di fare le operazioni di migrazione!
 
-if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM $consess_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in $consess_membri :(");
+echo "<b>migrazione del forum $sesorg dal database $dborigname, attendere prego....</b><br>";
+flush();
+
+
+// ************************************
+// CONVERSIONE UTENTI
+// ************************************
+echo "Conversione utenti<br>";
+$feedback=0;
+if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
 foreach ($res as $utente) {
     $riga=array();
     $riga[AUTORE]=$utente[1];
@@ -36,6 +68,13 @@ foreach ($res as $utente) {
     $res=$core->AddMsg($riga);
     if ($res[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($utente[0],$res[MD5]));
+    
+    // feedback
+    $feedback++;
+    if($feedback==100) {echo "<br>";$feedback=0;}
+    echo "|";
+    flush();
+    
     } else {
         list(,$hex)=unpack("H*",$utente[0]);
         print "Utente con hash $hex non aggiunto perchè $res[ERRORE]\n<br>";
@@ -43,7 +82,12 @@ foreach ($res as $utente) {
     }
 }
 
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM $consess_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in $consess_newmsg :(");
+// ************************************
+// CONVERSIONE THREAD
+// ************************************
+echo "<br>Conversione thread<br>";
+$feedback=0;
+if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM {$sesorg}_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_newmsg :(");
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -63,6 +107,13 @@ foreach ($res as $msg) {
     $risp=$core->AddMsg($riga);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
+        
+    // feedback
+   $feedback++;
+   if($feedback==100) {echo "<br>";$feedback=0;}
+    echo "|";
+    flush();
+        
     } else {
         list(,$hex)=unpack("H*",$msg[HASH]);
         print "MSG con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
@@ -71,8 +122,12 @@ foreach ($res as $msg) {
 }
   
 
-
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM $consess_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in $consess_reply :(");
+// ************************************
+// CONVERSIONE REPLY
+// ************************************
+echo "<br>Conversione reply<br>";
+$feedback=0;
+if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM {$sesorg}_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_reply :(");
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -91,12 +146,22 @@ foreach ($res as $msg) {
     $risp=$core->AddMsg($riga);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
+        
+    // feedback
+   $feedback++;
+   if($feedback==100) {echo "<br>";$feedback=0;}
+    echo "|";
+    flush();        
+        
     } else {
         list(,$hex)=unpack("H*",$msg[HASH]);
         print "reply con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
         
     }
 }
+
+
+
 
 function cambia ($old_hash) {
     global $db;
@@ -105,7 +170,6 @@ function cambia ($old_hash) {
     else return NULL;
 }
 
-#print preg_replace("/c/","kkk","ciao cioccio bello",1);
 $db->MakeQuery("SELECT HASH,FIRMA FROM ME WHERE HASH=? AND NICK=?;",array("5465465456","ffs'@ me ?"));
 
 
