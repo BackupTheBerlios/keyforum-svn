@@ -2,6 +2,7 @@
 
 $lang['inv_query']  = "Invalid query: ";
 $lang['mtitle_stat']  = "Statistics";
+$lang['mtitle_note']  = "Note";
 $lang['stat_dbmess1']  = "There are ";
 $lang['stat_dbmess2']  = " messages in the database";
 $lang['stat_dbmesslh1']  = "Inserted";

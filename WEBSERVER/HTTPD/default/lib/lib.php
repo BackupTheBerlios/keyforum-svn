@@ -51,7 +51,6 @@ foreach($result as $riga)
 {
 	$config[$riga->MAIN_GROUP][$riga->SUBKEY][$riga->FKEY] = $riga->VALUE;
 }
-
  
 define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
@@ -81,6 +80,13 @@ define ("GMT_TIME", date("Z")); // offset GMT
 if (!$_ENV['sesname']) {
 	print "Nessuna board assegnata a questo webserver.\n";
 	exit();
+}
+//Configurazione della board
+$query = "SELECT * FROM {$_ENV['sesname']}_conf WHERE 1";
+$result = $db->get_results($query);
+foreach($result as $riga)
+{
+	$forum_conf[$riga->GROUP][$riga->FKEY][$riga->SUBKEY] = array('VALUE' =>$riga->VALUE, 'PRESENT' =>$riga->present, 'DATE'=>$riga->date);
 }
 # Controllo se la sessione è stata registrata dallo stesso che ne ha fatto richiesta
 # tramite l'IP di origine del browser.
