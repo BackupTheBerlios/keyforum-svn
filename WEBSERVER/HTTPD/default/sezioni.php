@@ -120,15 +120,15 @@ function PageSelect() {
           $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID=".$subsezval->ID."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         $notfirst=1;
       }
-      $querymods="SELECT membri.AUTORE as MODERATOR FROM {$SNAME}_permessi as permessi, {$SNAME}_membri as membri WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."' AND membri.HASH=permessi.AUTORE;";
+      $querymods="SELECT membri.AUTORE as 'MOD' FROM {$SNAME}_permessi as permessi, {$SNAME}_membri as membri WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."' AND membri.HASH=permessi.AUTORE;";
       $mods = $db->get_results($querymods);
       $moderators="";
       $notfirst="";
       if($mods)foreach($mods as $modsval) {
       	if($notfirst)
-	  $moderators=$moderators.", ".$modsval->MODERATOR;
+	  $moderators=$moderators.", ".$modsval->MOD;
 	else
-	  $moderators=" ".$modsval->MODERATOR;
+	  $moderators=" ".$modsval->MOD;
         $notfirst=1;
       }
 		?>
