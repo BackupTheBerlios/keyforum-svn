@@ -21,7 +21,9 @@ function printmsg($MSG) {
   if ($MSG->regdate)
     $register_date=strftime("%d/%m/%y",$MSG->regdate);
   if ($MSG->gruppo)
-    $gruppo=$MSG->title; else $gruppo="membri";
+    $gruppo=$MSG->gruppo; else $gruppo="membri";
+  if ($MSG->is_mod)
+    $Is_mod="<span style='color:#FF0000'>Moderatore</span><br />"; else $Is_mod = '';
   if ($MSG->memhash) {
     $tmp=unpack("H32hash",$MSG->memhash);
     $autore="<a href='showmember.php?MEM_ID=".$tmp['hash']."'>".secure_v($MSG->autore)."</a>";
@@ -93,6 +95,7 @@ $membertitle=$std->MemberTitle($member_titles,$MSG->msg_num);
   {$avatar}
   {$membertitle['title']}<br />
   {$membertitle['pips']}<br />  
+  {$Is_mod}
   {$lang['shmsg_adminauth']}{$auth}<br />
   {$lang['shmsg_group']}{$gruppo}<br />
   {$lang['shmsg_messages']}{$MSG->msg_num}<br />
