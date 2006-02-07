@@ -120,7 +120,17 @@ function PageSelect() {
           $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID=".$subsezval->ID."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         $notfirst=1;
       }
-      $moderators=$std->ListMod($sezval->MOD);
+      $querymods="SELECT membri.AUTORE as MODERATOR FROM {$SNAME}_permessi as permessi, {$SNAME}_membri as membri WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."' AND membri.HASH=permessi.AUTORE;";
+      $mods = $db->get_results($querymods);
+      $moderators="";
+      $notfirst="";
+      if($mods)foreach($mods as $modsval) {
+      	if($notfirst)
+	  $moderators=$moderators.", ".$modsval->MODERATOR;
+	else
+	  $moderators=" ".$modsval->MODERATOR;
+        $notfirst=1;
+      }
 		?>
       <tr>
         <td class="row4" width="5%" align="center">
@@ -134,7 +144,7 @@ function PageSelect() {
 				<i><?=$lang['col_moderators']?>:<?=$moderators?></i>
 			</font><br />
 		</span>
-		</td>
+	</td>
         <td class="row2" align="center"><?=$sezval->THR_NUM?></td>
         <td class="row2" align="center"><?=$sezval->REPLY_NUM?></td>
         <td class="row2" nowrap="nowrap">
