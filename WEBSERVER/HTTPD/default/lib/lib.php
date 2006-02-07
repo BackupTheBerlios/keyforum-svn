@@ -84,9 +84,11 @@ if (!$_ENV['sesname']) {
 //Configurazione della board
 $query = "SELECT * FROM {$_ENV['sesname']}_conf WHERE 1";
 $result = $db->get_results($query);
+if ($result) { 
 foreach($result as $riga)
 {
 	$forum_conf[$riga->GROUP][$riga->FKEY][$riga->SUBKEY] = array('VALUE' =>$riga->VALUE, 'PRESENT' =>$riga->present, 'DATE'=>$riga->date);
+}
 }
 # Controllo se la sessione è stata registrata dallo stesso che ne ha fatto richiesta
 # tramite l'IP di origine del browser.
