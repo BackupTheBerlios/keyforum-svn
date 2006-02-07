@@ -49,36 +49,35 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
-$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, THR_NUM
- from {$_ENV['sesname']}_sez order by FIGLIO,ORDINE ";
+$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM,{$SNAME}_membri.autore as 'MOD' 
+ from {$SNAME}_sez 
+ LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
+ LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
+ order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 
-if ($result)
+if ($result) foreach ( $result as $row )
 {
-foreach ( $result as $row )
-{
-$tree->AddNode(" ".$row->id," ".$row->FIGLIO);
-$forum[$row->id+0]= Array(
-	 'SEZ_ID'	=> $row->id
-	,'SEZ_NAME' => $row->sez_name
-	,'SEZ_DESC' => $row->SEZ_DESC
-	,'MOD' 		=> $row->MOD
-	,'PKEY' 	=> $row->PKEY
-	,'PRKEY'	=> $row->THR_NUM
-	,'REPLY_NUM'=> $row->REPLY_NUM
-	,'THR_NUM'	=> $row->THR_NUM
-	,'ONLY_AUTH'=> $row->ONLY_AUTH
-	,'AUTOFLUSH'=> $row->AUTOFLUSH
-	,'ORDINE'	=> $row->ORDINE
-	,'FIGLIO' 	=> $row->FIGLIO
-	,'last_admin_edit' => $row->last_admin_edit
-	,'last_action' => $last_action[$row->id+0]
-	,'num_figli' => 0
-	);
-}
+	$tree->AddNode(" ".$row->id," ".$row->FIGLIO);
+	$forum[$row->id+0]= Array(
+		 'SEZ_ID'	=> $row->id
+		,'SEZ_NAME' => $row->sez_name
+		,'SEZ_DESC' => $row->SEZ_DESC
+		,'PKEY' 	=> $row->PKEY
+		,'PRKEY'	=> $row->THR_NUM
+		,'REPLY_NUM'=> $row->REPLY_NUM
+		,'THR_NUM'	=> $row->THR_NUM
+		,'ONLY_AUTH'=> $row->ONLY_AUTH
+		,'AUTOFLUSH'=> $row->AUTOFLUSH
+		,'ORDINE'	=> $row->ORDINE
+		,'FIGLIO' 	=> $row->FIGLIO
+		,'last_admin_edit' => $row->last_admin_edit
+		,'last_action' => $last_action[$row->id+0]
+		,'num_figli' => 0
+		);
+		$mod[$row->id+0][] = $row->MOD;
 }
 unset($last_action);
-
 
 $ris=$tree->drawTree();
 $num_figli = array_fill(0,count($ris),0);
@@ -118,7 +117,7 @@ include('end.php');
 //FUNZIONE DI VISUALIZZAZIONE
 function draw_forum($sez,$indice)
 {
-	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std;
+	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std,$mod;
 	switch($sez[level])
 	{
 		case 0:
@@ -206,7 +205,11 @@ function draw_forum($sez,$indice)
 			{
 				
 			}
-			$moderators=$std->ListMod($sez[MOD]);
+			foreach($mod[$sez['SEZ_ID']] as $key=>$value)
+			{
+				$moderators.= "$value, ";
+			}
+			$moderators = substr($moderators,0,-2);
 
 			echo "
 			<tr>
