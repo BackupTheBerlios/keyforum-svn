@@ -1,5 +1,5 @@
 <?php
-include ("testa.php");
+include ("testa.php");echo "<tr><td>";
 include ("mostra_messaggio.php");
 $lang += $std->load_lang('lang_showmsg', $blanguage );
 $SNAME=$_ENV['sesname'];
@@ -15,7 +15,7 @@ echo "<a href=\"searcher.php?MODO=2&amp;REPOF=" . $_REQUEST['THR_ID'] . "\">" . 
 function PageSelect($pos) {
 global $std;
 ?>
-<table border="0" cellpadding="5px" cellspacing="0" width="100%">
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
   <tbody>
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
@@ -68,7 +68,7 @@ global $std;
 	$dclose=$std->PostDate($closed);
 	echo "<img src='img/buttons/$blanguage/t_closed.gif' border='0' alt='Closed  $dclose' />";
 	} else {
-	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&THR_ID={$_REQUEST['THR_ID']}\"><img src='img/buttons/$blanguage/t_reply.gif' border='0' alt='Rispondi' /></a>";    
+	echo "<a href=\"reply.php?SEZID={$_REQUEST['SEZID']}&amp;THR_ID={$_REQUEST['THR_ID']}\"><img src='img/buttons/$blanguage/t_reply.gif' border='0' alt='Rispondi' /></a>";    
        }
      ?>
 
@@ -157,11 +157,11 @@ function FastReply() {
 			FastReply:
 		</div>
 		<div id='colo-sx' class='post2' align='center'><br />
-			<table border='0' cellspacing='0' cellpadding='3'>
-				<div align='center'><p><strong>Smiles:</strong></p></div>
-				<? include("emoticons.php");?>
-			</table>
-   		</div>
+			<div align='center'><p><strong>Smiles:</strong></p></div>
+				<table border='0' cellspacing='0' cellpadding='3'>
+					<? include("emoticons.php");?>
+				</table>
+   			</div>
    		<div id='colo-dx'></div>
   		<div id='centrale' class='post2' align='center'><br />
 			<table border='0' cellspacing='0' cellpadding='0'>

@@ -65,7 +65,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 <div class="borderwrap" style="display:<? echo $divhide; ?>" id="divhide_note">
 	<div class="maintitle">
 		<p class="expand">
-			<a href="javascript:ShowHideSection('note', 0,'<?=$SNAME?>');"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a>
+			<a href="javascript:ShowHideSection('note',0,'<?=$SNAME?>');"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a>
 		</p>
 		<p>	 <?=secure_v($forum_conf[FORUM][DATA][NAME][VALUE])?> by <?=secure_v($forum_conf[FORUM][DATA][ADMIN_NAME][VALUE])?></p>
 	</div>
@@ -73,7 +73,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 <div class="borderwrap" style="display:<? echo $divshow; ?>" id="divshow_note">
 	<div class="maintitle">
 		<p class="expand">
-			<a href="javascript:ShowHideSection('note', 1,'<?=$SNAME?>');"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a>
+			<a href="javascript:ShowHideSection('note',1,'<?=$SNAME?>');"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a>
 		</p>
 		<p>	 <?=secure_v($forum_conf[FORUM][DATA][NAME][VALUE])?> by <?=secure_v($forum_conf[FORUM][DATA][ADMIN_NAME][VALUE])?></p>
 	</div>
@@ -107,7 +107,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
    
    <div class="borderwrap" style="display:<? echo $divhide; ?>" id="divhide_stat">
    	<div class="maintitle">
-   		<p class="expand"><a href="javascript:ShowHideSection('stat', 0,'<?=$SNAME?>');"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
+   		<p class="expand"><a href="javascript:ShowHideSection('stat',0,'<?=$SNAME?>');"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
    		<p><? echo $lang['mtitle_stat']; ?></p>
    	</div>
    </div>
@@ -116,7 +116,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
    
    <div class="borderwrap" style="display:<? echo $divshow; ?>" id="divshow_stat">
      <div class="maintitle">
-       <p class="expand"><a href="javascript:ShowHideSection('stat', 1,'<?=$SNAME?>');"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a></p>
+       <p class="expand"><a href="javascript:ShowHideSection('stat',1,'<?=$SNAME?>');"><img src='img/exp_minus.gif' border='0'  alt='Expand' /></a></p>
        <p><? echo $lang['mtitle_stat']; ?></p>
      </div>
      <table cellspacing="1">
@@ -286,8 +286,8 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 if($whereiam=="index")
 {
 echo "<tr><td align=right>";
-$sezcollector .= "stat";
-echo "<a href=\"javascript:ShowHideAll('$sezcollector', 0,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector', 1,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
+$sezcollector .= "stat,note";
+echo "<a href=\"javascript:ShowHideAll('$sezcollector',0,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse All' /></a> | <a href=\"javascript:ShowHideAll('$sezcollector',1,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand All' /></a>";
 echo "</td></tr>";
 }
 ?>

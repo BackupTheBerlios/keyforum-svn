@@ -63,7 +63,7 @@ if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
      $realautore=$db->get_var($queryaut);
      $MSG->body = $MSG->body."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG->real_date)."[/COLOR][/SIZE]";
   }
- 
+  list($asd,$postid) = unpack('H*',$MSG->hash);
   $MSG->body = secure_v($MSG->body);
    
   // visualizzo le firme ?
@@ -133,7 +133,7 @@ EOF;
  </td>
 </tr>
 <tr>
- <td class='darkrow3' align='left'><b></b></td>
+ <td class='darkrow3' align='left'><b>&nbsp;</b></td>
  <td class='darkrow3' nowrap='nowrap' align='left'>
    <!-- PM / EMAIL / WWW / MSGR / UP -->
    <div align='left' class='darkrow3' style='float:left;width:auto'>

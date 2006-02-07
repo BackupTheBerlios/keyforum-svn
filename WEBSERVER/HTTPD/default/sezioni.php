@@ -9,7 +9,7 @@ $lang += $std->load_lang('lang_sezioni', $blanguage );
 function PageSelect() {
 ?>
 <tr><td>
-<table border="0" cellpadding="5px" cellspacing="0" width="100%">
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
   <tbody>
   <tr>
     <td align="left" nowrap="nowrap" width="20%">
@@ -193,7 +193,7 @@ PageSelect();
   <div class="maintitle">
     <p class="expand"></p>
     <?PHP
-	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA->ID."'>".$SEZ_DATA->SEZ_NAME."</a></p>";
+	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA->ID."'>".secure_v($SEZ_DATA->SEZ_NAME)."</a></p>";
     ?>
   </div>
   <table cellspacing="1">
@@ -346,7 +346,7 @@ $stop_not_pin=true;
 	</td>
 	<td align='center' class='row2'><?=$post_icon?></td>
 	<td align='left' class='row2'>
-	<table border='0' cellpadding='2px' cellspacing='0'>
+	<table border='0' cellpadding='2' cellspacing='0'>
 		<tbody>
 		<tr>
 			<td align='left' nowrap='nowrap'>

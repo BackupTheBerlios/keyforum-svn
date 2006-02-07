@@ -127,7 +127,7 @@ function draw_forum($sez,$indice)
 		echo "
 		<div class='borderwrap' style='display:$divhide' id='divhide_{$sez['SEZ_ID']}'>
 		 <div class='maintitlecollapse'>
-		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']}, 0,'$SNAME');\">
+		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},0,'$SNAME');\">
 		  <img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
 		  <p><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
  		 </div>
@@ -135,7 +135,7 @@ function draw_forum($sez,$indice)
 		
 		<div class='borderwrap' style='display:$divshow' id='divshow_{$sez['SEZ_ID']}'>
 		 <div class='maintitle' >
-		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']}, 1,'$SNAME');\">
+		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},1,'$SNAME');\">
 		  <img src='img/exp_minus.gif' border='0' alt='Collapse' /></a></p>
 		  <p><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
   		</div>
@@ -214,7 +214,7 @@ function draw_forum($sez,$indice)
 			echo "
 			<tr>
 			<td class='row4' width='5%' align='center'><img src='img/bf_new.gif' alt=''></td>
-			<td class='row4'><b><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></b><br /><span class='desc'>{$sez['SEZ_DESC']} $subsections <br /><font color='#808080'><i>{$lang['col_moderators']}: $moderators</i></font><br /></span></td>".'
+			<td class='row4'><b><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>".secure_v($sez['SEZ_NAME'])."</a></b><br /><span class='desc'>{$sez['SEZ_DESC']} $subsections <br /><font color='#808080'><i>{$lang['col_moderators']}: $moderators</i></font><br /></span></td>".'
 			<td class="row2" align="center">'.$sez['THR_NUM'].'</td>
 			<td class="row2" align="center">'.$sez['REPLY_NUM'].'</td>
 			<td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$sez['last_action']['sez_id'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($sez['last_action']['autore']).'</a></td>';

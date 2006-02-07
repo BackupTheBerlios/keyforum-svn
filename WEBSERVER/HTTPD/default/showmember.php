@@ -173,7 +173,7 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 					<table cellspacing="0">
 						<tr>
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
-							<td width="99%"><a href=""> <? echo" ".$lang['shmbr_add']." "; ?> </a></td>
+							<td width="99%"><a href="options_rubrica.php?ADD=<?=$user['id']?>"> <? echo" ".$lang['shmbr_add']." "; ?> </a></td>
 						</tr>
 						<tr>
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
@@ -184,7 +184,7 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 							<td width="99%"><a href=""><? echo" ".$lang['shmbr_findthr']." "; ?></a></td>
 						</tr><tr>
 							<td width="1%"><img src='img/profile_item.gif' border='0'  alt='Profile Item' /></td>
-							<td width="99%"><a href=""><? echo" ".$lang['shmbr_ignore']." "; ?></a></td>
+							<td width="99%"><a href="options_ban.php?ADD=<?=$user['id']?>"><? echo" ".$lang['shmbr_ignore']." "; ?></a></td>
 						</tr>					</table>
 			</td>
 		</tr>
@@ -298,7 +298,7 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_birthday']." "; ?></b></td>
-					<td class="row1"><i><?=$user['compleanno']?></i></td>
+					<td class="row1"><?=$user['compleanno']?></td>
 				</tr>
 				<tr>
 					<td class="row2" valign="top"><b><?=" ".$lang['shmbr_location']." "; ?></b></td>
