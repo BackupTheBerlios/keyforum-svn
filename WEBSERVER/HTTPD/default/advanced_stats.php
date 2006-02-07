@@ -14,7 +14,7 @@ switch($advanced_stats_mode)
 			AND {$SNAME}_reply.visibile='1'
 		group by {$SNAME}_membri.hash
 		order by rep_num desc
-		limit 10";
+		limit 7";
 		$result = $db->get_results($query);
 		if($result)foreach($result as $user)
 		{
@@ -33,9 +33,10 @@ switch($advanced_stats_mode)
 		echo $result;
 		}
 	break;
-	$timestart = mktime(0,0,0,date('M'),date('d'),date('Y'));
-	$timeend = mktime(23,59,59,date('M'),date('d'),date('Y'));
+	
 	case 'today_birthday':
+		$timestart = mktime(0,0,0,date('M'),date('d'),date('Y'));
+		$timeend = mktime(23,59,59,date('M'),date('d'),date('Y'));
 		$query = "
 		SELECT {$SNAME}_membri.hash , {$SNAME}_membri.autore as nick
 		from {$SNAME}_membri
@@ -51,7 +52,7 @@ switch($advanced_stats_mode)
 		}
 		if($users)
 		{
-			$result ='<br />Compiono oggi gli anni: ';
+			$result ='<br />Auguri a: ';
 			foreach($users as  $id=>$nick )
 			{
 				$result .= "<a href='showmember.php?MEM_ID=$id'>$nick</a>, ";
@@ -60,8 +61,34 @@ switch($advanced_stats_mode)
 		echo $result;
 		}
 	break;
+	
+	case 'last_user':
+		$query = "
+		SELECT {$SNAME}_membri.hash , {$SNAME}_membri.autore as nick
+		from {$SNAME}_membri
+		where {$SNAME}_membri.is_auth = '1'
+		order by date desc
+		limit 1";
+		$result = $db->get_results($query);
+		if($result)foreach($result as $user)
+		{
+			list($asd,$id) = unpack('H*',$user->hash);
+			$nick = secure_v($user->nick);
+			$users[$id] = $nick;
+		}
+		if($users)
+		{
+			$result ='<br />L\'ultimo arrivato: ';
+			foreach($users as  $id=>$nick )
+			{
+				$result .= "<a href='showmember.php?MEM_ID=$id'>$nick</a>, ";
+			}
+		$result = substr($result,0,-2);
+		echo $result;
+		}
 	default:
 	break;
 }
+unset($users,$result);
 ?>
 

@@ -209,6 +209,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 	<?
 	$USERPREF->most_active_users = 1;
 	$USERPREF->today_bithday = 1;
+	$USERPREF->last_user= 1;
 	if($USERPREF->most_active_users) 
 	{
 		$advanced_stats_mode = 'most_active_day';
@@ -219,6 +220,12 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
 		$advanced_stats_mode = 'today_bithday';
 		include('advanced_stats.php');
 	}
+	if($USERPREF->last_user) 
+	{
+		$advanced_stats_mode = 'last_user';
+		include('advanced_stats.php');
+	}
+
 	?>
 	</td>
        </tr>
