@@ -844,7 +844,7 @@ $db->query("CREATE TABLE `{$bsess}_ticket` (
 
 
 $db->query("CREATE TABLE `{$bsess}_sez` (
-  `ID` int(10) unsigned NOT NULL,
+  `ID` int(10) unsigned NOT NULL auto_increment,
   `SEZ_NAME` varchar(250) default '',
   `SEZ_DESC` text,
   `NEED_PERM` int(11) NOT NULL,

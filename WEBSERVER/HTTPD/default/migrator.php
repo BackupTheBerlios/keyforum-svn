@@ -4,6 +4,8 @@
 // script di conversione utenti e messaggi da una board
 // ad una nuova
 //
+// NOTA IMPORTANTE: è necessario inserire le sezioni prima di fare le operazioni di migrazione!
+//
 // richiede questa tabella temporanea, vuota nel db sorgente
 /*
 CREATE TABLE `hash_tmp` (
@@ -37,16 +39,17 @@ $consess="imptest";
 $whereiam="migrator";
 include ("testa.php");
 
+// chiudo la tabella di testa.php per permettere il flush()
+echo "</table>";
+
 $core=new CoreSock;
 
 // database di origine
 $dborig = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $dborigname,$_ENV['sql_host'].":".$_ENV['sql_dbport']);
 
-
-// Necessito della chiave privata dell'admin!
+// decodifico la chiave privata dell'admin
 $PRIVKEY=base64_decode($PRIVKEY);
 
-// è necessario inserire le sezioni prima di fare le operazioni di migrazione!
 
 echo "<b>migrazione del forum $sesorg dal database $dborigname, attendere prego....</b><br>";
 flush();
@@ -55,9 +58,10 @@ flush();
 // ************************************
 // CONVERSIONE UTENTI
 // ************************************
-echo "Conversione utenti<br>";
+echo "<br>Conversione utenti<br>";
 $feedback=0;
 if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
+$togo=$dborig->num_rows;
 foreach ($res as $utente) {
     $riga=array();
     $riga[AUTORE]=$utente[1];
@@ -65,22 +69,29 @@ foreach ($res as $utente) {
     $riga[TYPE]=2;  // Utente
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='AUTH';
+
     $res=$core->AddMsg($riga);
     if ($res[MD5]) {
-        $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($utente[0],$res[MD5]));
+    $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($utente[0],$res[MD5]));
     
     // feedback
     $feedback++;
-    if($feedback==100) {echo "<br>";$feedback=0;}
+    $togo--;
+    if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
     flush();
     
     } else {
         list(,$hex)=unpack("H*",$utente[0]);
-        print "Utente con hash $hex non aggiunto perchè $res[ERRORE]\n<br>";
+        $cerror += "Utente con hash $hex non aggiunto perchè $res[ERRORE]<br>";
         
     }
 }
+
+// se ci sono stati errori li stampo alla fine
+echo "<br>$cerror<br>";
+
+
 
 // ************************************
 // CONVERSIONE THREAD
@@ -88,6 +99,7 @@ foreach ($res as $utente) {
 echo "<br>Conversione thread<br>";
 $feedback=0;
 if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM {$sesorg}_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_newmsg :(");
+$togo=$dborig->num_rows;
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -110,16 +122,21 @@ foreach ($res as $msg) {
         
     // feedback
    $feedback++;
-   if($feedback==100) {echo "<br>";$feedback=0;}
+    $togo--;
+    if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
     flush();
         
     } else {
         list(,$hex)=unpack("H*",$msg[HASH]);
-        print "MSG con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
+        $cerror += "MSG con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
         
     }
 }
+
+// se ci sono stati errori li stampo alla fine
+echo "<br>$cerror<br>";
+
   
 
 // ************************************
@@ -128,6 +145,7 @@ foreach ($res as $msg) {
 echo "<br>Conversione reply<br>";
 $feedback=0;
 if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM {$sesorg}_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_reply :(");
+$togo=$dborig->num_rows;
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -149,17 +167,20 @@ foreach ($res as $msg) {
         
     // feedback
    $feedback++;
-   if($feedback==100) {echo "<br>";$feedback=0;}
+    $togo--;
+    if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
     flush();        
         
     } else {
         list(,$hex)=unpack("H*",$msg[HASH]);
-        print "reply con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
+        $cerror +=  "reply con hash $hex non aggiunto perchè $risp[ERRORE]\n<br>";
         
     }
 }
 
+// se ci sono stati errori li stampo alla fine
+echo "<br>$cerror<br>";
 
 
 
@@ -174,6 +195,8 @@ $db->MakeQuery("SELECT HASH,FIRMA FROM ME WHERE HASH=? AND NICK=?;",array("54654
 
 
 
+// riapro la tabella chiusa per il flush()
+echo '<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%">';
 include("end.php");
 exit(0);
 
