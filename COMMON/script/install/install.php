@@ -90,9 +90,9 @@ fclose($handle);
 // leggo il sample
 echo "PREPARAZIONE OTHERPORT.PHP ....\n";
 $filename = "otherport.php.sam";
-$handle2 = fopen($filename, "r");
-$othrptstart = fread($handle2, filesize($filename));
-fclose($handle2);
+$handle = fopen($filename, "r");
+$othrptstart = fread($handle, filesize($filename));
+fclose($handle);
 
 // leggo tutte le porte utilizzate
 $sql="SELECT VALUE FROM config WHERE SUBKEY='TCP' AND FKEY='PORTA'";
@@ -107,8 +107,9 @@ $othrptend=str_replace("{otherport}",$otherport,$othrptstart);
 // sovrascrivo otherport.php
 $filename = "$apachedir/COMMON/script/otherport.php";
 echo "-> $filename\n";
-$handle2 = fopen($filename, 'w');
-fwrite($handle2, $othrptend);
+$handle = fopen($filename, 'w');
+fwrite($handle, $othrptend);
+fclose($handle);
 
 // sovrascrivo chkdir.bat
 $filename = "$apachedir/COMMON/script/chkdir.bat";
