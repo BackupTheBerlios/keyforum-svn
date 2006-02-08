@@ -117,27 +117,32 @@ include('end.php');
 //FUNZIONE DI VISUALIZZAZIONE
 function draw_forum($sez,$indice)
 {
-	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std,$mod;
+	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std,$mod,$userdata;
 	switch($sez[level])
 	{
 		case 0:
+		
+		if($userdata->LEVEL >=10){$sezeditor="<a href='adminsez.php?SEZID={$sez['SEZ_ID']}'><img src='img/s_edit.gif' border='0'  alt='Edit section' /></a>";}
+		
 		$divshow = ( in_array($sez['SEZ_ID'],$hidesez) ? 'none' : 'show');
 		$divhide = ( in_array($sez['SEZ_ID'],$hidesez) ? 'show' : 'none');
 		$sezcollector .= $sez['SEZ_ID'].",";
 		echo "
 		<div class='borderwrap' style='display:$divhide' id='divhide_{$sez['SEZ_ID']}'>
 		 <div class='maintitlecollapse'>
-		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},0,'$SNAME');\">
+		  <p class='expand'>$sezeditor<a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},0,'$SNAME');\">
 		  <img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
-		  <p><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
+		  <p>
+		  <a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
  		 </div>
 		</div>
 		
 		<div class='borderwrap' style='display:$divshow' id='divshow_{$sez['SEZ_ID']}'>
 		 <div class='maintitle' >
-		  <p class='expand'><a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},1,'$SNAME');\">
+		  <p class='expand'>$sezeditor<a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},1,'$SNAME');\">
 		  <img src='img/exp_minus.gif' border='0' alt='Collapse' /></a></p>
-		  <p><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
+		  <p>
+		  <a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
   		</div>
   <table cellspacing=\"1\">
     <tr>

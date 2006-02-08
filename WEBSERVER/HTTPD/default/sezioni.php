@@ -77,6 +77,8 @@ function PageSelect() {
   $sez = $db->get_results($query);
   $num_sottoforum=$db->num_rows;
   
+  if($userdata->LEVEL >=10){$sezeditor="<a href='adminsez.php?SEZID={$SEZ_DATA->ID}'><img src='img/s_edit.gif' border='0'  alt='Edit section' /></a>";}
+  
   // esistono sottoforum ?
   if($num_sottoforum)
    {
@@ -84,7 +86,7 @@ function PageSelect() {
    echo "
    <div class='borderwrap'>
      <div class='maintitle'>
-       <p class='expand'></p>
+       <p class='expand'>$sezeditor</p>
        <p><a href='sezioni.php?SEZID={$SEZ_DATA->ID}'>{$SEZ_DATA->SEZ_NAME}</a></p>
      </div>";
 
@@ -202,7 +204,7 @@ PageSelect();
 ?>
 <div class="borderwrap">
   <div class="maintitle">
-    <p class="expand"></p>
+    <p class="expand"><? echo $sezeditor; ?></p>
     <?PHP
 	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA->ID."'>".secure_v($SEZ_DATA->SEZ_NAME)."</a></p>";
     ?>
