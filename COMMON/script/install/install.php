@@ -24,6 +24,7 @@ $settings = $root->toArray();
 
 // *********
 // connessione al db
+
  $connection = @mysql_connect($settings['root']['conf']['DB']['host'].":".$settings['root']['conf']['DB']['dbport'], $settings['root']['conf']['DB']['dbuser'], $settings['root']['conf']['DB']['dbpassword'])
   	or die("Non riesco a connettermi al database");
 
@@ -67,16 +68,18 @@ if ($cnt==3){
  if(!$bind) $bind='*';
  $apacheconf .= "<VirtualHost $bind:$port>\n";
  $apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/$dir\"\n";
+ $apacheconf .= "ServerAlias {$row['subkey']}\n";
  $apacheconf .= "</VirtualHost>\n\n";
             }
 
 }
 
 // startup page
-$apacheconf .= "# startup page\n";
+$apacheconf .= "# startup\n";
 $apacheconf .= "Listen 81\n";
 $apacheconf .= "<VirtualHost 127.0.0.1:81>\n";
 $apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/startup\"\n";
+$apacheconf .= "ServerAlias startup\n";
 $apacheconf .= "</VirtualHost>\n";
 
 // sovrascrivo keyforum.conf

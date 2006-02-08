@@ -78,9 +78,17 @@ define ("GMT_TIME", date("Z")); // offset GMT
       }*/
 
 if (!$_ENV['sesname']) {
+
+// tento con il name based VH
+if($_SERVER['SERVER_NAME'] <> $_SERVER['SERVER_ADDR'])
+ {
+  $_ENV['sesname']=$_SERVER['SERVER_NAME'];
+  } else {
 	print "Nessuna board assegnata a questo webserver.\n";
 	exit();
 }
+}
+
 //Configurazione della board
 $query = "SELECT * FROM {$_ENV['sesname']}_conf WHERE 1";
 $result = $db->get_results($query);
