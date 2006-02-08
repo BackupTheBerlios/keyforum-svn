@@ -311,10 +311,9 @@ function Multiutenza($SNAME)
 //***********************************
 
 
-function ForumJumper($forumid=0)
+function ForumList($forumid=0,$IdAddOn="")
 {
-global $db,$_ENV,$title;
-
+global $db,$_ENV;
 include_once "lib/TreeClass.php";
 
 $tree=new Tree;
@@ -330,8 +329,27 @@ $forum[$row->id+0]=$row->sez_name;
 }
 
 /* Draw tree */
-
 $ris=$tree->drawTree();
+
+while (list ($key, $value) = each ($ris)) {
+  $l=$value['lev']-4;  
+  if ($l >=0) 
+    {
+    $fid=trim($value['id'])+0;
+    if ($fid == $forumid) {$selected="selected";} else {$selected="";}	
+    $output .= "<option  $selected value='{$IdAddOn}{$fid}'>";
+    if ($l >0) { $output .= "&nbsp;&nbsp;|"; }
+    $output .= str_repeat("-",$l*2).secure_v($forum[$fid])."\n";
+    $output .= "</option>";
+    }  
+}
+return $output;
+}
+
+
+function ForumJumper($forumid=0)
+{
+global $title;
 
 $output .= "<form method='POST' name='jumpform' action=''>";
 $output .= "<select name='forumjump' class='content' size='1' onchange='location.href=document.jumpform.forumjump.options[document.jumpform.forumjump.selectedIndex].value' style='font-family: Verdana; font-size: 8pt'>";
@@ -351,21 +369,7 @@ $output .= "</optgroup>";
 
 $output .= "<optgroup label='Salta a un forum'>"; 			
 
-
-
-while (list ($key, $value) = each ($ris)) {
-  $l=$value['lev']-4;  
-  if ($l >=0) 
-    {
-    $fid=trim($value['id'])+0;
-    if ($fid == $forumid) {$selected="selected";} else {$selected="";}	
-    $output .= "<option  $selected value='sezioni.php?SEZID=$fid'>";
-    if ($l >0) { $output .= "&nbsp;&nbsp;|"; }
-    $output .= str_repeat("-",$l*2).secure_v($forum[$fid])."\n";
-    $output .= "</option>";
-    }  
-}
-
+$output .= $this->ForumList($forumid,"sezioni.php?SEZID=");
 
 $output .= "</optgroup></select></form>";
 
