@@ -863,6 +863,7 @@ $db->query("CREATE TABLE `{$bsess}_sez` (
   `HIDE` tinyint(1) unsigned NOT NULL default '0',
   `ALIAS` varchar(255) NOT NULL default '',
   `REDIRECT` varchar(255) NOT NULL default '',
+  `PENDING` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ");
