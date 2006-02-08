@@ -236,7 +236,6 @@ if($me->is_auth)
    $std->Notice($lang['user_info_auth']);
 }
 }
-$me=WhoIsMe();
 // avvisi per l'admin
 if($userdata->LEVEL >=9)
 {
