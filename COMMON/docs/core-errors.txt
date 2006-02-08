@@ -3,3 +3,46 @@
 103 non riesco a firmare il messaggio
 104 non riesco a convertire la chiave in oggetto
 105 non ho la chiave privata per firmare il msg
+
+TIPO 2 (utenti) - rif. CORE\addon\lib\tipo2.pm
+
+3 Data non valida (quando la lunghezza è minore di 10)
+4 la data contiene dei caratteri non numeri
+11 dim dell'autore non valida
+13 la chiave pubblica deve contenere solo numeri.
+28 Niente messaggi nel futuro
+100 Nessun SIGN o AUTH valido
+113 La public key che vuoi usare è già presente nel database
+
+TIPO 3 (thread) rif. CORE\addon\lib\tipo3.pm
+
+3 Data non valida (quando la lunghezza è minore di 10
+4 la data contiene dei caratteri non numeri
+15 dim dell'autore deve essere 16byte
+16 La sezione deve contenere solo numeri
+17 La sezione deve avere un valore valido tra 1 e 9000
+18 EXTVAR non può superare i 15000 caratteri
+19 Il titolo può essere massimo di 200 caratteri
+20 il SUBTITLE può essere massimo di 250 caratteri
+21 il BODY può essere di massimo 50k carratteri
+22 Manca l'autore nel database.
+23 ????
+24 Antiflood...troppi msg
+25 Sezione non trovata
+26 dati utente non caricati
+27 L'utente è bannato
+28 Niente messaggi nel futuro
+29 il forum è protetto (solo autorizzati)
+31 I non autorizzati non possono scrivere in questa sezione
+32 se non si è autorizzati  solo 1 msg
+33 lunghezza di edit_of non valida per essere una modifica
+100 Nessun SIGN valido
+151 Firma admin_sign non valida
+163  i non autorizzati non possono modificare i messaggi
+164 Solo gli autori possono modificare i propri messaggi
+169 manca il thread originale nel database
+179 Non si può scriver msg prima della data di registrazione
+
+TIPO 4
+
+
