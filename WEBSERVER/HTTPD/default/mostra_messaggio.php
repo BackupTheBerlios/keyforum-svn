@@ -8,6 +8,7 @@ function printmsg($MSG) {
   global $db;
   global $member_titles;
   global $closed;
+  global $SNAME;
 
   $usercolor = $std->GetUserColor($MSG->memhash);
   $mio_nick = $_SESSION[$SNAME]['sess_nick'];
