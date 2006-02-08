@@ -60,6 +60,7 @@ flush();
 // ************************************
 echo "<br>Conversione utenti<br>";
 $feedback=0;
+$cerror="";
 if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
 $togo=$dborig->num_rows;
 foreach ($res as $utente) {
@@ -98,6 +99,8 @@ echo "<br>$cerror<br>";
 // ************************************
 echo "<br>Conversione thread<br>";
 $feedback=0;
+$cerror="";
+$ebody=0;
 if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM {$sesorg}_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_newmsg :(");
 $togo=$dborig->num_rows;
 foreach ($res as $msg) {
@@ -113,6 +116,10 @@ foreach ($res as $msg) {
     $riga['TITLE']=$msg['TITLE'];
     $riga['SEZ']=$msg['SEZ'];
     $riga['SUBTITLE']=$msg['SUBTITLE'];
+    
+        // body vuoti ?
+    if(!$msg['BODY']){$ebody++;$msg['BODY']="{empty}";}
+    
     $riga['BODY']=$msg['BODY'];
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='ADMIN_SIGN';
@@ -136,6 +143,8 @@ foreach ($res as $msg) {
 
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
+if ($ebody) { echo "trovati $ebody messaggi con il body vuoto";}
+
 
   
 
@@ -144,6 +153,8 @@ echo "<br>$cerror<br>";
 // ************************************
 echo "<br>Conversione reply<br>";
 $feedback=0;
+$cerror="";
+$ebody=0;
 if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM {$sesorg}_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_reply :(");
 $togo=$dborig->num_rows;
 foreach ($res as $msg) {
@@ -158,6 +169,10 @@ foreach ($res as $msg) {
     $riga['DATE']=$msg['DATE'];
     $riga['TYPE']=4;
     $riga['TITLE']=$msg['TITLE'];
+    
+    // body vuoti ?
+    if(!$msg['BODY']){$ebody++;$msg['BODY']="{empty}";}
+    
     $riga['BODY']=$msg['BODY'];
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='ADMIN_SIGN';
@@ -181,6 +196,7 @@ foreach ($res as $msg) {
 
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
+if ($ebody) { echo "trovati $ebody messaggi con il body vuoto";}
 
 
 
