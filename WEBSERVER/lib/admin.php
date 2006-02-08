@@ -7,14 +7,23 @@ class Admin {
         $this->comandi=array();
         $this->privata=$privatepwd;
     }
+    
+      
     function EditSez($SEZID,$SEZ_NAME,$SEZ_DESC,$ORDINE,$FIGLIO,$ONLY_AUTH=1,$NEED_PERM=0) {
+        global $db;
+        
+        // se non ho fornito un id, creo una nuova sezione
+        if(!$SEZID)
+         {
+         $db->query("insert into imptest_sez (ID,PENDING) VALUES (null,'2')");
+         $SEZID=$db->insert_id;
+         }
         $sez=array(SEZID=>$SEZID, SEZ_NAME=>$SEZ_NAME,SEZ_DESC=>$SEZ_DESC,ORDINE=>$ORDINE,FIGLIO=>$FIGLIO,ONLY_AUTH=>$ONLY_AUTH,NEED_PERM=>$NEED_PERM);
         $this->comandi['EditSez'][$SEZID]=$sez;
     }
     function EditCat($SEZID,$SEZ_NAME,$SEZ_DESC,$ORDINE,$FIGLIO,$ONLY_AUTH=1,$NEED_PERM=0) {
         $ORDINE+=9000;
-        $sez=array(SEZID=>$SEZID, SEZ_NAME=>$SEZ_NAME,SEZ_DESC=>$SEZ_DESC,ORDINE=>$ORDINE,FIGLIO=>$FIGLIO,ONLY_AUTH=>$ONLY_AUTH,NEED_PERM=>$NEED_PERM);
-        $this->comandi['EditSez'][$SEZID]=$sez;
+ 	$this->EditSez($SEZID,$SEZ_NAME,$SEZ_DESC,$ORDINE,$FIGLIO,$ONLY_AUTH,$NEED_PERM);
     }
     function ConfTable($CHIAVE1,$CHIAVE2,$CHIAVE3,$VALORE,$delete=0) {
         $this->comandi['ConfTable'][]=array(a=>$CHIAVE1,b=>$CHIAVE2,c=>$CHIAVE3,d=>$VALORE,'delete'=>$delete);
