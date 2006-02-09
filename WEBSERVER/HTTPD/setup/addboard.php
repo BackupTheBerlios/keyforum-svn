@@ -364,6 +364,7 @@ $db->query("insert  into config values
 ('SHARE', '$bsess', 'ID', '$bid'), 
 ('WEBSERVER', '$bsess', 'BIND', '$bbind'), 
 ('WEBSERVER', '$bsess', 'SesName', '$bsess'), 
+('WEBSERVER', '$bsess', 'ALIASES', '$bsess'), 
 ('WEBSERVER', '$bsess', 'GROUP', 'generic'), 
 ('WEBSERVER', '$bsess', 'DIRECTORY', 'default'), 
 ('WEBSERVER', '$bsess', 'PORTA', '$bport'),
