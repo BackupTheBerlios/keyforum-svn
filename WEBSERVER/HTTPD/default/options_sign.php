@@ -12,7 +12,6 @@ require('lib/user_panel.php');
 include_once('lib/bbcode_parser.php');
 
 //AQUISIZIONE DATI
-$SNAME=$_ENV['sesname'];
 $mem_id = $_GET['MEM_ID']; 			//dell'utente da modificare
 $mem_hash = pack('H*',$mem_id); 
 list($user_hash,$user_id) = get_my_info($SNAME);

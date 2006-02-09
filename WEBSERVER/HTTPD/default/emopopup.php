@@ -1,6 +1,4 @@
-<? require_once("lib/lib.php");  
- $SNAME=$_ENV['sesname'];
-?>
+<? require_once("lib/lib.php");  ?>
 
 <html> 
  <head> 

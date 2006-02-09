@@ -1,6 +1,5 @@
 <?PHP
 // v. 0.14
-$SNAME=$_ENV['sesname'];
 $whereiam="userlist";
 include ("testa.php");
 // carico la lingua per le sezioni

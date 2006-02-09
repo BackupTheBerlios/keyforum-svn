@@ -7,7 +7,6 @@ $whereiam="userexport";
 require_once("lib/lib.php"); 
 $rawpasswd=pack("H*",md5($_REQUEST['passwd']));
 $identificatore=md5($rawpasswd.$_REQUEST['nick']);
-$SNAME=$_ENV['sesname'];
 
 $userdata= $db->get_row("SELECT * from {$SNAME}_LOCALMEMBER WHERE HASH='{$identificatore}'");
 

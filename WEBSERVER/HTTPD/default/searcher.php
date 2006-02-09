@@ -11,7 +11,7 @@ if ( empty($MODO) or ($MODO > 4 or $MODO < 1 ) ) $std->Error("Invalid HashReq MO
 if ( empty($ORDER) ) $ORDER = "DESC";
 if ( empty($LIMIT) ) $LIMIT = 200;
 
-$PKEY=$std->getpkey($_ENV['sesname']);
+$PKEY=$std->getpkey($_SERVER['sesname']);
 
 if ( empty($MODO) or empty($PKEY) )
     $std->Error("Error on request!\n");

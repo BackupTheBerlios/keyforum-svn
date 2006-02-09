@@ -2,7 +2,6 @@
 include ("testa.php");echo "<tr><td>";
 include ("mostra_messaggio.php");
 $lang += $std->load_lang('lang_showmsg', $blanguage );
-$SNAME=$_ENV['sesname'];
 
 // Parser
 include_once("lib/bbcode_parser.php");

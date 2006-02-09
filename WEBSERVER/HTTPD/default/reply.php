@@ -4,7 +4,7 @@ include "testa.php";
 // carico la lingua per le sezioni
 $lang += $std->load_lang('lang_reply', $blanguage );
 
-$SNAME=$_ENV["sesname"];
+
 $MSGID=mysql_real_escape_string(pack("H*",$_REQUEST["THR_ID"]));
 $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." FROM {$SNAME}_msghe,{$SNAME}_newmsg,{$SNAME}_membri"

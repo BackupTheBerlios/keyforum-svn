@@ -4,7 +4,6 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 if(is_array($lang)) { $lang += $std->load_lang('lang_reply_dest', $blanguage );} else { $lang = $std->load_lang('lang_reply_dest', $blanguage );}
 
-$SNAME=$_ENV['sesname'];
 $forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 
 if ( strlen($_REQUEST['edit_of'])==32 ) {

@@ -7,6 +7,7 @@
 */ 
 
 include_once ("testa.php");
+
 echo "<tr><td>";
 // carico la lingua per la index
 $lang += $std->load_lang('lang_index', $blanguage );

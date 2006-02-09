@@ -10,8 +10,6 @@
 <body>
 
 <?
-$SNAME=$_ENV['sesname'];
-
 $query="select * from {$SNAME}_localkey";
 $result = $db->get_results($query);
 

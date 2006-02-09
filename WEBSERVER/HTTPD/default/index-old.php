@@ -11,10 +11,10 @@ $whereiam="index";
 
 echo "<tr><td>";
 
-$query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=0 ORDER BY ordine;";
+$query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=0 ORDER BY ordine;";
 $mainsez = $db->get_results($query);
 // lo stato delle categorie salvato nel cookie
-$hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_ENV["sesname"]));
+$hidesez=explode(",",$std->GetKFcookie("collapseprefs",$_SERVER["sesname"]));
 
 if($mainsez) foreach($mainsez as $mainsezval) {
 
@@ -34,14 +34,14 @@ echo "
 
 <div class=\"borderwrap\" style=\"display:$divhide\" id=\"divhide_{$mainsezval->ID}\">
 	<div class=\"maintitlecollapse\">
-		<p class=\"expand\"><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 0,'{$_ENV['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
+		<p class=\"expand\"><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 0,'{$_SERVER['sesname']}');\"><img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
 		<p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
 	</div>
 </div>
 
 <div class='borderwrap' style=\"display:$divshow\" id=\"divshow_{$mainsezval->ID}\">
   <div class='maintitle' >
-    <p class='expand'><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 1,'{$_ENV['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
+    <p class='expand'><a href=\"javascript:ShowHideSection({$mainsezval->ID}, 1,'{$_SERVER['sesname']}');\"><img src='img/exp_minus.gif' border='0'  alt='Collapse' /></a></p>
     <p><a href='sezioni.php?SEZID={$mainsezval->ID}'>{$mainsezval->SEZ_NAME}</a></p>
   </div>";
 
@@ -56,7 +56,7 @@ echo "
     ";
 
   $mainzedid=$mainsezval->ID;
-  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ordine;";
+  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ordine;";
   $sez = $db->get_results($query);
  if($sez)foreach($sez as $sezval) {
   
@@ -75,7 +75,7 @@ echo "
       }
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=$sezval->ID ORDER BY ordine;";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=$sezval->ID ORDER BY ordine;";
       $subsez = $db->get_results($querysubs);
       if($subsez) foreach ($subsez as $subsezval) {
         if($notfirst)

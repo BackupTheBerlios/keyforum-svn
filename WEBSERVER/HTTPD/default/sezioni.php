@@ -73,7 +73,7 @@ function PageSelect() {
 // sottoforum
 
   $mainzedid=$_REQUEST["SEZID"];
-  $query = "SELECT * FROM ".$_ENV["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ORDINE;";
+  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ORDINE;";
   $sez = $db->get_results($query);
   $num_sottoforum=$db->num_rows;
   
@@ -113,7 +113,7 @@ function PageSelect() {
 	  
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_ENV["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ORDINE;";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ORDINE;";
       $subsez = $db->get_results($querysubs);
       if($subsez)foreach($subsez as $subsezval) {
         if($notfirst)
@@ -186,7 +186,7 @@ function who_posted(tid,sid)
 
 <?PHP
 $SEZID=$_REQUEST['SEZID'];
-$SNAME=$_ENV['sesname'];
+
 
 // se >= 9000 è un forum di categoria e non può contenere messaggi
 if($SEZ_DATA->ORDINE < 9000)

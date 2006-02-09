@@ -69,6 +69,7 @@ if ($cnt==3){
  $apacheconf .= "<VirtualHost $bind:$port>\n";
  $apacheconf .= "DocumentRoot \"$apachedir/WEBSERVER/HTTPD/$dir\"\n";
  $apacheconf .= "ServerAlias {$row['subkey']}\n";
+ $apacheconf .= "SetEnv sesname {$row['subkey']}\n";
  $apacheconf .= "</VirtualHost>\n\n";
             }
 

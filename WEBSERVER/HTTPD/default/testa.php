@@ -21,8 +21,6 @@ $UserXPage = 100;
 $BoardXPage = 20;
 $Section = 3; # Numero di pagine da visualizzare a sn e a ds dell'attuale (es. .. 2 3 [4] 5 6 ..)
 
-$SNAME=$_ENV["sesname"];
-
 /*$queryacbd="SELECT SUBKEY FROM config WHERE VALUE='".$SNAME."' LIMIT 1;";
 $BNAME=$db->get_var($queryacbd);*/
 

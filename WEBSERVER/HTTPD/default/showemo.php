@@ -2,7 +2,6 @@
 require_once("lib/lib.php");
 
 $id=$_GET['id'];
-$SNAME=$_ENV['sesname'];
 $query = "Select binimage,binimagetype FROM `{$SNAME}_emoticons` where id=$id";
 $emo = $db->get_row($query);
 

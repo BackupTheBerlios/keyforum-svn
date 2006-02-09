@@ -2,7 +2,6 @@
 // v. 0.4
 include ("testa.php");
 include ("lib/bbcode_parser.php");
-$SNAME=$_ENV['sesname'];
 $whereiam="boardlist";
 
 // carico la lingua per la boardlist

@@ -1,5 +1,5 @@
 <?php
- $SNAME=$_ENV['sesname'];
+ $SNAME=$_SERVER['sesname'];
  global $db;
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons WHERE enabled AND clickable";
   $res=$db->get_results($query);

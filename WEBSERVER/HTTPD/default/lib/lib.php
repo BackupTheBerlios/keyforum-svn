@@ -56,41 +56,15 @@ define ("SID", session_id());
 define ("USID", "PHPSESSID=".session_id());
 define ("GMT_TIME", date("Z")); // offset GMT
 
-    $porta=$_SERVER['SERVER_PORT'] ;
-	foreach($config['WEBSERVER'] as $nome=>$array)
-	{
-		if($array['PORTA'] == $porta)
-		{
-			$keyforum['porta'] = $porta;
-			$keyforum['sesname'] = $array['SesName'];
-			$keyforum['nome'] = $nome;
-			$_ENV['sesname']= $array['SesName'];
-			break;
-		}
-	}
+// sessione
+$keyforum['porta'] = $_SERVER['SERVER_PORT'];
+$keyforum['sesname'] = $_SERVER['sesname'];
+$keyforum['nome'] = $_SERVER['sesname'];
+$SNAME = $_SERVER['sesname'];
 
-    /*$subkey = $db->get_var("SELECT subkey FROM config WHERE fkey='PORTA' AND VALUE='$porta' LIMIT 1");
-    $riga = $db->get_var("SELECT value FROM config WHERE fkey='SesName' AND SUBKEY='$subkey'");
-    if($riga){
-         $_ENV['sesname']=$riga;
-    } else {
-          $_ENV['sesname']=$subkey;
-      }*/
-
-if (!$_ENV['sesname']) {
-
-// tento con il name based VH
-if($_SERVER['SERVER_NAME'] <> $_SERVER['SERVER_ADDR'])
- {
-  $_ENV['sesname']=$_SERVER['SERVER_NAME'];
-  } else {
-	print "Nessuna board assegnata a questo webserver.\n";
-	exit();
-}
-}
 
 //Configurazione della board
-$query = "SELECT * FROM {$_ENV['sesname']}_conf WHERE 1";
+$query = "SELECT * FROM {$_SERVER['sesname']}_conf WHERE 1";
 $result = $db->get_results($query);
 if ($result) { 
 foreach($result as $riga)
@@ -98,18 +72,7 @@ foreach($result as $riga)
 	$forum_conf[$riga->GROUP][$riga->FKEY][$riga->SUBKEY] = array('VALUE' =>$riga->VALUE, 'PRESENT' =>$riga->present, 'DATE'=>$riga->date);
 }
 }
-# Controllo se la sessione è stata registrata dallo stesso che ne ha fatto richiesta
-# tramite l'IP di origine del browser.
-#if (!isset($_SESSION[$SNAME]['IP'])) {
-#	session_unset();
-#	$_SESSION[$SNAME]['IP']=$_ENV["REMOTE_ADDR"];
-#} else {
-#	if ($_SESSION[$SNAME]['IP'] != $_ENV["REMOTE_ADDR"]) session_unset();
-#}
 
-/*$GLOBALS['sess_nick'] = &$sess_nick;
-$GLOBALS['sess_password'] = &$sess_password;
-$GLOBALS['sess_auth'] = &$sess_auth;*/
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 
 function CheckSession() {
@@ -124,7 +87,7 @@ function CheckSession() {
 		$_SESSION[$SNAME]['sess_auth'] = 1;
 	}
 	
-/*	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+/*	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_SERVER['sesname']."';");
    if ($result ) {
       $GLOBALS['sess_nick'] = $result->NICK;
       $GLOBALS['sess_password'] = $result->PASSWORD;
@@ -144,7 +107,7 @@ function DestroySession()
 global $db,$SNAME;
 	$sess_id = session_id();
 	$my_ip = $_SERVER['REMOTE_ADDR'];
-	$SNAME = $_ENV['sesname'];
+	$SNAME = $_SERVER['sesname'];
 	$query="DELETE FROM session WHERE SESSID='$sess_id' AND IP=md5('$my_ip') AND FORUM='$SNAME' ";
 	$db->query($query);
 	
@@ -159,7 +122,7 @@ function Muori($errore) {
 function GetLastMsg($sezid) {
 	global $db;
 	$query="SELECT (msghe.last_reply_time+".GMT_TIME.") AS 'time_action', newmsg.TITLE AS 'TITLE', membri.AUTORE AS 'nick', membri.HASH AS 'nickhash', newmsg.EDIT_OF AS 'hash',newmsg.SEZ AS 'SEZID'"
-	." FROM ".$_ENV['sesname']."_msghe AS msghe, ".$_ENV['sesname']."_membri AS membri,".$_ENV['sesname']."_newmsg AS newmsg"
+	." FROM ".$_SERVER['sesname']."_msghe AS msghe, ".$_SERVER['sesname']."_membri AS membri,".$_SERVER['sesname']."_newmsg AS newmsg"
 	." WHERE msghe.HASH=newmsg.EDIT_OF"
 	." AND msghe.last_reply_author=membri.HASH"
 	." AND newmsg.visibile='1'"
@@ -180,12 +143,12 @@ function Num2Ip ($ip) {
 	return implode('.', unpack("C4",pack("I",$ip+0)));
 }
 
-$db->query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_ENV['sesname']."';");
+$db->query("update `session` set `DATE`='".time()."' where `SESSID`='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_SERVER['sesname']."';");
 if (rand(0,10)<1) $db->query("DELETE FROM `session` WHERE `DATE`<'".(time()-3600)."';");
 if ($_REQUEST['SEZID']) 
 {
 	$tmp = mysql_escape_string($_GET['SEZID']);
-	$ris = $db->get_row("SELECT * FROM {$_ENV['sesname']}_sez WHERE ID='$tmp)';");
+	$ris = $db->get_row("SELECT * FROM {$_SERVER['sesname']}_sez WHERE ID='$tmp)';");
   if($ris) {
     $GLOBALS['SEZ_DATA']=$ris;
   }
@@ -254,7 +217,6 @@ function WhoIsMe()
 
 
 // *** variabili usate ovunque ***
-$SNAME = $_ENV['sesname'];
 $forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 
 

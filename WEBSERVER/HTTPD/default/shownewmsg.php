@@ -11,7 +11,7 @@ $title=$lang['page_title'] ;
 if($_REQUEST['allread'])
  {
  $userdata->LASTREAD=$_REQUEST['allread'];
- $std->UpdateUserData($_ENV["sesname"],$userdata);
+ $std->UpdateUserData($_SERVER["sesname"],$userdata);
  $std->Redirect($lang['shnwmsg_allread'],"index.php",$lang['shnwmsg_markedread'],$lang['shnwmsg_at'].date("d/m/Y H:i:s",$_REQUEST['allread'])); 
  }
 

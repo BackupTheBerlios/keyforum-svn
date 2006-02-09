@@ -7,7 +7,6 @@ if(is_array($lang)) { $lang += $std->load_lang('lang_showmember', $blanguage );}
 
 
 //ACQUISIZIONE DATI
-$SNAME=$_ENV['sesname'];
 $id = $_GET['MEM_ID'];
 $hash = addslashes(pack('H*',$id));
 

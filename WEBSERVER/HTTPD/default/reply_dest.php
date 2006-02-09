@@ -4,9 +4,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
 
 if(is_array($lang)) { $lang += $std->load_lang('lang_reply_dest', $blanguage );} else { $lang = $std->load_lang('lang_reply_dest', $blanguage );}
 
-$SNAME=$_ENV["sesname"];
 $MSG_HASH=pack("H32",$_REQUEST['repof']);
-$SNAME=$_ENV['sesname'];
 
 if ( strlen($_REQUEST['edit_of'])==32 ) {
     $EDIT_OF=pack("H32",$_REQUEST['edit_of']);

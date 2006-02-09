@@ -22,7 +22,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
     exit(0);
   }
 
-  $query="SELECT PKEY,ORDINE FROM `".mysql_real_escape_string($_ENV["sesname"])."_sez` WHERE `ID`=".mysql_escape_string($_REQUEST["SEZID"]).";";
+  $query="SELECT PKEY,ORDINE FROM `".mysql_real_escape_string($_SERVER["sesname"])."_sez` WHERE `ID`=".mysql_escape_string($_REQUEST["SEZID"]).";";
   $SECTION_DATA = $db->get_row($query);
   if (!$SECTION_DATA) 
   {
@@ -37,7 +37,7 @@ include ("lib/lib.php"); # Librerie per creare la connessione MySQL
   }
 
   // ****** Devo prima reperire l'hash dell'utente
-  $query="SELECT `PASSWORD` FROM `".mysql_real_escape_string($_ENV["sesname"])."_localmember` WHERE `HASH`=".???????.";";
+  $query="SELECT `PASSWORD` FROM `".mysql_real_escape_string($_SERVER["sesname"])."_localmember` WHERE `HASH`=".???????.";";
   if !($PASSWORD = $db->get_var($query)) {
     echo "Impossibile caricare la chiave privata.<br>\n";
     include ("end.php");

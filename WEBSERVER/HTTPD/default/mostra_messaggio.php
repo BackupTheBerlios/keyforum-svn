@@ -54,13 +54,13 @@ if(($userdata->LEVEL)  OR ($MSG->autore==$mio_nick))
 }  
  
   if($MSG->edit_of!=$MSG->hash){
-     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
+     $queryaut="SELECT AUTORE FROM `".$_SERVER["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
      $realautore=$db->get_var($queryaut);
      $MSG->body = $MSG->body."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG->real_date)."[/COLOR][/SIZE]";
   }
 
   if(($MSG->real_hash)AND($MSG->edit_of!=$MSG->real_hash)){
-     $queryaut="SELECT AUTORE FROM `".$_ENV["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
+     $queryaut="SELECT AUTORE FROM `".$_SERVER["sesname"]."_membri` WHERE HASH='".mysql_real_escape_string($MSG->real_autore)."' LIMIT 1;";
      $realautore=$db->get_var($queryaut);
      $MSG->body = $MSG->body."\n\n\n\n [SIZE=1][COLOR=blue]".$lang['shmsg_modby']." ".secure_v($realautore)." ".$lang['shmsg_on']." ".strftime("%d/%m/%y  - %H:%M:%S",$MSG->real_date)."[/COLOR][/SIZE]";
   }
