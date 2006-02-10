@@ -243,7 +243,8 @@ if(!$blanguage) {$blanguage="eng";}
 
 include_once("testa.php");
 
-$lang += $std->load_lang('lang_error', $blanguage );
+if($lang !==NULL) 	$lang += $std->load_lang('lang_error', $blanguage );
+else 				$lang = $std->load_lang('lang_error', $blanguage );
 
 
 // errore o informazione ?
