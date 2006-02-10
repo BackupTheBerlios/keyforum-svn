@@ -6,7 +6,7 @@
 //
 // NOTA IMPORTANTE: è necessario inserire le sezioni prima di fare le operazioni di migrazione!
 //
-// richiede questa tabella temporanea, vuota nel db sorgente
+// richiede questa tabella temporanea
 /*
 CREATE TABLE `hash_tmp` (
   `OLD_HASH` binary(16) NOT NULL,
@@ -19,18 +19,13 @@ CREATE TABLE `hash_tmp` (
 // massima durata in secondi dello script
 ini_set("max_execution_time",3600);
 
-//nome db con i dati di origine
-$dborigname="keyforum-org";
-// nome sessione di origine
-$sesorg="keyfo";
+// nome sessione di origine (bastano le tabelle _memberi , _newmsg , _reply )
+$sesorg="keyfo2";
 // chiave privata Admin forum di destinazione
 // va inserita in un file chiamato pkeytemp.php
 // contenente
 //$PRIVKEY=".....";
 include("pkeytemp.php");
-
-// sessione da convertire
-$consess="imptest";
 
 // il forum di destinazione è quello corrente...
 
@@ -44,15 +39,15 @@ echo "</table>";
 
 $core=new CoreSock;
 
-// database di origine
-$dborig = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $dborigname,$_ENV['sql_host'].":".$_ENV['sql_dbport']);
-
 // decodifico la chiave privata dell'admin
 $PRIVKEY=base64_decode($PRIVKEY);
 
 
-echo "<b>migrazione del forum $sesorg dal database $dborigname, attendere prego....</b><br>";
+echo "<b>migrazione del forum $sesorg, attendere prego....</b><br>";
 flush();
+
+// svuoto la tabella temporanea
+$db->query("delete from hash_tmp where 1");
 
 
 // ************************************
@@ -60,9 +55,11 @@ flush();
 // ************************************
 echo "<br>Conversione utenti<br>";
 $feedback=0;
+$accepted=0;
 $cerror="";
-if (! $res = $dborig->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
-$togo=$dborig->num_rows;
+if (! $res = $db->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
+$togo=$db->num_rows;
+echo "$togo records selected<br>";
 foreach ($res as $utente) {
     $riga=array();
     $riga[AUTORE]=$utente[1];
@@ -77,6 +74,7 @@ foreach ($res as $utente) {
     
     // feedback
     $feedback++;
+    $accepted++;
     $togo--;
     if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
@@ -89,6 +87,10 @@ foreach ($res as $utente) {
     }
 }
 
+echo "<br>$accepted record accettati dal core<br>";
+$test = $db->get_var("SELECT count(*) FROM {$SNAME}_membri");
+echo "$test messaggi nel nuovo db<br>";
+
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
 
@@ -99,10 +101,12 @@ echo "<br>$cerror<br>";
 // ************************************
 echo "<br>Conversione thread<br>";
 $feedback=0;
+$accepted=0;
 $cerror="";
 $ebody=0;
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM {$sesorg}_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_newmsg :(");
-$togo=$dborig->num_rows;
+if (! $res = $db->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,SUBTITLE,BODY,SEZ FROM {$sesorg}_newmsg ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_newmsg :(");
+$togo=$db->num_rows;
+echo "$togo records selected<br>";
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -127,8 +131,16 @@ foreach ($res as $msg) {
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
         
+/*
+        // verifica
+        $rhash=mysql_real_escape_string($risp[MD5]);
+        $db->get_results("SELECT HASH FROM {$SNAME}_newmsg WHERE HASH='$rhash'");
+        if (!$db->num_rows) { echo "<br>warning - messaggio non realmente inserito<br>";}
+
+*/        
     // feedback
    $feedback++;
+   $accepted++;
     $togo--;
     if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
@@ -140,6 +152,11 @@ foreach ($res as $msg) {
         
     }
 }
+
+echo "<br>$accepted messaggi accettati dal core<br>";
+
+$test = $db->get_var("SELECT count(*) FROM {$SNAME}_newmsg");
+echo "$test messaggi nel nuovo db<br>";
 
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
@@ -153,10 +170,12 @@ if ($ebody) { echo "trovati $ebody messaggi con il body vuoto";}
 // ************************************
 echo "<br>Conversione reply<br>";
 $feedback=0;
+$accepted=0;
 $cerror="";
 $ebody=0;
-if (! $res = $dborig->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM {$sesorg}_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_reply :(");
-$togo=$dborig->num_rows;
+if (! $res = $db->get_results("SELECT HASH,EDIT_OF,(HASH <> EDIT_OF) AS IS_EDIT,AUTORE,`DATE`,TITLE,BODY,REP_OF FROM {$sesorg}_reply ORDER BY HASH=EDIT_OF DESC, `DATE`",ARRAY_A) ) die ("Non riesco a fare la select in {$sesorg}_reply :(");
+$togo=$db->num_rows;
+echo "$togo records selected<br>";
 foreach ($res as $msg) {
     $riga=array();
     if($msg[IS_EDIT]) {
@@ -180,8 +199,18 @@ foreach ($res as $msg) {
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
         
+/*
+                // verifica
+	        $rhash=mysql_real_escape_string($risp[MD5]);
+	        $db->get_results("SELECT HASH FROM {$SNAME}_reply WHERE HASH='$rhash'");
+        if (!$db->num_rows) { echo "<br>warning - messaggio non realmente inserito<br>";}
+*/        
+
+        
     // feedback
    $feedback++;
+   $accepted++;
+
     $togo--;
     if($feedback==100) {echo " (-{$togo})<br>";$feedback=0;}
     echo "|";
@@ -193,6 +222,11 @@ foreach ($res as $msg) {
         
     }
 }
+
+echo "<br>$accepted messaggi accettati dal core<br>";
+
+$test = $db->get_var("SELECT count(*) FROM {$SNAME}_reply");
+echo "$test messaggi nel nuovo db<br>";
 
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
