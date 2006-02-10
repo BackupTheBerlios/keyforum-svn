@@ -321,7 +321,7 @@ $tree=new Tree;
 
 $tree->AddNode(" 0","root");
 
-$result = $db->get_results("select id,sez_name,figlio,ordine from {$_ENV['sesname']}_sez order by figlio,ordine ");
+$result = $db->get_results("select id,sez_name,figlio,ordine from {$_SERVER['sesname']}_sez order by figlio,ordine ");
 
 if ($result) foreach ( $result as $row )
 {
