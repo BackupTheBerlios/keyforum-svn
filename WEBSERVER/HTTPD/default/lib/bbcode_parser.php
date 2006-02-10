@@ -15,7 +15,7 @@
 function convert($text) {
  global $_ENV,$db;
  
- $SNAME=$_ENV['sesname'];
+ $SNAME=$_SERVER['sesname'];
 
   // BBCode che richiedono una funzione
   $text = preg_replace("#\[code\](.+?)\[/code\]#ies"        , "convert_code('\\1')"  , $text);
