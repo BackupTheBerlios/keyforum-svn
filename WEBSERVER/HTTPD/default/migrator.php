@@ -1,18 +1,11 @@
 <?PHP
 
 // *******************************
-// script di conversione utenti e messaggi da una board
+// script di conversione utenti e messaggi da una board vecchia
 // ad una nuova
 //
 // NOTA IMPORTANTE: è necessario inserire le sezioni prima di fare le operazioni di migrazione!
 //
-// richiede questa tabella temporanea
-/*
-CREATE TABLE `hash_tmp` (
-  `OLD_HASH` binary(16) NOT NULL,
-  `NEW_HASH` binary(16) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
-*/
 
 //******** CONFIGURAZIONE *************
 
@@ -46,7 +39,18 @@ $PRIVKEY=base64_decode($PRIVKEY);
 echo "<b>migrazione del forum $sesorg, attendere prego....</b><br>";
 flush();
 
-// svuoto la tabella temporanea
+// se non esiste creo la tabella temporanea degli hash
+$db->query(" 
+
+CREATE TABLE IF NOT EXISTS `hash_tmp` (
+ `OLD_HASH` binary(16) NOT NULL,
+ `NEW_HASH` binary(16) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+
+");
+
+
+// svuoto la tabella temporanea, se piena
 $db->query("delete from hash_tmp where 1");
 
 
