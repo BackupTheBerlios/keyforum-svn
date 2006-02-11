@@ -72,7 +72,7 @@ for($i=$CurrPag*$BoardXPage;$i<$CurrPag*$BoardXPage+$tot;$i++)
 	 		}
 			$query = "SELECT SUBKEY, value FROM {$board[$i]['nome']}_conf WHERE `GROUP` = 'FORUM' AND FKEY ='DATA' AND PRESENT ='1' ";
 			$result = $db->get_results($query);
-			foreach($result as $row)
+			if($result)foreach($result as $row)
 			{
 				$board_conf[$row->SUBKEY] = $row->value;
 			}
