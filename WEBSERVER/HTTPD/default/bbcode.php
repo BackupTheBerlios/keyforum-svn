@@ -267,3 +267,27 @@ function mozWrap(txtarea, open, close)
 	function btnHover(str) {
 		document.forms[2].elements['txtAbout'].value = str;
 	}
+
+
+// based on FUDforum code
+
+/* indentify the browser */
+var IE4 = (document.all) ? 1 : 0;
+
+function rs_txt_box(name, col_inc, row_inc,savename)
+{
+        if (IE4) {  
+                var obj = document.all[name];
+                var objs = document.all[savename];
+        } else {
+                var obj = document.getElementById(name);
+                var objs = document.getElementById(savename);
+        }                                   
+
+        obj.rows += row_inc;           
+        obj.cols += col_inc;           
+        
+        objs.value = obj.rows+":"+obj.cols;
+        
+        
+}

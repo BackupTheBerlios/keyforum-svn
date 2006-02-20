@@ -12,6 +12,16 @@ if ( strlen($_REQUEST['edit_of'])==32 ) {
         $edit_val=1;
 }
 
+// salvo le dimensioni della textbox, se richiesto
+if ($_REQUEST['tboxsave'])
+{
+$newboxsize=explode(":",$_REQUEST['boxsize']);
+$userdata->TBOX_ROWS=$newboxsize[0];
+$userdata->TBOX_COLS=$newboxsize[1];
+$std->UpdateUserData($SNAME,$userdata);
+}
+
+
 if (!$_SESSION[$SNAME]['sess_auth']) $std->Error ($lang['reply_login'],$_REQUEST['body']);
 
 $IDENTIFICATORE=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale

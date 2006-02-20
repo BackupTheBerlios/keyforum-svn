@@ -698,6 +698,8 @@ $db->query("CREATE TABLE `{$bsess}_localmember` (
   `LASTREAD` int(10) NOT NULL default '0',
   `LEVEL` tinyint(2) unsigned NOT NULL default '0',
   `IS_AUTH` tinyint(1) unsigned NOT NULL default '0',
+  `TBOX_ROWS` smallint(3) unsigned NOT NULL default '15',
+  `TBOX_COLS` smallint(3) unsigned NOT NULL default '70',
   PRIMARY KEY  (`HASH`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
 

@@ -127,14 +127,25 @@ include "buttons.php";
 
 echo<<<EOF
     <div>
-      <table class=pformstrip width="60%">
+      <table class=pformstrip width="80%">
         <tr>
           <td>{$lang['reply_title']}</td>
           <td><input type="text" name="title" size="50" class="forminput" /></td>
         </tr>
         <tr>
           <td>{$lang['reply_body']}</td>
-          <td><textarea name="body" rows="15" cols="70" wrap="virtual" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);"  >{$box_text}</textarea></td>
+          <td><textarea name="body" rows="{$userdata->TBOX_ROWS}" id="txtb" cols="{$userdata->TBOX_COLS}" wrap="virtual" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);"  >{$box_text}</textarea>
+          </td>
+          <td>
+          <a href="javascript://" onClick="rs_txt_box('txtb', 1, 0,'boxsize');"><img alt="" src="img/arrow-r.gif" style="margin: 2px" /></a><br />
+	  <a href="javascript://" onClick="rs_txt_box('txtb', 0, 1,'boxsize');"><img alt="" src="img/arrow-d.gif" style="margin: 2px" /></a><br />
+	  <a href="javascript://" onClick="rs_txt_box('txtb', -1, 0,'boxsize');"><img alt="" src="img/arrow-l.gif" style="margin: 2px" /></a><br /> 
+	  <a href="javascript://" onClick="rs_txt_box('txtb', 0, -1,'boxsize');"><img alt="" src="img/arrow-u.gif" style="margin: 2px" /></a><br /> 
+	  <a href="javascript://" onClick="rs_txt_box('txtb', 2, 2,'boxsize');"><img alt="" src="img/arrow-dr.gif" style="margin: 2px" /></a><br /> 
+	  <a href="javascript://" onClick="rs_txt_box('txtb', -2, -2,'boxsize');"><img alt="" src="img/arrow-ul.gif" style="margin: 2px" /></a><br />
+	  <input type="checkbox" name="tboxsave" value="1"><br><font size=1>save</font>
+	  <input type="hidden" name="boxsize" value="{$userdata->TBOX_ROWS}:{$userdata->TBOX_COLS}">
+          </td>
         </tr>
         <tr>
 	  <td>{$lang['reply_avatar']}</td>
