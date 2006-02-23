@@ -159,24 +159,25 @@ echo "</form>";
 	<input type='hidden' name='order' value='<?=$_GET['order']?>'>
 	<table border=0 cellspacing=1 cellpadding=1 align=center>
 	<tR>
-		<?PHP echo "<td colspan=2 class=row4 align=center><b>".$lang['gestip_addip']."</b></td>";?>
+		<td colspan='2' class='row4' align='center'><b><?=$lang['gestip_addip']?></b></td>
 	</tR>
 	<tr>
 		<td class=row1>IP</td>	
 		<td class=row2><input type='text' name='ip'></td>
 	</tr>
 	<tr>
-		<?PHP echo "<td class=row2>".$lang['gestip_addporttcp']."</td>";?>
-		<td class=row1><input type='text' name='TCP_PORT' value='40569'></td>
+		<td class='row2'><?=$lang['gestip_addporttcp']?></td>
+		<td class='row1'><input type='text' name='TCP_PORT' value='40569'></td>
 	</tr>
 	<tr>
-		<?PHP echo "<td class=row1>".$lang['gestip_addstatic']."</td>	";?>	
+		<td class=row1><?=$lang['gestip_addstatic']?></td>
 		<td class=row2><INPUT type='CHECKBOX' name='STATIC' value='1'></td>
 	</tr>
 	<tR>
-		<?PHP echo "<td colspan=2 class=row4 align=center><input type=submit value=".$lang['gestip_add']."></form></td>";?>
+		<td colspan='2' class='row4' align='center'><input type='submit' value='<?=$lang['gestip_add']?>'></td>
 	</tR>
 	</table>
+	</form>
   </td>
 </tr>
 <?PHP
@@ -201,7 +202,7 @@ function titoli($array)
 		list($asd,$stringa,$lar) = $array[$i];
 		$new_mode = ($i == $order ?  (int)!$_REQUEST['mode'] : $_REQUEST['mode']);
 		$return .="<th align='left' width='$lar%' class='titlemedium'>
-			<a href='$link&amp;mode=$new_mode&order=$i'>$stringa</th>";
+			<a href='$link&amp;mode=$new_mode&amp;order=$i'>$stringa</a></th>";
 	}
 	return $return;
 }

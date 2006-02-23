@@ -3,6 +3,10 @@ require_once('lib/lib.php');
 
 switch($advanced_stats_mode)
 {
+	case 'logged_since':
+		if(!$_SESSION[$SNAME]['logged_since']) break;
+		echo "<br />Loggato da ".$std->postdate($_SESSION[$SNAME]['logged_since']);
+	break;
 	case 'most_active_day':
 		$timestart = time()-3600*24-GMT_TIME;
 		$timeend = time();

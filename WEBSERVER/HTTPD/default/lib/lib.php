@@ -76,30 +76,24 @@ foreach($result as $riga)
 $GLOBALS['SEZ_DATA'] = &$SEZ_DATA;
 
 function CheckSession() {
-	global $db,$SNAME;
-	if($_COOKIE["sess_auth_{$SNAME}"])
-	{
-		$the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$SNAME}"]));
-		//var_dump($the_cookie);
-		list($nick,$pass) = $the_cookie;
-		$_SESSION[$SNAME]['sess_nick'] = $nick;
-		$_SESSION[$SNAME]['sess_password'] = $pass;
-		$_SESSION[$SNAME]['sess_auth'] = 1;
-	}
-	
-/*	$result = $db->get_row("SELECT NICK,PASSWORD FROM session WHERE SESSID='".session_id()."' AND IP=md5('".$_SERVER['REMOTE_ADDR']."') AND FORUM='".$_SERVER['sesname']."';");
-   if ($result ) {
-      $GLOBALS['sess_nick'] = $result->NICK;
-      $GLOBALS['sess_password'] = $result->PASSWORD;
-      $GLOBALS['sess_auth'] = 1;
-
-  } else {
-      
-      $_SESSION[$SNAME]['sess_nick'] = "";
-      $_SESSION[$SNAME]['sess_password'] = "";
-      $_SESSION[$SNAME]['sess_auth'] = 0;
-  }*/
-
+global $db,$SNAME;
+if(!$_SESSION[$SNAME]) //Se non sono già autenticato
+{
+ if($_COOKIE["sess_auth_{$SNAME}"]) //Se c'è il cookie
+ {
+  //Prendo i dati dal cookie
+  $the_cookie = unserialize(stripslashes($_COOKIE["sess_auth_{$SNAME}"]));
+  list($nick,$pass,$logged_since) = $the_cookie;
+  //E mi autentico
+  $_SESSION[$SNAME]['sess_nick'] = $nick;
+  $_SESSION[$SNAME]['sess_password'] = $pass;
+  $_SESSION[$SNAME]['logged_since'] = $logged_since;
+  $_SESSION[$SNAME]['sess_auth'] = 1;
+  //Reimposto la scadenza del cookie
+  $the_cookie = array(mysql_real_escape_string($nick),$pass,$logged_since);
+  setcookie("sess_auth_{$SNAME}",serialize($the_cookie),time()+60*60*24*7);
+ }
+}
 }
 
 function DestroySession() 

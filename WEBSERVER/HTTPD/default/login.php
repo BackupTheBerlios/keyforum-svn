@@ -25,11 +25,12 @@ else
 		
 		if(isset($_POST['remember']))
 		{
-			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),$rawpasswd);
+			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),$rawpasswd,time());
 			setcookie("sess_auth_{$SNAME}",serialize($the_cookie),time()+60*60*24*7);
 		}
 		$_SESSION[$SNAME]['sess_nick'] = mysql_real_escape_string($_POST["nick"]);
 		$_SESSION[$SNAME]['sess_password'] = $rawpasswd;
+		$_SESSION[$SNAME]['logged_since'] = time();
 		$_SESSION[$SNAME]['sess_auth'] = 1;
 		
 		echo $lang['login_succ'];
