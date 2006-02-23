@@ -21,8 +21,13 @@ class CoreSock {
 		$this->prov=0;
 		
 	}
-	function Connect($ip='127.0.0.1',$porta=40565) {
+	function Connect($ip=NULL,$porta=NULL) {
 		if ($this->prov) return false;
+		//Hack Parametri di default
+		global $config;
+		if($ip === NULL) $ip = $config[SHELL][TCP][BIND];
+		if($porta === NULL) $porta = $config[SHELL][TCP][PORTA];
+		
 		$this->prov=1;
 		$this->coresock=@socket_create ( AF_INET, SOCK_STREAM,getprotobyname('tcp'));
 		if (!@socket_connect($this->coresock, $ip, $porta)) 
