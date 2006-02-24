@@ -12,7 +12,7 @@
 // massima durata in secondi dello script
 ini_set("max_execution_time",3600);
 
-// nome sessione di origine (bastano le tabelle _memberi , _newmsg , _reply )
+// nome sessione di origine (bastano le tabelle _memberi , _newmsg , _reply, _sez )
 $sesorg="keyfo2";
 // chiave privata Admin forum di destinazione
 // va inserita in un file chiamato pkeytemp.php
@@ -26,6 +26,8 @@ include("pkeytemp.php");
 
 $whereiam="migrator";
 include ("testa.php");
+require("admin.php");
+
 
 // chiudo la tabella di testa.php per permettere il flush()
 echo "</table>";
@@ -55,19 +57,52 @@ $db->query("delete from hash_tmp where 1");
 
 
 // ************************************
+// CONVERSIONE SEZIONI
+// ************************************
+
+echo "<br>Conversione sezioni<br>";
+
+$admin=new Admin($PRIVKEY);
+
+
+$sql="SELECT ID,SEZ_NAME,SEZ_DESC,ORDINE,FIGLIO from {$sesorg}_sez ORDER BY ID ASC";
+$res = $db->get_results($sql);
+
+// carico la coda di comandi admin
+foreach ($res as $sezval)
+{
+  $admin->EditSez($sezval->ID,$sezval->SEZ_NAME,$sezval->SEZ_DESC,$sezval->ORDINE,$sezval->FIGLIO);
+}
+
+// eseguo la coda di comandi admin
+$risp=$admin->Send2Core("edit sezioni");
+
+if($risp[ERRORE])
+{
+$std->Error("errore migrando le sezioni: ".$risp[ERRORE]);
+} else {
+echo "<br>sezioni migrate correttamente....<br>";
+}
+
+flush();
+
+
+
+// ************************************
 // CONVERSIONE UTENTI
 // ************************************
 echo "<br>Conversione utenti<br>";
 $feedback=0;
 $accepted=0;
 $cerror="";
-if (! $res = $db->get_results("SELECT HASH,AUTORE,PKEYDEC FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
+if (! $res = $db->get_results("SELECT HASH,AUTORE,PKEYDEC,DATE FROM {$sesorg}_membri WHERE IS_AUTH='1'",ARRAY_N) ) die ("Non riesco a fare la select in {$sesorg}_membri :(");
 $togo=$db->num_rows;
 echo "$togo records selected<br>";
 foreach ($res as $utente) {
     $riga=array();
     $riga[AUTORE]=$utente[1];
     $riga[PKEYDEC]=$utente[2];
+    $riga[DATE]=$utente[3];
     $riga[TYPE]=2;  // Utente
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='AUTH';
