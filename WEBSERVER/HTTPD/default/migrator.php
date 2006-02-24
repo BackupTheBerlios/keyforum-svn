@@ -107,7 +107,9 @@ foreach ($res as $utente) {
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='AUTH';
 
+    // mettere 1 se si vuole che la data utente sia generata ex-novo, 0 se si vuole importarla dalle originali, in tal caso la board deve essere creata in data <= a quella dell'utente più vecchio
     $res=$core->AddMsg($riga,0);
+    
     if ($res[MD5]) {
     $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($utente[0],$res[MD5]));
     
