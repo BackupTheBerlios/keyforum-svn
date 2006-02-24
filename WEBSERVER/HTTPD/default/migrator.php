@@ -107,7 +107,7 @@ foreach ($res as $utente) {
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='AUTH';
 
-    $res=$core->AddMsg($riga);
+    $res=$core->AddMsg($riga,0);
     if ($res[MD5]) {
     $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($utente[0],$res[MD5]));
     

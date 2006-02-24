@@ -121,15 +121,20 @@ class CoreSock {
 		$utente[_PWD]=$passwd;
 		return $this->AddMsg($utente);
 	}
-	function AddMsg($array) {
+	function AddMsg($array,$forcedate=1) {
 		global $forum_id;
 		$array['FDEST']=$forum_id;
-		if (strlen($this->gmt_time)>10) {
+	     
+	     if($forcedate)
+	     {
+	      if (strlen($this->gmt_time)>10) {
 			$array['DATE']=$this->gmt_time;
 		} else {
 			$array['DATE']=time()-date("Z"); // timestamp in GMT
 		}
-		$tosend['FORUM']['ADDMSG']=$array;
+	     }
+	
+	$tosend['FORUM']['ADDMSG']=$array;
 		$this->Send($tosend);
 		$risp=$this->Read();
 		return $risp['FORUM']['ADDMSG'];
