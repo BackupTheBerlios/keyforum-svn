@@ -190,7 +190,7 @@ if($risultato) foreach($risultato as $riga ) {
   
   $num = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
   //Default data
-  if ($num) 
+  if (($num)OR($num==='0')) 
   {
 	$PostStatImage = ($num < $riga->reply_num ? "f_norm" : "f_norm_no");
     $nickhash =($riga->nickhash ? unpack("H32alfa",$riga->nickhash) : '');
