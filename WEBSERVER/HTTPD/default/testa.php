@@ -140,7 +140,7 @@ foreach($config['WEBSERVER'] as $nome_board=>$array)
 		$portwsl = $config['WEBSERVER'][$nome_board]['PORTA'];
 		if($portwsl)
 		{
-			if((!$bindwsl) OR ($bindwsl==$_SERVER['REMOTE_ADDR']) OR ($bindwsl==$bindboard))
+			if((!$bindwsl) OR ($bindwsl==$_SERVER['REMOTE_ADDR']) OR ($bindwsl==$bindboard)OR ($bindwsl=='*'))
 			{
 				$addrwsl=substr($_SERVER['HTTP_HOST'], 0, strlen($_SERVER['HTTP_HOST'])-strlen($_SERVER['SERVER_PORT'])-1);
 				echo "<option value='http://$addrwsl:$portwsl/'>$nome_board</option>";

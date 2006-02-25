@@ -49,7 +49,7 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = preg_replace("#\[size=([^\]]+)\](.+?)\[/size\]#ies", "convert_style('size','\\1','\\2')", $text);
 
     // Link
-  $text = preg_replace("#(^|\s|<br \/>)([\w]{1,6}://(\|)*[\w]+[^\s]+)#ie"               , "convert_link('\\2','\\2','\\1',1)", $text);
+  $text = preg_replace("#(^|\s|<br \/>)([\w]{1,8}://(\|)*[\w]+[^\s]+)#ie"               , "convert_link('\\2','\\2','\\1',1)", $text);
 
   $text = preg_replace("#\[url\](\S+?)\[/url\]#ie"                                      , "convert_link('\\1','\\1')", $text);
   $text = preg_replace("#\[url\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/url\]#ie", "convert_link('\\1','\\2')", $text);
@@ -187,7 +187,7 @@ function convert_link($url,$show,$before="",$simple=0) {
   if($simple) {$url=str_replace("<br","",$url);$show=$url;}
 
   // Protocollo?
-  if (!preg_match("#^([\w]{1,6}://|\#)#", $url))$url = "http://".$url;
+  if (!preg_match("#^([\w]{1,8}://|\#)#", $url))$url = "http://".$url;
 
   // Apertura in nuova pagina
   if (preg_match("#^((http|https|ftp)://|\#)#", $url)) $newpage = 1;
