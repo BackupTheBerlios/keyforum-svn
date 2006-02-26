@@ -8,11 +8,12 @@ require "msgpila.pm";
 
 
 #Carico le librerie dei vari tipi memorizzati
-require "tipo1.pm"; # Comandi admin
-require "tipo2.pm"; # Registrazione utenti
-require "tipo3.pm"; # Thread
-require "tipo4.pm"; # Reply
-require "tipo5.pm"; # ExtDati e varie per modificare i propri dati nel db
+require "tipo1.pm"; # Comandi admin (nitente antiflood e autoflush)
+require "tipo2.pm"; # Registrazione utenti (nitente antiflood e autoflush)
+require "tipo3.pm"; # Thread. Supporta antiflood
+require "tipo4.pm"; # Reply. Supporta antiflood (niente antiflush)
+require "tipo5.pm"; # ToValidate (utenti da validare). Supporta autoflush
+require "tipo6.pm"; # Messaggi Privati, supporta autoflush e antiflood
 
 sub new {
     my ($packname,$fname,$id,$pkey)=@_;

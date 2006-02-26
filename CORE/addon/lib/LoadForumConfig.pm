@@ -6,11 +6,11 @@ sub Load {
     my $sth=$GLOBAL::SQL->prepare("SELECT `GROUP`, `FKEY`, `SUBKEY`,`VALUE` FROM ".$fname."_conf WHERE present='1' ORDER BY `GROUP`, `FKEY`,`SUBKEY`");
     $sth->execute or return Error($GLOBAL::SQL->errstr."\n");
     my (@tmp);
-    $GLOBAL::Fconf->{$id}={};
-    addhashref($GLOBAL::Fconf->{$id},@tmp) while @tmp=$sth->fetchrow_array;
+    my $this=bless({},'LoadForumConfig');
+    $GLOBAL::Fconf->{$id}=$this;
+    addhashref($this,@tmp) while @tmp=$sth->fetchrow_array;
     $sth->finish;
 }
-
 
 sub addhashref {
     my ($hash,@vet)=@_;

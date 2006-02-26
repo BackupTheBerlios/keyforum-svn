@@ -42,9 +42,11 @@ sub Rule {
     my ($this,$msg)=@_;
     return 1 if length($msg->{'ADMIN_SIGN'})>50;
     # Se il messaggio è scritto prima di una certa data impostata dall'utente si esce
-    $msg->{ERRORE}=23,return undef if $msg->{DATE}< $GLOBAL::Fconf->{$this->{id}}->{'CORE'}->{'MSG'}->{'MAX_OLD'};
-    $msg->{ERRORE}=24,return undef unless $this->{AntiFlood}->Check($msg->{AUTORE},$msg->{DATE});  # 23 Antiflood...troppi msg
+    $msg->{ERRORE}=23,return undef if $msg->{DATE}< int(eval{$GLOBAL::Fconf->{$this->{id}}->{'CORE'}->{'MSG'}->{'MAX_OLD'}});
+      
     $msg->{ERRORE}=28,return undef if $msg->{DATE}>Time::Local::timelocal(gmtime(time()+$GLOBAL::ntpoffset))+3700; #Niente messaggi nel futuro
+    return 1 if $GLOBAL::Permessi->{$this->{id}}->CanDo($msg->{AUTORE},$msg->{DATE},'ANTIFLOOD','NO_LIMIT');
+    $msg->{ERRORE}=24,return undef unless $this->{AntiFlood}->Check($msg->{AUTORE},$msg->{DATE}); # 23 Antiflood...troppi msg
     return 1;
 }
 # Questa funzione viene richiamata dall'esterno e ci deve essere.
@@ -53,7 +55,7 @@ sub Inserisci {
     my $forumid=$this->{id};
     # Controllo la firma digitale. Con la public key dell'amministratore. -100=firma non valida
     my $futils=$GLOBAL::ForUtility->{$forumid};
-    my $permessi=$GLOBAL::Permessi->{$this->{id}};
+    my $permessi=$GLOBAL::Permessi->{$forumid};
     
     
     my ($valid_sign,$sez_data,$user_data);

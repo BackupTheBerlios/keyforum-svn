@@ -29,6 +29,16 @@ sub SezPerm {
     }
     return undef; 
 }
+# I permessi dei vari tipi di messaggi
+sub TypePerm {
+    my ($this,$sezione,$data,$chiave1,$chiave2)=@_;
+    $sezione=Digest::MD5::md5("Type:".int($sezione));
+    return undef if length($sezione) != 16;
+    if (my $val=$GLOBAL::SQL->selectrow_array($this->{SelVal},undef,($sezione,$chiave1 || '', $chiave2 || '',$data))) {
+        return $val;
+    }
+    return undef; 
+}
 sub KeyRing {
     my ($this,$key_id,$data,$chiave1,$chiave2)=@_;
     $key_id=Digest::MD5::md5("KeyRing:".int($key_id));

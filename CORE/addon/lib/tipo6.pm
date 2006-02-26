@@ -1,18 +1,18 @@
-package tipo5;
+package tipo6;  # Messaggi Privati
 # reply
 use strict;
 use Digest::MD5;
 use Itami::BinDump;
-my $thistype=5;  # Dichiaro il tipo 
+my $thistype=6;  # Dichiaro il tipo 
 $GLOBAL::TIPI->{$thistype}=\&new; # Si inserisce l'indirizzo della funzione in una variabile globale.
-my @campi=('DATE','TYPE','AUTORE','PKEY'); # Questi sono i campi che verrano usati per il calcolo dell'md5
+my @campi=('DATE','TYPE','AUTORE','TITLE','BODY','DEST'); # Questi sono i campi che verrano usati per il calcolo dell'md5
 my @items;
 
 sub SelectQuery {
     my $this=shift;
     my $tosend=[];
     push(@$tosend,
-        "SELECT `HASH`,`AUTORE`,`PKEY`,'$thistype' AS `TYPE`,`DATE`,`TICKET` FROM ".$this->{fname}."_tovalidate WHERE `HASH`=?;");
+        "SELECT `HASH`,`AUTORE`,`TITLE`,'$thistype' AS `TYPE`,`DEST`,`DATE`,`BODY`,`SIGN` FROM ".$this->{fname}."_tovalidate WHERE `HASH`=?;");
     return $tosend;
 }
 
@@ -22,16 +22,20 @@ sub new {
     my $this=bless({},"tipo".$thistype);
     print "Creato un tipo $thistype\n";
     @{$this}{'fname','id'}=($fname,$id);
-    $this->{autoflush}=int(eval{$GLOBAL::Fconf->{$id}->{'TYPE'}->{'5'}->{'AUTOFLUSH'}});
+    # Antiflood
+    my $name=$GLOBAL::Fconf->{$this->{id}}->{'TYPE'}->{$thistype}->{'ANTIFLOOD'};
+    $this->{AntiFlood}=AntiFlood->new($fname,$id,$GLOBAL::Fconf->{$id}->{"ANTIFLOOD_".$name},$name,$thistype);
+    $this->{congi}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_congi(`HASH`,`TYPE`,`WRITE_DATE`,`INSTIME`,`AUTORE`) VALUES (?,'".$thistype."',?,?,?)");
+    # Autoflush
+    $this->{autoflush}=int(eval{$GLOBAL::Fconf->{$id}->{'TYPE'}->{$thistype}->{'AUTOFLUSH'}});
     {$this->{autoflush}=72000000,last if $this->{autoflush}<=0 || $this->{autoflush}>20000;
     $this->{autoflush}=5*3600,last if $this->{autoflush}<5;
     $this->{autoflush}=$this->{autoflush}*3600;}
     $this->{congi}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_congi (`HASH`,`TYPE`,`WRITE_DATE`,`INSTIME`,`AUTORE`) VALUES (?,'".$thistype."',?,?,?)");
-    $this->{Inserisci}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_tovalidate (`HASH`,`AUTORE`,`PKEY`,`DATE`,`TICKET_HASH`,`TICKET`) VALUES(?,?,?,?,?,?)");
-    $this->{Update}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_congi SET CAN_SEND='0' WHERE `WRITE_DATE`<? AND `TYPE`='5'");
-    $this->{DeleteCongi}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_congi WHERE `WRITE_DATE`<? AND `TYPE`='5'");
-    $this->{DeleteToValidate}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_tovalidate WHERE `DATE`<?");
-    $this->{CountTicket}=$GLOBAL::SQL->prepare("SELECT count(*) FROM ".$fname."_tovalidate WHERE `TICKET_HASH`=?");
+    $this->{Inserisci}=$GLOBAL::SQL->prepare("INSERT INTO ".$fname."_mp (`HASH`,`AUTORE`,`DEST`,`DATE`,`BODY`,`TITLE`,`SIGN`) VALUES(?,?,?,?,?,?,?)");
+    $this->{Update}=$GLOBAL::SQL->prepare("UPDATE ".$fname."_congi SET CAN_SEND='0' WHERE `TYPE`='6' AND `WRITE_DATE`<?");
+    $this->{DeleteCongi}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_congi WHERE `TYPE`='6' AND `WRITE_DATE`<?");
+    $this->{DeleteToValidate}=$GLOBAL::SQL->prepare("DELETE FROM ".$fname."_mp WHERE `DATE`<?");
     push @items,$this;
     return $this;
 }
@@ -40,7 +44,9 @@ sub Rule {
     my ($this,$msg)=@_;
     # Se il messaggio è scritto prima di una certa data impostata dall'utente si esce
     $msg->{ERRORE}=198,return undef if $msg->{DATE} < GM_TIME()-$this->{autoflush}-3700;
-    $msg->{ERRORE}=28,return undef if $msg->{DATE}>GM_TIME()+3700; #Niente messaggi nel futuro
+    $msg->{ERRORE}=28,return undef if $msg->{DATE} > GM_TIME()+3700; #Niente messaggi nel futuro
+    return 1 if $GLOBAL::Permessi->{$this->{id}}->CanDo($msg->{AUTORE},$msg->{DATE},'ANTIFLOOD','NO_LIMIT');
+    $msg->{ERRORE}=24,return undef unless $this->{AntiFlood}->Check($msg->{AUTORE},$msg->{DATE});  # 23 Antiflood...troppi msg
     return 1;
 }
 # Questa funzione viene richiamata dall'esterno e ci deve essere.
@@ -49,17 +55,12 @@ sub Inserisci {
     my $forumid=$this->{id};
     # Controllo la firma digitale. Con la public key dell'amministratore. -100=firma non valida
     my $futils=$GLOBAL::ForUtility->{$forumid};
-    my $ticket=$GLOBAL::TICKET{$forumid};
-    my $reftick=BinDump::MainDeDump($msg->{TICKET});
-    $msg->{ERRORE}=195,return undef unless $ticket->ValidateTicket($reftick);
-    $msg->{ERRORE}=194,return undef if $msg->{'TRUEMD5'} ne $reftick->{AUTORE};
-    $ticket->DeleteTicket($reftick->{HASH});
-    $msg->{TICKET_HASH}=$reftick->{HASH};
-    $this->{CountTicket}->execute($reftick->{HASH});
-    my ($num)=$this->{CountTicket}->fetchrow_array;
-    $msg->{ERRORE}=193,return undef if $num;
-    $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),'');
-    $this->{Inserisci}->execute($msg->{TRUEMD5},$msg->{AUTORE},$msg->{PKEY},$msg->{'DATE'},$reftick->{HASH},$msg->{TICKET});
+    my $permessi=$GLOBAL::Permessi->{$forumid};
+    unless ($permessi->TypePerm($thistype,$msg->{DATE},'ENABLE')) { # Se nessuno può scrivere messaggi
+        $msg->{ERRORE}=300, return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'CAN','WRITE_MP'); # Devi avere l'autorizzazione dall'admin
+    }
+    $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});
+    $this->{Inserisci}->execute($msg->{TRUEMD5},$msg->{AUTORE},$msg->{DEST},$msg->{'DATE'},$msg->{BODY},$msg->{TITLE},$msg->{SIGN});
     return 1;
 }
 
@@ -67,12 +68,12 @@ sub Inserisci {
 # Controlla se il formato del messaggio è valido. Non ci può essere una data che contenga dei caratteri :\
 sub CheckFormat {
     my ($this, $msg)=@_;
-    $msg->{ERRORE}=11,return undef if length($msg->{AUTORE}) > 30 || length($msg->{AUTORE}) < 4; # 11 dim dell'autore non valida
-    $msg->{ERRORE}=13,return undef if $msg->{PKEY} =~ /\D/; # 13 la chaive pubblica deve contenere solo numeri.
-    $msg->{ERRORE}=197,return undef if length($msg->{PKEY}) > 500; # 197 chiave pubblica troppo grande
-    $msg->{ERRORE}=196,return undef if length($msg->{TICKET}) > 1000; # 196 TICKET troppo grande
+    $msg->{ERRORE}=15,return undef if length($msg->{AUTORE}) != 16; # 15 dim dell'autore deve essere 16byte
+    $msg->{ERRORE}=194,return undef if length($msg->{DEST}) != 16; # 194 la dim del campo DEST deve essere 16 caratteri
     $msg->{ERRORE}=4,return undef if $msg->{DATE} =~ /\D/; # -4 la data contiene dei caratteri non numeri
     $msg->{ERRORE}=3,return undef if length($msg->{DATE})<10; # -3 Data non valida (quando la lunghezza è minore di 10
+    $msg->{ERRORE}=19,return undef if length($msg->{TITLE}) > 200;   # 19 Il titolo può essere massimo di 200 caratteri
+    $msg->{ERRORE}=21,return undef if length($msg->{BODY}) > 15000 || length($msg->{BODY})==0; # 21 il BODY può essere di massimo 15k carratteri
     $msg->{ERRORE}=0; # Imposto la variabile ERRORE per questo messaggio a zero (nessun errore).
     return 1;
 }
@@ -80,6 +81,17 @@ sub CheckFormat {
 # Controlla se le dipenze di sto messaggio sono presenti nel database.
 sub CheckDipen {
     my ($this,$msg,$dipen)=@_;
+    my $return ='';
+    unless ($GLOBAL::ForUtility->{$this->{id}}->ExecuteQuery('ExistsUser',$msg->{AUTORE})) { # Controllo se è presente l'utente che ha scritto il msg
+        $dipen->{$msg->{AUTORE}}++;
+        $msg->{ERRORE}=22; # 22 Manca l'autore nel database.
+        $return= $msg->{AUTORE};  # Questo Thread resterà in attesa nel buffer fino a quando non arriva l'autore del messaggio
+    }
+    unless ($GLOBAL::ForUtility->{$this->{id}}->ExecuteQuery('ExistsUser',$msg->{DEST})) { # Controllo se è presente l'utente che ha scritto il msg
+        $dipen->{$msg->{DEST}}++;
+        $msg->{ERRORE}=187; # 187 manca il destinatario
+        $return= $msg->{DEST};  # Questo Thread resterà in attesa nel buffer fino a quando non arriva l'autore del messaggio
+    }
     return undef;
 }
 # Questa funzione viene richiamata dall'esterno e ci deve essere.
