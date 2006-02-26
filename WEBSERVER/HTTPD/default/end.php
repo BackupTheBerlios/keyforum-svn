@@ -87,7 +87,7 @@ $today=$std->k_date($lang['bottom_date'])." - ".date($lang['bottom_time']);
         <?PHP
            $idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
            $idriga = $db->get_var($idquery);
-           $req_nod[INFO][FORUM][0]=pack("H*", $idriga);
+           $req_nod[INFO][FORUM][0]=@pack("H*", $idriga);
            $core   = new CoreSock;
            if ( !(@$core->Connect()) ) echo "<font color=red>Core offline!</font>";
            else {
