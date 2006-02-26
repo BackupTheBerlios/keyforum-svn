@@ -97,12 +97,14 @@ sub CheckDipen {
         $msg->{ERRORE}=22; # 22 Manca l'autore nel database.
         $return= $msg->{AUTORE};  # Questo Thread resterà in attesa nel buffer fino a quando non arriva l'autore del messaggio
     }
+    # Si aggiunge l'mp anche se manca il destinatario.
+    # Se non è presente nella tabella si richiede al vicino.
     unless ($GLOBAL::ForUtility->{$this->{id}}->ExecuteQuery('ExistsUser',$msg->{DEST})) { # Controllo se è presente l'utente che ha scritto il msg
         $dipen->{$msg->{DEST}}++;
-        $msg->{ERRORE}=187; # 187 manca il destinatario
-        $return= $msg->{DEST};  # Questo Thread resterà in attesa nel buffer fino a quando non arriva l'autore del messaggio
+        #$msg->{ERRORE}=187; # 187 manca il destinatario
+        #$return= $msg->{DEST};  # Questo Thread resterà in attesa nel buffer fino a quando non arriva l'autore del messaggio
     }
-    return undef;
+    return $return;
 }
 # Questa funzione viene richiamata dall'esterno e ci deve essere.
 # Da una priorità al messaggio.
