@@ -12,7 +12,7 @@ sub SelectQuery {
     my $this=shift;
     my $tosend=[];
     push(@$tosend,
-        "SELECT `HASH`,`AUTORE`,`TITLE`,'$thistype' AS `TYPE`,`DEST`,`DATE`,`BODY`,`SIGN` FROM ".$this->{fname}."_tovalidate WHERE `HASH`=?;");
+        "SELECT `HASH`,`AUTORE`,`TITLE`,'$thistype' AS `TYPE`,`DEST`,`DATE`,`BODY`,`SIGN` FROM ".$this->{fname}."_mp WHERE `HASH`=?;");
     return $tosend;
 }
 
