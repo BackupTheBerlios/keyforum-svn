@@ -57,7 +57,16 @@ sub Inserisci {
     my $futils=$GLOBAL::ForUtility->{$forumid};
     my $permessi=$GLOBAL::Permessi->{$forumid};
     unless ($permessi->TypePerm($thistype,$msg->{DATE},'ENABLE')) { # Se nessuno può scrivere messaggi
-        $msg->{ERRORE}=300, return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'CAN','WRITE_MP'); # Devi avere l'autorizzazione dall'admin
+        SWITCH: { # Almeno il mittente o il destinatario devono essere autorizzati a ricevere o spedire messaggi.
+            last SWITCH if $permessi->CanDo($msg->{DEST},$msg->{DATE},'CAN','RECV_MP');
+            $msg->{ERRORE}=301;
+            last SWITCH if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'CAN','WRITE_MP'); # Devi avere l'autorizzazione dall'admin
+            $msg->{ERRORE}=300;
+            return undef;
+        }
+        $msg->{ERRORE}=0;
+    } else {
+        $msg->{ERRORE}=302, return undef unless $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'CANT','WRITE_MP');
     }
     $this->{congi}->execute($msg->{TRUEMD5},$msg->{DATE},time(),$msg->{AUTORE});
     $this->{Inserisci}->execute($msg->{TRUEMD5},$msg->{AUTORE},$msg->{DEST},$msg->{'DATE'},$msg->{BODY},$msg->{TITLE},$msg->{SIGN});
