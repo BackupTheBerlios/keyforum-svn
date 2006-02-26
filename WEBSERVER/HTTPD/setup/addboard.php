@@ -845,6 +845,19 @@ $db->query("CREATE TABLE `{$bsess}_ticket` (
 ");
 
 
+$db->query("CREATE TABLE `{$bsess}_mp` (
+ `HASH` binary(16) NOT NULL,
+ `AUTORE` binary(16) NOT NULL,
+ `DEST` binary(16) NOT NULL,
+ `DATE` int(10) unsigned NOT NULL,
+ `TITLE` tinyblob NOT NULL,
+ `BODY` blob NOT NULL,
+ `SIGN` tinyblob NOT NULL,
+ PRIMARY KEY  (`HASH`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+");
+
+
 
 $db->query("CREATE TABLE `{$bsess}_sez` (
   `ID` int(10) unsigned NOT NULL auto_increment,
