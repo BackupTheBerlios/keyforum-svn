@@ -56,6 +56,7 @@ sub Inserisci {
     # Controllo la firma digitale. Con la public key dell'amministratore. -100=firma non valida
     my $futils=$GLOBAL::ForUtility->{$forumid};
     my $permessi=$GLOBAL::Permessi->{$forumid};
+    $msg->{ERRORE}=27,return undef if $permessi->CanDo($msg->{AUTORE},$msg->{DATE},'IS_BAN'); # 27 L'utente è bannato
     unless ($permessi->TypePerm($thistype,$msg->{DATE},'ENABLE')) { # Se nessuno può scrivere messaggi
         SWITCH: { # Almeno il mittente o il destinatario devono essere autorizzati a ricevere o spedire messaggi.
             last SWITCH if $permessi->CanDo($msg->{DEST},$msg->{DATE},'CAN','RECV_MP');
