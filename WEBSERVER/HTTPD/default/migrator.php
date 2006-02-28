@@ -37,7 +37,6 @@ $core=new CoreSock;
 // decodifico la chiave privata dell'admin
 $PRIVKEY=base64_decode($PRIVKEY);
 
-
 echo "<b>migrazione del forum $sesorg, attendere prego....</b><br>";
 flush();
 
@@ -45,9 +44,10 @@ flush();
 $db->query(" 
 
 CREATE TABLE IF NOT EXISTS `hash_tmp` (
- `OLD_HASH` binary(16) NOT NULL,
- `NEW_HASH` binary(16) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+  `OLD_HASH` binary(16) NOT NULL,
+  `NEW_HASH` binary(16) NOT NULL,
+  PRIMARY KEY  (`OLD_HASH`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
 
 ");
 
@@ -171,14 +171,7 @@ foreach ($res as $msg) {
     $risp=$core->AddMsg($riga);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
-        
-/*
-        // verifica
-        $rhash=mysql_real_escape_string($risp[MD5]);
-        $db->get_results("SELECT HASH FROM {$SNAME}_newmsg WHERE HASH='$rhash'");
-        if (!$db->num_rows) { echo "<br>warning - messaggio non realmente inserito<br>";}
-
-*/        
+               
     // feedback
    $feedback++;
    $accepted++;
@@ -239,15 +232,7 @@ foreach ($res as $msg) {
     $risp=$core->AddMsg($riga);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
-        
-/*
-                // verifica
-	        $rhash=mysql_real_escape_string($risp[MD5]);
-	        $db->get_results("SELECT HASH FROM {$SNAME}_reply WHERE HASH='$rhash'");
-        if (!$db->num_rows) { echo "<br>warning - messaggio non realmente inserito<br>";}
-*/        
-
-        
+                
     // feedback
    $feedback++;
    $accepted++;
@@ -282,7 +267,6 @@ function cambia ($old_hash) {
     else return NULL;
 }
 
-$db->MakeQuery("SELECT HASH,FIRMA FROM ME WHERE HASH=? AND NICK=?;",array("5465465456","ffs'@ me ?"));
 
 
 
