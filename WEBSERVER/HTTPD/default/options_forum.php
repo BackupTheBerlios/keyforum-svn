@@ -69,11 +69,9 @@ if($_POST['MEM_ID'])
 		WHERE HASH = '{$userdata->HASH}'  LIMIT 1 ";
 		$result = $db->query($query);
 
-		$is_post_back= 0;
-		/*echo "</table>";
-		$is_post_back= 1;
-		$std->Redirect('Modifica impostazioni forum',$_SERVER['HTTP_REFERER'],$lang['optusr_msg'],$lang['optusr_msg']);
-		exit();*/
+		echo "</table>";
+		Success_Page("Successo!","Modifiche apportate con successo<br>Loout in corso...");
+		exit();
 	}
 }
 
@@ -251,9 +249,4 @@ function select_language($name,$default)
 	$return .="</select>";
 	return $return;
 }
-
-function is_valid($pkey) //TO DISCOVER
-{
-	if($pkey) return true;
-	else return false;
-}?>
+?>

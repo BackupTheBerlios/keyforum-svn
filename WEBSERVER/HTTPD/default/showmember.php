@@ -160,7 +160,7 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 				<div id="profilename"><?=$user['nick']?></div>
 				<br />
 				<?=$user['avatar']?>
-				<div><?=$user['surnick']?></div>
+				<? if($user['surnick']) echo "<div>{$user['surnick']}</div>"; ?>
 				<br />
 				<div class="postdetails">
 					<?=$lang['shmbr_group']?>  <?=$user['group']['text']?><br />
@@ -271,7 +271,7 @@ if(!$user['location']) $user['location'] = "<i>{$lang['shmbr_noinfo']}</i>";
 					<td width="1%" class="row1">
 						<img src='img/f_norm_no.gif' border='0'  alt='Contact' /></td>
 					<td width="99%" class="row2">
-						<a href=""><?=$lang['shmbr_sendpvt']?></a></td>
+						<a href="pm_send.php?MEM_ID=<?=$user['id']?>"><?=$lang['shmbr_sendpvt']?></a></td>
 				</tr>
 				<tr>
 					<td width="1%" class="row1">

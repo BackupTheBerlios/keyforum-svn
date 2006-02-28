@@ -173,12 +173,3 @@ var remove_pressed = 0;
 } //end postback
 
 include('end.php');?>
-
-
-
-<?
-function is_valid($pkey) //Fake Function
-{
-	if($pkey) return true;
-	else return false;
-}?>

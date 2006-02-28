@@ -179,9 +179,4 @@ function select_number($name,$default,$number)
 	$return .="</select>";
 	return $return;
 }
-
-function is_valid($pkey) //TO DISCOVER
-{
-	if($pkey) return true;
-	else return false;
-}?>
+?>

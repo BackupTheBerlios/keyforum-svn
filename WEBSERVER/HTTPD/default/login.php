@@ -42,13 +42,13 @@ else
 			else			$url="sezioni.php?SEZID=$SEZ_ID";
 		}
 		else $url="index.php";
-		$db->query($query) or Muori ($lang['inv_query'] . $db-debug());
+		$db->query($query) or Muori ($lang['inv_query'] . $db->debug());
 		echo "<br><center>".$lang['login_back']."</center><script language=\"javascript\">setTimeout('delayer()', 2000);\nfunction delayer(){ window.location='$url';}</script>";
 	}
 	else 
 	{	//SHOW FORM   ?>
     <br><br><center>
-    <form method="post" action="login.php" align="center">
+    <form method="post" action="login.php">
     <input type="hidden" name="SEZID" value="<?=$_REQUEST["SEZID"]?>">
     <input type="hidden" name="THR_ID" value="<?=$_REQUEST["THR_ID"]?>">
     <table border="0" cellspacing="0" cellpadding="0">

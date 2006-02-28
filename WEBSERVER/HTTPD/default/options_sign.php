@@ -139,12 +139,3 @@ if(!$is_post_back)
 } //end postback
 
 include('end.php');?>
-
- 
-
-<?
-function is_valid($pkey) //Fake Function
-{
-	if($pkey) return true;
-	else return false;
-}

@@ -79,8 +79,9 @@ function show_menu()
 		);
 			
 	$menu[$lang['usrpnl_options']] = Array(
-		'options_forum.php' 	=> $lang['usrpnl_forumopt']
+		 'options_forum.php' 	=> $lang['usrpnl_forumopt']
 		,'options_emoticons.php' => $lang['usrpnl_emoopt']
+		,'options_account.php' => $lang['usrpnl_accountopt']
 			);
 	
 	$return ='
@@ -138,3 +139,31 @@ function show_private_form($data)
 	<tr><td class="row1" align="center" colspan="2"><input type="submit" class="button" name="submit"></td></table></form>';
 	return $return;
 }
+
+function Success_Page($title,$msg,$url=NULL,$exit=NULL)
+{
+	global $std,$blanguage,$PHP_SELF;
+	$url = ($url === NULL ? $PHP_SELF.'?'.$QUERY_STRING: $url);
+
+	$lang = $std->load_lang('lang_functions', $blanguage );
+
+	$return ="
+		<link type='text/css' rel='stylesheet' href='style_page_redirect.css'>
+		<script type='text/javascript' language='javascript'>
+			 setTimeout(\"location.href='$url'\",1000);
+		</script>
+		<div id='redirectwrap'>
+			<h4>$title</h4>
+			<p>$msg</p>
+			<p class='redirectfoot'>{$lang['redirect_wait']}<br>(<a href='$url'>{$lang['redirect_invite']}</a>)</p>
+		</div>
+		";
+	echo $return;
+	if($exit) exit();
+}
+function is_valid($pkey) //TO DISCOVER
+{
+	if($pkey) return true;
+	else return false;
+}
+?>

@@ -95,11 +95,9 @@ if($_POST['MEM_ID'])
 			WHERE hash = '{$userdata->HASH}'
 			LIMIT 1");
 			
-		$is_post_back= 0;
-		/*echo "</table>";
-		$is_post_back= 1;
-		$std->Redirect('Modifica impostazioni forum',$_SERVER['HTTP_REFERER'],$lang['optusr_msg'],$lang['optusr_msg']);
-		exit();*/
+		echo "</table>";
+		Success_Page('Modifica impostazioni forum',"Impostazioni modificate con successo");
+		exit();
 	}
 }
 
@@ -226,11 +224,6 @@ function select_language($name,$default)
 	return $return;
 }
 
-function is_valid($pkey) //TO DISCOVER
-{
-	if($pkey) return true;
-	else return false;
-}
 function show_emoticons($emoticons,$num_row=2)
 {
 	$i = 0;
