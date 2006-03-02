@@ -152,6 +152,9 @@ class FUNC {
 		// all user data
 		$query = "SELECT * FROM {$sess_name}_localmember  WHERE HASH='$hash'";
 		$userdata = $db->get_row($query);
+		//Default value:
+		$userdata->TBOX_ROWS = ($userdata->TBOX_ROWS ? $userdata->TBOX_ROWS : 15);
+		$userdata->TBOX_COLS = ($userdata->TBOX_COLS ? $userdata->TBOX_COLS : 70);
 		return $userdata;
 	 }
 

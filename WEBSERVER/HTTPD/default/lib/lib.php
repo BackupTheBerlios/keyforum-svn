@@ -44,10 +44,9 @@ $_ENV['sql_dbport']=$settings['root']['conf']['DB']['dbport'];
 if(!$_ENV['sql_dbport']){$_ENV['sql_dbport']="3306";}
 $db = new db($_ENV['sql_user'], $_ENV['sql_passwd'], $_ENV['sql_dbname'],$_ENV['sql_host'].":".$_ENV['sql_dbport']);
 
-
 $query = "SELECT * FROM config WHERE 1";
 $result = $db->get_results($query);
-foreach($result as $riga)
+if($result)foreach($result as $riga)
 {
 	$config[$riga->MAIN_GROUP][$riga->SUBKEY][$riga->FKEY] = $riga->VALUE;
 }
@@ -106,7 +105,7 @@ global $db,$SNAME;
 	$db->query($query);
 	
 	unset($_SESSION[$SNAME]);
-	if(isset($_COOKIE["sess_auth_{$SNAME}"])) setcookie("sess_auth_{$SNAME}",'',time()-60*60*24*1); //Scade ieri ed è vouto
+	if(isset($_COOKIE["sess_auth_{$SNAME}"])) @setcookie("sess_auth_{$SNAME}",'',time()-60*60*24*1); //Scade ieri ed è vouto
 }
 
 function Muori($errore) {
