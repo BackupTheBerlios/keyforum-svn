@@ -884,6 +884,22 @@ $db->query("CREATE TABLE `{$bsess}_sez` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ");
 
+
+$db->query("CREATE TABLE `{$bsess}_tovalidate` (
+`HASH` binary(16) NOT NULL,
+`AUTORE` varchar(30) NOT NULL,
+`DATE` int(10) unsigned NOT NULL,
+`PKEY` text NOT NULL,
+`TICKET_HASH` binary(20) NOT NULL,
+`TICKET` blob NOT NULL,
+PRIMARY KEY (`HASH`),
+UNIQUE KEY `TICKET_HASH` (`TICKET_HASH`),
+KEY `DATE` (`DATE`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+");
+
+
+
 }
 
 ?>
