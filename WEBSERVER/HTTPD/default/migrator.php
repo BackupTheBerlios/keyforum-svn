@@ -168,7 +168,7 @@ foreach ($res as $msg) {
     $riga['BODY']=$msg['BODY'];
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='ADMIN_SIGN';
-    $risp=$core->AddMsg($riga);
+    $risp=$core->AddMsg($riga,0);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
                
@@ -195,7 +195,6 @@ echo "$test messaggi nel nuovo db<br>";
 // se ci sono stati errori li stampo alla fine
 echo "<br>$cerror<br>";
 if ($ebody) { echo "trovati $ebody messaggi con il body vuoto";}
-
 
   
 
@@ -229,7 +228,7 @@ foreach ($res as $msg) {
     $riga['BODY']=$msg['BODY'];
     $riga[_PRIVATE]=$PRIVKEY;
     $riga[CPSIGN]='ADMIN_SIGN';
-    $risp=$core->AddMsg($riga);
+    $risp=$core->AddMsg($riga,0);
     if ($risp[MD5]) {
         $db->doQuery("INSERT INTO hash_tmp (OLD_HASH,NEW_HASH) VALUES(?,?)",array($msg['HASH'],$risp[MD5]));
                 
