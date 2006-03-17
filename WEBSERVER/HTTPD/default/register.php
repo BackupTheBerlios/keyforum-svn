@@ -57,7 +57,7 @@ if ($create_user)
 	$chiavi=$core->GenRsaKey($password,1);
 	//if($privkey) $chiavi[priv] = $privkey; //Prendo la chiave privata dal form se presente altrimenti prendo quella appena generata
 
-	echo "Adding user into the system... ";
+	echo "Adding user into the system... <br>";
 	$risp = $core->NewUser($nick,$chiavi[pub],base64_decode($chiavi[priv]),$password);
 	if ( !empty($risp['ERRORE']) ) {
 		$std->Error('Errore generico nella registrazione');
@@ -67,7 +67,7 @@ if ($create_user)
 	if ( empty($risp['MD5']) ) $std->Error("Core didn't return TRUEMD5, aborting!");
 	$truemd5=$risp['MD5'];
 	//var_dump($risp);
-	echo "TRUEMD5: " . $truemd5 . "<br><br>";
+	// echo "TRUEMD5: " . $truemd5 . "<br><br>";
 		
 	// dedump private key....
 	$req[FUNC][BlowDump2var][Data]=base64_decode($chiavi[priv]);
@@ -79,21 +79,21 @@ if ($create_user)
 	
 	//....add user hash....
 	$newprivkey[hash]=$truemd5;
-	var_dump($newprivkey);
+	// var_dump($newprivkey);
 	// ...dump the new private key....we'll get it in base64...
 	//unset($req);
 	$req2[FUNC][var2BlowDump64][Key]=$password;
 	$req2[FUNC][var2BlowDump64][Data]=$newprivkey;
-	var_dump($req2);
-	echo "<br>FATTO REQ2<br><br>";
+	//var_dump($req2);
+	//echo "<br>FATTO REQ2<br><br>";
 	if ( !$core->Send($req2) ) $std->Error("Timeout sending data to the core, aborting.");
 	$resp2=$core->Read();
-	var_dump($resp2);
-	echo "FATTO RESP2<br><br>";
+	//var_dump($resp2);
+	//echo "FATTO RESP2<br><br>";
 	if ( !$resp2 ) $std->Error("Error receiving data from the core, aborting.");
 	$finalpkey64=$resp2[FUNC][var2BlowDump64];
 	
-	var_dump($finalpkey64);
+	//var_dump($finalpkey64);
 	
 	echo "Adding user into the local members table... ";
 	$sqladd = "
@@ -101,14 +101,14 @@ if ($create_user)
 			(hash, password $optfield) VALUES 
 			('$identif','" . mysql_real_escape_string($finalpkey64) . "' $optvalue)";
         if ( !$db->query($sqladd) ) $std->Error("".$lang['reg_usererr']."");
-        else echo "Ok<br><br>";
+        else echo "Done...<br><br>";
 	
-	echo "<br>";
-	echo "	
-	<p><b>IMPORTANTISSIMO:</b> devi salvare il file con l'utente generato e metterlo 
+	echo "<br><br>";
+	$std->Error("","","<b>IMPORTANTISSIMO:</b> devi salvare il file con l'utente generato e metterlo 
 	in un posto sicuro, ti servirà in futuro se vorrai reinstallare keyforum e 
 	loggarti con lo stesso utente. Per salvare il file <a href=\"userexport.php\">fai 
-	click qui</a></p>";
+	click qui</a></p><br>");
+	echo "<br><br>";
 	include("end.php");
 	exit(0);	
 	//END CREATE		
