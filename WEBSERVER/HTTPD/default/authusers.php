@@ -86,11 +86,8 @@ else {
 	$messaggio['TYPE']=1;
 	$messaggio['_PRIVATE']=base64_decode($PRIVKEY);
 	$risp = $core->AddMsg($messaggio);
-	switch($risp)
+	switch($risp['ERRORE'])
 	{
-		default:
-			$std->Error("Error receiving response form the core!");		
-		break;
 		case '104':
 			$std->Error("Private key not valid!");		
 		break;
@@ -102,6 +99,9 @@ else {
 		break;
 		case NULL:
 			$std->Error("","","User(s) authed, let the spam begin.");
+		break;
+		default:
+			$std->Error("Error receiving response form the core!");
 		break;
 	// yes, the end!
 	}
