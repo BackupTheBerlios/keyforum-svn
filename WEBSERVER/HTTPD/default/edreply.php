@@ -2,11 +2,9 @@
 
 ob_start('ob_gzhandler');
 include ("testa.php");
-
 // carico la lingua per l'edit
 $lang += $std->load_lang('lang_edreply', $blanguage );
 
-$SNAME=$_ENV[sesname];
 $MSGID=mysql_escape_string(pack("H*",$_REQUEST["REP_OF"]));
 $query="SELECT {$SNAME}_newmsg.title as title, {$SNAME}_membri.AUTORE as autore"
   ." FROM {$SNAME}_msghe,{$SNAME}_newmsg,{$SNAME}_membri"
