@@ -44,8 +44,27 @@ if($_POST['MEM_ID'])
 	}
 	else
 	{
-		echo "".$lang['optavt_modsucc']."";
-		$is_post_back= 0;
+		if(!$core) $core = new CoreSock();
+		$IDENTIFICATORE=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
+		$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+
+		$mreq['REP_OF']=pack("H32",'39022b1483601c914c507e377f56df00');
+		$mreq['AUTORE']=$user_hash;
+			# Creo un vettore qualsiasi
+			$extvar=array();
+			# Con questo vettore nel vettore dico che voglio fare l'update del mio avatar e firma
+			$extvar[UpdateMyAvatar]=array();
+			if(isset($_POST['remove'])) $extvar[UpdateMyAvatar][avatar]=NULL;
+			if(isset($_POST['submit'])) $extvar[UpdateMyAvatar][avatar]=$_REQUEST['url_avatar'];
+			$extvar[UpdateMyAvatar][firma]=get_sign($user_id);
+		$mreq['TYPE']='4';
+		$mreq['BODY']='Madifico il mio avatar :wacko:';
+		$mreq['_PRIVATE']=base64_decode($userdata->PASSWORD);
+		$mreq['_PWD']=$KEY_DECRYPT;
+		$mreq['EXTVAR']=$core->Var2BinDump($extvar);
+		$risp = $core->AddMsg($mreq);
+		if(empty($risp['ERRORE'])) Success_Page("Successo!","Modifiche apportate con successo","options_avatar.php?MEM_ID=$user_id",1);
+		$is_post_back= 1;
 	}
 }
 
@@ -67,7 +86,7 @@ if(!$is_post_back)
 <!-- Start main CP area -->
 		<td valign="top" class="nopad" width="75%">
 			<div id="ucpcontent">
-			<? echo " <div class=\"maintitle\">".$lang['optavt_welcome']."</div>"; ?>
+			<div class="maintitle"><?=$lang['optavt_welcome']?></div>
 			<script type="text/javascript">
 <!--
 var url_input      = "<?=$current_avatar?>";
@@ -99,7 +118,7 @@ var remove_pressed = 0;
 		}
 	
 		else{
-		<? echo"	fcheck = confirm(".$lang['optavt_removeavatar'].");"; ?>
+			fcheck = confirm(<?=$lang['optavt_removeavatar']?>);
 			if ( fcheck == true ){
 				return true;
 			}
@@ -110,7 +129,7 @@ var remove_pressed = 0;
 	}
 -->
 </script>
-<? echo " <div class=\"formsubtitle\">".$lang['optavt_avataropt']."</div>"; ?>
+	<div class="formsubtitle"><?=$lang['optavt_avataropt']?></div>
 	<? echo" ".$lang['optavt_info1'].""; ?>
 <? echo" <div class=\"formsubtitle\">".$lang['optavt_current']."</div>"; ?>
 <div class='tablepad' align='center'>
@@ -158,8 +177,9 @@ var remove_pressed = 0;
 	</tr>
 </table>
 	<div align="center" class="formsubtitle">
-		<? echo "<input type=\"submit\" name=\"submit\" value=\"".$lang['optavt_update']."\" />"; ?>
-		&nbsp;&nbsp;&nbsp;<input type="submit" name="remove" onclick="remove_pressed=1;" <? echo"value=\"".$lang['optavt_remove']."\" />"; ?>
+		<input type="submit" name="submit" value="<?=$lang['optavt_update']?>" />
+		&nbsp;&nbsp;&nbsp; 
+		<input type="submit" name="remove" onclick="remove_pressed=1;" value="<?=$lang['optavt_remove']?>" />
 	</div>
 </form></div>
 		</td>
