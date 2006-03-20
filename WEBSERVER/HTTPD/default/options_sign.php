@@ -16,6 +16,7 @@ $mem_id = $_GET['MEM_ID']; 			//dell'utente da modificare
 $mem_hash = pack('H*',$mem_id); 
 list($user_hash,$user_id) = get_my_info($SNAME);
 
+
 if (!$_SESSION[$SNAME]['sess_auth']) {
     $url = "login.php";
     echo "<tr><td><center>".$lang['sign_login']."<br>";
@@ -44,8 +45,26 @@ if($_POST['MEM_ID'])
 	}
 	else
 	{
-		echo "".$lang['optsign_info1']."";
-		$is_post_back= 0;
+		if(!$core) $core = new CoreSock();
+		$IDENTIFICATORE=md5($_SESSION[$SNAME]['sess_password'].$_SESSION[$SNAME]['sess_nick']); // = identificatore dell'utente nella tabella localmember. easadecimale
+		$KEY_DECRYPT=pack('H*',md5($_SESSION[$SNAME]['sess_nick'].$_SESSION[$SNAME]['sess_password']));// = password per decriptare la chiave privata in localmember (16byte)
+
+		$mreq['REP_OF']=pack("H32",'39022b1483601c914c507e377f56df00');
+		$mreq['AUTORE']=$user_hash;
+			# Creo un vettore qualsiasi
+			$extvar=array();
+			# Con questo vettore nel vettore dico che voglio fare l'update del mio avatar e firma
+			$extvar[UpdateMyAvatar]=array();
+			$extvar[UpdateMyAvatar][avatar]=get_avatar($user_id);
+			$extvar[UpdateMyAvatar][firma]=$_REQUEST['body'];
+		$mreq['TYPE']='4';
+		$mreq['BODY']='Madifico la mia firma :wacko:';
+		$mreq['_PRIVATE']=base64_decode($userdata->PASSWORD);
+		$mreq['_PWD']=$KEY_DECRYPT;
+		$mreq['EXTVAR']=$core->Var2BinDump($extvar);
+		$risp = $core->AddMsg($mreq);
+		if(empty($risp['ERRORE'])) Success_Page("Successo!","Modifiche apportate con successo","options_sign.php?MEM_ID=$user_id",1);
+		$is_post_back= 1;
 	}
 }
 

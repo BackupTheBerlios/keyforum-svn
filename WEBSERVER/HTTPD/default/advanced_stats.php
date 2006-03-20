@@ -23,6 +23,7 @@ switch($advanced_stats_mode)
 		if($result)foreach($result as $user)
 		{
 			list($asd,$id) = unpack('H*',$user->hash);
+			$id = substr($id,0,32);		//BUG: PLEASE FIX (33 caratteri, aggiunge uno 0 finale in più a tutti :s )
 			$nick = secure_v($user->nick);
 			$users[$id] = $nick;
 		}

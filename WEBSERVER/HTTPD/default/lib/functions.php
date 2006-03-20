@@ -301,10 +301,7 @@ echo "<div class=\"errorwrap\"><h4>$ntitle</h4><p>$ncontent</p></div>";
 function Multiutenza($SNAME)
 {
 	global $config;
-	/*
-	TO DO
-	*/
-	return false;
+	return $config['WEBSERVER'][$SNAME]['MULTIUSER'];
 }
 
 

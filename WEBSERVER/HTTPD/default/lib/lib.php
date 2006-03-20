@@ -1,6 +1,6 @@
 <?php
 $sep = PATH_SEPARATOR; 
-ini_set("include_path", ini_get ("include_path")."$sep.$sep../../../WEBSERVER/pear");
+ini_set("include_path", ini_get ("include_path")."$sep.$sep../../../WEBSERVER/pear$sep../../../WEBSERVER/lib");
   $Timer1 = microtime();
   $Timer1 = explode(" ",$Timer1);
   $Timer1 = $Timer1[0] + $Timer1[1];

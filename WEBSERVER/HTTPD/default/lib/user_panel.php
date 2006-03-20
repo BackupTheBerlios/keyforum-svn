@@ -34,6 +34,7 @@ function get_sign($mem_id)
 {
 	global $SNAME,$db;
 	$user_hash = @pack("H*",$mem_id);
+	$user_hash = substr($user_hash,0,16); //BUG: PLS FIX ME (17 caratteri, aggiunge uno 0 :s )
 	$user_hash = mysql_real_escape_string($user_hash);
 	
 	$query = "SELECT firma
@@ -47,6 +48,7 @@ function get_avatar($mem_id)
 {
 	global $SNAME,$db;
 	$user_hash = @pack("H*",$mem_id);
+	$user_hash = substr($user_hash,0,16); //BUG: PLS FIX ME (17 caratteri, aggiunge uno 0 :s )
 	$user_hash = mysql_real_escape_string($user_hash);
 	
 	$query = "SELECT avatar
