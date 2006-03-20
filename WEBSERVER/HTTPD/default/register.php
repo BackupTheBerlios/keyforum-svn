@@ -59,8 +59,21 @@ if ($create_user)
 
 	echo "Adding user into the system... <br>";
 	$risp = $core->NewUser($nick,$chiavi[pub],base64_decode($chiavi[priv]),$password);
-	if ( !empty($risp['ERRORE']) ) {
-		$std->Error('Errore generico nella registrazione');
+	if ( !empty($risp['ERRORE']) ) 
+	{
+		//NON TRADURRE: Si prevede una gestione migliore degli errori del core :)
+		switch($risp['ERRORE'])
+		{
+			case 11: 
+				$std->Error("L'username deve avere una lunghezza compresa tra 4 e 30 caratteri");
+			break;
+			case 28: 
+				$std->Error("Niente messaggi nel futuro");
+			break;
+			default:
+				$std->Error("Errore generico in fase di registrazione");
+			breaK;
+		}
 	} else "Ok <br><br>\n";
 	
 	//add user hash returned from the core (md5) into the private key

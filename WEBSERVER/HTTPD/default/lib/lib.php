@@ -97,13 +97,12 @@ if(!$_SESSION[$SNAME]) //Se non sono già autenticato
 
 function DestroySession() 
 {
-global $db,$SNAME;
+	global $db,$SNAME;
 	$sess_id = session_id();
-	$my_ip = $_SERVER['REMOTE_ADDR'];
+	$my_ip = md5($_SERVER['REMOTE_ADDR']);
 	$SNAME = $_SERVER['sesname'];
-	$query="DELETE FROM session WHERE SESSID='$sess_id' AND IP=md5('$my_ip') AND FORUM='$SNAME' ";
+	$query="DELETE FROM `session` WHERE SESSID='$sess_id' AND IP='$my_ip' AND FORUM='$SNAME'";
 	$db->query($query);
-	
 	unset($_SESSION[$SNAME]);
 	if(isset($_COOKIE["sess_auth_{$SNAME}"])) @setcookie("sess_auth_{$SNAME}",'',time()-60*60*24*1); //Scade ieri ed è vouto
 }

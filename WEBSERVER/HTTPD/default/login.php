@@ -20,9 +20,16 @@ else
 		$risultato=$db->get_var($query);
 		if ($risultato==0) Muori("".$lang['login_err']."\n<br>");
 		
-		$query="INSERT INTO `session` (`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) 
-		VALUES('".session_id()."',md5('".$_SERVER['REMOTE_ADDR']."'),'".mysql_real_escape_string($_ENV[sesname])."','".mysql_real_escape_string($_POST["nick"])."','".time()."','".mysql_real_escape_string($rawpasswd)."');";
+		$temp[sessid] 	= session_id();
+		$temp[md5ip] 	= md5($_SERVER['REMOTE_ADDR']);
+		$temp[forum] 	= mysql_real_escape_string($SNAME);
+		$temp[nick] 	= mysql_real_escape_string($_POST["nick"]);
+		$temp[rawpwd]	= mysql_real_escape_string($rawpasswd);
 		
+		$query="INSERT INTO `session` 
+				(`SESSID`,`IP`,`FORUM`,`NICK`,`DATE`,`PASSWORD`) 
+		VALUES('$temp[sessid]','$temp[md5ip]','$temp[forum]','$temp[nick]','".time()."','$temp[rawpwd]');";
+		unset($temp);
 		if(isset($_POST['remember']))
 		{
 			$the_cookie = array(mysql_real_escape_string($_POST["nick"]),$rawpasswd,time());
@@ -43,7 +50,7 @@ else
 		}
 		else $url="index.php";
 		$db->query($query) or Muori ($lang['inv_query'] . $db->debug());
-		echo "<br><center>".$lang['login_back']."</center><script language=\"javascript\">setTimeout('delayer()', 2000);\nfunction delayer(){ window.location='$url';}</script>";
+		echo "<br><center>".$lang['login_back']."</center><script  type='text/javascript' language=\"javascript\">setTimeout('delayer()', 2000);\nfunction delayer(){ window.location='$url';}</script>";
 	}
 	else 
 	{	//SHOW FORM   ?>
