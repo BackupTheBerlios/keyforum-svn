@@ -10,12 +10,12 @@ class Admin {
     
       
     function EditSez($SEZID,$SEZ_NAME,$SEZ_DESC,$ORDINE,$FIGLIO,$ONLY_AUTH=1,$NEED_PERM=0,$HIDE=0,$ALIAS='',$REDIRECT='') {
-        global $db;
+        global $db,$SNAME;
         
         // se non ho fornito un id, creo una nuova sezione
         if(!$SEZID)
          {
-         $db->query("insert into imptest_sez (ID,PENDING) VALUES (null,'2')");
+         $db->query("insert into {$SNAME}_sez (ID,PENDING) VALUES (null,'2')");
          $SEZID=$db->insert_id;
          }
         $sez=array(SEZID=>$SEZID, SEZ_NAME=>$SEZ_NAME,SEZ_DESC=>$SEZ_DESC,ORDINE=>$ORDINE,FIGLIO=>$FIGLIO,ONLY_AUTH=>$ONLY_AUTH,NEED_PERM=>$NEED_PERM,HIDE=>$HIDE,ALIAS=>$ALIAS,REDIRECT=>$REDIRECT);
