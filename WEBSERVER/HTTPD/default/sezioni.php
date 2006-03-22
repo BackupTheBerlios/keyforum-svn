@@ -82,13 +82,20 @@ if(! $db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"]."
   
   // esistono sottoforum ?
   if($num_sottoforum)
-   {
+  {
+   
+   if($SEZ_DATA->REDIRECT){
+   	$link="target='_blank' href='".$SEZ_DATA->REDIRECT;
+   }else{
+   	$link="href='sezioni.php?SEZID=".$SEZ_DATA->ID;
+   }
+   
    
    echo "
    <div class='borderwrap'>
      <div class='maintitle'>
        <p class='expand'>$sezeditor</p>
-       <p><a href='sezioni.php?SEZID={$SEZ_DATA->ID}'>{$SEZ_DATA->SEZ_NAME}</a></p>
+       <p><a ".$link."'>{$SEZ_DATA->SEZ_NAME}</a></p>
      </div>";
 
      echo "
@@ -114,13 +121,18 @@ if(! $db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"]."
 	  
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." AND HIDE='0' ORDER BY ORDINE;";
+      $querysubs = "SELECT ID, SEZ_NAME, REDIRECT FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." AND HIDE='0' ORDER BY ORDINE;";
       $subsez = $db->get_results($querysubs);
       if($subsez)foreach($subsez as $subsezval) {
+      	if($subsezval->REDIRECT){
+		$link="target='_blank' href='".$subsezval->REDIRECT;
+	}else{
+		$link="href='sezioni.php?SEZID=".$subsezval->ID;
+   	}
         if($notfirst)
-          $subsections=$subsections.", <b><a href='sezioni.php?SEZID=".$subsezval->ID."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
+          $subsections=$subsections.", <b><a ".$link."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         else
-          $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID=".$subsezval->ID."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
+          $subsections="<br><i>".$lang['subforums']."</i><b><a ".$link."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         $notfirst=1;
       }
       $querymods="SELECT membri.AUTORE as 'MOD', membri.HASH as 'MOD_HASH' FROM {$SNAME}_permessi as permessi, {$SNAME}_membri as membri WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."' AND membri.HASH=permessi.AUTORE;";
@@ -135,13 +147,18 @@ if(! $db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"]."
 	  $moderators=" <a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$modsval->MOD."</a>";
         $notfirst=1;
       }
+      if($sezval->REDIRECT){
+      	$link="target='_blank' href='".$sezval->REDIRECT;
+      }else{
+      	$link="href='sezioni.php?SEZID=".$sezval->ID;
+      }
 		?>
       <tr>
         <td class="row4" width="5%" align="center">
 			<img src="img/bf_new.gif" alt="">
 		</td>
         <td class="row4">
-		<b><a href="sezioni.php?SEZID=<?=$sezval->ID?>"><?=secure_v($sezval->SEZ_NAME)?></a></b><br />
+		<b><a "<?=$link?>'"><?=secure_v($sezval->SEZ_NAME)?></a></b><br />
 		<span class="desc">
 			<?=secure_v($sezval->SEZ_DESC).$subsections?><br />
 			<font color="#808080">
@@ -190,7 +207,7 @@ $SEZID=$_REQUEST['SEZID'];
 
 
 // se >= 9000 è un forum di categoria e non può contenere messaggi
-if($SEZ_DATA->ORDINE < 9000)
+if(($SEZ_DATA->ORDINE < 9000) and (!$SEZ_DATA->REDIRECT))
 {
 echo "<a href=\"searcher.php?MODO=1&amp;SEZ=".$SEZID."&amp;ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
@@ -201,13 +218,19 @@ if (! is_numeric($CurrPag))
   $CurrPag = 0;
 if ($CurrPag < 0) $CurrPag = 0;
 
+if($SEZ_DATA->REDIRECT){
+	$link="target='_blank' href='".$SEZ_DATA->REDIRECT;
+}else{
+	$link="href='sezioni.php?SEZID=".$SEZ_DATA->ID;
+}
+
 PageSelect();
 ?>
 <div class="borderwrap">
   <div class="maintitle">
     <p class="expand"><? echo $sezeditor; ?></p>
     <?PHP
-	echo "<p><a href='sezioni.php?SEZID=".$SEZ_DATA->ID."'>".secure_v($SEZ_DATA->SEZ_NAME)."</a></p>";
+	echo "<p><a ".$link."'>".secure_v($SEZ_DATA->SEZ_NAME)."</a></p>";
     ?>
   </div>
   <table cellspacing="1">

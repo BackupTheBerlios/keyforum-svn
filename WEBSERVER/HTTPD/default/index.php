@@ -50,7 +50,7 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
-$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH' 
+$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM, REDIRECT,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH' 
  from {$SNAME}_sez 
  LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
  LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
@@ -73,6 +73,7 @@ if ($result) foreach ( $result as $row )
 		,'AUTOFLUSH'=> $row->AUTOFLUSH
 		,'ORDINE'	=> $row->ORDINE
 		,'FIGLIO' 	=> $row->FIGLIO
+		,'REDIRECT'	=> $row->REDIRECT
 		,'last_admin_edit' => $row->last_admin_edit
 		,'last_action' => $last_action[$row->id+0]
 		,'num_figli' => 0
@@ -119,7 +120,7 @@ include('end.php');
 //FUNZIONE DI VISUALIZZAZIONE
 function draw_forum($sez,$indice)
 {
-	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std,$mod,$userdata;
+	global $ris,$forum,$lang,$db,$SNAME,$hidesez,$sezcollector,$std,$mod,$userdata;	
 	switch($sez[level])
 	{
 		case 0:
@@ -129,13 +130,20 @@ function draw_forum($sez,$indice)
 		$divshow = ( in_array($sez['SEZ_ID'],$hidesez) ? 'none' : 'show');
 		$divhide = ( in_array($sez['SEZ_ID'],$hidesez) ? 'show' : 'none');
 		$sezcollector .= $sez['SEZ_ID'].",";
+		
+		if($sez['REDIRECT']){
+			$link="target='_blank' href='".$sez['REDIRECT'];
+		}else{
+			$link="href='sezioni.php?SEZID=".$sez['SEZ_ID'];
+		}
+		
 		echo "
 		<div class='borderwrap' style='display:$divhide' id='divhide_{$sez['SEZ_ID']}'>
 		 <div class='maintitlecollapse'>
 		  <p class='expand'>$sezeditor<a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},0,'$SNAME');\">
 		  <img src='img/exp_plus.gif' border='0'  alt='Expand' /></a></p>
 		  <p>
-		  <a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
+		  <a ".$link."'>{$sez['SEZ_NAME']}</a></p>
  		 </div>
 		</div>
 		
@@ -144,7 +152,7 @@ function draw_forum($sez,$indice)
 		  <p class='expand'>$sezeditor<a href=\"javascript:ShowHideSection({$sez['SEZ_ID']},1,'$SNAME');\">
 		  <img src='img/exp_minus.gif' border='0' alt='Collapse' /></a></p>
 		  <p>
-		  <a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>{$sez['SEZ_NAME']}</a></p>
+		  <a ".$link."'>{$sez['SEZ_NAME']}</a></p>
   		</div>
   <table cellspacing=\"1\">
     <tr>
@@ -173,11 +181,16 @@ function draw_forum($sez,$indice)
 			{
 				$next_id = $ris[$indice+$i+1];
 				$next_id = (int) $next_id['id'];
-			
+				if($forum[$next_id]['REDIRECT']){
+					$link="target='_blank' href='".$forum[$next_id]['REDIRECT'];
+				}else{
+					$link="href='sezioni.php?SEZID=".$forum[$next_id]['SEZ_ID'];
+				}
+				
 				if($notfirst)
-    		     $subsections .= ", <b><a href='sezioni.php?SEZID={$forum[$next_id]['SEZ_ID']}'>".secure_v($forum[$next_id]['SEZ_NAME'])."</a></b>";
+    		     $subsections .= ", <b><a ".$link."'>".secure_v($forum[$next_id]['SEZ_NAME'])."</a></b>";
 		        else
-		          $subsections="<br><i>".$lang['subforums']."</i><b><a href='sezioni.php?SEZID={$forum[$next_id]['SEZ_ID']}'>".secure_v($forum[$next_id][SEZ_NAME])."</a></b>";
+		          $subsections="<br><i>".$lang['subforums']."</i><b><a ".$link."'>".secure_v($forum[$next_id][SEZ_NAME])."</a></b>";
 		       $notfirst=1;
 			}
 			//Ultimo messaggio
@@ -218,11 +231,17 @@ function draw_forum($sez,$indice)
 				$moderators.= "<a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$value["Nick"]."</a>, ";
 			}
 			$moderators = substr($moderators,0,-2);
+			
+			if($sez['REDIRECT']){
+				$link="target='_blank' href='".$sez['REDIRECT'];
+			}else{
+				$link="href='sezioni.php?SEZID=".$sez['SEZ_ID'];
+			}
 
 			echo "
 			<tr>
 			<td class='row4' width='5%' align='center'><img src='img/bf_new.gif' alt=''></td>
-			<td class='row4'><b><a href='sezioni.php?SEZID={$sez['SEZ_ID']}'>".secure_v($sez['SEZ_NAME'])."</a></b><br /><span class='desc'>{$sez['SEZ_DESC']} $subsections <br /><font color='#808080'><i>{$lang['col_moderators']}: $moderators</i></font><br /></span></td>".'
+			<td class='row4'><b><a ".$link."'>".secure_v($sez['SEZ_NAME'])."</a></b><br /><span class='desc'>{$sez['SEZ_DESC']} $subsections <br /><font color='#808080'><i>{$lang['col_moderators']}: $moderators</i></font><br /></span></td>".'
 			<td class="row2" align="center">'.$sez['THR_NUM'].'</td>
 			<td class="row2" align="center">'.$sez['REPLY_NUM'].'</td>
 			<td class="row2" nowrap="nowrap">'.$lang['last_in'].'<a href="showmsg.php?SEZID='.$sez['last_action']['sez_id'].'&amp;THR_ID='.$hash['alfa'].'&amp;pag=last#end_page">'.secure_v($msg).'</a><br>'.$lang['last_data'].$write_date.'<br>'.$lang['last_from'].'<a href="showmember.php?MEM_ID='.$nickhash['alfa'].'">'.secure_v($sez['last_action']['autore']).'</a></td>';
