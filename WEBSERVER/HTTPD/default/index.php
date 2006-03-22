@@ -54,6 +54,7 @@ $query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH
  from {$SNAME}_sez 
  LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
  LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
+ WHERE HIDE='0'
  order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 

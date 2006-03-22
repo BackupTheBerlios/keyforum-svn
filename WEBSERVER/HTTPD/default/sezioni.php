@@ -73,7 +73,7 @@ function PageSelect() {
 // sottoforum
 
   $mainzedid=$_REQUEST["SEZID"];
-  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid ORDER BY ORDINE;";
+  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid AND HIDE='0' ORDER BY ORDINE;";
   $sez = $db->get_results($query);
   $num_sottoforum=$db->num_rows;
   
@@ -113,7 +113,7 @@ function PageSelect() {
 	  
       $notfirst=0;
       $subsections="";
-      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." ORDER BY ORDINE;";
+      $querysubs = "SELECT ID, SEZ_NAME FROM ".$_SERVER["sesname"]."_sez WHERE FIGLIO=".$sezval->ID." AND HIDE='0' ORDER BY ORDINE;";
       $subsez = $db->get_results($querysubs);
       if($subsez)foreach($subsez as $subsezval) {
         if($notfirst)
@@ -193,7 +193,7 @@ if($SEZ_DATA->ORDINE < 9000)
 {
 echo "<a href=\"searcher.php?MODO=1&amp;SEZ=".$SEZID."&amp;ORDER=DESC\">".$lang['req_last']."</a><br><br>";
 
-$Num3d = $Num3d = $db->get_var("SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID;");
+$Num3d = $Num3d = $db->get_var("SELECT THR_NUM from {$SNAME}_sez WHERE ID=$SEZID AND HIDE='0';");
 $NumPag = intval(($Num3d-1) / $ThreadXPage);
 $CurrPag = $_REQUEST["pag"];
 if (! is_numeric($CurrPag))
