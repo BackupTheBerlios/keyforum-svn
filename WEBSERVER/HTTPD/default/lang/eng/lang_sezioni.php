@@ -21,6 +21,7 @@ $lang['last_data']  = "Date: ";
 $lang['last_from']  = "From: ";
 $lang['subforums']  = "Subforums:";
 $lang['forum']  = "Forum";
+$lang['sezioni_hide']  = "Page cannot be displayed: invalid section";
 
 
 ?>

@@ -21,6 +21,6 @@ $lang['last_data']  = "Data: ";
 $lang['last_from']  = "Da: ";
 $lang['subforums']  = "All'interno:";
 $lang['forum']  = "Forum";
-
+$lang['sezioni_hide']  = "Impossibile visualizzare la pagina: sezione inesistente";
 
 ?>

@@ -71,7 +71,8 @@ function PageSelect() {
 <?
 
 // sottoforum
-
+if(! $db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"].";")) //se è visibile
+{
   $mainzedid=$_REQUEST["SEZID"];
   $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid AND HIDE='0' ORDER BY ORDINE;";
   $sez = $db->get_results($query);
@@ -164,13 +165,13 @@ function PageSelect() {
 
   // esistono sottoforum ?
   if($num_sottoforum)
-   {    
-echo "<tr> 
-          <td class='darkrow2' colspan='5'>&nbsp;</td>
-        </tr></table></div>";
-}
+  {    
+    echo "<tr> 
+            <td class='darkrow2' colspan='5'>&nbsp;</td>
+          </tr></table></div>";
+  }
 
-// end sottoforum
+  // end sottoforum
 
 
 ?>
@@ -406,6 +407,10 @@ echo "</table></div>";
 PageSelect(); 
 
 } // FI - Forum di categoria
+
+}else{ // Fine controllo di visibilità
+	$std->Error($lang['sezioni_hide']);
+}
 
 
 include ("end.php");
