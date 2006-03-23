@@ -183,22 +183,28 @@ die();
 
 function FindFreePort()
 {
+ global $db;
+ $host="127.0.0.1";
+ $timeout= 0.5;
+ echo "<center>".$lang['addboard_freeport']."";
 
-$host="127.0.0.1";
-$timeout= 0.5;
-echo "<center>".$lang['addboard_freeport']."";
-for ($port = 20585; $port <= 65000; $port++) {
-    
+ for ($port = 20585; $port <= 65000; $port++) {
     settype($ports[$i], "integer");
     	if (($handle = @fsockopen($host, $port, $errno, $errstr, $timeout)) == false)
     	{
- 	return $port;
+    		$qres = $db->get_results("SELECT MAIN_GROUP FROM config WHERE FKEY='PORTA' AND VALUE='".$port."';");
+    		if($qres){
+    			echo "$port  ";
+    			flush();
+    		}else{
+ 			return $port;
+ 		}
     	} else { 
-    	echo "$port  ";
-    	flush();
+    		echo "$port  ";
+    		flush();
     	}
    
-}
+ }
  echo "</center>";	
 
 }
@@ -221,20 +227,7 @@ $portalibera=FindFreePort();
 
 echo  "
 
-<html>
-
-<head>
-<meta http-equiv=\"Content-Language\" content=\"it\">
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">
-<title>IMPORTA NUOVA BOARD</title>
-<link type=\"text/css\" rel=\"stylesheet\" href=\"style_page.css\">
-</head>
-
-<style>
-
-</style>
-
-<body>
+</center>
 <br>
 <div align=\"center\">
 	<table border=\"0\" width=\"500\" id=\"table1\">
