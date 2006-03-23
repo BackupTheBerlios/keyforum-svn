@@ -19,6 +19,7 @@ function PageSelect() {
   global $CurrPag;
   global $Section;
   global $lang;
+  global $userdata;
   $link = '?';
   foreach($_GET as $nome=>$valore)
   {
@@ -71,14 +72,16 @@ function PageSelect() {
 <?
 
 // sottoforum
-if(! $db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"].";")) //se è visibile
+if((!$db->get_var("SELECT HIDE from {$SNAME}_sez WHERE ID=".$_REQUEST["SEZID"].";")) OR ($userdata->LEVEL >=11)) //se è visibile
 {
+
   $mainzedid=$_REQUEST["SEZID"];
-  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid AND HIDE='0' ORDER BY ORDINE;";
+if($userdata->LEVEL < 11) {$showhiddensez="AND HIDE='0'";}
+  $query = "SELECT * FROM ".$_SERVER["sesname"]."_sez WHERE figlio=$mainzedid {$showhiddensez} ORDER BY ORDINE;";
   $sez = $db->get_results($query);
   $num_sottoforum=$db->num_rows;
   
-  if($userdata->LEVEL >=10){$sezeditor="<a href='adminsez.php?SEZID={$SEZ_DATA->ID}'><img src='img/s_edit.gif' border='0'  alt='Edit section' /></a>";}
+  if($userdata->LEVEL >=11){$sezeditor="<a href='adminsez.php?SEZID={$SEZ_DATA->ID}'><img src='img/s_edit.gif' border='0'  alt='Edit section' /></a>";}
   
   // esistono sottoforum ?
   if($num_sottoforum)

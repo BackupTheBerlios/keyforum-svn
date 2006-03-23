@@ -27,6 +27,7 @@ function get_level_list()
 	/*...*/
 	$level[9] = 'Validatore';
 	$level[10] = 'Admin';
+	$level[11] = 'Mantainer';
 	return $level;
 }
 

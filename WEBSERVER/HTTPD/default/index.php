@@ -50,11 +50,13 @@ require_once("lib/TreeClass.php");
 $tree=new Tree;
 $tree->AddNode(" 0","root");
 
+if($userdata->LEVEL < 11) {$showhiddensez="WHERE HIDE='0'";}
+
 $query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM, REDIRECT,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH' 
  from {$SNAME}_sez 
  LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
  LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
- WHERE HIDE='0'
+ {$showhiddensez}
  order by FIGLIO,ORDINE ";
 $result = $db->get_results($query);
 
