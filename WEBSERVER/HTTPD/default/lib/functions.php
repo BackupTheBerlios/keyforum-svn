@@ -314,19 +314,22 @@ function Multiutenza($SNAME)
 
 function ForumList($forumid=0,$IdAddOn="")
 {
-global $db,$_ENV;
+global $db,$_ENV,$userdata;
 include_once "lib/TreeClass.php";
 
 $tree=new Tree;
 
 $tree->AddNode(" 0","root");
 
-$result = $db->get_results("select id,sez_name,figlio,ordine from {$_SERVER['sesname']}_sez order by figlio,ordine ");
+if ($userdata->LEVEL < 11) $showhiddensez="WHERE HIDE='0' ";
+
+$result = $db->get_results("select id,sez_name,figlio,ordine,redirect from {$_SERVER['sesname']}_sez {$showhiddensez}ORDER BY figlio,ordine ");
 
 if ($result) foreach ( $result as $row )
 {
 $tree->AddNode(" ".$row->id," ".$row->figlio);
 $forum[$row->id+0]=$row->sez_name;
+$red[$row->id]=$row->redirect;
 }
 
 /* Draw tree */
@@ -337,8 +340,9 @@ while (list ($key, $value) = each ($ris)) {
   if ($l >=0) 
     {
     $fid=trim($value['id'])+0;
+    if ($red[$fid]) {$link=$red[$fid];} else {$link=$IdAddOn.$fid;}
     if ($fid == $forumid) {$selected="selected";} else {$selected="";}	
-    $output .= "<option  $selected value='{$IdAddOn}{$fid}'>";
+    $output .= "<option  $selected value='{$link}'>";
     if ($l >0) { $output .= "&nbsp;&nbsp;|"; }
     $output .= str_repeat("-",$l*2).secure_v($forum[$fid])."\n";
     $output .= "</option>";
