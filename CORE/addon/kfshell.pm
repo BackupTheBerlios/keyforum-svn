@@ -291,7 +291,24 @@ sub DeCryptBlowFish {
 		$pezzo=substr($testo_criptato, 0, 8, "");
 		$testo_normale.=$cipher->decrypt($pezzo);
 	}
-	return unpack("I/a",$testo_normale);	
+	
+	#return unpack("I/a",$testo_normale);	
+
+my $var;
+eval {
+$var=unpack("I/a",$testo_normale); # cattura l'errore come un blocco try
+};
+if ($@) { #Se si è verificato un errore nel blocco viene salvato nella variabile $@
+print STDERR "Errore nel blocco unpack: $@\n";
+$@=''; # Resettiamo la variabile
+return undef; # Ritorniamo un valore nullo
+} else {
+return $var; #Se non ci sono errori si ritorna $var
+} 
+
+
+
+
 }
 
 
