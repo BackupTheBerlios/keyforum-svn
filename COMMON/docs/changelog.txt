@@ -1,6 +1,73 @@
 ================ KeyForum 0.43 Alfa ===========================
 
 
+2006-04-29
+mmorselli:				[MOD]  rinominati file .xlm in .KFU per gli utenti e .KFB per le board
+mmorselli:				[FIX]  corretto l'header in userexport.php, ora il file viene esportato con il nome corretto
+
+2006-03-22
+Luftw@ffer:			[ADD] gestione HIDE e REDIRECT
+
+2006-03-21
+mmorselli:				[MOD]  campi HIDE, ALIAS, REDIRECT nella creazione di sezioni
+
+2006-03-18
+dapuzz:				[ADD] woraround per modificare firme ed avatar dal pannello personale
+dapuzz:				[FIX] edreply.php non riconosce il login
+Luftw@ffer:			[FIX] Rilevazione corretta delle risposte del core in authuser.php
+
+2006-03-13
+mmorselli:				[FIX] migrator ora non perde più messaggi
+
+2006-02-28
+dapuzz:				[ADD] opzioni account personale
+
+2006-02-26
+Itami:				[ADD][CORE] tipo 6: messaggi privati
+
+2006-02-25
+dapuzz:				[FIX] "Altre board" riconosce anche le board con bin *
+
+2006-02-24
+mmorselli:				[MOD] migrator converte anche le sezioni e migra le date originali degli utenti
+
+2006-02-23
+dapuzz:				[FIX] la comunicazione con il core avviene tramite l'indirizzo e la porta specificata nella tab. config del db.
+
+2006-02-20
+mmorselli:				[MOD] reply box personalizzabile
+
+2006-02-09
+mmorselli:				[ADD] nome sessione inserito nelle variabili del webserver
+
+2006-02-08
+mmorselli:				[ADD] supporto a name based virtual host
+mmorselli:				[ADD] gli utenti di livello 10 (ADMIN) hanno l'icona "edit" nel titolo delle sezioni
+mmorselli:				[FIX] lmigrator: risolto il problema del flush e migliorato l'output
+mmorselli:				[FIX] addboard: l'id delle sezioni ora è autoincrementale
+
+2006-02-07
+dapuzz:				[MOD] varie aggiunte alle statistiche di fondo pagina
+dapuzz:				[MOD] visualizzazione moderatori aggiornata al nuovo core
+
+
+2006-02-05
+dapuzz:				[ADD] salva autenticazione nel cookie
+
+2006-02-03
+Itami:				[ADD][CORE] gestione tiket
+Luftw@ffer:			[MOD] modificato lo script che controlla le porte libere all'avvio
+
+2006-02-02
+mmorselli:				[MOD] spostate nella /lib esterna le librerie che fanno riferimento al core e ez_sql
+
+2006-01-30
+dapuzz:				[ADD] shownewmsg ultima ora
+
+2006-01-29
+Luftw@ffer:			[ADD] gestione webserver in SETUP
+Luftw@ffer:			[FIX] usa $_SERVER['SERVER_NAME'] se il bind è vuoto
+
 2006-01-28
 mmorselli:				[FIX] gestione stati PINNED, FIXED, HOME, SPECIAL, CLOSED per nuovo core
 
