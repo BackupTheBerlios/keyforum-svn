@@ -1,6 +1,10 @@
 <?
 include("testa.php");
 
+// massima durata in secondi dello script
+$globaltimeout=3600;
+
+ini_set("max_execution_time",$globaltimeout);
 
 // lingua
 $lang += load_lang('lang_newboard', $blanguage ); 
@@ -37,7 +41,7 @@ flush();
 
 if ( !$coresk->Send($corereq) ) $std->Error($lang['newbrd_senderr']);
 
-$coreresp = $coresk->Read(180);
+$coreresp = $coresk->Read($globaltimeout);
 
 if ( !$coreresp ) die($lang['newbrd_coretimeout']);
 
@@ -64,7 +68,7 @@ echo "<textarea rows='5' name='chiave' cols='70' readonly class='row2' style='bo
 echo "<b>".$lang['newbrd_brdid']."</b><br>";
 echo "<textarea rows='1' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$bid</textarea><br><br>";
 
-echo "<b>".$lang['newbrd_xmlfile']." (es $bname.xml) ".$lang['newbrd_infoxml'].": </b><br>";
+echo "<b>".$lang['newbrd_xmlfile']." (es $bname.kfb) ".$lang['newbrd_infoxml'].": </b><br>";
 echo "<textarea rows='15' name='chiave' cols='70' readonly class='row2' style='border: none; overflow: auto'>$xmlcont</textarea><br><br>";
 
 

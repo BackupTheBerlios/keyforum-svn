@@ -9,7 +9,7 @@ $lang['newbrd_senderr']  = "Errore in send!";
 $lang['newbrd_coretimeout']  = "il core non ha risposto nel tempo indicato";
 $lang['newbrd_pk']  = "chiave pubblica (da distribuire):";
 $lang['newbrd_brdid']  = "id board";
-$lang['newbrd_xmlfile']  = "file XML";
+$lang['newbrd_xmlfile']  = "file XML (.KFB = KeyForum Board)";
 $lang['newbrd_infoxml']  = "da distribuire/importare in addboard.php";
 $lang['newbrd_infoprvkey']  = "chiave privata ADMIN (conservare gelosamente e non distribuire): ";
 

@@ -75,7 +75,7 @@ function UserExport($userdata)
 {
 global $_REQUEST;
 // modificando gli header l'output viene salvato invece che visualizzato
-$filename = "userdata.xml";
+$filename = "userdata.kfu";
 
 if($_REQUEST['pwdexport']) {$userpwd=$_REQUEST['passwd'];}
 
@@ -90,7 +90,7 @@ $xmlcont="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
   </USERDATA>";
 
 header("Content-type: text/xml");
-header("Content-Disposition: attachment; " . $filename);
+header("Content-Disposition: attachment; filename=$filename");
      
 print($xmlcont);
 }
