@@ -84,6 +84,16 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = str_replace("[cuthere]", "<!--cuthere-->", $text);
  
  
+ // tabelle
+ $text = preg_replace( "#\[table\](.+?)\[/table\]#is", "<table>\\1</table>", $text ); 
+ $text = preg_replace( "#\[TABLE bd=(.+?) bgc=(.+?) bdc=(.+?) cp=(.+?) cs=(.+?)\](.+?)\[/TABLE\]#is", "<table border=\\1 bgcolor=\\2 bordercolor=\\3 cellpadding=\\4 cellspacing=\\5>\\6</table>", $text ); 
+ $text = preg_replace( "#\[tr\](.+?)\[/tr\]#is", "<tr>\\1</tr>", $text ); 
+ $text = preg_replace( "#\[td\](.+?)\[/td\]#is", "<td>\\1</td>", $text ); 
+ $text = preg_replace( "#\[td c=(\S+?)\s*\](.+?)\[/td\]#is", "<td colspan=\"\\1\">\\2</td>", $text ); 
+ $text = preg_replace( "#\[td r=(\S+?)\s*\](.+?)\[/td\]#is", "<td rowspan=\"\\1\">\\2</td>", $text ); 
+
+ 
+ 
   // bbcode di comodo
   $text = str_replace("[TOPIC-PINNED]", "<!--TOPIC-PINNED-->", $text);
   $text = str_replace("[TOPIC-CLOSED]", "<!--TOPIC-CLOSED-->", $text);
