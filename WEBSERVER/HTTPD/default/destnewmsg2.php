@@ -63,6 +63,24 @@ if ( $edit_val ) {
 	$mreq['IS_EDIT']='1';
 }
 
+// ****************** test: pinned
+
+// togliendo il commento a queste righe, il thread editato diventa PINNED
+
+/*
+
+$extvar=array();
+$extvar[update_thread]=1; // Eseguo l'update sul thread
+$extvar[pinned]=1; // pinned=1, tutte le altre variabili si auto-impostano a ZERO.
+// Inserisco la extvar come allegato del messaggio:
+$mreq['EXTVAR']=$core->Var2BinDump($extvar);
+
+*/
+
+// ****************** test: pinned - end
+
+
+
 /*$MD5_MSG=pack('H*',md5($PKEY.$_REQUEST['sezid'].$mreq[FORUM][ADDMSG]['AUTORE']."1".$EDIT_OF
         .$mreq[FORUM][ADDMSG]['DATE'].$_REQUEST['subject'].$_REQUEST['desc'].$_REQUEST['body'].$_REQUEST['firma'].$_REQUEST['avatar']));
 if ( $edit_val ) {
