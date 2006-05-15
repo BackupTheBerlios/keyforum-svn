@@ -27,6 +27,16 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
     $Testo = "";
     $Titolo = "";
   }
+  if(($userdata->LEVEL)>0)
+  {
+	  $Pinned="";
+	  $query="SELECT PINNED from {$SNAME}_msghe WHERE HASH='$EDITID';";
+	  $riga = $db->get_row($query);
+	  if ($riga)
+	  {
+	    $Pinned=$riga->PINNED;
+	  }
+   }
 
 ?>
 <tr><td>
@@ -97,6 +107,13 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
 	  <? echo "<td>".$lang['edmsg_signature']."</td>"; ?>
 	  <td><textarea cols=70 rows=2 name=firma></textarea></td>
         </tr>
+        <? if(($userdata->LEVEL)>0) { ?>
+        <tr>
+          <td></td>
+          <? if($Pinned) $Pinned=" checked='checked'"; ?>
+          <? echo "<td><input name='pinned' type='checkbox' value='".$lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']."</td>"; ?>
+        </tr>
+        <? } ?>
       </table>
     </div>
     <br />

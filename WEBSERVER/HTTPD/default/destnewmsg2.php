@@ -6,6 +6,8 @@ if(is_array($lang)) { $lang += $std->load_lang('lang_reply_dest', $blanguage );}
 
 $forum_id = pack('H*',$config[SHARE][$SNAME][ID]);
 
+$EDITID = mysql_real_escape_string(pack("H*",$_REQUEST["edit_of"]));
+
 if ( strlen($_REQUEST['edit_of'])==32 ) {
     $EDIT_OF=pack("H32",$_REQUEST['edit_of']);
     if ( strlen($EDIT_OF) == 16 )
@@ -63,19 +65,23 @@ if ( $edit_val ) {
 	$mreq['IS_EDIT']='1';
 }
 
+
 // ****************** test: pinned
 
-// togliendo il commento a queste righe, il thread editato diventa PINNED
-
-/*
-
-$extvar=array();
-$extvar[update_thread]=1; // Eseguo l'update sul thread
-$extvar[pinned]=1; // pinned=1, tutte le altre variabili si auto-impostano a ZERO.
-// Inserisco la extvar come allegato del messaggio:
-$mreq['EXTVAR']=$core->Var2BinDump($extvar);
-
-*/
+$query="SELECT PINNED from {$SNAME}_msghe WHERE HASH='$EDITID';";
+$riga = $db->get_row($query);
+if ($riga) $Pinned=$riga->PINNED;
+else $Pinned=0;
+if($_REQUEST['pinned'] xor $Pinned)
+{
+	if($_REQUEST['pinned']) $Pinned=1;
+	else $Pinned=0;
+	$extvar=array();
+	$extvar[update_thread]=1; // Eseguo l'update sul thread
+	$extvar[pinned]=$Pinned; // pinned=1, tutte le altre variabili si auto-impostano a ZERO.
+	// Inserisco la extvar come allegato del messaggio:
+	$mreq['EXTVAR']=$core->Var2BinDump($extvar);
+}
 
 // ****************** test: pinned - end
 
@@ -108,7 +114,7 @@ $risp = $core->AddMsg($mreq);
 if ( empty($risp['ERRORE']) ) {		// ok, redirect
 	if ($_REQUEST['edit_of']) $THR_ID=$_REQUEST['edit_of'];
 	else $THR_ID=bin2hex($risp['MD5']);
-    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$THR_ID."&pag=last#end_page";
+    $rurl="showmsg.php?SEZID=".$_REQUEST['sezid']."&THR_ID=".$THR_ID;
     $std->Redirect($lang['reply_thanks'],$rurl,$lang['reply_ok'],$lang['reply_ok']);
 }
 else $std->Error("Error adding reply, error code: " . $risp[ERRORE],$_REQUEST['body']);
