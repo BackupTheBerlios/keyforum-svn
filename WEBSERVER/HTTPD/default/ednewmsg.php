@@ -30,11 +30,13 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
   if(($userdata->LEVEL)>0)
   {
 	  $Pinned="";
-	  $query="SELECT PINNED from {$SNAME}_msghe WHERE HASH='$EDITID';";
+	  $Fixed="";
+	  $query="SELECT PINNED, FIXED from {$SNAME}_msghe WHERE HASH='$EDITID';";
 	  $riga = $db->get_row($query);
 	  if ($riga)
 	  {
 	    $Pinned=$riga->PINNED;
+	    $Fixed=$riga->FIXED;
 	  }
    }
 
@@ -110,8 +112,11 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
         <? if(($userdata->LEVEL)>0) { ?>
         <tr>
           <td></td>
-          <? if($Pinned) $Pinned=" checked='checked'"; ?>
-          <? echo "<td><input name='pinned' type='checkbox' value='".$lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']."</td>"; ?>
+          <? if($Pinned) $Pinned=" checked='checked'";
+             if($Fixed) $Fixed=" checked='checked'"; ?>
+          <td><input name='pinned' type='checkbox' value='<? echo $lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']; ?>
+              <input name='fixed' type='checkbox' value='<? echo $lang['edmsg_fixed']."'".$Fixed." /> ".$lang['edmsg_fixed']; ?>
+          </td>
         </tr>
         <? } ?>
       </table>

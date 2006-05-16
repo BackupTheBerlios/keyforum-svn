@@ -68,19 +68,36 @@ if ( $edit_val ) {
 
 // ****************** test: pinned
 
-$query="SELECT PINNED from {$SNAME}_msghe WHERE HASH='$EDITID';";
+$query="SELECT PINNED, FIXED from {$SNAME}_msghe WHERE HASH='$EDITID';";
 $riga = $db->get_row($query);
-if ($riga) $Pinned=$riga->PINNED;
-else $Pinned=0;
+if ($riga)
+{
+	$Pinned=$riga->PINNED;
+	$Fixed=$riga->FIXED;
+}else{
+	$Pinned=0;
+	$Fixed=0;
+}
+$change=0;
+$extvar=array();
 if($_REQUEST['pinned'] xor $Pinned)
 {
+	$change=1;
 	if($_REQUEST['pinned']) $Pinned=1;
 	else $Pinned=0;
-	$extvar=array();
+}
+if($_REQUEST['fixed'] xor $Fixed)
+{
+	$change=1;
+	if($_REQUEST['fixed']) $Fixed=1;
+	else $Fixed=0;
+}
+if($change)
+{
 	$extvar[update_thread]=1; // Eseguo l'update sul thread
-	$extvar[pinned]=$Pinned; // pinned=1, tutte le altre variabili si auto-impostano a ZERO.
-	// Inserisco la extvar come allegato del messaggio:
-	$mreq['EXTVAR']=$core->Var2BinDump($extvar);
+	$extvar[pinned]=$Pinned;
+	$extvar[fixed]=$Fixed;
+	$mreq['EXTVAR']=$core->Var2BinDump($extvar); // Inserisco la extvar come allegato del messaggio:
 }
 
 // ****************** test: pinned - end
