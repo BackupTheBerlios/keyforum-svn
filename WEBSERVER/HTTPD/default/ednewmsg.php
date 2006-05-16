@@ -117,7 +117,8 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
           <? if($Pinned) $Pinned=" checked='checked'";
              if($Fixed) $Fixed=" checked='checked'";
              if($Home) $Home=" checked='checked'"; ?>
-          <td><input name='pinned' type='checkbox' value='<? echo $lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']; ?>
+          <td><input name='extvar' type='hidden' value='1' />
+              <input name='pinned' type='checkbox' value='<? echo $lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']; ?>
               <input name='fixed' type='checkbox' value='<? echo $lang['edmsg_fixed']."'".$Fixed." /> ".$lang['edmsg_fixed']; ?>
               <input name='home' type='checkbox' value='<? echo $lang['edmsg_home']."'".$Home." /> ".$lang['edmsg_home']; ?>
           </td>
