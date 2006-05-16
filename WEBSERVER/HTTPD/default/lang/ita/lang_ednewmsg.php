@@ -11,6 +11,7 @@ $lang['edmsg_avatar']  = "Avatar*:";
 $lang['edmsg_signature']  = "Firma*:";
 $lang['edmsg_pinned']  = "Pinned";
 $lang['edmsg_fixed']  = "Fixed";
+$lang['edmsg_home']  = "Home";
 $lang['edmsg_submit']  = "Modifica messaggio";
 $lang['edmsg_info1']  = "*Basta che la firma o l'avatat contengano un valore per cambiare nel database il parametro ad entrambi.";
 $lang['edmsg_info2']  = "Se vuoi cambiare la firma ma non l'avatar, devi riscriverli entrambi.";
