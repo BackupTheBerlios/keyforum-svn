@@ -138,17 +138,26 @@ if($userdata->LEVEL < 11) {$showhiddensez="AND HIDE='0'";}
           $subsections="<br><i>".$lang['subforums']."</i><b><a ".$link."'>".secure_v($subsezval->SEZ_NAME)."</a></b>";
         $notfirst=1;
       }
-      $querymods="SELECT membri.AUTORE as 'MOD', membri.HASH as 'MOD_HASH' FROM {$SNAME}_permessi as permessi, {$SNAME}_membri as membri WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."' AND membri.HASH=permessi.AUTORE;";
+      $querymods="SELECT {$SNAME}_membri.AUTORE as 'MOD', {$SNAME}_membri.HASH as 'MOD_HASH', VALORE
+      		FROM {$SNAME}_permessi
+      		LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
+      		WHERE CHIAVE_B='IS_MOD' AND CHIAVE_A='".$sezval->ID."'
+      		ORDER BY {$SNAME}_permessi.autore ASC,{$SNAME}_permessi.DATE DESC;";
       $mods = $db->get_results($querymods);
       $moderators="";
       $notfirst="";
+      $buffer="";
       if($mods)foreach($mods as $modsval) {
-      	$modhash= @unpack("H32alfa",$modsval->MOD_HASH);
-      	if($notfirst)
-	  $moderators.=", <a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$modsval->MOD."</a>";
-	else
-	  $moderators=" <a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$modsval->MOD."</a>";
-        $notfirst=1;
+      	if(($modsval->MOD_HASH != $buffer) and ($modsval->VALORE))
+      	{
+		$modhash= @unpack("H32alfa",$modsval->MOD_HASH);
+		if($notfirst)
+		  $moderators.=", <a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$modsval->MOD."</a>";
+		else
+		  $moderators=" <a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$modsval->MOD."</a>";
+		$notfirst=1;
+	}
+	$buffer=$modsval->MOD_HASH;
       }
       if($sezval->REDIRECT){
       	$link="target='_blank' href='".$sezval->REDIRECT;

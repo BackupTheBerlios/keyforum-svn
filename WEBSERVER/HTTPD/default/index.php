@@ -52,14 +52,13 @@ $tree->AddNode(" 0","root");
 
 if($userdata->LEVEL < 11) {$showhiddensez="WHERE HIDE='0'";}
 
-$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM, REDIRECT,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH' 
+$query = "SELECT id, sez_name, SEZ_DESC, FIGLIO,  SEZ_DESC, REPLY_NUM, ONLY_AUTH, THR_NUM, REDIRECT,{$SNAME}_membri.autore as 'MOD', {$SNAME}_permessi.autore as 'MOD_HASH', {$SNAME}_permessi.VALORE as 'VALORE'
  from {$SNAME}_sez 
  LEFT OUTER JOIN {$SNAME}_permessi ON ( {$SNAME}_sez.id = {$SNAME}_permessi.chiave_a and {$SNAME}_permessi.chiave_b = 'IS_MOD' )
  LEFT OUTER JOIN {$SNAME}_membri on {$SNAME}_permessi.autore = {$SNAME}_membri.hash
  {$showhiddensez}
- order by FIGLIO,ORDINE ";
+ order by FIGLIO ASC,ORDINE ASC,sez_name ASC,MOD_HASH ASC,{$SNAME}_permessi.DATE DESC ";
 $result = $db->get_results($query);
-
 if ($result) foreach ( $result as $row )
 {
 	$tree->AddNode(" ".$row->id," ".$row->FIGLIO);
@@ -80,7 +79,7 @@ if ($result) foreach ( $result as $row )
 		,'last_action' => $last_action[$row->id+0]
 		,'num_figli' => 0
 		);
-		$mod[$row->id+0][] = Array("Nick"=>$row->MOD, "Hash"=>$row->MOD_HASH);
+	$mod[$row->id+0][] = Array("Nick"=>$row->MOD, "Hash"=>$row->MOD_HASH, "Value"=>$row->VALORE);
 }
 unset($last_action);
 
@@ -227,10 +226,15 @@ function draw_forum($sez,$indice)
 			{
 				
 			}
+			$buffer="";
 			foreach($mod[$sez['SEZ_ID']] as $key=>$value)
 			{
-				$modhash= @unpack("H32alfa",$value["Hash"]);
-				$moderators.= "<a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$value["Nick"]."</a>, ";
+				if(($value["Hash"] != $buffer) and ($value["Value"]))
+				{
+					$modhash= @unpack("H32alfa",$value["Hash"]);
+					$moderators.= "<a href='showmember.php?MEM_ID=".$modhash["alfa"]."'>".$value["Nick"]."</a>, ";
+				}
+				$buffer=$value["Hash"];
 			}
 			$moderators = substr($moderators,0,-2);
 			
