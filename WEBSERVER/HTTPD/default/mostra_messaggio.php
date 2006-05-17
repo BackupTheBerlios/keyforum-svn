@@ -10,6 +10,15 @@ function printmsg($MSG) {
   global $closed;
   global $SNAME;
 
+  $query="SELECT VALORE as 'is_mod'
+  	FROM {$SNAME}_permessi
+  	WHERE AUTORE='".$MSG->memhash."'
+  	AND {$SNAME}_permessi.chiave_a = '{$_GET['SEZID']}'
+  	AND {$SNAME}_permessi.chiave_b ='IS_MOD'
+  	ORDER BY DATE DESC;";
+  $riga=$db->get_row($query);
+  $MSG->is_mod=$riga->is_mod;
+  
   $usercolor = $std->GetUserColor($MSG->memhash);
   $mio_nick = $_SESSION[$SNAME]['sess_nick'];
   if ($MSG->date)
