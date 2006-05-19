@@ -32,13 +32,15 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
 	  $Pinned="";
 	  $Fixed="";
 	  $Home="";
-	  $query="SELECT PINNED, FIXED, HOME from {$SNAME}_msghe WHERE HASH='$EDITID';";
+	  $Lock="";
+	  $query="SELECT PINNED, FIXED, HOME, block_date from {$SNAME}_msghe WHERE HASH='$EDITID';";
 	  $riga = $db->get_row($query);
 	  if ($riga)
 	  {
 	    $Pinned=$riga->PINNED;
 	    $Fixed=$riga->FIXED;
 	    $Home=$riga->HOME;
+	    $Lock=$riga->block_date;
 	  }
    }
 
@@ -116,11 +118,13 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
           <td></td>
           <? if($Pinned) $Pinned=" checked='checked'";
              if($Fixed) $Fixed=" checked='checked'";
-             if($Home) $Home=" checked='checked'"; ?>
+             if($Home) $Home=" checked='checked'";
+             if($Lock) $Lock=" checked='checked'"; ?>
           <td><input name='extvar' type='hidden' value='1' />
               <input name='pinned' type='checkbox' value='<? echo $lang['edmsg_pinned']."'".$Pinned." /> ".$lang['edmsg_pinned']; ?>
               <input name='fixed' type='checkbox' value='<? echo $lang['edmsg_fixed']."'".$Fixed." /> ".$lang['edmsg_fixed']; ?>
               <input name='home' type='checkbox' value='<? echo $lang['edmsg_home']."'".$Home." /> ".$lang['edmsg_home']; ?>
+              <input name='lock' type='checkbox' value='<? echo $lang['edmsg_lock']."'".$Lock." /> ".$lang['edmsg_lock']; ?>
           </td>
         </tr>
         <? } ?>

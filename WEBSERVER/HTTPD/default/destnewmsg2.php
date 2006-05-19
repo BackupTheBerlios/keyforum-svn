@@ -71,17 +71,19 @@ if ( $edit_val ) {
 
 if($_REQUEST['extvar'])
 {
-	$query="SELECT PINNED, FIXED, HOME from {$SNAME}_msghe WHERE HASH='$EDITID';";
+	$query="SELECT PINNED, FIXED, HOME, block_date from {$SNAME}_msghe WHERE HASH='$EDITID';";
 	$riga = $db->get_row($query);
 	if ($riga)
 	{
 		$Pinned=$riga->PINNED;
 		$Fixed=$riga->FIXED;
 		$Home=$riga->HOME;
+		$Lock=$riga->block_date;
 	}else{
 		$Pinned=0;
 		$Fixed=0;
 		$Home=0;
+		$Lock=0;
 	}
 	$change=0;
 	$extvar=array();
@@ -103,12 +105,36 @@ if($_REQUEST['extvar'])
 		if($_REQUEST['home']) $Home=1;
 		else $Home=0;
 	}
+	if($_REQUEST['lock'] xor $Lock)
+	{
+		if($_REQUEST['lock'])
+		{
+			$core=new CoreSock;
+			if (@$core->Connect())
+			{
+				// Questa parte mi serve solo per ottenere una risposta dal core, così da leggerne il timestamp GMT
+				$idquery="SELECT value FROM config WHERE MAIN_GROUP='SHARE' AND SUBKEY='".$SNAME."' AND FKEY='ID';";
+				$idriga = $db->get_var($idquery);
+				$req_nod[INFO][FORUM][0]=@pack("H*", $idriga);
+                 		$core->Send($req_nod);
+				$risp=$core->Read();
+				// Fine parte fittizia
+				
+				$Lock=$risp['CORE']['INFO']['GMT_TIME'];
+				$change=1;
+			}
+		}else{
+			$Lock=0;
+			$change=1;
+		}
+	}
 	if($change)
 	{
 		$extvar[update_thread]=1; // Eseguo l'update sul thread
 		$extvar[pinned]=$Pinned;
 		$extvar[fixed]=$Fixed;
 		$extvar[home]=$Home;
+		$extvar[block_date]=$Lock;
 		$mreq['EXTVAR']=$core->Var2BinDump($extvar); // Inserisco la extvar come allegato del messaggio:
 	}
 }
