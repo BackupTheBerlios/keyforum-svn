@@ -12,7 +12,7 @@ function printmsg($MSG) {
 
   $query="SELECT VALORE as 'is_mod'
   	FROM {$SNAME}_permessi
-  	WHERE AUTORE='".$MSG->memhash."'
+  	WHERE AUTORE='".mysql_real_escape_string($MSG->memhash)."'
   	AND {$SNAME}_permessi.chiave_a = '{$_GET['SEZID']}'
   	AND {$SNAME}_permessi.chiave_b ='IS_MOD'
   	ORDER BY DATE DESC;";
