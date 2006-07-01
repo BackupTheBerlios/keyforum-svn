@@ -1,5 +1,5 @@
 <?
-function printmsg($MSG) {
+function printmsg($MSG,$postlink) {
   global $GLOBALS;
   global $blanguage;
   global $lang;
@@ -89,7 +89,7 @@ $membertitle=$std->MemberTitle($member_titles,$MSG->msg_num);
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
 <tr>
  <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></span>
-   <a id='post_{$postid}'></a>
+   <a id='post_{$postid}'></a><a name='{$postlink}'>
  </td>
  <td class='row4' valign='top' width='99%'>
   <div align='left' class='row4' style='float:left;padding-top:4px;padding-bottom:4px'>
