@@ -193,73 +193,99 @@ function FastReply() {
 
 
 $MSGID=pack("H*",$_REQUEST['THR_ID']);
-$query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autore, newmsg.SUBTITLE as subtitle,"
-." newmsg.BODY as body, (msghe.DATE+".GMT_TIME.") as 'date', membri.avatar AS 'avatar', membri.firma AS 'firma',"
-." (membri.DATE+".GMT_TIME.") AS 'regdate', membri.msg_num AS 'msg_num',membri.title as 'gruppo',"
-." membri.is_auth AS 'is_auth', membri.HASH AS 'memhash', newmsg.AUTORE AS 'real_autore', (newmsg.DATE+".GMT_TIME.") AS 'real_date',"
-." newmsg.SEZ AS 'SEZ', newmsg.EDIT_OF as edit_of, msghe.reply_num as reply_num, msghe.block_date as closed"
-." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri
-   WHERE newmsg.EDIT_OF=msghe.HASH"
-." AND newmsg.EDIT_OF='".mysql_escape_string($MSGID)."'"
-." AND newmsg.visibile='1'"
-." AND membri.HASH=msghe.AUTORE;";
-$riga=$db->get_row($query);
-
-$closed=$riga->closed;
-
-
-if (!$riga) {
-  echo "".$lang['shmsg_msgnotfound']."\n\t</td>\n</tR>\n";
-  include ("end.php");
-  exit(0);
+if($_REQUEST['view']=="getnewpost")
+{
+	$pagelink="";
+	$query="SELECT VALORE FROM temp WHERE CHIAVE='".$_REQUEST['THR_ID']."';";
+	$numrisp=$db->get_var($query);
+	if($numrisp)
+	{
+		$page_num=intval(($numrisp+1) / $PostXPage);
+		if($page_num) $pagelink="&pag=".$page_num;
+		$postlink=$numrisp+1;
+		echo "<SCRIPT LANGUAGE='JavaScript'>
+			<!-- 
+			window.location='?SEZID=".$_REQUEST['SEZID']."&THR_ID=".$_REQUEST['THR_ID']."&".$pagelink."#".$postlink."';
+			// -->
+		</script>";
+	}
 }
+else
+{
+
+	$query="SELECT newmsg.HASH as hash,newmsg.title as title, membri.AUTORE as autore, newmsg.SUBTITLE as subtitle,"
+	." newmsg.BODY as body, (msghe.DATE+".GMT_TIME.") as 'date', membri.avatar AS 'avatar', membri.firma AS 'firma',"
+	." (membri.DATE+".GMT_TIME.") AS 'regdate', membri.msg_num AS 'msg_num',membri.title as 'gruppo',"
+	." membri.is_auth AS 'is_auth', membri.HASH AS 'memhash', newmsg.AUTORE AS 'real_autore', (newmsg.DATE+".GMT_TIME.") AS 'real_date',"
+	." newmsg.SEZ AS 'SEZ', newmsg.EDIT_OF as edit_of, msghe.reply_num as reply_num, msghe.block_date as closed"
+	." FROM {$SNAME}_msghe AS msghe,{$SNAME}_newmsg AS newmsg,{$SNAME}_membri AS membri
+	   WHERE newmsg.EDIT_OF=msghe.HASH"
+	." AND newmsg.EDIT_OF='".mysql_escape_string($MSGID)."'"
+	." AND newmsg.visibile='1'"
+	." AND membri.HASH=msghe.AUTORE;";
+	$riga=$db->get_row($query);
+
+	$closed=$riga->closed;
 
 
-/*
-  Preparo le variabili per la selezione delle pagine...
-*/
-$Num3d = $riga->reply_num;
-$NumPag = intval(($Num3d-1) / $PostXPage);
-$CurrPag = $_REQUEST["pag"];
-if ($CurrPag=="last")
-  $CurrPag = $NumPag;
-if (! is_numeric($CurrPag))
-  $CurrPag = 0;
-if ($CurrPag < 0) $CurrPag = 0;
-
-$db->query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$Num3d,".(time()+2592000).");");
-
-$db->query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
-
-// *** convertire searcher.pm prima di attivare questa funzione ***
-//echo "<a href=\"searcher.pm?MODO=2&amp;REP_OF=".urlencode($MSGID)."\">";
-//echo $lang['shmsg_findnewmsg']."</a><br />";
+	if (!$riga) {
+	  echo "".$lang['shmsg_msgnotfound']."\n\t</td>\n</tR>\n";
+	  include ("end.php");
+	  exit(0);
+	}
 
 
-  PageSelect(1);
+	/*
+	  Preparo le variabili per la selezione delle pagine...
+	*/
+	$Num3d = $riga->reply_num;
+	$NumPag = intval(($Num3d-1) / $PostXPage);
+	$CurrPag = $_REQUEST["pag"];
+	if ($CurrPag=="last")
+	  $CurrPag = $NumPag;
+	if (! is_numeric($CurrPag))
+	  $CurrPag = 0;
+	if ($CurrPag < 0) $CurrPag = 0;
+	$postlink=$CurrPag * $PostXPage + 1;
 
-  if ($CurrPag<1)
-    printmsg($riga);
+	$db->query("replace temp(chiave,valore,TTL) values ('".$_REQUEST['THR_ID']."',$Num3d,".(time()+2592000).");");
+
+	$db->query("update {$SNAME}_msghe set read_num=read_num+1 WHERE HASH='".mysql_escape_string($MSGID)."';");
+
+	// *** convertire searcher.pm prima di attivare questa funzione ***
+	//echo "<a href=\"searcher.pm?MODO=2&amp;REP_OF=".urlencode($MSGID)."\">";
+	//echo $lang['shmsg_findnewmsg']."</a><br />";
 
 
-$query="SELECT edit.TITLE AS title, edit.BODY AS body, membri.AUTORE as autore, "
-." (origi.DATE+".GMT_TIME.") as 'date', (membri.DATE+".GMT_TIME.") AS regdate, membri.avatar AS avatar, membri.firma AS firma,"
-." membri.is_auth AS 'is_auth', membri.msg_num AS 'msg_num',"
-." membri.title as 'gruppo', membri.HASH AS 'memhash',origi.HASH AS 'hash', edit.REP_OF AS 'repof',"
-." edit.EDIT_OF AS 'edit_of', edit.HASH AS 'real_hash', edit.AUTORE AS 'real_autore', (edit.DATE+".GMT_TIME.") AS 'real_date'"
-." FROM `{$SNAME}_reply` AS origi, `{$SNAME}_reply` AS edit, `{$SNAME}_membri` AS membri
-   WHERE edit.EDIT_OF=origi.HASH"
-." AND membri.HASH=origi.AUTORE"
-." AND edit.REP_OF='".mysql_escape_string($MSGID)."'"
-." AND edit.visibile='1'"
-." ORDER BY origi.DATE"
-." LIMIT ".($CurrPag*$PostXPage).",$PostXPage;";
+	  PageSelect(1);
 
-$risultato=$db->get_results($query);
-  if($risultato)foreach($risultato as $riga)  printmsg($riga);
+	  if ($CurrPag<1)
+	    printmsg($riga,$postlink-1);
 
-  PageSelect(2);
-  FastReply();
+
+	$query="SELECT edit.TITLE AS title, edit.BODY AS body, membri.AUTORE as autore, "
+	." (origi.DATE+".GMT_TIME.") as 'date', (membri.DATE+".GMT_TIME.") AS regdate, membri.avatar AS avatar, membri.firma AS firma,"
+	." membri.is_auth AS 'is_auth', membri.msg_num AS 'msg_num',"
+	." membri.title as 'gruppo', membri.HASH AS 'memhash',origi.HASH AS 'hash', edit.REP_OF AS 'repof',"
+	." edit.EDIT_OF AS 'edit_of', edit.HASH AS 'real_hash', edit.AUTORE AS 'real_autore', (edit.DATE+".GMT_TIME.") AS 'real_date'"
+	." FROM `{$SNAME}_reply` AS origi, `{$SNAME}_reply` AS edit, `{$SNAME}_membri` AS membri
+	   WHERE edit.EDIT_OF=origi.HASH"
+	." AND membri.HASH=origi.AUTORE"
+	." AND edit.REP_OF='".mysql_escape_string($MSGID)."'"
+	." AND edit.visibile='1'"
+	." ORDER BY origi.DATE"
+	." LIMIT ".($CurrPag*$PostXPage).",$PostXPage;";
+
+	$risultato=$db->get_results($query);
+	  if($risultato)foreach($risultato as $riga)
+		{
+			printmsg($riga,$postlink);
+			$postlink++;
+		}
+
+	  PageSelect(2);
+	  FastReply();
+}
 ?>
 </td>
 </tr>

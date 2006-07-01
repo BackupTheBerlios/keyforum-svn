@@ -312,8 +312,12 @@ if($risultato) foreach($risultato as $riga)
   $write_date=$std->PostDate($riga->write_date);
   
   $tmp = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
+  $gotolu="";
   if (($tmp)OR($tmp==='0'))
+  {
     $PostStatImage = ($tmp < $riga->reply_num ? "f_norm" : "f_norm_no");
+    $gotolu=($tmp < $riga->reply_num ? "<a href='showmsg.php?SEZID=".$SEZID."&amp;THR_ID=".$iden['hex']."&amp;view=getnewpost'><img src='img/newpost.gif' alt='Go to last unread'></a>" : "");
+  }
   else
     $PostStatImage = "f_norm";
 	
@@ -398,7 +402,7 @@ $stop_not_pin=true;
 	<table border='0' cellpadding='2' cellspacing='0'>
 		<tbody>
 		<tr>
-			<td align='left' nowrap='nowrap'>
+			<td align='left' nowrap='nowrap'><?=$gotolu?>
 			<?=$pinned_str?><a href='showmsg.php?SEZID=<?=$SEZID?>&amp;THR_ID=<?=$iden['hex']?>' title='<?=$lang['topic_start'] . $write_date?>'>
 			<?=secure_v($title)?></a>
 			<?=$pinned_close?>

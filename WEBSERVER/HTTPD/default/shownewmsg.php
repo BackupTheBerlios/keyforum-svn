@@ -190,11 +190,13 @@ if($risultato) foreach($risultato as $riga ) {
   
   $num = $db->get_var("select valore from temp where chiave='".$iden['hex']."';");
   //Default data
+  $gotolu="";
   if (($num)OR($num==='0')) 
   {
 	$PostStatImage = ($num < $riga->reply_num ? "f_norm" : "f_norm_no");
     $nickhash =($riga->nickhash ? unpack("H32alfa",$riga->nickhash) : '');
     $dnickhash=($riga->dnickhash ? unpack("H32alfa",$riga->dnickhash) : '');
+    $gotolu=($num < $riga->reply_num ? " <a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."&amp;view=getnewpost'><img src='img/newpost.gif' alt='Go to last unread'></a> " : "");
   }
   else
   $PostStatImage = "f_norm";
@@ -241,7 +243,7 @@ if($risultato) foreach($risultato as $riga ) {
 <tr>
   <td align='center' class='row2'><img src='img/$PostStatImage.gif' alt=''></td>
   <td align='center' class='row2'>$post_icon</td>
-  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>$pinned_str<a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
+  <td align='left' class='row2'><table border='0' cellpadding='2px' cellspacing='0'><tbody><tr><td align='left' nowrap='nowrap'>".$gotolu."$pinned_str<a href='showmsg.php?SEZID=".$riga->sez."&amp;THR_ID=".$iden['hex']."' title='".$lang['topic_start']." {$write_date}'>".secure_v($title)."</a>$pinned_close</td>".$Pages."</tr></tbody></table>&nbsp;".secure_v($riga->subtitle)."</td>
   <td align=center class='row4'><a href='sezioni.php?SEZID=".$riga->sez."'>".$sezname[$riga->sez]."</td>
   <td align=center class='row4'><a href=\"javascript:who_posted('{$iden['hex']}',$riga->sez)\">".$riga->reply_num."</a></td>
   <td align=center class='row4'><small><u><a href='showmember.php?MEM_ID=".$nickhash['alfa']."'>".secure_v($riga->nick)."</a></u></small></td>
