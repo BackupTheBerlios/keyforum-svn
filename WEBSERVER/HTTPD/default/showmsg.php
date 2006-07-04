@@ -198,7 +198,7 @@ if($_REQUEST['view']=="getnewpost")
 	$pagelink="";
 	$query="SELECT VALORE FROM temp WHERE CHIAVE='".$_REQUEST['THR_ID']."';";
 	$numrisp=$db->get_var($query);
-	if($numrisp)
+	if(($numrisp)OR($numrisp==='0'))
 	{
 		$page_num=intval(($numrisp+1) / $PostXPage);
 		if($page_num) $pagelink="&pag=".$page_num;
