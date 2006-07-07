@@ -170,7 +170,7 @@ if($userdata->LEVEL < 11) {$showhiddensez="AND HIDE='0'";}
 			<img src="img/bf_new.gif" alt="">
 		</td>
         <td class="row4">
-		<b><a "<?=$link?>'"><?=secure_v($sezval->SEZ_NAME)?></a></b><br />
+		<b><a <?=$link?>'><?=secure_v($sezval->SEZ_NAME)?></a></b><br />
 		<span class="desc">
 			<?=secure_v($sezval->SEZ_DESC).$subsections?><br />
 			<font color="#808080">
