@@ -103,11 +103,14 @@ while( preg_match( "#\n?\[list=(a|A|i|I|1)\](.+?)\[/list\]\n?#ies" , $text ) )
   $text = str_replace("[TOPIC-HOME]", "<!--TOPIC-HOME-->", $text);
  
   // EMOTICON
-
+  static $emo_res;
+  if(!$emo_res)
+  {
   $query="SELECT id,typed,image,internal from {$SNAME}_emoticons";
-  $res=$db->get_results($query);
+  $emo_res=$db->get_results($query);
+  }
 
-  if($res) foreach($res as $row)
+  if($emo_res) foreach($emo_res as $row)
   {
 	$emo=$row->typed;
 	$img=$row->image;
