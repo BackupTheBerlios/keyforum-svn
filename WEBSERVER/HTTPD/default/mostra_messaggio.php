@@ -9,17 +9,26 @@ function printmsg($MSG,$postlink) {
   global $member_titles;
   global $closed;
   global $SNAME;
+  static $utenti;
 
+ if(!isset($utenti[$MSG->memhash]->is_mod))
+ {
   $query="SELECT VALORE as 'is_mod'
   	FROM {$SNAME}_permessi
   	WHERE AUTORE='".mysql_real_escape_string($MSG->memhash)."'
   	AND {$SNAME}_permessi.chiave_a = '{$_GET['SEZID']}'
   	AND {$SNAME}_permessi.chiave_b ='IS_MOD'
-  	ORDER BY DATE DESC;";
-  $riga=$db->get_row($query);
-  $MSG->is_mod=$riga->is_mod;
+  	ORDER BY DATE DESC
+	LIMIT 1;";
+  $utenti[$MSG->memhash]->is_mod = ($db->get_row($query)->is_mod ? $db->get_row($query)->is_mod : 0);
+ }
+  $MSG->is_mod = $utenti[$MSG->memhash]->is_mod;
   
-  $usercolor = $std->GetUserColor($MSG->memhash);
+  if(!isset($utente[$MSG->memhash]->usercolor))
+  {
+	$utenti[$MSG->memhash]->usercolor = $std->GetUserColor($MSG->memhash);
+  }
+  $usercolor = $utenti[$MSG->memhash]->usercolor;
   $mio_nick = $_SESSION[$SNAME]['sess_nick'];
   if ($MSG->date)
     $write_date=strftime("%d/%m/%y  - %H:%M:%S",$MSG->date);
@@ -89,7 +98,7 @@ $membertitle=$std->MemberTitle($member_titles,$MSG->msg_num);
 <table width='100%' border='0' cellspacing='1' cellpadding='3'>
 <tr>
  <td valign='middle' class='row4' width='1%'><span class='normalname'><u>{$autore}</u></span>
-   <a id='post_{$postid}'></a><a name='{$postlink}'>
+   <a id='post_{$postid}' name='{$postlink}'></a>
  </td>
  <td class='row4' valign='top' width='99%'>
   <div align='left' class='row4' style='float:left;padding-top:4px;padding-bottom:4px'>
