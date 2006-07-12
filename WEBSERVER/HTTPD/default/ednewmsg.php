@@ -105,7 +105,7 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
 	  <? echo "<td>".$lang['edmsg_body']."</td>"; ?>
 	  <td><textarea name="body" rows="15" cols="70" wrap="virtual"><? echo $Testo; ?></textarea></tD>
         </tr>
-        <tr>
+<!--        <tr>
 	  <? echo "<td>".$lang['edmsg_avatar']."</td>"; ?>
 	  <td><input type=text name=avatar size=50 class=forminput></td>
         </tr>
@@ -113,6 +113,7 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
 	  <? echo "<td>".$lang['edmsg_signature']."</td>"; ?>
 	  <td><textarea cols=70 rows=2 name=firma></textarea></td>
         </tr>
+-->
         <? if(($userdata->LEVEL)>0) { ?>
         <tr>
           <td></td>
@@ -133,8 +134,10 @@ $lang += $std->load_lang('lang_ednewmsg', $blanguage );
     <br />
     <center>
       <? echo "<input type='submit' name='submit' value='".$lang['edmsg_submit']."' accesskey='s' /><br />"; ?>
+<!--
 <? echo "".$lang['edmsg_info1']."<bR>"; ?>
 <? echo "".$lang['edmsg_info2']."<br>"; ?>
+-->
     </center>
     <br />
   </div>

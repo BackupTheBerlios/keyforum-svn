@@ -147,6 +147,7 @@ echo<<<EOF
 	  <input type="hidden" name="boxsize" value="{$userdata->TBOX_ROWS}:{$userdata->TBOX_COLS}">
           </td>
         </tr>
+<!--
         <tr>
 	  <td>{$lang['reply_avatar']}</td>
           <td><input type="text" name="avatar" size="50" class="forminput" /></td>
@@ -155,14 +156,17 @@ echo<<<EOF
           <td>{$lang['reply_signature']}</td>
           <td><textarea cols="70" rows="2" name="firma"></textarea></td>
         </tr>
+-->
       </table>
     </div>
     <br />
     <center>
       <input type='submit' name='submit' value='{$lang['reply_submit']}' accesskey='s' />
       <input type='submit' name='preview' value='{$lang['reply_preview']}' accesskey='p' onclick="document.reply.action='reply.php';document.reply.submit()" /><br />
+<!--
       {$lang['reply_info3']}<br />
       {$lang['reply_info4']}<br />
+-->
     </center>
     <br />
   </div>

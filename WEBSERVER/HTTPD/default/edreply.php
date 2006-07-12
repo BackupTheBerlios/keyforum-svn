@@ -97,6 +97,7 @@ else
           <? echo"<td>".$lang['edrep_body']."</td>"; ?>
           <td><textarea name="body" rows="15" cols="70" wrap="virtual"><? echo $Testo; ?></textarea></td>
         </tr>
+<!--
         <tr>
           <? echo" <td>".$lang['edrep_avatar']."</td>"; ?>
           <td><input type=text name=avatar size=50 class=forminput></td>
@@ -105,6 +106,7 @@ else
           <? echo"<td>".$lang['edrep_signature']."</td>"; ?>
           <td><textarea cols=70 rows=2 name=firma></textarea></td>
         </tr>
+-->
       </table>
     </div>
     <br />

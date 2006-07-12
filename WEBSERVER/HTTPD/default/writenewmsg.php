@@ -71,21 +71,23 @@ if ($SEZ_DATA->PKEY) {
         </tr>\n";
 }
 ?>
-        <tr>
+<!-- 	<tr>
           <? echo "<td>".$lang['wreply_avatar']."</td>"; ?>
           <td><input type=text name=avatar size=50 class=forminput></td>
         </tr>
         <tr>
           <? echo "<td>".$lang['wreply_signature']."</td>"; ?>
           <td><textarea cols="70" rows="2" name=firma></textarea></td>
-        </tr>
+        </tr> 
+-->
       </table>
     </div>
     <br />
     <center>
       <? echo "<input type='submit' name='submit' value='".$lang['wreply_submit']."' accesskey='s' /><br />"; ?>
-<? echo "".$lang['wreply_info1']."<bR>"; ?>
+<!-- <? echo "".$lang['wreply_info1']."<bR>"; ?>
 <? echo "".$lang['wreply_info2']."<br>"; ?>
+-->
     </center>
     <br />
   </div>
