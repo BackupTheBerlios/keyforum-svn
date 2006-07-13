@@ -16,5 +16,10 @@ $lang['shmsg_hidefp'] = "Hide FastReply";
 $lang['shmsg_msgnotfound'] = "Message not found ";
 $lang['shmsg_findnewmsg'] = "Find new reply in this thread";
 $lang['emo_showallemo'] = "Show all";
+$lang['shmsg_nopost'] = "Unable to find this message";
+$lang['shmsg_nothread'] = "Unable to find this thread";
+$lang['shmsg_message'] = "Message";
+$lang['shmsg_msglnk'] = "Show message link";
+$lang['shmsg_lnkmsg'] = "Manually copy the link below showed";
 
 ?>

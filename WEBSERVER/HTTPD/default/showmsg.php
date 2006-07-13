@@ -10,6 +10,22 @@ include_once("lib/bbcode_parser.php");
 $member_titles=$std->CollectMemberTitles();
 
 echo "<a href=\"searcher.php?MODO=2&amp;REPOF=" . $_REQUEST['THR_ID'] . "\">" . $lang['shmsg_findnewmsg'] . "</a><br>";
+echo "<script type='text/javascript' language='javascript'>
+	<!--
+	var ipb_lang_tt_prompt = '{$lang['shmsg_lnkmsg']}';";
+
+if(!$config['WEBSERVER'][$BNAME]['BIND'] OR $config['WEBSERVER'][$BNAME]['BIND']=='*')
+	echo "var ipb_var_base_url = 'http://".$_SERVER['SERVER_NAME'].":".$config['WEBSERVER'][$BNAME]['PORTA']."/';";
+else
+	echo "var ipb_var_base_url = 'http://".$config['WEBSERVER'][$BNAME]['BIND'].":".$config['WEBSERVER'][$BNAME]['PORTA']."/';";
+
+echo "	function link_to_post(pid)
+	{
+		temp = prompt( ipb_lang_tt_prompt, ipb_var_base_url + 'showmsg.php?SEZID={$_REQUEST['SEZID']}&THR_ID={$_REQUEST["THR_ID"]}&view=findpost&post=' + pid );
+		return false;
+	}
+	//-->
+      </script>";
 
 function PageSelect($pos) {
 global $std;
@@ -209,6 +225,40 @@ if($_REQUEST['view']=="getnewpost")
 			// -->
 		</script>";
 	}
+}
+elseif($_REQUEST['view']=="findpost" && $_REQUEST['post'])
+{
+	$cont=0;
+	$found=0;
+	$query="SELECT HASH FROM {$SNAME}_reply "
+	."WHERE REP_OF='".mysql_escape_string($MSGID)."' AND visibile='1' "
+	."ORDER BY DATE;";
+	
+	$risultato=$db->get_results($query);
+	if($risultato)foreach($risultato as $riga)
+	{
+		$cont++;
+		$hash=unpack('H32hex',$riga->HASH);
+		if($hash['hex']==$_REQUEST['post'])
+		{
+			$found++;
+			break;
+		}
+	}
+	else
+		$std->Error ($lang['shmsg_nothread']);
+	if($found)
+	{
+		$page_num=intval(($cont) / $PostXPage);
+		if($page_num) $pagelink="&pag=".$page_num;
+		echo "<SCRIPT LANGUAGE='JavaScript'>
+			<!-- 
+			window.location='?SEZID=".$_REQUEST['SEZID']."&THR_ID=".$_REQUEST['THR_ID'].$pagelink."#".$cont."';
+			// -->
+		</script>";
+	}
+	else
+		$std->Error ($lang['shmsg_nopost']);
 }
 else
 {
