@@ -205,7 +205,7 @@ if($_REQUEST['view']=="getnewpost")
 		$postlink=$numrisp+1;
 		echo "<SCRIPT LANGUAGE='JavaScript'>
 			<!-- 
-			window.location='?SEZID=".$_REQUEST['SEZID']."&THR_ID=".$_REQUEST['THR_ID']."&".$pagelink."#".$postlink."';
+			window.location='?SEZID=".$_REQUEST['SEZID']."&THR_ID=".$_REQUEST['THR_ID'].$pagelink."#".$postlink."';
 			// -->
 		</script>";
 	}
