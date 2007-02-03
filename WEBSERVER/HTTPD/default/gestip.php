@@ -71,19 +71,19 @@ $titoli_array = Array(
 	,array('TCP_PORT',$lang['gestip_porta'],10)
 	,array('CLIENT_NAME',$lang['gestip_nomeclient'],15)
 	,array('CLIENT_VER',$lang['gestip_clientvers'],7)
-	,array('DESC',$lang['gestip_nick'],15)
+	,array('`DESC`',$lang['gestip_nick'],15)
 	,array('FALLIMENTI',$lang['gestip_failed'],1)
 	,array('TROVATO',$lang['gestip_source'],15)
 	,array('STATIC',$lang['gestip_static'],5)
-	,array(NULL,$lang['gestip_delete'],5)
+	,array('TROVATO',$lang['gestip_delete'],5)
 	);
 //PREPARAZIONE QUERY
 
 $mode_a =  Array('ASC','DESC');
-$order = $titoli_array[$_REQUEST['order']][0];
-$mode = $mode_a[$_REQUEST['mode']];
+$order = $titoli_array[$_GET['order']][0];
+$mode = $mode_a[$_GET['mode']];
 $new_mode = !$_REQUEST['mode'];
-$ordinamento = "ORDER BY '$order' $mode, 'IP'";
+$ordinamento = "ORDER BY $order $mode, 'IP'";
 
 //QUERY
 $risultato = $db->get_results("SELECT * FROM iplist WHERE BOARD='$idriga' $ordinamento;");
